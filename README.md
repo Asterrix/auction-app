@@ -1,1 +1,1 @@
-# auction-app
+Initial ERD can be found at the following [link](https://lucid.app/lucidchart/5f57cb04-8b70-4de6-99b7-485c39801ee6/view?page=0_0#).
