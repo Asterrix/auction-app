@@ -3,8 +3,7 @@ import {BrowserModule} from "@angular/platform-browser";
 
 import {AppRoutingModule} from "./app-routing.module";
 import {AppComponent} from "./app.component";
-import {TopBarComponent} from "./shared/components/navbar/components/top-bar/top-bar.component";
-import {MainNavbarComponent} from "./shared/components/navbar/components/main-navbar/main-navbar.component";
+import {NavbarComponent} from "./shared/components/navbar/navbar.component";
 
 @NgModule({
   declarations: [
@@ -13,8 +12,7 @@ import {MainNavbarComponent} from "./shared/components/navbar/components/main-na
   imports: [
     BrowserModule,
     AppRoutingModule,
-    TopBarComponent,
-    MainNavbarComponent
+    NavbarComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
