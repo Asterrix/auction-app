@@ -30,8 +30,17 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/global.styles.scss",
+              "src/styles/container.styles.scss",
+              "src/styles/height.styles.scss",
+              "src/themes/typography.styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles",
+                "src/themes"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
@@ -93,8 +102,17 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/global.styles.scss",
+              "src/styles/container.styles.scss",
+              "src/styles/height.styles.scss",
+              "src/themes/typography.styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles",
+                "src/themes"
+              ]
+            },
             "scripts": []
           }
         }
