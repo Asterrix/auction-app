@@ -5,6 +5,9 @@ import {AppRoutingModule} from "./app-routing.module";
 import {AppComponent} from "./app.component";
 import {NavbarComponent} from "./shared/components/navbar/navbar.component";
 import {FooterComponent} from "./shared/components/footer/footer.component";
+import {HomeAboutUsComponent} from "./features/home/home-about-us/home-about-us.component";
+import {HomePrivacyPolicyComponent} from "./features/home/home-privacy-policy/home-privacy-policy.component";
+import {HomeTermsConditionsComponent} from "./features/home/home-terms-conditions/home-terms-conditions.component";
 
 @NgModule({
   declarations: [
@@ -14,7 +17,10 @@ import {FooterComponent} from "./shared/components/footer/footer.component";
     BrowserModule,
     AppRoutingModule,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    HomeAboutUsComponent,
+    HomePrivacyPolicyComponent,
+    HomeTermsConditionsComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
