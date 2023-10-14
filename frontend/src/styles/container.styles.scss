@@ -10,6 +10,7 @@ $extra-large: 1280px;
 $super-large: 1536px;
 
 .container {
+  display: flex;
   margin: 0 auto;
   padding-left: 2.4rem;
   padding-right: 2.4rem;
