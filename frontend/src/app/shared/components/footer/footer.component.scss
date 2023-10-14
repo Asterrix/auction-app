@@ -26,12 +26,26 @@
     }
 
     &__list {
-      color: $neutral-09;
       display: flex;
       @extend .font-semibold;
       flex-direction: column;
       gap: 0.4rem;
       list-style: none;
+    }
+
+    &__item {
+      color: $neutral-09;
+      transition: all 300ms ease-out;
+
+      &:hover {
+        color: $neutral-05;
+      }
+
+      &--disabled {
+        &:hover {
+          color: $neutral-09;
+        }
+      }
     }
   }
 
