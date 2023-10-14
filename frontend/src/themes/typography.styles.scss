@@ -21,6 +21,7 @@
 @mixin apply-line-height($line-height) {
   line-height: $line-height;
 }
+
 /* --> Mixins */
 
 /* <-- Font Weight */
@@ -39,12 +40,18 @@
 .font-bold {
   @include apply-font-weight(700);
 }
+
 /* --> Font Weight */
 
 /* --> Font Size */
+.font-size-regular {
+  @include apply-font-size(1.6rem);
+}
+
 .font-size-small {
   @include apply-font-size(1.4rem);
 }
+
 /* --> Font Size */
 
 /* --> Body Typography */
@@ -59,19 +66,20 @@ body {
     @include apply-font-size(1.6rem);
   }
 }
+
 /* <-- Body Typography */
 
 /* <-- Headers */
 h1 {
   @include apply-font-size(9.6rem);
   @include apply-font-weight(700);
-  @include apply-line-height(11.2rem)
+  @include apply-line-height(11.2rem);
 }
 
 h2 {
   @include apply-font-size(6rem);
   @include apply-font-weight(700);
-  @include apply-line-height(8rem)
+  @include apply-line-height(8rem);
 }
 
 h3 {
@@ -97,4 +105,5 @@ h6 {
   @include apply-font-weight(600);
   @include apply-line-height(3.2rem);
 }
+
 /* --> Headers */
