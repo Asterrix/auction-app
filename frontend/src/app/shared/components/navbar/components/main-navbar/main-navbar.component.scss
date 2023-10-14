@@ -1,0 +1,52 @@
+@import "colors.styles";
+@import "typography.styles";
+
+.main-navbar {
+  display: flex;
+
+  &__layout {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 2.4rem;
+    width: 100%;
+  }
+
+  &__logo {
+    align-items: center;
+    display: flex;
+  }
+
+  &__search {
+    align-items: center;
+    display: flex;
+    gap: 2.4rem;
+    justify-content: space-between;
+  }
+
+  &__navigation {
+    display: flex;
+
+    ul {
+      align-items: center;
+      display: inherit;
+      gap: 3rem;
+      list-style: none;
+      text-transform: uppercase;
+
+      li {
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+}
+
+.active {
+  color: $primary;
+  @extend .font-bold;
+
+  &:hover {
+    filter: contrast(200%);
+  }
+}
