@@ -1,0 +1,35 @@
+@import "colors.styles";
+
+@mixin flex-items-center {
+  display: flex;
+  align-items: center;
+}
+
+.top-bar {
+  background-color: $neutral-00;
+  display: flex;
+  height: 4rem;
+
+  &__layout {
+    @include flex-items-center;
+    justify-content: space-between;
+  }
+
+  &__social-media {
+    @include flex-items-center;
+    gap: 1.6rem;
+  }
+
+  &__user-action {
+    @include flex-items-center;
+
+    a {
+      color: $white;
+
+      &:hover {
+        color: $neutral-09;
+      }
+    }
+  }
+}
+
