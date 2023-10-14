@@ -18,6 +18,12 @@
   &__social-media {
     @include flex-items-center;
     gap: 1.6rem;
+
+    &__item {
+      &:hover {
+        filter: contrast(200%);
+      }
+    }
   }
 
   &__user-action {
