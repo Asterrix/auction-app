@@ -7,23 +7,37 @@ import {HomeTermsConditionsComponent} from "./features/home/home-terms-condition
 const applicationName: string = "Auction App";
 
 const routes: Routes = [
+  {path: "", redirectTo: "/home", pathMatch: "full"},
   {
     path: "home",
+    title: `${applicationName} - Home`,
+    data: {
+      breadcrumb: "Home"
+    },
     children: [
       {
         path: "about-us",
         title: `${applicationName} - About Us`,
-        component: HomeAboutUsComponent
+        component: HomeAboutUsComponent,
+        data: {
+          breadcrumb: "About Us"
+        }
       },
       {
         path: "privacy-policy",
         title: `${applicationName} - Privacy Policy`,
-        component: HomePrivacyPolicyComponent
+        component: HomePrivacyPolicyComponent,
+        data: {
+          breadcrumb: "Privacy Policy"
+        }
       },
       {
         path: "terms-and-conditions",
         title: `${applicationName} - Terms And Conditions`,
-        component: HomeTermsConditionsComponent
+        component: HomeTermsConditionsComponent,
+        data: {
+          breadcrumb: "Terms And Conditions"
+        }
       },
     ]
   }
