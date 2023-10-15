@@ -1,10 +1,16 @@
 @import "colors.styles";
 @import "typography.styles";
 
+:host{
+  display: flex;
+  flex: 1;
+}
+
 .footer {
   background-color: $neutral-00;
   color: $white;
   display: flex;
+  flex: 1;
 
   &__layout {
     display: flex;
