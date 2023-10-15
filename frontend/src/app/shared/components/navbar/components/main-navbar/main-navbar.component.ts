@@ -1,11 +1,12 @@
 import {Component} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {SearchBarComponent} from "../search-bar/search-bar.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-main-navbar",
   standalone: true,
-  imports: [CommonModule, SearchBarComponent, NgOptimizedImage],
+  imports: [CommonModule, SearchBarComponent, NgOptimizedImage, RouterLink],
   template: `
     <div class="main-navbar">
       <div class="container">
@@ -23,13 +24,13 @@ import {SearchBarComponent} from "../search-bar/search-bar.component";
             <div class="main-navbar__navigation">
               <ul>
                 <li>
-                  <a class="active" href="">Home</a>
+                  <a class="active" routerLink="/home">Home</a>
                 </li>
                 <li>
-                  <a href="">Shop</a>
+                  <a>Shop</a>
                 </li>
                 <li>
-                  <a href="">My Account</a>
+                  <a>My Account</a>
                 </li>
               </ul>
             </div>
