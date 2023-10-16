@@ -6,7 +6,8 @@
   display: flex;
 
   &__layout {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
     justify-content: space-between;
     width: 100%;
   }
@@ -18,17 +19,10 @@
 
   &__search {
     align-items: center;
-    display: flex;
+    display: grid;
     gap: 2.4rem;
+    grid-template-columns: 3fr 1fr;
     justify-content: space-between;
-
-    &-bar {
-      display: none;
-
-      @media (min-width: $medium) {
-        display: flex;
-      }
-    }
   }
 
   &__navigation {
