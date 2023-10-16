@@ -1,5 +1,6 @@
 @import "colors.styles";
 @import "typography.styles";
+@import "container.styles";
 
 .main-navbar {
   display: flex;
@@ -20,6 +21,14 @@
     display: flex;
     gap: 2.4rem;
     justify-content: space-between;
+
+    &-bar {
+      display: none;
+
+      @media (min-width: $medium) {
+        display: flex;
+      }
+    }
   }
 
   &__navigation {
@@ -31,6 +40,7 @@
       gap: 3rem;
       list-style: none;
       text-transform: uppercase;
+      white-space: nowrap;
 
       li {
         &:hover {

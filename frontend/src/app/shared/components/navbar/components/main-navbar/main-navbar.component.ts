@@ -17,7 +17,7 @@ import {RouterLink} from "@angular/router";
           </div>
 
           <div class="main-navbar__search">
-            <div>
+            <div class="main-navbar__search-bar">
               <app-search-bar/>
             </div>
 
