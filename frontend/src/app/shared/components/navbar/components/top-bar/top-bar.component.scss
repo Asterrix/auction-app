@@ -26,17 +26,4 @@
       }
     }
   }
-
-  &__user-action {
-    @include flex-items-center;
-
-    a {
-      color: $white;
-
-      &:hover {
-        color: $neutral-09;
-      }
-    }
-  }
 }
-

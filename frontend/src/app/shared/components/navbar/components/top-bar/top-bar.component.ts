@@ -27,10 +27,6 @@ import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component
               imageSource="assets/social-media/entypo-social_twitter-with-circle.svg"
               alt="Twitter"/>
           </div>
-
-          <div class="top-bar__user-action">
-            <a href="https://www.atlantbh.com/abh-internship/" class="font-size-small">Hi, Atlantbh</a>
-          </div>
         </div>
       </div>
     </div>
