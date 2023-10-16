@@ -1,6 +1,6 @@
-### Explanation of the Given Folder Structure
+### Project Structure
 
-- **builder**: contains classes that implement the Builder design pattern.
+- **builder** (optional): contains classes that implement the Builder design pattern.
 
 - **config**: holds configuration files for customizing the application's behavior.
   - Example: Using the `@Bean` annotation and performing Dependency Injection.
