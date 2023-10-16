@@ -5,11 +5,7 @@ import {CommonModule, NgOptimizedImage} from "@angular/common";
   selector: "app-anchor-image",
   standalone: true,
   imports: [CommonModule, NgOptimizedImage],
-  template: `
-    <a href="{{link}}">
-      <img ngSrc="{{imageSource}}" alt="{{alt}}" width="{{imageWidth}}" height="{{imageHeight}}"/>
-    </a>
-  `,
+  templateUrl: './anchor-image.component.html',
   styleUrls: ["./anchor-image.component.scss"]
 })
 export class AnchorImageComponent {

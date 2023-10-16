@@ -5,12 +5,7 @@ import {CommonModule} from "@angular/common";
   selector: "app-content-card",
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="content-card">
-      <h6>{{title}}</h6>
-      <p class="content-card__content">{{body}}</p>
-    </div>
-  `,
+  templateUrl: "content-card.component.html",
   styleUrls: ["./content-card.component.scss"]
 })
 export class ContentCardComponent {

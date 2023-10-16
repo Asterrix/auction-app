@@ -7,12 +7,7 @@ import {MainNavbarComponent} from "./components/main-navbar/main-navbar.componen
   selector: "app-navbar",
   standalone: true,
   imports: [CommonModule, TopBarComponent, MainNavbarComponent],
-  template: `
-    <div class="navbar">
-      <app-top-bar/>
-      <app-main-navbar/>
-    </div>
-  `,
+  templateUrl: "navbar.component.html",
   styleUrls: ["./navbar.component.scss"]
 })
 export class NavbarComponent {

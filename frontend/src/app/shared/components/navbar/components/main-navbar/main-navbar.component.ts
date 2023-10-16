@@ -7,39 +7,7 @@ import {RouterLink} from "@angular/router";
   selector: "app-main-navbar",
   standalone: true,
   imports: [CommonModule, SearchBarComponent, NgOptimizedImage, RouterLink],
-  template: `
-    <div class="main-navbar">
-      <div class="container">
-        <div class="main-navbar__layout">
-
-          <div class="main-navbar__logo">
-            <img ngSrc="assets/logos/auction-app-logo-1.png" alt="Auction App logo" width="163" height="56"/>
-          </div>
-
-          <div class="main-navbar__search">
-            <div class="main-navbar__search-bar">
-              <app-search-bar/>
-            </div>
-
-            <div class="main-navbar__navigation">
-              <ul>
-                <li>
-                  <a class="active" routerLink="/home">Home</a>
-                </li>
-                <li>
-                  <a>Shop</a>
-                </li>
-                <li>
-                  <a>My Account</a>
-                </li>
-              </ul>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: "main-navbar.component.html",
   styleUrls: ["./main-navbar.component.scss"]
 })
 export class MainNavbarComponent {
