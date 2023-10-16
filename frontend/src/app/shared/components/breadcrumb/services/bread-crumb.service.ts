@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {distinctUntilChanged, filter, map} from "rxjs/operators";
+import {distinctUntilChanged, map} from "rxjs/operators";
 
 export interface BreadCrumbItem {
   label: string;
@@ -17,7 +17,6 @@ export class BreadCrumbService {
 
   constructor(private _router: Router, private _route: ActivatedRoute) {
     this.items$ = this._router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
       distinctUntilChanged(),
       map(_ => this._buildBreadCrumbList(this._route.root))
     );

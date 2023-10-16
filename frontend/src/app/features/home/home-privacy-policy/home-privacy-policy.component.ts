@@ -1,11 +1,13 @@
 import {Component} from "@angular/core";
 import {CommonModule} from "@angular/common";
+import {BreadCrumbComponent} from "../../../shared/components/breadcrumb/bread-crumb.component";
 
 @Component({
   selector: "app-home-privacy-policy",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BreadCrumbComponent],
   template: `
+    <app-breadcrumb/>
     <div class="privacy-policy">
       <div class="container">
         <div class="privacy-policy__layout">
