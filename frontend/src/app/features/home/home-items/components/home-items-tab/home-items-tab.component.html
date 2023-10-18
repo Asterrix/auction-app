@@ -1,0 +1,20 @@
+<div class="home-item-list-tab">
+  <ul class="home-item-list-tab__list">
+    <li class="home-item-list-tab__list__item">
+      <a [routerLinkActiveOptions]="{exact: true}"
+         class="home-item-list-tab__list__item__link"
+         routerLink="/home"
+         routerLinkActive="item--active">
+        New Arrivals
+      </a>
+    </li>
+    <li class="home-item-list-tab__list__item">
+      <a [queryParams]="{section: Section.LastChance}"
+         class="home-item-list-tab__list__item__link"
+         routerLink="/home"
+         routerLinkActive="item--active">
+        Last Chance
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,5 @@
+.items-grid {
+  display: grid;
+  gap: 3.2rem 1.6rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
