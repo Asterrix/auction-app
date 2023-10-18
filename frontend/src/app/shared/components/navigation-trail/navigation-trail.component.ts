@@ -4,6 +4,11 @@ import {RouterLink} from "@angular/router";
 import {NavigationTrailService, NavigationTrailStructure} from "./services/navigation-trail.service";
 import {Observable} from "rxjs";
 
+export enum NavigationTrail {
+  Trail = "trail"
+}
+
+
 /* Navigation trail/ Path tracker / BreadCrumb component
 *  Displays current navigation path that lead the client to their current page
 *  Example: Home/Items/Item
