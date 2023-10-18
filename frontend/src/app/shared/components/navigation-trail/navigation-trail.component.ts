@@ -10,7 +10,7 @@ import {Observable} from "rxjs";
 *  Will display: Home -> Items -> Item
 * */
 @Component({
-  selector: "app-breadcrumb",
+  selector: "app-navigation-trail",
   standalone: true,
   imports: [CommonModule, RouterLink, NgOptimizedImage],
   templateUrl: "./navigation-trail.component.html",
