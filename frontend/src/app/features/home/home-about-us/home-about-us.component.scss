@@ -9,26 +9,16 @@
     display: grid;
     gap: 3.2rem;
     grid-template-columns: 1fr;
-  }
-
-  &__section {
-    display: grid;
-    gap: 3.2rem;
-    grid-template-columns: 1fr;
 
     @media (min-width: $extra-large) {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
 
-    &-text{
-      display: flex;
-      flex-direction: column;
-      gap: 3.2rem;
-
-      p {
-        color: $neutral-05;
-      }
-    }
+  &__section {
+    display: flex;
+    gap: 3.2rem;
+    flex-direction: column;
   }
 
   &__image__section {

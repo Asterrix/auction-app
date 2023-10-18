@@ -1,9 +1,15 @@
 @import "colors.styles";
+@import "typography.styles";
 
 .content-card {
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
+
+  &__title {
+    font-size: 2.4rem;
+    @extend .font-semibold;
+  }
 
   &__content {
     color: $neutral-05;
