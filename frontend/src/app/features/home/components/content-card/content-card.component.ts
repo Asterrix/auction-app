@@ -1,6 +1,6 @@
 import {Component, Input} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {EmptyValue} from "../../../../shared/models/enums/EmptyValue";
+import {Constants} from "../../../../shared/models/enums/constants";
 
 @Component({
   selector: "app-content-card",
@@ -10,7 +10,7 @@ import {EmptyValue} from "../../../../shared/models/enums/EmptyValue";
   styleUrls: ["./content-card.component.scss"]
 })
 export class ContentCardComponent {
-  @Input({required: true}) title: string = EmptyValue.String;
-  @Input({required: true}) body: string = EmptyValue.String;
-  protected readonly EmptyValue = EmptyValue;
+  @Input({required: true}) title: string = Constants.EMPTY_VALUE;
+  @Input({required: true}) body: string = Constants.EMPTY_VALUE;
+  protected readonly Constants = Constants;
 }
