@@ -1,0 +1,34 @@
+@mixin apply-max-width($max-width) {
+  max-width: $max-width;
+}
+
+/* Screen Size */
+$small: 640px;
+$medium: 768px;
+$large: 1024px;
+$extra-large: 1280px;
+$super-large: 1536px;
+
+.container {
+  display: flex;
+  margin: 0 auto;
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+  width: 100%;
+
+  @media (min-width: $medium) {
+    @include apply-max-width($small);
+  }
+
+  @media (min-width: $large) {
+    @include apply-max-width($medium);
+  }
+
+  @media (min-width: $extra-large) {
+    @include apply-max-width($large);
+  }
+
+  @media (min-width: $super-large) {
+    @include apply-max-width($extra-large);
+  }
+}

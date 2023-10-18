@@ -1,0 +1,22 @@
+@import "colors.styles";
+@import "container.styles";
+
+.search-bar {
+  border: 1px solid $neutral-09;
+  display: flex;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+
+  &:focus-within {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  img {
+    margin-left: 1.2rem;
+  }
+}

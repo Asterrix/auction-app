@@ -1,0 +1,51 @@
+<div class="footer">
+  <div class="container">
+    <div class="footer__layout">
+
+      <div class="footer__section">
+        <h4 class="footer__section__title">Auction</h4>
+        <ul class="footer__section__list">
+          <li><a class="footer__section__item" routerLink="home/about-us">About Us</a></li>
+          <li><a class="footer__section__item" routerLink="home/terms-and-conditions">Terms and Conditions</a></li>
+          <li><a class="footer__section__item" routerLink="home/privacy-policy">Privacy and policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__section">
+        <h4 class="footer__section__title">Get in touch</h4>
+        <ul class="footer__section__list">
+          <li><p class="footer__section__item footer__section__item--disabled">Call Us at &nbsp;&nbsp;+123
+            797-567-2535</p></li>
+          <li><a class="footer__section__item footer__section__item--disabled">support@auction.com</a></li>
+          <ul class="footer__section__list footer__follow-us">
+            <li>
+              <app-anchor-image
+                [externalLink]="true"
+                alt="Facebook"
+                class="footer__follow-us--hover"
+                imageSource="assets/social-media/akar-icons_facebook-fill.svg"
+                link="https://www.facebook.com/atlantbh"/>
+            </li>
+            <li>
+              <app-anchor-image
+                [externalLink]="true"
+                alt="Instagram"
+                class="footer__follow-us--hover"
+                imageSource="assets/social-media/entypo-social_instagram-with-circle.svg"
+                link="https://www.instagram.com/atlantbh/"/>
+
+            </li>
+            <li>
+              <app-anchor-image
+                [externalLink]="true"
+                alt="Twitter"
+                class="footer__follow-us--hover"
+                imageSource="assets/social-media/entypo-social_twitter-with-circle.svg"
+                link="https://twitter.com/atlantbh?lang=en"/>
+            </li>
+          </ul>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
