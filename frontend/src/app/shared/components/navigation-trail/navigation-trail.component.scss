@@ -1,7 +1,7 @@
 @import "colors.styles";
 @import "typography.styles";
 
-.breadcrumb {
+.navigation-trail {
   display: flex;
   margin-top: 3.2rem;
 
@@ -9,10 +9,6 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-  }
-
-  &__location {
-
   }
 
   &__navigation {
@@ -26,11 +22,11 @@
       &:hover {
         color: $primary;
       }
-
-      &--active {
-        color: $primary;
-        @extend .font-bold;
-      }
     }
   }
+}
+
+.--active {
+  color: $primary;
+  @extend .font-bold;
 }

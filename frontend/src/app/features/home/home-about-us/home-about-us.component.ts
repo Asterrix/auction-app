@@ -1,11 +1,11 @@
 import {Component} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {BreadCrumbComponent} from "../../../shared/components/breadcrumb/bread-crumb.component";
+import {NavigationTrailComponent} from "../../../shared/components/navigation-trail/navigation-trail.component";
 
 @Component({
   selector: "app-home-about-us",
   standalone: true,
-  imports: [CommonModule, BreadCrumbComponent],
+  imports: [CommonModule, NavigationTrailComponent],
   templateUrl: "home-about-us.component.html",
   styleUrls: ["./home-about-us.component.scss"]
 })
