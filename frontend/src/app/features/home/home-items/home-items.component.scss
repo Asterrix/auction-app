@@ -1,0 +1,15 @@
+@import "colors.styles";
+@import "typography.styles";
+
+.home-item-list {
+  display: flex;
+  flex-direction: column;
+  padding: 3.2rem 0;
+
+  &__layout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+  }
+}
