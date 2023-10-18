@@ -1,0 +1,68 @@
+@import "colors.styles";
+@import "typography.styles";
+
+:host{
+  display: flex;
+  flex: 1;
+}
+
+.footer {
+  background-color: $neutral-00;
+  color: $white;
+  display: flex;
+  flex: 1;
+
+  &__layout {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 4.8rem;
+    width: 100%;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 2.4rem 0;
+
+    &__title {
+      color: $neutral-05;
+      @extend .font-size-regular;
+      text-transform: uppercase;
+    }
+
+    &__list {
+      display: flex;
+      @extend .font-semibold;
+      flex-direction: column;
+      gap: 0.4rem;
+      list-style: none;
+    }
+
+    &__item {
+      color: $neutral-09;
+      transition: all 300ms ease-out;
+
+      &:hover {
+        color: $neutral-05;
+      }
+
+      &--disabled {
+        &:hover {
+          color: $neutral-09;
+        }
+      }
+    }
+  }
+
+  &__follow-us {
+    flex-direction: row;
+    gap: 1.2rem;
+
+    &--hover {
+      &:hover {
+        filter: contrast(200%);
+      }
+    }
+  }
+}

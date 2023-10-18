@@ -1,0 +1,55 @@
+@import "colors.styles";
+@import "typography.styles";
+@import "container.styles";
+
+.main-navbar {
+  display: flex;
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__logo {
+    align-items: center;
+    display: flex;
+  }
+
+  &__search {
+    align-items: center;
+    display: grid;
+    gap: 2.4rem;
+    grid-template-columns: 3fr 1fr;
+    justify-content: space-between;
+  }
+
+  &__navigation {
+    display: flex;
+
+    ul {
+      align-items: center;
+      display: inherit;
+      gap: 3rem;
+      list-style: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+
+      li {
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+}
+
+.active {
+  color: $primary;
+  @extend .font-bold;
+
+  &:hover {
+    filter: contrast(200%);
+  }
+}
