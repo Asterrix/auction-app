@@ -1,0 +1,12 @@
+.home-header {
+  background-color: #FCFCFC;
+  display: flex;
+
+  &__layout {
+    display: grid;
+    gap: 6.4rem;
+    grid-template-columns: 1fr 3fr;
+    margin-top: 1.6rem;
+    width: 100%;
+  }
+}
