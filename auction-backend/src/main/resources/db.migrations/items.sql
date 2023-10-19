@@ -1,0 +1,12 @@
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (1, 'Headphones', 'Placeholder', 29.99, '2023-10-19', '2023-10-30');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (2, 'Shoes', 'Placeholder', 49.99, '2023-10-21', '2023-10-23');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (3, 'Watch', 'Placeholder', 299.99, '2023-10-25', '2023-10-31');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (4, 'Bag', 'Placeholder', 480.00, '2023-10-22', '2023-11-01');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (5, 'Camera', 'Placeholder', 320.00, '2023-10-16', '2023-11-14');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (6, 'White Shoes', 'Placeholder', 120.00, '2023-10-27', '2023-10-28');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (7, 'Body Spray', 'Placeholder', 72.00, '2023-10-22', '2023-10-25');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (8, 'Coco', 'Placeholder', 147.99, '2023-10-29', '2023-10-31');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (9, 'Fragrance', 'Placeholder', 99.99, '2023-11-01', '2023-11-09');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (10, 'Sunglasses', 'Placeholder', 25.00, '2023-10-29', '2023-10-30');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (11, 'Coin', 'Placeholder', 41.00, '2023-10-31', '2023-11-03');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (12, 'Phone Mask', 'Placeholder', 20.00, '2023-10-23', '2023-10-26');
