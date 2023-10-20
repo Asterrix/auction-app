@@ -4,7 +4,8 @@
 
 - **config**: holds configuration files for customizing the application's behavior.
     - Example: Using the `@Bean` annotation and performing Dependency Injection.
-
+      
+  Will include constants.
 - **controller**: contains classes that handle incoming HTTP requests and define RESTful endpoints.
 
 - **dto**: contains Data Transfer Objects (DTOs). DTOs cab only contain a subset of the fields present in the

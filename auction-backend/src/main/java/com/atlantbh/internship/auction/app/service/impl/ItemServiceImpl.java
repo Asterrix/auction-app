@@ -1,8 +1,8 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
-import com.atlantbh.internship.auction.app.dto.ItemDto;
+import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.mapper.Mapper;
+import com.atlantbh.internship.auction.app.mapper.SummaryMapper;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import org.springframework.data.domain.Page;
@@ -16,15 +16,15 @@ import java.util.List;
 @Service
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final Mapper<Item, ItemDto> mapper;
+    private final SummaryMapper<Item, ItemSummaryDto> summaryMapper;
 
-    public ItemServiceImpl(ItemRepository itemRepository, Mapper<Item, ItemDto> mapper) {
+    public ItemServiceImpl(ItemRepository itemRepository, SummaryMapper<Item, ItemSummaryDto> summaryMapper) {
         this.itemRepository = itemRepository;
-        this.mapper = mapper;
+        this.summaryMapper = summaryMapper;
     }
 
     @Override
-    public Page<ItemDto> getAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection) {
+    public Page<ItemSummaryDto> getAll(Integer pageNumber, Integer pageSize, String sortByAttribute, String sortDirection) {
         Sort.Direction direction;
 
         switch (sortDirection) {
@@ -33,12 +33,12 @@ public class ItemServiceImpl implements ItemService {
             default -> direction = Sort.DEFAULT_DIRECTION;
         }
 
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortBy));
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortByAttribute));
 
         Page<Item> itemPage = itemRepository.findAll(pageRequest);
 
-        List<ItemDto> itemDtoList = itemPage.getContent().stream().map(mapper::toDto).toList();
+        List<ItemSummaryDto> itemSummaryList = itemPage.getContent().stream().map(summaryMapper::toDto).toList();
 
-        return new PageImpl<>(itemDtoList, pageRequest, itemPage.getTotalElements());
+        return new PageImpl<>(itemSummaryList, pageRequest, itemPage.getTotalElements());
     }
 }

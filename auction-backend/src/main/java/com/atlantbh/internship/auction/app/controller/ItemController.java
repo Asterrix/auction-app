@@ -1,6 +1,7 @@
 package com.atlantbh.internship.auction.app.controller;
 
-import com.atlantbh.internship.auction.app.dto.ItemDto;
+import com.atlantbh.internship.auction.app.config.constant.ItemGetAllRequestConstant;
+import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ItemDto>> getAllItems(@RequestParam(required = false, defaultValue = "0") Integer pageNumber,
-                                                     @RequestParam(required = false, defaultValue = "9") Integer pageSize,
-                                                     @RequestParam(required = false, defaultValue = "id") String sortBy,
-                                                     @RequestParam(required = false, defaultValue = "ASC") String sortDirection) {
+    public ResponseEntity<Page<ItemSummaryDto>> getAllItems(
+            @RequestParam(defaultValue = ItemGetAllRequestConstant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+            @RequestParam(defaultValue = ItemGetAllRequestConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
+            @RequestParam(defaultValue = ItemGetAllRequestConstant.DEFAULT_SORT_BY_ATTRIBUTE) String sortByAttribute,
+            @RequestParam(defaultValue = ItemGetAllRequestConstant.DEFAULT_SORT_DIRECTION) String sortDirection) {
 
-        Page<ItemDto> response = this.itemService.getAll(pageNumber, pageSize, sortBy, sortDirection);
+        Page<ItemSummaryDto> response = this.itemService.getAll(pageNumber, pageSize, sortByAttribute, sortDirection);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
