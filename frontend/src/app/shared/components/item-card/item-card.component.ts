@@ -1,6 +1,6 @@
 import {Component, Input} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {Item} from "../../../features/home/home-items/services/home-items.service";
+import {ItemSummary} from "../../../features/home/home-items/services/home-items.service";
 
 @Component({
   selector: "app-item-card",
@@ -10,5 +10,5 @@ import {Item} from "../../../features/home/home-items/services/home-items.servic
   styleUrls: ["./item-card.component.scss"]
 })
 export class ItemCardComponent {
-  @Input({required: true}) item!: Item;
+  @Input({required: true}) item!: ItemSummary;
 }
