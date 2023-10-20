@@ -17,11 +17,11 @@ $super-large: 1536px;
   width: 100%;
 
   @media (min-width: $medium) {
-    @include apply-max-width($small);
+    @include apply-max-width($medium);
   }
 
   @media (min-width: $large) {
-    @include apply-max-width($medium);
+    @include apply-max-width($large);
   }
 
   @media (min-width: $extra-large) {
