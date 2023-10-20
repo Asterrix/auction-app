@@ -3,20 +3,15 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Page} from "../../../../shared/models/interfaces/page";
 
-export interface Item {
+export interface ItemSummary {
   id: number;
   name: string;
-  description: string;
   initialPrice: number;
-  startDate: string;
-  endDate: string;
-  itemImages: [
-    {
-      id: number;
-      name: string;
-      imageUrl: string;
-    }
-  ];
+  portrait: {
+    id: number;
+    name: string;
+    imageUrl: string;
+  }
 }
 
 enum SortItemsAttribute {
@@ -34,28 +29,30 @@ enum SortItemDirection {
   providedIn: "root"
 })
 export class HomeItemsService {
-  private pageNumber: number = 0;
-  private pageSize: number = 8;
-  private endpoint: string = "http://localhost:8080/api/v1/items";
+  private readonly _pageNumber: number = 0;
+  private readonly _pageSize: number = 8;
+  private readonly _endpoint: string = "http://localhost:8080/api/v1/items";
 
   constructor(private httpClient: HttpClient) {
   }
 
-  public getListOfNewestItems(pageNumber: number): Observable<Page<Item>> {
-    return this.getListOfItems(pageNumber, this.pageSize, SortItemsAttribute.StartDate, SortItemDirection.DESC);
+  public getListOfNewestItems(): Observable<Page<ItemSummary>> {
+    return this.getListOfItems(SortItemsAttribute.StartDate, SortItemDirection.DESC);
   }
 
-  public getListOfLastChanceItems(pageNumber: number): Observable<Page<Item>> {
-    return this.getListOfItems(pageNumber, this.pageSize, SortItemsAttribute.EndDate, SortItemDirection.DESC);
+  public getListOfLastChanceItems(): Observable<Page<ItemSummary>> {
+    return this.getListOfItems(SortItemsAttribute.EndDate, SortItemDirection.DESC);
   }
 
-  private getListOfItems(pageNumber: number = this.pageNumber,
-                         pageSize: number = this.pageSize,
-                         sortBy: string = SortItemsAttribute.Id,
-                         sortDirection: string = SortItemDirection.ASC): Observable<Page<Item>> {
+  private getListOfItems(sortByAttribute: string, sortDirection: string): Observable<Page<ItemSummary>> {
 
-    const params = {pageNumber: pageNumber, pageSize: pageSize, sortBy: sortBy, sortDirection: sortDirection};
+    const params = {
+      pageNumber: this._pageNumber,
+      pageSize: this._pageSize,
+      sortByAttribute: sortByAttribute,
+      sortDirection: sortDirection
+    };
 
-    return this.httpClient.get<Page<Item>>(this.endpoint, {params});
+    return this.httpClient.get<Page<ItemSummary>>(this._endpoint, {params});
   }
 }
