@@ -45,12 +45,4 @@ public class ItemImage {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
 }
