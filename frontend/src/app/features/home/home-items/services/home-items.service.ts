@@ -47,10 +47,9 @@ export class HomeItemsService {
   private getListOfItems(sortByAttribute: string, sortDirection: string): Observable<Page<ItemSummary>> {
 
     const params = {
-      pageNumber: this._pageNumber,
-      pageSize: this._pageSize,
-      sortByAttribute: sortByAttribute,
-      sortDirection: sortDirection
+      page: this._pageNumber,
+      size: this._pageSize,
+      sort: sortByAttribute,sortDirection
     };
 
     return this.httpClient.get<Page<ItemSummary>>(this._endpoint, {params});
