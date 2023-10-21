@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,7 +49,7 @@ class ItemControllerTest {
         ItemSummaryDto itemSummaryDto = new ItemSummaryDto(ID, ITEM_NAME, INITIAL_PRICE, itemImageDto);
         Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 
-        when(itemService.getAll(anyInt(), anyInt(), anyString(), anyString())).thenReturn(mockPage);
+//        when(itemService.getAll).thenReturn(mockPage);
 
         mockMvc.perform(get("/api/v1/items"))
                 .andExpect(status().isOk())
