@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "items")
 public class Item {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,6 +34,20 @@ public class Item {
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<ItemImage> itemImages = new ArrayList<>();
 
+    public Item(Integer id, String name, String description, BigDecimal initialPrice, LocalDate startDate, LocalDate endDate, List<ItemImage> itemImages) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.initialPrice = initialPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.itemImages = itemImages;
+    }
+
+    public Item() {
+
+    }
+
     public Integer getId() {
         return id;
     }
@@ -48,4 +63,5 @@ public class Item {
     public List<ItemImage> getItemImages() {
         return itemImages;
     }
+
 }
