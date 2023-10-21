@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public final class ItemImageMapper implements Mapper<ItemImage, ItemImageDto> {
     @Override
-    public ItemImage toEntity(ItemImageDto dto) {
+    public ItemImage toEntity(final ItemImageDto dto) {
         ItemImage entity = new ItemImage();
         entity.setId(dto.id());
         entity.setName(dto.name());
@@ -19,17 +19,17 @@ public final class ItemImageMapper implements Mapper<ItemImage, ItemImageDto> {
     }
 
     @Override
-    public ItemImageDto toDto(ItemImage entity) {
+    public ItemImageDto toDto(final ItemImage entity) {
         return new ItemImageDto(entity.getId(), entity.getName(), entity.getImageUrl());
     }
 
     @Override
-    public List<ItemImage> toEntity(List<ItemImageDto> dtoList) {
+    public List<ItemImage> toEntity(final List<ItemImageDto> dtoList) {
         return dtoList.stream().map(this::toEntity).toList();
     }
 
     @Override
-    public List<ItemImageDto> toDto(List<ItemImage> entityList) {
+    public List<ItemImageDto> toDto(final List<ItemImage> entityList) {
         return entityList.stream().map(this::toDto).toList();
     }
 }

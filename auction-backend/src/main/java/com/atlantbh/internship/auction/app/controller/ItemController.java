@@ -26,10 +26,10 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<Page<ItemSummaryDto>> getAllItems(
-            @RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
-            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
-            @RequestParam(defaultValue = DEFAULT_SORT_BY_ATTRIBUTE) String sortByAttribute,
-            @RequestParam(defaultValue = DEFAULT_SORT_DIRECTION) String sortDirection) {
+            @RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) final Integer pageNumber,
+            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) final Integer pageSize,
+            @RequestParam(defaultValue = DEFAULT_SORT_BY_ATTRIBUTE) final String sortByAttribute,
+            @RequestParam(defaultValue = DEFAULT_SORT_DIRECTION) final String sortDirection) {
 
         Page<ItemSummaryDto> response = this.itemService.getAll(pageNumber, pageSize, sortByAttribute, sortDirection);
         return new ResponseEntity<>(response, HttpStatus.OK);
