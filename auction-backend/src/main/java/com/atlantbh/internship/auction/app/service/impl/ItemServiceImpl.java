@@ -18,13 +18,13 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final SummaryMapper<Item, ItemSummaryDto> summaryMapper;
 
-    public ItemServiceImpl(ItemRepository itemRepository, SummaryMapper<Item, ItemSummaryDto> summaryMapper) {
+    public ItemServiceImpl(final ItemRepository itemRepository, final SummaryMapper<Item, ItemSummaryDto> summaryMapper) {
         this.itemRepository = itemRepository;
         this.summaryMapper = summaryMapper;
     }
 
     @Override
-    public Page<ItemSummaryDto> getAll(Integer pageNumber, Integer pageSize, String sortByAttribute, String sortDirection) {
+    public Page<ItemSummaryDto> getAll(final Integer pageNumber, final Integer pageSize, final String sortByAttribute, final String sortDirection) {
         Sort.Direction direction;
 
         switch (sortDirection) {

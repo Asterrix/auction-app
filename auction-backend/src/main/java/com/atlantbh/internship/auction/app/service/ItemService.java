@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ItemService {
-    Page<ItemSummaryDto> getAll(Integer pageNumber, Integer pageSize, String sortByAttribute, String sortDirection);
+    Page<ItemSummaryDto> getAll(final Integer pageNumber, final Integer pageSize, final String sortByAttribute, final String sortDirection);
 }

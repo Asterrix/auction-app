@@ -14,12 +14,12 @@ import java.util.List;
 public final class ItemSummaryMapper implements SummaryMapper<Item, ItemSummaryDto> {
     private final Mapper<ItemImage, ItemImageDto> itemImageMapper;
 
-    public ItemSummaryMapper(Mapper<ItemImage, ItemImageDto> itemImageMapper) {
+    public ItemSummaryMapper(final Mapper<ItemImage, ItemImageDto> itemImageMapper) {
         this.itemImageMapper = itemImageMapper;
     }
 
     @Override
-    public ItemSummaryDto toDto(Item entity) {
+    public ItemSummaryDto toDto(final Item entity) {
         ItemImage itemImage = entity.getItemImages().getFirst();
 
         return new ItemSummaryDto(
@@ -30,7 +30,7 @@ public final class ItemSummaryMapper implements SummaryMapper<Item, ItemSummaryD
     }
 
     @Override
-    public List<ItemSummaryDto> toDto(List<Item> entityList) {
+    public List<ItemSummaryDto> toDto(final List<Item> entityList) {
         return entityList.stream().map(this::toDto).toList();
     }
 }
