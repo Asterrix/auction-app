@@ -20,8 +20,7 @@ import java.util.List;
 
 import static com.atlantbh.internship.auction.app.controller.ItemControllerTestConstant.*;
 import static org.hamcrest.Matchers.closeTo;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -49,7 +48,7 @@ class ItemControllerTest {
         ItemSummaryDto itemSummaryDto = new ItemSummaryDto(ID, ITEM_NAME, INITIAL_PRICE, itemImageDto);
         Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 
-//        when(itemService.getAll).thenReturn(mockPage);
+        when(itemService.getAll(any(Pageable.class))).thenReturn(mockPage);
 
         mockMvc.perform(get("/api/v1/items"))
                 .andExpect(status().isOk())
