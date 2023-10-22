@@ -7,11 +7,13 @@ export interface ItemSummary {
   id: number;
   name: string;
   initialPrice: number;
-  portrait: {
-    id: number;
-    name: string;
-    imageUrl: string;
-  }
+  itemImages: [
+    {
+      id: number;
+      name: string;
+      imageUrl: string;
+    }
+  ];
 }
 
 enum SortItemsAttribute {
@@ -49,7 +51,7 @@ export class HomeItemsService {
     const params = {
       page: this._pageNumber,
       size: this._pageSize,
-      sort: sortByAttribute,sortDirection
+      sort: sortByAttribute, sortDirection
     };
 
     return this.httpClient.get<Page<ItemSummary>>(this._endpoint, {params});

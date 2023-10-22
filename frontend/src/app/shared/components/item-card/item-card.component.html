@@ -1,6 +1,6 @@
 <div class="item-card">
   <a class="item-card__link">
-    <img alt="Image of an item" src="{{item.portrait.imageUrl}}"/>
+    <img alt="Image of an item" src="{{item.itemImages.at(0)?.imageUrl}}"/>
   </a>
   <span class="item-card__name">{{item.name}}</span>
   <p class="item-card__text">Start from <span class="item-card--price">${{item.initialPrice}}</span></p>
