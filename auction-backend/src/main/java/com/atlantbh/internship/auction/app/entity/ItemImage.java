@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "items_images")
 public class ItemImage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -22,11 +23,21 @@ public class ItemImage {
     @JsonIgnore
     private Item item;
 
+    public ItemImage() {
+    }
+
+    public ItemImage(final Integer id, final String name, final String imageUrl, final Item item) {
+        this.id = id;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.item = item;
+    }
+
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -34,7 +45,7 @@ public class ItemImage {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -42,7 +53,16 @@ public class ItemImage {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(final String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(final Item item) {
+        this.item = item;
+    }
+
 }
