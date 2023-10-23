@@ -1,10 +1,4 @@
 spring:
-  datasource:
-    driver-class-name: ${db_connection_driver}
-    url: ${db_connection_url}
-    username: ${db_connection_username}
-    password: ${db_connection_password}
-
   sql:
     init:
       mode: always

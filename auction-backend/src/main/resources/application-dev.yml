@@ -1,16 +1,15 @@
 spring:
-  datasource:
-    driver-class-name: ${db_connection_driver}
-    url: ${db_connection_url}
-    username: ${db_connection_username}
-    password: ${db_connection_password}
-
   jpa:
     properties:
       hibernate:
         show_sql: true
         format_sql: true
     show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  flyway:
+    baseline-on-migrate: true
 
 logging:
   level:
