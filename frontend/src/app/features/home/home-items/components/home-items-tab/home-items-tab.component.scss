@@ -5,7 +5,7 @@
   display: flex;
 
   &__list {
-    border-bottom: 1px solid $neutral-09;
+    border-bottom: 1px solid $neutral-light-grey;
     display: flex;
     list-style: none;
     width: 100%;
@@ -34,7 +34,7 @@
 .item--active {
   border-bottom: 3px solid $primary;
   @extend .font-semibold;
-  color: $neutral-00;
+  color: $neutral-dark;
   font-size: 1.8rem;
 
   &:hover {

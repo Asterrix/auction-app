@@ -1,7 +1,7 @@
-<a *ngIf="externalLink; else useHref" href="{{link}}">
+<a *ngIf="externalLink; else useRouterLink" href="{{link}}">
   <img alt="{{alt}}" height="{{imageHeight}}" ngSrc="{{imageSource}}" width="{{imageWidth}}"/>
 </a>
-<ng-template #useHref>
+<ng-template #useRouterLink>
   <a routerLink="{{link}}">
     <img alt="{{alt}}" height="{{imageHeight}}" ngSrc="{{imageSource}}" width="{{imageWidth}}"/>
   </a>
