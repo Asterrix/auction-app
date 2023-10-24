@@ -1,0 +1,32 @@
+@import "colors.styles";
+@import "typography.styles";
+
+.item-information {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  &__content {
+    color: $neutral-grey;
+  }
+}
+
+.tab-item {
+  margin-right: 0.8rem;
+
+  &__link {
+    border-bottom: 2px solid transparent;
+    display: block;
+    padding: 0.8rem 1.6rem;
+
+    &:hover {
+      border-bottom: 2px solid $primary;
+    }
+  }
+}
+
+.--active {
+  border-bottom: 2px solid $primary;
+  @extend .font-regular;
+  color: $primary;
+}

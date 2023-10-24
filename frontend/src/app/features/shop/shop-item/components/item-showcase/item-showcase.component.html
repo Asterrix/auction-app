@@ -1,0 +1,12 @@
+<div class="item-showcase">
+  <div class="item-showcase__layout">
+    <div class="item-showcase__main">
+      <img src="{{activeImage?.imageUrl}}" alt="Main Image" class="item-showcase__main__image" />
+    </div>
+    <div class="item-showcase__slide">
+      <div *ngFor="let image of listOfImages" class="item-showcase__slide__item" (click)="changeActiveImage(image)">
+        <img src="{{image.imageUrl}}" alt="Image" />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="item-information">
+  <app-tab>
+    <li class="tab-item">
+      <a [routerLinkActiveOptions]="{exact: false}"
+         class="tab-item__link"
+         routerLink="/shop/item/"
+         routerLinkActive="--active">
+        Details
+      </a>
+    </li>
+  </app-tab>
+  <div>
+    <p class="item-information__content">
+      {{description}}
+    </p>
+  </div>
+</div>

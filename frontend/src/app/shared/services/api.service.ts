@@ -36,7 +36,7 @@ export class ApiService {
     const getListOfItemsParams = {
       page: 0,
       size: 8,
-      sort: sortAttribute, sortDirection
+      sort: `${sortAttribute},${sortDirection}`
     };
 
     return this.httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${ApiRoute.ItemRoute.Items}`, {params: getListOfItemsParams});
