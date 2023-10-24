@@ -26,6 +26,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(final CorsRegistry registry) {
                 createMapping(registry, "/items", new String[]{HttpMethod.GET.name()});
+                createMapping(registry, "/items/{id}", new String[]{HttpMethod.GET.name()});
                 createMapping(registry, "/category", new String[]{HttpMethod.GET.name()});
                 createMapping(registry, "/items/featured", new String[]{HttpMethod.GET.name()});
             }

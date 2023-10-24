@@ -1,5 +1,6 @@
 package com.atlantbh.internship.auction.app.service;
 
+import com.atlantbh.internship.auction.app.dto.ItemDto;
 import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
@@ -67,6 +68,29 @@ class ItemServiceTest {
     }
 
     @Test
+    void ItemService_GetById_ReturnsItem() {
+        Item item = new Item(1, "Item1", "Desc", new BigDecimal("40.00"), LocalDate.EPOCH, LocalDate.EPOCH, List.of());
+        Optional<Item> optionalItem = Optional.of(item);
+
+        when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
+        Optional<ItemDto> result = service.getById(anyInt());
+
+        assertTrue(result.isPresent());
+        verify(itemRepository, times(1)).findById(anyInt());
+    }
+
+    @Test
+    void ItemService_GetById_ReturnsEmptyOptional() {
+        Optional<Item> optionalItem = Optional.empty();
+
+        when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
+        Optional<ItemDto> result = service.getById(anyInt());
+
+        assertTrue(result.isEmpty());
+        verify(itemRepository, times(1)).findById(anyInt());
+    }
+
+    @Test
     void ItemService_GetFeatured_ReturnsItem() {
         when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(LocalDate.now().plusDays(7))).thenReturn(Optional.of(item));
         when(imageRepository.findFirstByItem_IdOrderByIdAsc(item.getId())).thenReturn(Optional.of(itemImage));
@@ -80,9 +104,7 @@ class ItemServiceTest {
     void ItemService_GetFeatured_ThrowsError_WhenItemIsNull() {
         when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class))).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> {
-            service.getFeatured();
-        });
+        assertThrows(NoSuchElementException.class, () -> service.getFeatured());
     }
 
     @Test
@@ -91,8 +113,6 @@ class ItemServiceTest {
 
         when(imageRepository.findFirstByItem_IdOrderByIdAsc(anyInt())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> {
-            service.getFeatured();
-        });
+        assertThrows(NoSuchElementException.class, () -> service.getFeatured());
     }
 }

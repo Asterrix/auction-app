@@ -1,0 +1,13 @@
+@import "colors.styles";
+@import "typography.styles";
+
+.tab {
+  display: flex;
+
+  &__list {
+    border-bottom: 1px solid $neutral-light-grey;
+    display: flex;
+    list-style: none;
+    width: 100%;
+  }
+}
