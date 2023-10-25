@@ -2,12 +2,10 @@
   <div class="highlight__layout">
 
     <div class="highlight__body">
-      <h1 class="highlight__label label label--title">Running Shoes</h1>
-      <span class="highlight__label label label--price">Start From $59.00</span>
+      <h1 class="highlight__label label label--title">{{item?.name}}</h1>
+      <span class="highlight__label label label--price">Start From ${{item?.initialPrice}}</span>
       <p class="highlight__description">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor.
-        Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam
-        et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.
+        {{item?.description}}
       </p>
       <a class="highlight__btn">
         Bid Now
@@ -26,7 +24,7 @@
     </div>
 
     <div class="highlight__image">
-      <img alt="Featured item" src="https://images.unsplash.com/photo-1562183241-b937e95585b6?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cnVubmluZyUyMHNob2VzfGVufDB8fDB8fHww"/>
+      <img alt="Featured item" src="{{item?.itemImages?.at(0)?.imageUrl}}"/>
     </div>
 
   </div>

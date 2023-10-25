@@ -19,7 +19,7 @@ class ItemMapperTest {
         ItemImage itemImage = new ItemImage(1, "Image1", "ImageUrl", item);
         item.setItemImages(List.of(itemImage));
 
-        ItemSummaryDto itemSummaryDto = ItemMapper.convertToDto(item);
+        ItemSummaryDto itemSummaryDto = ItemMapper.convertToSummaryDto(item);
 
         assertEquals(item.getId(), itemSummaryDto.id());
         assertEquals(item.getName(), itemSummaryDto.name());
@@ -33,7 +33,7 @@ class ItemMapperTest {
     void ItemMapper_TakeListOfEntities_MapThemTo_ListOfSummaryDto() {
         List<Item> items = List.of(new Item(), new Item(), new Item());
 
-        List<ItemSummaryDto> result = ItemMapper.convertToDto(items);
+        List<ItemSummaryDto> result = ItemMapper.convertToSummaryDto(items);
 
         assertEquals(items.size(), result.size());
     }

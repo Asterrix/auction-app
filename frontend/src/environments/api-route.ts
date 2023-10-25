@@ -7,7 +7,8 @@ enum HomeRouteEndpoint {
 }
 
 enum ItemRouteEndpoint {
-  Items = "items"
+  Items = "items",
+  Featured = "featured"
 }
 
 /* Page Labels */
