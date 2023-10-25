@@ -7,3 +7,6 @@ spring:
 
   profiles:
     active: dev
+
+app-properties:
+  client-route: http://localhost:4200
