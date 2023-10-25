@@ -38,10 +38,10 @@ export class HomeItemsComponent implements OnInit, OnDestroy {
   loadItems(): void {
     switch (this._queryParam) {
       case Section.LastChance:
-        this.itemService.items$.data$ = this.itemService.getListOfLastChanceItems();
+        this.itemService.items$.load(this.itemService.getListOfLastChanceItems());
         break;
       default:
-        this.itemService.items$.data$ = this.itemService.getListOfNewestItems();
+        this.itemService.items$.load(this.itemService.getListOfNewestItems());
     }
 
     this.itemService.items$.data$.subscribe((items: Page<ItemSummary> | undefined) => {

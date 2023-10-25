@@ -9,13 +9,13 @@ import {HomeTermsConditionsComponent} from "./home-terms-conditions/home-terms-c
 
 export const HOME_ROUTES: Route[] = [
   {
-    path: Constant.EMPTY_VALUE,
+    path: Constant.EmptyValue,
     title: `${environment.applicationName} - ${HomeRouteTitles[ApiRoute.HomeRoute.Home]}`,
     data: {
       trail: HomeRouteTitles[ApiRoute.HomeRoute.Home]
     },
     children: [
-      {path: Constant.EMPTY_VALUE, component: HomeComponent},
+      {path: Constant.EmptyValue, component: HomeComponent},
       {
         path: ApiRoute.HomeRoute.AboutUs,
         title: `${environment.applicationName} - ${HomeRouteTitles[ApiRoute.HomeRoute.AboutUs]}`,
