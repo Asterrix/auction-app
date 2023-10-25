@@ -1,6 +1,7 @@
-package com.atlantbh.internship.auction.app.entity;
+package com.atlantbh.internship.auction.app.dto;
 
 import com.atlantbh.internship.auction.app.dto.ItemImageDto;
+import com.atlantbh.internship.auction.app.entity.Item;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

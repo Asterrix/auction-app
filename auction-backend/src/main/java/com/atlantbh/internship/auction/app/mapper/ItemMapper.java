@@ -2,7 +2,7 @@ package com.atlantbh.internship.auction.app.mapper;
 
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.entity.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 
 import java.util.List;
 
