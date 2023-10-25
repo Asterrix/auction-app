@@ -11,13 +11,12 @@ export interface FeaturedItem {
   name: string;
   description: string;
   initialPrice: number;
-  itemImages: [
+  itemImage:
     {
       id: number;
       name: string;
       imageUrl: string;
-    }
-  ];
+    };
 }
 
 export interface ItemSummary {
