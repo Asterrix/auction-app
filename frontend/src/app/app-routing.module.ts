@@ -1,48 +1,15 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {HomeAboutUsComponent} from "./features/home/home-about-us/home-about-us.component";
-import {HomePrivacyPolicyComponent} from "./features/home/home-privacy-policy/home-privacy-policy.component";
-import {HomeTermsConditionsComponent} from "./features/home/home-terms-conditions/home-terms-conditions.component";
-import {HomeComponent} from "./features/home/home.component";
-
-const applicationName: string = "Auction App";
+import {ApiRoute} from "../environments/api-route";
+import {Constant} from "./shared/models/enums/constant";
 
 const routes: Routes = [
-  {path: "", redirectTo: "/home", pathMatch: "full"},
+  {path: Constant.EMPTY_VALUE, redirectTo: `/${ApiRoute.HomeRoute.Home}`, pathMatch: "full"},
   {
-    path: "home",
-    title: `${applicationName} - Home`,
-    data: {
-      trail: "Home"
-    },
-    children: [
-      {path: "", component: HomeComponent},
-      {
-        path: "about-us",
-        title: `${applicationName} - About Us`,
-        component: HomeAboutUsComponent,
-        data: {
-          trail: "About Us"
-        }
-      },
-      {
-        path: "privacy-policy",
-        title: `${applicationName} - Privacy Policy`,
-        component: HomePrivacyPolicyComponent,
-        data: {
-          trail: "Privacy Policy"
-        }
-      },
-      {
-        path: "terms-and-conditions",
-        title: `${applicationName} - Terms And Conditions`,
-        component: HomeTermsConditionsComponent,
-        data: {
-          trail: "Terms And Conditions"
-        }
-      },
-    ]
-  }
+    path: ApiRoute.HomeRoute.Home,
+    loadChildren: () => import("./features/home/home-routes").then(mod => mod.HOME_ROUTES)
+  },
+  {path: "**", redirectTo: `/${ApiRoute.HomeRoute.Home}`}
 ];
 
 @NgModule({
