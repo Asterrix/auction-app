@@ -27,6 +27,10 @@ public class CorsConfig {
                 registry.addMapping("/api/v1/category")
                         .allowedOrigins(appProperties.getClientRoute())
                         .allowedMethods(HttpMethod.GET.name());
+
+                registry.addMapping("/api/v1/items/featured")
+                        .allowedOrigins(appProperties.getClientRoute())
+                        .allowedMethods(HttpMethod.GET.name());
             }
         };
     }
