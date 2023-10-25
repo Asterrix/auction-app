@@ -19,7 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAll() {
-        List<Category> categories = repository.findAll();
+        final List<Category> categories = repository.findAll();
         return CategoryMapper.convertToDto(categories);
     }
 }
