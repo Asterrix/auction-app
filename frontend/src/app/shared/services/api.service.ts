@@ -41,11 +41,7 @@ export class ApiService implements IApiService {
   constructor(private httpClient: HttpClient) {
   }
 
-  get<T>(params: IGetMethod): Observable<T> {
-    return this.httpClient.get<T>(params.path, params.options);
-  }
+  get = <T>(params: IGetMethod): Observable<T> => this.httpClient.get<T>(params.path, params.options);
 
-  post<T>(post: IPostMethod): Observable<T> {
-    return this.httpClient.post<T>(post.path, post.body, post.options);
-  }
+  post = <T>(params: IPostMethod): Observable<T> => this.httpClient.post<T>(params.path, params.body, params.options);
 }

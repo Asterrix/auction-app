@@ -20,6 +20,7 @@ export const HomeRouteTitles: Record<HomeRouteEndpoint, string> = {
 };
 
 
+/* Groups All Endpoints Together */
 export const ApiRoute = {
   HomeRoute: HomeRouteEndpoint,
   ItemRoute: ItemRouteEndpoint
