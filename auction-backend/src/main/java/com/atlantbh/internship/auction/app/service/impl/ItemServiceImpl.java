@@ -6,6 +6,7 @@ import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.projection.ItemImageInfo;
 import com.atlantbh.internship.auction.app.projection.ItemInfo;
+import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import org.springframework.data.domain.Page;
@@ -19,9 +20,11 @@ import java.util.Optional;
 @Service
 public final class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
+    private final ItemImageRepository itemImageRepository;
 
-    public ItemServiceImpl(final ItemRepository itemRepository) {
+    public ItemServiceImpl(final ItemRepository itemRepository, final ItemImageRepository itemImageRepository) {
         this.itemRepository = itemRepository;
+        this.itemImageRepository = itemImageRepository;
     }
 
     @Override
@@ -35,7 +38,7 @@ public final class ItemServiceImpl implements ItemService {
         final Integer featuredItemId = 1;
 
         final Optional<ItemInfo> itemInfo = itemRepository.getFeaturedItem(featuredItemId);
-        final Optional<ItemImageInfo> itemImageInfo = itemRepository.getFeaturedItemImage(featuredItemId);
+        final Optional<ItemImageInfo> itemImageInfo = itemImageRepository.getFeaturedItemImage(featuredItemId);
 
         if (itemInfo.isPresent() && itemImageInfo.isPresent()) {
             return ItemMapper.convertToFeaturedDto(itemInfo.get(), itemImageInfo.get());

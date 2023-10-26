@@ -5,6 +5,7 @@ import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.projection.ItemImageInfo;
 import com.atlantbh.internship.auction.app.projection.ItemInfo;
+import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.impl.ItemServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,13 +31,16 @@ import static org.mockito.Mockito.*;
 class ItemServiceTest {
 
     @Mock
-    ItemRepository repository;
+    ItemRepository itemRepository;
+
+    @Mock
+    ItemImageRepository imageRepository;
 
     ItemServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        this.service = new ItemServiceImpl(repository);
+        service = new ItemServiceImpl(itemRepository, imageRepository);
     }
 
     @Test
@@ -50,11 +54,11 @@ class ItemServiceTest {
         Page<Item> page = new PageImpl<>(itemList);
         Pageable pageRequest = PageRequest.of(0, 3);
 
-        when(repository.findAll(pageRequest)).thenReturn(page);
+        when(itemRepository.findAll(pageRequest)).thenReturn(page);
         Page<ItemSummaryDto> result = service.getAll(pageRequest);
 
         assertEquals(itemList.size(), result.getTotalElements());
-        verify(repository, times(1)).findAll(pageRequest);
+        verify(itemRepository, times(1)).findAll(pageRequest);
     }
 
     @Test
@@ -98,8 +102,8 @@ class ItemServiceTest {
             }
         };
 
-        when(repository.getFeaturedItem(1)).thenReturn(Optional.of(itemInfo));
-        when(repository.getFeaturedItemImage(1)).thenReturn(Optional.of(itemImageInfo));
+        when(itemRepository.getFeaturedItem(1)).thenReturn(Optional.of(itemInfo));
+        when(imageRepository.getFeaturedItemImage(1)).thenReturn(Optional.of(itemImageInfo));
 
         ItemFeaturedDto featured = service.getFeatured();
 
@@ -108,7 +112,7 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetFeatured_ThrowsError() {
-        when(repository.getFeaturedItem(1)).thenReturn(Optional.empty());
+        when(itemRepository.getFeaturedItem(1)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> {
             service.getFeatured();
