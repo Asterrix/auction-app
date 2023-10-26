@@ -36,15 +36,15 @@ public final class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemFeaturedDto getFeatured() {
-        final LocalDate endDateThreshold = LocalDate.now().plusDays(3);
+        final LocalDate endDateThreshold = LocalDate.now().plusDays(7);
 
-        final Optional<ItemInfo> itemInfo = itemRepository.getFeaturedItem(endDateThreshold);
+        final Optional<ItemInfo> itemInfo = itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(endDateThreshold);
 
         if (itemInfo.isEmpty()) {
             throw new NoSuchElementException("Featured item was not found.");
         }
 
-        final Optional<ItemImageInfo> itemImageInfo = itemImageRepository.getFeaturedItemImage(itemInfo.get().getId());
+        final Optional<ItemImageInfo> itemImageInfo = itemImageRepository.findFirstByItem_IdOrderByIdAsc(itemInfo.get().getId());
 
         if (itemImageInfo.isEmpty()) {
             throw new NoSuchElementException("Featured item images were not found.");

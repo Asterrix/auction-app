@@ -102,8 +102,8 @@ class ItemServiceTest {
             }
         };
 
-        when(itemRepository.getFeaturedItem(LocalDate.now().plusDays(3))).thenReturn(Optional.of(itemInfo));
-        when(imageRepository.getFeaturedItemImage(itemInfo.getId())).thenReturn(Optional.of(itemImageInfo));
+        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(LocalDate.now().plusDays(7))).thenReturn(Optional.of(itemInfo));
+        when(imageRepository.findFirstByItem_IdOrderByIdAsc(itemInfo.getId())).thenReturn(Optional.of(itemImageInfo));
 
         ItemFeaturedDto featured = service.getFeatured();
 
@@ -112,7 +112,7 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetFeatured_ThrowsError_WhenItemIsNull() {
-        when(itemRepository.getFeaturedItem(any(LocalDate.class))).thenReturn(Optional.empty());
+        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class))).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> {
             service.getFeatured();
@@ -143,9 +143,9 @@ class ItemServiceTest {
             }
         };
 
-        when(itemRepository.getFeaturedItem(any(LocalDate.class))).thenReturn(Optional.of(itemInfo));
+        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class))).thenReturn(Optional.of(itemInfo));
 
-        when(imageRepository.getFeaturedItemImage(anyInt())).thenReturn(Optional.empty());
+        when(imageRepository.findFirstByItem_IdOrderByIdAsc(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> {
             service.getFeatured();
