@@ -21,7 +21,8 @@ public final class ItemMapper {
     }
 
     public static ItemFeaturedDto convertToFeaturedDto(final ItemInfo itemInfo, final ItemImageInfo itemImageInfo) {
-        return new ItemFeaturedDto(itemInfo.getId(),
+        return new ItemFeaturedDto(
+                itemInfo.getId(),
                 itemInfo.getName(),
                 itemInfo.getDescription(),
                 itemInfo.getInitialPrice(),
