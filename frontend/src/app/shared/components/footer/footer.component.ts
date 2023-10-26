@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {AnchorImageComponent} from "../anchor-image/anchor-image.component";
 import {RouterLink} from "@angular/router";
-import {SocialMediaIcon} from "../../../../assets/asset";
 
 @Component({
   selector: "app-footer",
@@ -13,5 +12,4 @@ import {SocialMediaIcon} from "../../../../assets/asset";
 })
 export class FooterComponent {
 
-    protected readonly SocialMedia = SocialMediaIcon;
 }

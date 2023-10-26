@@ -3,7 +3,6 @@ import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {NavigationTrailService, NavigationTrailStructure} from "./services/navigation-trail.service";
 import {Observable} from "rxjs";
-import {Chevron} from "../../../../assets/asset";
 
 export enum NavigationTrail {
   Trail = "trail"
@@ -32,6 +31,4 @@ export class NavigationTrailComponent {
   public getPaths(): Observable<Array<NavigationTrailStructure>> {
     return this.navigationTrailService.getPathsAsObservable();
   }
-
-    protected readonly Chevron = Chevron;
 }
