@@ -30,16 +30,16 @@ import static org.mockito.Mockito.*;
 class ItemServiceTest {
 
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Mock
-    ItemImageRepository imageRepository;
+    private ItemImageRepository imageRepository;
 
-    ItemServiceImpl service;
+    private ItemServiceImpl service;
 
-    Item item;
+    private Item item;
 
-    ItemImage itemImage;
+    private ItemImage itemImage;
 
     @BeforeEach
     void setUp() {
