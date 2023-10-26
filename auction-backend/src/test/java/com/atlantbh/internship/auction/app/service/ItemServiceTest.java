@@ -102,8 +102,8 @@ class ItemServiceTest {
             }
         };
 
-        when(itemRepository.getFeaturedItem(1)).thenReturn(Optional.of(itemInfo));
-        when(imageRepository.getFeaturedItemImage(1)).thenReturn(Optional.of(itemImageInfo));
+        when(itemRepository.getFeaturedItem(LocalDate.now().plusDays(3))).thenReturn(Optional.of(itemInfo));
+        when(imageRepository.getFeaturedItemImage(itemInfo.getId())).thenReturn(Optional.of(itemImageInfo));
 
         ItemFeaturedDto featured = service.getFeatured();
 
@@ -111,8 +111,41 @@ class ItemServiceTest {
     }
 
     @Test
-    void ItemService_GetFeatured_ThrowsError() {
-        when(itemRepository.getFeaturedItem(1)).thenReturn(Optional.empty());
+    void ItemService_GetFeatured_ThrowsError_WhenItemIsNull() {
+        when(itemRepository.getFeaturedItem(any(LocalDate.class))).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> {
+            service.getFeatured();
+        });
+    }
+
+    @Test
+    void ItemService_GetFeatured_ThrowsError_WhenItemImageIsNull() {
+        final ItemInfo itemInfo = new ItemInfo() {
+            @Override
+            public Integer getId() {
+                return 1;
+            }
+
+            @Override
+            public String getName() {
+                return "Item";
+            }
+
+            @Override
+            public String getDescription() {
+                return "Desc";
+            }
+
+            @Override
+            public BigDecimal getInitialPrice() {
+                return new BigDecimal("92.00");
+            }
+        };
+
+        when(itemRepository.getFeaturedItem(any(LocalDate.class))).thenReturn(Optional.of(itemInfo));
+
+        when(imageRepository.getFeaturedItemImage(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> {
             service.getFeatured();

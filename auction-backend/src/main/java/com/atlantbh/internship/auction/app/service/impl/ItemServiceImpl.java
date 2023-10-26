@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -35,15 +36,20 @@ public final class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemFeaturedDto getFeatured() {
-        final Integer featuredItemId = 1;
+        final LocalDate endDateThreshold = LocalDate.now().plusDays(3);
 
-        final Optional<ItemInfo> itemInfo = itemRepository.getFeaturedItem(featuredItemId);
-        final Optional<ItemImageInfo> itemImageInfo = itemImageRepository.getFeaturedItemImage(featuredItemId);
+        final Optional<ItemInfo> itemInfo = itemRepository.getFeaturedItem(endDateThreshold);
 
-        if (itemInfo.isPresent() && itemImageInfo.isPresent()) {
-            return ItemMapper.convertToFeaturedDto(itemInfo.get(), itemImageInfo.get());
-        } else {
+        if (itemInfo.isEmpty()) {
             throw new NoSuchElementException("Featured item was not found.");
         }
+
+        final Optional<ItemImageInfo> itemImageInfo = itemImageRepository.getFeaturedItemImage(itemInfo.get().getId());
+
+        if (itemImageInfo.isEmpty()) {
+            throw new NoSuchElementException("Featured item images were not found.");
+        }
+
+        return ItemMapper.convertToFeaturedDto(itemInfo.get(), itemImageInfo.get());
     }
 }
