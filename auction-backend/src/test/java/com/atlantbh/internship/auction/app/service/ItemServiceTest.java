@@ -3,8 +3,7 @@ package com.atlantbh.internship.auction.app.service;
 import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.projection.ItemImageInfo;
-import com.atlantbh.internship.auction.app.projection.ItemInfo;
+import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.impl.ItemServiceImpl;
@@ -38,9 +37,15 @@ class ItemServiceTest {
 
     ItemServiceImpl service;
 
+    Item item;
+
+    ItemImage itemImage;
+
     @BeforeEach
     void setUp() {
         service = new ItemServiceImpl(itemRepository, imageRepository);
+        item = new Item(1, "Item", "desc", new BigDecimal("20.00"), LocalDate.MIN, LocalDate.MAX, List.of());
+        itemImage = new ItemImage(1, "Image1", "ImageUrl", item);
     }
 
     @Test
@@ -63,47 +68,8 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetFeatured_ReturnsItem() {
-        final ItemInfo itemInfo = new ItemInfo() {
-            @Override
-            public Integer getId() {
-                return 1;
-            }
-
-            @Override
-            public String getName() {
-                return "Item";
-            }
-
-            @Override
-            public String getDescription() {
-                return "Desc";
-            }
-
-            @Override
-            public BigDecimal getInitialPrice() {
-                return new BigDecimal("92.00");
-            }
-        };
-
-        final ItemImageInfo itemImageInfo = new ItemImageInfo() {
-            @Override
-            public Integer getId() {
-                return 1;
-            }
-
-            @Override
-            public String getName() {
-                return "Image";
-            }
-
-            @Override
-            public String getImageUrl() {
-                return "ImageUrl";
-            }
-        };
-
-        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(LocalDate.now().plusDays(7))).thenReturn(Optional.of(itemInfo));
-        when(imageRepository.findFirstByItem_IdOrderByIdAsc(itemInfo.getId())).thenReturn(Optional.of(itemImageInfo));
+        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(LocalDate.now().plusDays(7))).thenReturn(Optional.of(item));
+        when(imageRepository.findFirstByItem_IdOrderByIdAsc(item.getId())).thenReturn(Optional.of(itemImage));
 
         ItemFeaturedDto featured = service.getFeatured();
 
@@ -121,29 +87,7 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetFeatured_ThrowsError_WhenItemImageIsNull() {
-        final ItemInfo itemInfo = new ItemInfo() {
-            @Override
-            public Integer getId() {
-                return 1;
-            }
-
-            @Override
-            public String getName() {
-                return "Item";
-            }
-
-            @Override
-            public String getDescription() {
-                return "Desc";
-            }
-
-            @Override
-            public BigDecimal getInitialPrice() {
-                return new BigDecimal("92.00");
-            }
-        };
-
-        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class))).thenReturn(Optional.of(itemInfo));
+        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class))).thenReturn(Optional.of(item));
 
         when(imageRepository.findFirstByItem_IdOrderByIdAsc(anyInt())).thenReturn(Optional.empty());
 
