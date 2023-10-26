@@ -3,9 +3,8 @@ package com.atlantbh.internship.auction.app.service.impl;
 import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
+import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
-import com.atlantbh.internship.auction.app.projection.ItemImageInfo;
-import com.atlantbh.internship.auction.app.projection.ItemInfo;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.ItemService;
@@ -38,13 +37,13 @@ public final class ItemServiceImpl implements ItemService {
     public ItemFeaturedDto getFeatured() {
         final LocalDate endDateThreshold = LocalDate.now().plusDays(7);
 
-        final Optional<ItemInfo> itemInfo = itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(endDateThreshold);
+        final Optional<Item> itemInfo = itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(endDateThreshold);
 
         if (itemInfo.isEmpty()) {
             throw new NoSuchElementException("Featured item was not found.");
         }
 
-        final Optional<ItemImageInfo> itemImageInfo = itemImageRepository.findFirstByItem_IdOrderByIdAsc(itemInfo.get().getId());
+        final Optional<ItemImage> itemImageInfo = itemImageRepository.findFirstByItem_IdOrderByIdAsc(itemInfo.get().getId());
 
         if (itemImageInfo.isEmpty()) {
             throw new NoSuchElementException("Featured item images were not found.");

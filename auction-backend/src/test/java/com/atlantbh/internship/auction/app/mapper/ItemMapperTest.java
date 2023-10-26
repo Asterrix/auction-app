@@ -4,8 +4,7 @@ import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
-import com.atlantbh.internship.auction.app.projection.ItemImageInfo;
-import com.atlantbh.internship.auction.app.projection.ItemInfo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -16,12 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ItemMapperTest {
 
+    private Item item;
+    private ItemImage itemImage;
+
+    @BeforeEach
+    void setUp() {
+        item = new Item(1, "Item", "Desc", new BigDecimal("0"), LocalDate.EPOCH, LocalDate.EPOCH, List.of());
+        itemImage = new ItemImage(1, "Image1", "ImageUrl", item);
+        item.setItemImages(List.of(itemImage));
+    }
+
     @Test
     void ItemMapper_TakeEntityAndMapItTo_SummaryDto() {
-        Item item = new Item(1, "Item", "Desc", new BigDecimal("0"), LocalDate.EPOCH, LocalDate.EPOCH, List.of());
-        ItemImage itemImage = new ItemImage(1, "Image1", "ImageUrl", item);
-        item.setItemImages(List.of(itemImage));
-
         ItemSummaryDto itemSummaryDto = ItemMapper.convertToSummaryDto(item);
 
         assertEquals(item.getId(), itemSummaryDto.id());
@@ -42,53 +47,15 @@ class ItemMapperTest {
     }
 
     @Test
-    void ItemMapper_TakeProjectionsAndMapThemTo_ItemFeaturedDto() {
-        final ItemInfo itemInfo = new ItemInfo() {
-            @Override
-            public Integer getId() {
-                return 1;
-            }
+    void ItemMapper_TakeProjections_AndMapThemTo_ItemFeaturedDto() {
+        ItemFeaturedDto featuredDto = ItemMapper.convertToFeaturedDto(item, itemImage);
 
-            @Override
-            public String getName() {
-                return "Item";
-            }
-
-            @Override
-            public String getDescription() {
-                return "Desc";
-            }
-
-            @Override
-            public BigDecimal getInitialPrice() {
-                return new BigDecimal("92.00");
-            }
-        };
-
-        final ItemImageInfo itemImageInfo = new ItemImageInfo() {
-            @Override
-            public Integer getId() {
-                return 1;
-            }
-
-            @Override
-            public String getName() {
-                return "Image";
-            }
-
-            @Override
-            public String getImageUrl() {
-                return "ImageUrl";
-            }
-        };
-
-        ItemFeaturedDto featuredDto = ItemMapper.convertToFeaturedDto(itemInfo, itemImageInfo);
-
-        assertEquals(itemInfo.getId(), featuredDto.id());
-        assertEquals(itemInfo.getName(), featuredDto.name());
-        assertEquals(itemInfo.getInitialPrice(), featuredDto.initialPrice());
-        assertEquals(itemImageInfo.getId(), featuredDto.itemImage().id());
-        assertEquals(itemImageInfo.getName(), featuredDto.itemImage().name());
-        assertEquals(itemImageInfo.getImageUrl(), featuredDto.itemImage().imageUrl());
+        assertEquals(item.getId(), featuredDto.id());
+        assertEquals(item.getName(), featuredDto.name());
+        assertEquals(item.getDescription(), featuredDto.description());
+        assertEquals(item.getInitialPrice(), featuredDto.initialPrice());
+        assertEquals(item.getItemImages().getFirst().getId(), featuredDto.itemImage().id());
+        assertEquals(item.getItemImages().getFirst().getName(), featuredDto.itemImage().name());
+        assertEquals(item.getItemImages().getFirst().getImageUrl(), featuredDto.itemImage().imageUrl());
     }
 }
