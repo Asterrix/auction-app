@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {SearchIcon} from "../../../../../../assets/asset";
 
 @Component({
   selector: "app-search-bar",
@@ -11,5 +10,4 @@ import {SearchIcon} from "../../../../../../assets/asset";
 })
 export class SearchBarComponent {
 
-    protected readonly SearchIcon = SearchIcon;
 }
