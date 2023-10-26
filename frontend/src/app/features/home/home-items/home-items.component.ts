@@ -6,6 +6,7 @@ import {ItemCardComponent} from "../../../shared/components/item-card/item-card.
 import {Page} from "../../../shared/models/interfaces/page";
 import {ActivatedRoute, Params} from "@angular/router";
 import {ItemService, ItemSummary} from "../services/item.service";
+import {ApiService} from "../../../shared/services/api.service";
 
 @Component({
   selector: "app-home-items",
@@ -17,10 +18,11 @@ import {ItemService, ItemSummary} from "../services/item.service";
 export class HomeItemsComponent implements OnInit, OnDestroy {
   private _queryParamSub: Subscription | undefined;
   private _queryParam: Section = Section.Default;
-  private _items: Array<ItemSummary> = Array<ItemSummary>();
 
-  constructor(private itemService: ItemService, private activatedRoute: ActivatedRoute) {
+  constructor(private itemService: ItemService, private apiService: ApiService, private activatedRoute: ActivatedRoute) {
   }
+
+  private _items: Array<ItemSummary> = Array<ItemSummary>();
 
   get items(): Array<ItemSummary> {
     return this._items;
@@ -38,10 +40,10 @@ export class HomeItemsComponent implements OnInit, OnDestroy {
   loadItems(): void {
     switch (this._queryParam) {
       case Section.LastChance:
-        this.itemService.items$.load(this.itemService.getListOfLastChanceItems());
+        this.itemService.items$.load(this.apiService.getListOfLastChanceItems());
         break;
       default:
-        this.itemService.items$.load(this.itemService.getListOfNewestItems());
+        this.itemService.items$.load(this.apiService.getListOfNewestItems());
     }
 
     this.itemService.items$.data$.subscribe((items: Page<ItemSummary> | undefined) => {
