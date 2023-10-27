@@ -6,6 +6,11 @@ enum HomeRouteEndpoint {
   TermsAndConditions = "terms-and-conditions"
 }
 
+enum ShopRouteEndpoint {
+  Shop = "shop",
+  Item = "item"
+}
+
 enum ItemRouteEndpoint {
   Items = "items",
   Featured = "featured"
@@ -19,9 +24,15 @@ export const HomeRouteTitles: Record<HomeRouteEndpoint, string> = {
   [HomeRouteEndpoint.TermsAndConditions]: "Terms and Conditions"
 };
 
+export const ShopRouteTitles: Record<ShopRouteEndpoint, string> = {
+  [ShopRouteEndpoint.Shop]: "Shop",
+  [ShopRouteEndpoint.Item]: "Single product",
+};
+
 
 /* Groups All Endpoints Together */
 export const ApiRoute = {
   HomeRoute: HomeRouteEndpoint,
+  ShopRoute: ShopRouteEndpoint,
   ItemRoute: ItemRouteEndpoint
 };

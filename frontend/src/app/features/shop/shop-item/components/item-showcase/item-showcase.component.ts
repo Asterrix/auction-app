@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {Item, ItemImage, ItemService} from "../../services/item.service";
+import {Observable, Subscription} from "rxjs";
+import {Item, ItemImage, ItemService} from "../../../../../shared/services/item.service";
 
 @Component({
   selector: "app-item-showcase",
@@ -10,25 +11,29 @@ import {Item, ItemImage, ItemService} from "../../services/item.service";
   styleUrls: ["./item-showcase.component.scss"]
 })
 export class ItemShowcaseComponent implements OnInit, OnDestroy {
-  activeImage: ItemImage | undefined;
-  listOfImages: Array<ItemImage> | undefined;
+  item$: Observable<Item> = {} as Observable<Item>;
+  activeImage: ItemImage = {} as ItemImage;
+  imagesSub: Subscription | undefined;
 
   constructor(private itemService: ItemService) {
   }
 
   ngOnInit(): void {
-    this.itemService.item$.data$.subscribe((item: Item | undefined) => {
-      this.activeImage = item?.itemImages?.at(0);
-      this.listOfImages = item?.itemImages;
+    this.item$ = this.itemService.getItem();
+    this.imagesSub = this.item$.subscribe((item: Item): void => {
+      if (item.itemImages && item.itemImages.length > 0) {
+        this.activeImage = item.itemImages[0];
+      }
     });
   }
 
   ngOnDestroy(): void {
-    this.itemService.item$.unsubscribe();
+    if (this.imagesSub) {
+      this.imagesSub.unsubscribe();
+    }
   }
 
-
-  changeActiveImage(image: ItemImage): void {
+  changeActiveImage(image: ItemImage) {
     this.activeImage = image;
   }
 }

@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {FeaturedItem, ItemService} from "../../../services/item.service";
-import {ApiService} from "../../../../../shared/services/api.service";
+import {FeaturedItem, ItemService} from "../../../../../shared/services/item.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: "app-home-header-highlight",
@@ -10,25 +10,14 @@ import {ApiService} from "../../../../../shared/services/api.service";
   templateUrl: "./home-header-highlight.component.html",
   styleUrls: ["./home-header-highlight.component.scss"]
 })
-export class HomeHeaderHighlightComponent implements OnInit, OnDestroy {
-  constructor(private itemService: ItemService, private apiService: ApiService) {
-  }
+export class HomeHeaderHighlightComponent implements OnInit {
+  public item$: Observable<FeaturedItem> = {} as Observable<FeaturedItem>;
 
-  private _item: FeaturedItem | undefined;
-
-  get item(): FeaturedItem | undefined {
-    return this._item;
+  constructor(private itemService: ItemService) {
   }
 
   ngOnInit(): void {
-    this.itemService.item$.data$ = this.apiService.getFeaturedItem();
-
-    this.itemService.item$.data$.subscribe((value: FeaturedItem | undefined) => {
-      this._item = value;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.itemService.item$.unsubscribe();
+    this.item$ = this.itemService.getFeaturedItem();
+    this.itemService.initFeaturedItem();
   }
 }

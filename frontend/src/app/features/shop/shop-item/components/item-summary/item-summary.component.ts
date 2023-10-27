@@ -1,14 +1,7 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {ItemService} from "../../services/item.service";
-
-export interface ItemSummary {
-  name: string;
-  startingPrice: number;
-  highestBid: number;
-  numberBids: number;
-  timeLeft: string;
-}
+import {Item, ItemService} from "../../../../../shared/services/item.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: "app-item-summary",
@@ -17,27 +10,13 @@ export interface ItemSummary {
   templateUrl: "./item-summary.component.html",
   styleUrls: ["./item-summary.component.scss"]
 })
-export class ItemSummaryComponent implements OnInit, OnDestroy {
-  itemSummary: ItemSummary | undefined;
+export class ItemSummaryComponent implements OnInit {
+  public item$: Observable<Item> = {} as Observable<Item>;
 
   constructor(private itemService: ItemService) {
   }
 
   ngOnInit(): void {
-    this.itemService.item$.data$.subscribe(value => {
-      if (value) {
-        this.itemSummary = {
-          name: value.name,
-          startingPrice: value.initialPrice,
-          numberBids: 0, // placeholder
-          highestBid: 0, // placeholder
-          timeLeft: value.timeLeft
-        };
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.itemService.item$.unsubscribe();
+    this.item$ = this.itemService.getItem();
   }
 }
