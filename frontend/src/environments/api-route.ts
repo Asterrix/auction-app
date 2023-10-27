@@ -29,6 +29,10 @@ export const ShopRouteTitles: Record<ShopRouteEndpoint, string> = {
   [ShopRouteEndpoint.Item]: "Single product",
 };
 
+/* Page Parameters */
+export enum ItemPageParam {
+  Id = "id"
+}
 
 /* Groups All Endpoints Together */
 export const ApiRoute = {

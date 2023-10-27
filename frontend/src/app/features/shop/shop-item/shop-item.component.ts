@@ -6,6 +6,7 @@ import {ItemSummaryComponent} from "./components/item-summary/item-summary.compo
 import {ItemInformationComponent} from "./components/item-information/item-information.component";
 import {ItemService} from "../../../shared/services/item.service";
 import {ActivatedRoute} from "@angular/router";
+import {ItemPageParam} from "../../../../environments/api-route";
 
 @Component({
   selector: "app-shop-item",
@@ -19,7 +20,7 @@ export class ShopItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.itemService.initItem(this.activeRoute.snapshot.params["id"]);
+    this.itemService.initItem(this.activeRoute.snapshot.params[ItemPageParam.Id]);
     this.itemService.getItem();
   }
 }
