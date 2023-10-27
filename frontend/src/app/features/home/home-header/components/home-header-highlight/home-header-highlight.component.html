@@ -1,11 +1,11 @@
-<div class="highlight">
+<div *ngIf="item$ | async as item" class="highlight">
   <div class="highlight__layout">
 
     <div class="highlight__body">
-      <h1 class="highlight__label label label--title">{{item?.name}}</h1>
-      <span class="highlight__label label label--price">Start From ${{item?.initialPrice}}</span>
+      <h1 class="highlight__label label label--title">{{item.name}}</h1>
+      <span class="highlight__label label label--price">Start From ${{item.initialPrice}}</span>
       <p class="highlight__description">
-        {{item?.description}}
+        {{item.description}}
       </p>
       <a class="highlight__btn">
         Bid Now
@@ -24,7 +24,7 @@
     </div>
 
     <div class="highlight__image">
-      <img alt="Featured item" src="{{item?.itemImage?.imageUrl}}"/>
+      <img alt="Featured item" src="{{item.itemImage.imageUrl}}"/>
     </div>
 
   </div>

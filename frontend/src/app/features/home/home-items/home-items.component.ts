@@ -1,12 +1,10 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {HomeItemsTabComponent, Section, SectionQueryParam} from "./components/home-items-tab/home-items-tab.component";
 import {ItemCardComponent} from "../../../shared/components/item-card/item-card.component";
-import {Page} from "../../../shared/models/interfaces/page";
 import {ActivatedRoute, Params} from "@angular/router";
-import {ItemService, ItemSummary} from "../services/item.service";
-import {ApiService} from "../../../shared/services/api.service";
+import {ItemService, ItemSummary} from "../../../shared/services/item.service";
 
 @Component({
   selector: "app-home-items",
@@ -16,39 +14,25 @@ import {ApiService} from "../../../shared/services/api.service";
   styleUrls: ["./home-items.component.scss"]
 })
 export class HomeItemsComponent implements OnInit, OnDestroy {
+  public items$: Observable<ItemSummary[]> = {} as Observable<ItemSummary[]>;
   private _queryParamSub: Subscription | undefined;
   private _queryParam: Section = Section.Default;
 
-  constructor(private itemService: ItemService, private apiService: ApiService, private activatedRoute: ActivatedRoute) {
-  }
-
-  private _items: Array<ItemSummary> = Array<ItemSummary>();
-
-  get items(): Array<ItemSummary> {
-    return this._items;
+  constructor(private itemService: ItemService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
     this._queryParamSub = this.activatedRoute.queryParams.subscribe((params: Params): void => {
       this._queryParam = params[SectionQueryParam.Section] || Section.Default;
-      this._items.length = 0;
 
-      this.loadItems();
-    });
-  }
-
-  loadItems(): void {
-    switch (this._queryParam) {
-      case Section.LastChance:
-        this.itemService.items$.load(this.apiService.getListOfLastChanceItems());
-        break;
-      default:
-        this.itemService.items$.load(this.apiService.getListOfNewestItems());
-    }
-
-    this.itemService.items$.data$.subscribe((items: Page<ItemSummary> | undefined) => {
-      if (items) {
-        this._items = items.content;
+      switch (this._queryParam) {
+        case Section.LastChance:
+          this.items$ = this.itemService.getItems();
+          this.itemService.initItemsLastChance();
+          break;
+        default:
+          this.items$ = this.itemService.getItems();
+          this.itemService.initItemsNewArrivals();
       }
     });
   }
@@ -57,6 +41,5 @@ export class HomeItemsComponent implements OnInit, OnDestroy {
     if (this._queryParamSub) {
       this._queryParamSub.unsubscribe();
     }
-    this.itemService.items$.unsubscribe();
   }
 }

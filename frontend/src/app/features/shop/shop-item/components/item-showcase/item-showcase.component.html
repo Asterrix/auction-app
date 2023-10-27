@@ -1,11 +1,13 @@
-<div class="item-showcase">
+<div *ngIf="item$ | async as item" class="item-showcase">
   <div class="item-showcase__layout">
     <div class="item-showcase__main">
-      <img src="{{activeImage?.imageUrl}}" alt="Main Image" class="item-showcase__main__image" />
+      <img alt="{{activeImage.name}}"
+           class="item-showcase__main__image"
+           src="{{activeImage.imageUrl}}"/>
     </div>
     <div class="item-showcase__slide">
-      <div *ngFor="let image of listOfImages" class="item-showcase__slide__item" (click)="changeActiveImage(image)">
-        <img src="{{image.imageUrl}}" alt="Image" />
+      <div (click)="changeActiveImage(image)" *ngFor="let image of item.itemImages" class="item-showcase__slide__item">
+        <img alt="Image" src="{{image.imageUrl}}"/>
       </div>
     </div>
   </div>

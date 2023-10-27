@@ -1,12 +1,11 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {NavigationTrailComponent} from "../../../shared/components/navigation-trail/navigation-trail.component";
 import {ItemShowcaseComponent} from "./components/item-showcase/item-showcase.component";
 import {ItemSummaryComponent} from "./components/item-summary/item-summary.component";
 import {ItemInformationComponent} from "./components/item-information/item-information.component";
-import {ActivatedRoute, ParamMap} from "@angular/router";
-import {ItemService} from "./services/item.service";
-import {Observable, switchMap} from "rxjs";
+import {ItemService} from "../../../shared/services/item.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: "app-shop-item",
@@ -15,25 +14,12 @@ import {Observable, switchMap} from "rxjs";
   templateUrl: "./shop-item.component.html",
   styleUrls: ["./shop-item.component.scss"]
 })
-export class ShopItemComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private service: ItemService) {
+export class ShopItemComponent implements OnInit {
+  constructor(private itemService: ItemService, private activeRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.fetchItem();
-  }
-
-  ngOnDestroy(): void {
-    this.service.item$.unsubscribe();
-  }
-
-  private fetchItem(): void {
-    this.service.item$.load(this.route.paramMap.pipe(
-      switchMap((param: ParamMap) => {
-        const itemId: number = Number(param.get("id"));
-        return this.service.getItem(itemId);
-      })
-    ));
+    this.itemService.initItem(this.activeRoute.snapshot.params["id"]);
+    this.itemService.getItem();
   }
 }
-

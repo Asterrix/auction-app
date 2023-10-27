@@ -1,9 +1,9 @@
-<div class="item-summary">
-  <h1 class="item-summary__title">{{itemSummary?.name}}</h1>
-  <p>Starts from <span class="item-summary--info">${{itemSummary?.startingPrice}}</span></p>
+<div class="item-summary" *ngIf="item$ | async as item">
+  <h1 class="item-summary__title">{{item.name}}</h1>
+  <p>Starts from <span class="item-summary--info">${{item.initialPrice}}</span></p>
   <div class="item-summary__auction">
-    <p>Highest bid: <span class="item-summary--info">${{itemSummary?.highestBid}}</span></p>
-    <p>Number of bids: <span class="item-summary--info">{{itemSummary?.highestBid}}</span></p>
-    <p>Time left: <span class="item-summary--info">{{itemSummary?.timeLeft}}</span></p>
+    <p>Highest bid: <span class="item-summary--info">$0</span></p>
+    <p>Number of bids: <span class="item-summary--info">$0</span></p>
+    <p>Time left: <span class="item-summary--info">{{item.timeLeft}}</span></p>
   </div>
 </div>
