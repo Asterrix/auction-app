@@ -1,0 +1,59 @@
+<aside aria-label="sidebar" class="sidebar">
+  <div class="sidebar__content">
+
+    <!-- Header -->
+    <span class="sidebar__title">Product Categories</span>
+    <div class="sidebar__layout">
+      <ul *ngFor="let category of categories$ | async; let i = index" class="sidebar__list">
+        <li>
+          <div class="sidebar__category">
+            <a [id]="category.id"
+               [queryParams]="{category: category.name.toLowerCase()}"
+               [ngClass]="{'active': category.name.toLowerCase() === activeCategory}"
+               class="sidebar__category__name"
+               routerLink="/shop">
+              {{category.name}}
+            </a>
+
+            <ng-container *ngIf="category.subcategories.length > 0">
+              <img (click)="toggleSection(i)"
+                   [ngSrc]="accordionState[i] ? 'assets/icons/remove.svg' : 'assets/icons/add.svg'"
+                   alt="Expand category"
+                   class="sidebar__icon"
+                   height="20" width="20"/>
+            </ng-container>
+          </div>
+        </li>
+
+        <!-- Accordion section which contains subcategories -->
+        <div *ngIf="accordionState[i]" @expandCollapse class="sidebar__accordion">
+          <ul class="sidebar__list">
+            <li *ngFor="let subcategory of category.subcategories">
+              <a [queryParams]="{category: category.name.toLowerCase(), subcategory: subcategory.name.toLowerCase()}"
+                 class="sidebar__subcategory"
+                 id="{{subcategory.id}}"
+                 routerLink="/shop">
+
+                <div [ngClass]="{'sidebar__checkbox--active' : subcategory.name.toLowerCase() === activeSubcategory}"
+                     class="sidebar__checkbox"></div>
+
+                <span class="sidebar__subcategory">
+                  {{subcategory.name}} ({{subcategory.numberOfItems}})
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </ul>
+
+      <!-- Default section -->
+      <a (click)="collapseAccordion()"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="sidebar__category sidebar__list sidebar__category__name"
+         routerLink="/shop"
+         routerLinkActive="active">
+        All Categories
+      </a>
+    </div>
+  </div>
+</aside>

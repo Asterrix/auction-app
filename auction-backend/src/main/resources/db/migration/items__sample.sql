@@ -1,15 +1,15 @@
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (1, 'Headphones', 'Placeholder', 29.99, '2023-10-19', '2023-10-30');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (2, 'Shoes', 'Placeholder', 49.99, '2023-10-21', '2023-10-23');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (3, 'Watch', 'Placeholder', 299.99, '2023-10-25', '2023-10-31');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (4, 'Bag', 'Placeholder', 480.00, '2023-10-22', '2023-11-01');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (5, 'Camera', 'Placeholder', 320.00, '2023-10-16', '2023-11-14');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (6, 'White Shoes', 'Placeholder', 120.00, '2023-10-27', '2023-10-28');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (7, 'Body Spray', 'Placeholder', 72.00, '2023-10-22', '2023-10-25');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (8, 'Coco', 'Placeholder', 147.99, '2023-10-29', '2023-10-31');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (9, 'Fragrance', 'Placeholder', 99.99, '2023-11-01', '2023-11-09');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (10, 'Sunglasses', 'Placeholder', 25.00, '2023-10-29', '2023-10-30');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (11, 'Coin', 'Placeholder', 41.00, '2023-10-31', '2023-11-03');
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date) VALUES (12, 'Phone Mask', 'Placeholder', 20.00, '2023-10-23', '2023-10-26');
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (1, 'Headphones', 'Placeholder', 29.99, '2023-10-19', '2023-10-30', 1);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (2, 'Shoes', 'Placeholder', 49.99, '2023-10-21', '2023-10-23', 1);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (3, 'Watch', 'Placeholder', 299.99, '2023-10-25', '2023-10-31', 1);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (4, 'Bag', 'Placeholder', 480.00, '2023-10-22', '2023-11-01', 2);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (5, 'Camera', 'Placeholder', 320.00, '2023-10-16', '2023-11-14', 2);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (6, 'White Shoes', 'Placeholder', 120.00, '2023-10-27', '2023-10-28', 2);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (7, 'Body Spray', 'Placeholder', 72.00, '2023-10-22', '2023-10-25', 3);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (8, 'Coco', 'Placeholder', 147.99, '2023-10-29', '2023-10-31', 4);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (9, 'Fragrance', 'Placeholder', 99.99, '2023-11-01', '2023-11-09', 5);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (10, 'Sunglasses', 'Placeholder', 25.00, '2023-10-29', '2023-10-30',6);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (11, 'Coin', 'Placeholder', 41.00, '2023-10-31', '2023-11-03',7);
+INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id) VALUES (12, 'Phone Mask', 'Placeholder', 20.00, '2023-10-23', '2023-10-26',8);
 
 INSERT INTO public.items_images (id, name, image_url, item_id) VALUES (1, 'Headphones', 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHN8ZW58MHx8MHx8fDA%3D', 1);
 INSERT INTO public.items_images (id, name, image_url, item_id) VALUES (2, 'Shoes', 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZHVjdHN8ZW58MHx8MHx8fDA%3D', 2);

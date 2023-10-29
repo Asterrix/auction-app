@@ -1,12 +1,17 @@
-<div class="shop-item">
-  <app-navigation-trail/>
-  <div class="container">
-    <div class="shop-item__page__layout">
-      <shop-item-showcase/>
-      <div class="shop-item__description__layout">
-        <shop-item-summary/>
-        <shop-item-information/>
+<ng-container *ngIf="(loader$ | async); else content">
+  <app-loader/>
+</ng-container>
+
+<ng-template #content>
+  <div class="shop-item">
+    <div class="container">
+      <div class="shop-item__page__layout">
+        <shop-item-showcase/>
+        <div class="shop-item__description__layout">
+          <shop-item-summary/>
+          <shop-item-information/>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>

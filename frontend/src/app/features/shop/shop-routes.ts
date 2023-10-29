@@ -4,6 +4,14 @@ import {Constant} from "../../shared/models/enums/constant";
 import {ShopItemPage} from "./shop-item/shop-item-page.component";
 import {ShopPage} from "./shop-page.component";
 
+export namespace ShopPageParameter {
+  export enum Parameter {
+    Category = "category",
+    Subcategory = "subcategory",
+    ItemName = "itemName"
+  }
+}
+
 export enum ShopRouteEndpoint {
   Shop = "shop",
   Item = "item"

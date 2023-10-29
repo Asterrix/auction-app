@@ -11,7 +11,7 @@ class CategoryMapperTest {
     void convertToDto_DtoShouldMatchParameterProperties() {
         final Category category = new Category(100, "Category");
 
-        final CategoryDto categoryDto = CategoryMapper.convertToDto(category);
+        final CategoryDto categoryDto = CategoryMapper.convertToCategoryDto(category);
 
         assertEquals(category.getId(), categoryDto.id());
         assertEquals(category.getName(), categoryDto.name());

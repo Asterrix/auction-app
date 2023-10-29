@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {AnchorImageComponent} from "../anchor-image/anchor-image.component";
+import {Component} from "@angular/core";
 import {RouterLink} from "@angular/router";
+import {AnchorImageComponent} from "../anchor-image/anchor-image.component";
 
 @Component({
   selector: "app-footer",

@@ -7,4 +7,3 @@ INSERT INTO public.category (id, name) VALUES (6, 'Home');
 INSERT INTO public.category (id, name) VALUES (7, 'Electronics');
 INSERT INTO public.category (id, name) VALUES (8, 'Mobile');
 INSERT INTO public.category (id, name) VALUES (9, 'Computer');
-INSERT INTO public.category (id, name) VALUES (10, 'All Categories');
