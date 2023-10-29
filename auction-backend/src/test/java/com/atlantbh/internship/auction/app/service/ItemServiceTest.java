@@ -1,6 +1,7 @@
 package com.atlantbh.internship.auction.app.service;
 
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
@@ -46,7 +47,8 @@ class ItemServiceTest {
                 new BigDecimal("40.00"),
                 LocalDate.MIN,
                 LocalDate.MAX,
-                List.of()
+                List.of(),
+                new Category()
         );
         final Optional<Item> optionalItem = Optional.of(item);
 
@@ -83,7 +85,8 @@ class ItemServiceTest {
                 BigDecimal.ZERO,
                 LocalDate.MIN,
                 LocalDate.MAX,
-                List.of()
+                List.of(),
+                new Category()
         );
 
         when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class)))

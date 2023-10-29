@@ -1,23 +1,12 @@
 <div class="section-tab">
   <ul class="section-tab__list">
-
-    <li class="section-tab__list__item">
-      <a [routerLinkActiveOptions]="{exact: true}"
+    <li *ngFor="let section of sections" class="section-tab__list__item">
+      <a [ngClass]="{'--active': section.value === activeSection}"
+         [queryParams]="{ section: section.value }"
          class="section-tab__list__item__link"
-         routerLink="/home"
-         routerLinkActive="--active">
-        New Arrivals
+         routerLink="/home">
+        {{section.name}}
       </a>
     </li>
-
-    <li class="section-tab__list__item">
-      <a [queryParams]="{section: Section.LastChance}"
-         class="section-tab__list__item__link"
-         routerLink="/home"
-         routerLinkActive="--active">
-        Last Chance
-      </a>
-    </li>
-
   </ul>
 </div>

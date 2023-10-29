@@ -3,13 +3,17 @@ package com.atlantbh.internship.auction.app.service;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 public interface ItemService {
-    Page<ItemSummaryDto> getAllItems(final Pageable pageable);
+    Page<ItemSummaryDto> getAllItems(@Nullable final String category,
+                                     @Nullable final String subcategory,
+                                     @Nullable final String itemName,
+                                     final Pageable pageable);
 
     Optional<ItemDto> getItemById(final Integer itemId);
 

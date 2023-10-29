@@ -10,8 +10,10 @@
         </p>
       </div>
 
-      <a class="highlight__btn">
+      <a class="highlight__btn" routerLink="/shop/item/{{item.id}}">
         Bid Now
+
+        <!-- SVG is displayed like this and not imported because the hover effect was not taking effect on <img> tag -->
         <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_2_14401)">
             <path d="M9.99984 6L8.58984 7.41L13.1698 12L8.58984 16.59L9.99984 18L15.9998 12L9.99984 6Z"

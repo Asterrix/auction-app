@@ -3,6 +3,7 @@ package com.atlantbh.internship.auction.app.mapper;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,15 @@ class ItemMapperTest {
 
     @BeforeEach
     void setUp() {
-        item = new Item(1, "Item", "Desc", new BigDecimal("0"), LocalDate.EPOCH, LocalDate.EPOCH, List.of());
+        item = new Item(
+                1,
+                "Item",
+                "Desc",
+                new BigDecimal("0"),
+                LocalDate.EPOCH,
+                LocalDate.EPOCH,
+                List.of(),
+                new Category(1, "Category"));
         itemImage = new ItemImage(1, "Image1", "ImageUrl", item);
         item.setItemImages(List.of(itemImage));
     }

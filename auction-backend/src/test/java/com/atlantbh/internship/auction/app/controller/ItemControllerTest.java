@@ -33,6 +33,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -69,15 +70,20 @@ class ItemControllerTest {
     @Test
     void getAllItems_ShouldReturn_Content() throws Exception {
         final String path = "/api/v1/items";
+
         final ItemSummaryDto itemSummaryDto = new ItemSummaryDto(
                 1,
                 "Item",
                 new BigDecimal("80.00"),
-                new ItemImageDto(1,"Name", "ImageUrl")
+                new ItemImageDto(1, "Name", "ImageUrl")
         );
         final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 
-        given(itemService.getAllItems(Mockito.any(PageRequest.class))).willReturn(mockPage);
+        given(itemService.getAllItems(
+                eq(null),
+                eq(null),
+                eq(null),
+                Mockito.any(PageRequest.class))).willReturn(mockPage);
 
         final MockHttpServletResponse response = mockMvc
                 .perform(get(path).accept(MediaType.APPLICATION_JSON))
@@ -89,11 +95,17 @@ class ItemControllerTest {
         JSONAssert.assertEquals(json, responseContentAsString, false);
     }
 
+    // TODO FAILING TEST
     @Test
     void getAllItems_ShouldTake_PageableParameters() throws Exception {
         final String path = "/api/v1/items";
 
-        given(itemService.getAllItems(any(Pageable.class))).willReturn(Mockito.any());
+        given(itemService.getAllItems(
+                any(String.class),
+                any(String.class),
+                any(String.class),
+                any(Pageable.class)))
+                .willReturn(Mockito.any());
 
         mockMvc.perform(get(path).accept(MediaType.APPLICATION_JSON)
                         .queryParam("page", "0")
@@ -101,10 +113,11 @@ class ItemControllerTest {
                 .andReturn().getResponse();
 
         final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
-        verify(itemService).getAllItems(pageableCaptor.capture());
+        verify(itemService).getAllItems(any(String.class), any(String.class), any(String.class), pageableCaptor.capture());
         assertEquals(0, pageableCaptor.getValue().getPageNumber());
         assertEquals(3, pageableCaptor.getValue().getPageSize());
     }
+
 
     @Test
     void getItemById_ShouldReturn_StatusOk() throws Exception {

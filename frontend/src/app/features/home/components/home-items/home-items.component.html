@@ -7,8 +7,8 @@
       <div class="items-grid">
         <ng-container *ngIf="items$ | async as items">
 
-          <ng-container *ngFor="let item of items">
-            <app-item-card [id]="item.id" [item]="item"/>
+          <ng-container *ngFor="let item of items.content">
+            <app-item-card [id]="item.id" [item]="item" (click)="navigateToItem(item.id)"/>
           </ng-container>
 
         </ng-container>

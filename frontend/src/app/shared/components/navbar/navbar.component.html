@@ -1,4 +1,7 @@
 <div class="navbar">
-    <app-top-bar/>
-    <app-main-navbar/>
+  <app-top-bar/>
+  <app-main-navbar/>
+  <ng-container *ngIf="displayTrail$ | async">
+    <app-navigation-trail/>
+  </ng-container>
 </div>

@@ -9,15 +9,21 @@ import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.ItemService;
+import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static com.atlantbh.internship.auction.app.mapper.ItemMapper.convertToFeaturedDto;
+import static com.atlantbh.internship.auction.app.mapper.ItemMapper.convertToSummaryDto;
+import static com.atlantbh.internship.auction.app.service.specification.ItemSpecification.*;
 
 @Service
 public final class ItemServiceImpl implements ItemService {
@@ -30,12 +36,22 @@ public final class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<ItemSummaryDto> getAllItems(final Pageable pageable) {
-        final Page<Item> items = itemRepository.findAll(pageable);
-        final List<ItemSummaryDto> itemList = ItemMapper.convertToSummaryDto(items.getContent());
+    public Page<ItemSummaryDto> getAllItems(@Nullable final String category,
+                                            @Nullable final String subcategory,
+                                            @Nullable final String itemName,
+                                            final Pageable pageable) {
+
+        Specification<Item> specification = Specification.allOf(isActive());
+        if (category != null) specification = specification.and(isPartOfCategory(category));
+        if(subcategory != null) specification = specification.and(isPartOfSubcategory(category, subcategory));
+        if(itemName != null) specification = specification.and(isNameOf(itemName));
+
+        final Page<Item> items = itemRepository.findAll(specification, pageable);
+
+        final List<ItemSummaryDto> mappedItems = convertToSummaryDto(items.getContent());
         final long totalElements = items.getTotalElements();
 
-        return new PageImpl<>(itemList, pageable, totalElements);
+        return new PageImpl<>(mappedItems, pageable, totalElements);
     }
 
     @Override
@@ -60,6 +76,6 @@ public final class ItemServiceImpl implements ItemService {
             throw new NoSuchElementException("Featured item images were not found.");
         }
 
-        return ItemMapper.convertToFeaturedDto(itemInfo.get(), itemImageInfo.get());
+        return convertToFeaturedDto(itemInfo.get(), itemImageInfo.get());
     }
 }

@@ -5,6 +5,10 @@
   flex-direction: column;
   gap: 0.8rem;
 
+  &:hover{
+    cursor: pointer;
+  }
+
   &__link {
     display: flex;
     flex-direction: column;
