@@ -11,8 +11,8 @@ import {Item, ItemImage, ItemService} from "../../../../../shared/services/item.
   styleUrls: ["./item-showcase.component.scss"]
 })
 export class ItemShowcaseComponent implements OnInit, OnDestroy {
-  item$: Observable<Item> = {} as Observable<Item>;
-  activeImage: ItemImage = {} as ItemImage;
+  item$: Observable<Item | undefined> | undefined;
+  activeImage: ItemImage| undefined;
   imagesSub: Subscription | undefined;
 
   constructor(private itemService: ItemService) {
@@ -20,9 +20,11 @@ export class ItemShowcaseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.item$ = this.itemService.getItem();
-    this.imagesSub = this.item$.subscribe((item: Item): void => {
-      if (item.itemImages && item.itemImages.length > 0) {
-        this.activeImage = item.itemImages[0];
+    this.imagesSub = this.item$.subscribe((item: Item | undefined): void => {
+      if(item){
+        if (item.itemImages && item.itemImages.length > 0) {
+          this.activeImage = item.itemImages[0];
+        }
       }
     });
   }

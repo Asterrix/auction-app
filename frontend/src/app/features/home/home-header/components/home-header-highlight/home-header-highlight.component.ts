@@ -11,7 +11,7 @@ import {Observable} from "rxjs";
   styleUrls: ["./home-header-highlight.component.scss"]
 })
 export class HomeHeaderHighlightComponent implements OnInit {
-  public item$: Observable<FeaturedItem> = {} as Observable<FeaturedItem>;
+  public item$: Observable<FeaturedItem | undefined> | undefined;
 
   constructor(private itemService: ItemService) {
   }

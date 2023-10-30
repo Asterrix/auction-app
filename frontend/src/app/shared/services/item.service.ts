@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {ApiService} from "./api.service";
 import {Page} from "../models/interfaces/page";
 
@@ -64,9 +64,9 @@ export enum SortItemDirection {
   providedIn: "root"
 })
 export class ItemService {
-  private featuredItem$: BehaviorSubject<FeaturedItem> = new BehaviorSubject<FeaturedItem>({} as FeaturedItem);
-  private item$: BehaviorSubject<Item> = new BehaviorSubject<Item>({} as Item);
-  private items$: BehaviorSubject<ItemSummary[]> = new BehaviorSubject<ItemSummary[]>({} as ItemSummary[]);
+  private featuredItem$: BehaviorSubject<FeaturedItem | undefined> = new BehaviorSubject<FeaturedItem | undefined>(undefined);
+  private item$: BehaviorSubject<Item | undefined> = new BehaviorSubject<Item | undefined>(undefined);
+  private items$: BehaviorSubject<ItemSummary[] | undefined> = new BehaviorSubject<ItemSummary[] | undefined>(undefined);
 
   constructor(private apiService: ApiService) {
   }
@@ -77,7 +77,7 @@ export class ItemService {
     });
   }
 
-  public getFeaturedItem(): BehaviorSubject<FeaturedItem> {
+  public getFeaturedItem(): BehaviorSubject<FeaturedItem | undefined> {
     return this.featuredItem$;
   }
 
@@ -93,17 +93,17 @@ export class ItemService {
     });
   }
 
-  public getItems(): BehaviorSubject<ItemSummary[]> {
+  public getItems(): BehaviorSubject<ItemSummary[] | undefined> {
     return this.items$;
   }
 
-  public initItem(id: number) {
+  public initItem(id: number): Subscription {
     return this.apiService.getItem(id).subscribe((value) => {
       this.item$.next(value);
     });
   }
 
-  public getItem() {
+  public getItem(): BehaviorSubject<Item | undefined> {
     return this.item$;
   }
 }

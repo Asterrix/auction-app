@@ -11,7 +11,7 @@ import {Observable} from "rxjs";
   styleUrls: ["./item-summary.component.scss"]
 })
 export class ItemSummaryComponent implements OnInit {
-  public item$: Observable<Item> = {} as Observable<Item>;
+  public item$: Observable<Item | undefined> | undefined
 
   constructor(private itemService: ItemService) {
   }

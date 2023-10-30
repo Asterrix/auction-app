@@ -14,7 +14,7 @@ import {ItemService, ItemSummary} from "../../../shared/services/item.service";
   styleUrls: ["./home-items.component.scss"]
 })
 export class HomeItemsComponent implements OnInit, OnDestroy {
-  public items$: Observable<ItemSummary[]> = {} as Observable<ItemSummary[]>;
+  public items$: Observable<ItemSummary[] | undefined> | undefined;
   private _queryParamSub: Subscription | undefined;
   private _queryParam: Section = Section.Default;
 
