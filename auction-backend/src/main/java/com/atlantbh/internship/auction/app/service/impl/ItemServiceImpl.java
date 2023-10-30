@@ -36,7 +36,7 @@ public final class ItemServiceImpl implements ItemService {
 
     @Override
     public Optional<ItemDto> getById(final Integer itemId) {
-        Optional<Item> item = itemRepository.findById(itemId);
+        final Optional<Item> item = itemRepository.findById(itemId);
         return item.map(ItemMapper::convertToItemDto).or(Optional::empty);
     }
 

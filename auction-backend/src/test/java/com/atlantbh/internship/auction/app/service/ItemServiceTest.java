@@ -51,17 +51,17 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetAll_ReturnsListOfItems() {
-        List<Item> itemList = List.of(
+        final List<Item> itemList = List.of(
                 new Item(1, "Item1", "Desc1", new BigDecimal("100.00"), LocalDate.EPOCH, LocalDate.EPOCH, List.of()),
                 new Item(2, "Item2", "Desc2", new BigDecimal("999.00"), LocalDate.EPOCH, LocalDate.EPOCH, List.of()),
                 new Item(3, "Item3", "Desc3", new BigDecimal("1999.99"), LocalDate.EPOCH, LocalDate.EPOCH, List.of())
         );
 
-        Page<Item> page = new PageImpl<>(itemList);
-        Pageable pageRequest = PageRequest.of(0, 3);
+        final Page<Item> page = new PageImpl<>(itemList);
+        final Pageable pageRequest = PageRequest.of(0, 3);
 
         when(itemRepository.findAll(pageRequest)).thenReturn(page);
-        Page<ItemSummaryDto> result = service.getAll(pageRequest);
+        final Page<ItemSummaryDto> result = service.getAll(pageRequest);
 
         assertEquals(itemList.size(), result.getTotalElements());
         verify(itemRepository, times(1)).findAll(pageRequest);
@@ -69,11 +69,11 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetById_ReturnsItem() {
-        Item item = new Item(1, "Item1", "Desc", new BigDecimal("40.00"), LocalDate.EPOCH, LocalDate.EPOCH, List.of());
-        Optional<Item> optionalItem = Optional.of(item);
+        final Item item = new Item(1, "Item1", "Desc", new BigDecimal("40.00"), LocalDate.EPOCH, LocalDate.EPOCH, List.of());
+        final Optional<Item> optionalItem = Optional.of(item);
 
         when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
-        Optional<ItemDto> result = service.getById(anyInt());
+        final Optional<ItemDto> result = service.getById(anyInt());
 
         assertTrue(result.isPresent());
         verify(itemRepository, times(1)).findById(anyInt());
@@ -81,10 +81,10 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetById_ReturnsEmptyOptional() {
-        Optional<Item> optionalItem = Optional.empty();
+        final Optional<Item> optionalItem = Optional.empty();
 
         when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
-        Optional<ItemDto> result = service.getById(anyInt());
+        final Optional<ItemDto> result = service.getById(anyInt());
 
         assertTrue(result.isEmpty());
         verify(itemRepository, times(1)).findById(anyInt());
@@ -95,7 +95,7 @@ class ItemServiceTest {
         when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(LocalDate.now().plusDays(7))).thenReturn(Optional.of(item));
         when(imageRepository.findFirstByItem_IdOrderByIdAsc(item.getId())).thenReturn(Optional.of(itemImage));
 
-        ItemFeaturedDto featured = service.getFeatured();
+        final ItemFeaturedDto featured = service.getFeatured();
 
         assertNotNull(featured);
     }

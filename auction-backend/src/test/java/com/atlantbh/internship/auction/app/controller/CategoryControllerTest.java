@@ -42,12 +42,12 @@ class CategoryControllerTest {
 
     @Test
     void CategoryController_GetAllCategories_ReturnsListOfCategories_StatusOk() throws Exception {
-        CategoryDto categoryDto = new CategoryDto(1, "Category1");
-        List<CategoryDto> categoryDtos = List.of(categoryDto);
+        final CategoryDto categoryDto = new CategoryDto(1, "Category1");
+        final List<CategoryDto> categoryDtos = List.of(categoryDto);
 
         given(categoryService.getAll()).willReturn(categoryDtos);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/category").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        final MockHttpServletResponse response = mockMvc.perform(get("/api/v1/category").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         JSONAssert.assertEquals(jacksonTester.write(categoryDtos).getJson(), response.getContentAsString(), false);

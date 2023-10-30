@@ -10,7 +10,10 @@ public final class CategoryMapper {
     }
 
     public static CategoryDto convertToDto(final Category category){
-        return new CategoryDto(category.getId(), category.getName());
+        return new CategoryDto(
+                category.getId(),
+                category.getName()
+        );
     }
 
     public static List<CategoryDto> convertToDto(final List<Category> categories){
