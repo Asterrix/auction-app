@@ -3,45 +3,25 @@ import {BehaviorSubject, Subscription} from "rxjs";
 import {ApiService} from "./api.service";
 import {Page} from "../models/interfaces/page";
 
-export interface FeaturedItem {
+interface ItemBaseProperties {
   id: number;
   name: string;
-  description: string;
   initialPrice: number;
-  itemImage:
-    {
-      id: number;
-      name: string;
-      imageUrl: string;
-    };
 }
 
-export interface ItemSummary {
-  id: number;
-  name: string;
-  initialPrice: number;
-  itemImages: [
-    {
-      id: number;
-      name: string;
-      imageUrl: string;
-    }
-  ];
+export interface FeaturedItem extends ItemBaseProperties {
+  description: string;
+  itemImage: ItemImage;
 }
 
-export interface Item {
-  id: number;
-  name: string;
+export interface ItemSummary extends ItemBaseProperties {
+  itemImages: [ItemImage];
+}
+
+export interface Item extends ItemBaseProperties {
   description: string;
-  initialPrice: number;
   timeLeft: string;
-  itemImages: [
-    {
-      id: number;
-      name: string;
-      imageUrl: string;
-    }
-  ];
+  itemImages: [ItemImage];
 }
 
 export interface ItemImage {
@@ -53,11 +33,6 @@ export interface ItemImage {
 export enum SortItemAttribute {
   StartDate = "startDate",
   EndDate = "endDate"
-}
-
-export enum SortItemDirection {
-  ASC = "ASC",
-  DESC = "DESC"
 }
 
 @Injectable({
@@ -82,13 +57,13 @@ export class ItemService {
   }
 
   public initItemsNewArrivals(): void {
-    this.apiService.getListOfNewestItems().subscribe((page: Page<ItemSummary>) => {
+    this.apiService.getListOfNewestItems().subscribe((page: Page<ItemSummary>): void => {
       this.items$.next(page.content);
     });
   }
 
   public initItemsLastChance(): void {
-    this.apiService.getListOfLastChanceItems().subscribe((page: Page<ItemSummary>) => {
+    this.apiService.getListOfLastChanceItems().subscribe((page: Page<ItemSummary>): void => {
       this.items$.next(page.content);
     });
   }
@@ -98,7 +73,7 @@ export class ItemService {
   }
 
   public initItem(id: number): Subscription {
-    return this.apiService.getItem(id).subscribe((value) => {
+    return this.apiService.getItem(id).subscribe((value: Item): void => {
       this.item$.next(value);
     });
   }

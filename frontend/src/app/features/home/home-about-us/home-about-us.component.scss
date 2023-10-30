@@ -35,21 +35,21 @@
 
   &__image-item {
     &:nth-child(1) {
-      background: url("/assets/images/Rectangle-63.svg") no-repeat;
+      background: url("/assets/images/PersonOne.svg") no-repeat;
       background-size: cover;
       grid-area: X;
       height: 381px;
     }
 
     &:nth-child(2) {
-      background: url("/assets/images/Rectangle-64.svg") no-repeat;
+      background: url("/assets/images/PersonTwo.svg") no-repeat;
       background-size: cover;
       grid-area: Y;
       height: 199px;
     }
 
     &:nth-child(3) {
-      background: url("/assets/images/Rectangle-65.svg") no-repeat;
+      background: url("/assets/images/PersonThree.svg") no-repeat;
       background-size: cover;
       grid-area: Z;
       height: 199px;

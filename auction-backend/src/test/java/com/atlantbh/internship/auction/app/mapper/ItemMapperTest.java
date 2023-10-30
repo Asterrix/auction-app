@@ -28,7 +28,7 @@ class ItemMapperTest {
 
     @Test
     void ItemMapper_TakeEntityAndMapItTo_SummaryDto() {
-        ItemSummaryDto itemSummaryDto = ItemMapper.convertToSummaryDto(item);
+        final ItemSummaryDto itemSummaryDto = ItemMapper.convertToSummaryDto(item);
 
         assertEquals(item.getId(), itemSummaryDto.id());
         assertEquals(item.getName(), itemSummaryDto.name());
@@ -40,16 +40,16 @@ class ItemMapperTest {
 
     @Test
     void ItemMapper_TakeListOfEntities_MapThemTo_ListOfSummaryDto() {
-        List<Item> items = List.of(new Item(), new Item(), new Item());
+        final List<Item> items = List.of(new Item(), new Item(), new Item());
 
-        List<ItemSummaryDto> result = ItemMapper.convertToSummaryDto(items);
+        final List<ItemSummaryDto> result = ItemMapper.convertToSummaryDto(items);
 
         assertEquals(items.size(), result.size());
     }
 
     @Test
     void ItemMapper_TakeProjections_AndMapThemTo_ItemFeaturedDto() {
-        ItemFeaturedDto featuredDto = ItemMapper.convertToFeaturedDto(item, itemImage);
+        final ItemFeaturedDto featuredDto = ItemMapper.convertToFeaturedDto(item, itemImage);
 
         assertEquals(item.getId(), featuredDto.id());
         assertEquals(item.getName(), featuredDto.name());
@@ -62,7 +62,7 @@ class ItemMapperTest {
 
     @Test
     void ItemMapper_TakeEntityAndMapItTo_ItemDto() {
-        ItemDto itemDto = ItemMapper.convertToItemDto(item);
+        final ItemDto itemDto = ItemMapper.convertToItemDto(item);
 
         assertEquals(item.getId(), itemDto.id());
         assertEquals(item.getName(), itemDto.name());

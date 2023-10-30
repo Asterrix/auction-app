@@ -32,7 +32,7 @@ public final class ItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ItemDto> getItemById(@PathVariable("id") final Integer itemId) {
-        Optional<ItemDto> result = itemService.getById(itemId);
+        final Optional<ItemDto> result = itemService.getById(itemId);
 
         return result.map(itemDto -> new ResponseEntity<>(itemDto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
