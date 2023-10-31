@@ -35,13 +35,13 @@ public final class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Optional<ItemDto> getById(final Integer itemId) {
+    public Optional<ItemDto> getItemById(final Integer itemId) {
         final Optional<Item> item = itemRepository.findById(itemId);
         return item.map(ItemMapper::convertToItemDto).or(Optional::empty);
     }
 
     @Override
-    public ItemFeaturedDto getFeatured() {
+    public ItemFeaturedDto getFeaturedItem() {
         final LocalDate endDateThreshold = LocalDate.now().plusDays(7);
 
         final Optional<Item> itemInfo = itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(endDateThreshold);
