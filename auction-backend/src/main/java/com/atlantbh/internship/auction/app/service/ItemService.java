@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ItemService {
     Page<ItemSummaryDto> getAll(final Pageable pageable);
 
-    Optional<ItemDto> getById(Integer itemId);
+    Optional<ItemDto> getItemById(Integer itemId);
 
-    ItemFeaturedDto getFeatured();
+    ItemFeaturedDto getFeaturedItem();
 }

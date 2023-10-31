@@ -29,16 +29,16 @@ public final class ItemController {
         return new ResponseEntity<>(itemService.getAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ItemDto> getItemById(@PathVariable("id") final Integer itemId) {
-        final Optional<ItemDto> result = itemService.getById(itemId);
+        final Optional<ItemDto> result = itemService.getItemById(itemId);
 
-        return result.map(itemDto -> new ResponseEntity<>(itemDto, HttpStatus.OK))
+        return result.map(item -> new ResponseEntity<>(item, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("featured")
     public ResponseEntity<ItemFeaturedDto> getFeaturedItem() {
-        return new ResponseEntity<>(itemService.getFeatured(), HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getFeaturedItem(), HttpStatus.OK);
     }
 }
