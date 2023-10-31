@@ -10,7 +10,7 @@ export interface Category {
   providedIn: "root"
 })
 export class ItemCategoryService {
-  private readonly _endpoint: string = "http://localhost:8080/api/v1/category";
+  private readonly _endpoint: string = "http://localhost:8080/api/v1/categories";
 
   constructor(private httpClient: HttpClient) {
   }

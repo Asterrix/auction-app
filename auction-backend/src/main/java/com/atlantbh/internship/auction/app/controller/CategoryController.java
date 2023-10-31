@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/category")
+@RequestMapping("api/v1/categories")
 public final class CategoryController {
     private final CategoryService categoryService;
 
@@ -21,6 +21,6 @@ public final class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        return new ResponseEntity<>(categoryService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 }
