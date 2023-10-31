@@ -55,6 +55,6 @@ class CorsConfig {
     }
 
     private void addCategoryMapping(final CorsRegistry registry) {
-        createMapping(registry, "/category", new String[]{HttpMethod.GET.name()});
+        createMapping(registry, "/categories", new String[]{HttpMethod.GET.name()});
     }
 }
