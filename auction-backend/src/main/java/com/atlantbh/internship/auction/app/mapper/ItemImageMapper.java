@@ -1,6 +1,6 @@
 package com.atlantbh.internship.auction.app.mapper;
 
-import com.atlantbh.internship.auction.app.dto.ItemImageDto;
+import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 
 import java.util.List;

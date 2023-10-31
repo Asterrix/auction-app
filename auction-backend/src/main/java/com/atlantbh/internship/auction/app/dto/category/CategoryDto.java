@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.dto;
+package com.atlantbh.internship.auction.app.dto.category;
 
 import com.atlantbh.internship.auction.app.entity.Category;
 
