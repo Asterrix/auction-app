@@ -73,7 +73,7 @@ class ItemServiceTest {
         final Optional<Item> optionalItem = Optional.of(item);
 
         when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
-        final Optional<ItemDto> result = service.getById(anyInt());
+        final Optional<ItemDto> result = service.getItemById(anyInt());
 
         assertTrue(result.isPresent());
         verify(itemRepository, times(1)).findById(anyInt());
@@ -84,7 +84,7 @@ class ItemServiceTest {
         final Optional<Item> optionalItem = Optional.empty();
 
         when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
-        final Optional<ItemDto> result = service.getById(anyInt());
+        final Optional<ItemDto> result = service.getItemById(anyInt());
 
         assertTrue(result.isEmpty());
         verify(itemRepository, times(1)).findById(anyInt());
@@ -95,7 +95,7 @@ class ItemServiceTest {
         when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(LocalDate.now().plusDays(7))).thenReturn(Optional.of(item));
         when(imageRepository.findFirstByItem_IdOrderByIdAsc(item.getId())).thenReturn(Optional.of(itemImage));
 
-        final ItemFeaturedDto featured = service.getFeatured();
+        final ItemFeaturedDto featured = service.getFeaturedItem();
 
         assertNotNull(featured);
     }
@@ -104,7 +104,7 @@ class ItemServiceTest {
     void ItemService_GetFeatured_ThrowsError_WhenItemIsNull() {
         when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class))).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> service.getFeatured());
+        assertThrows(NoSuchElementException.class, () -> service.getFeaturedItem());
     }
 
     @Test
@@ -113,6 +113,6 @@ class ItemServiceTest {
 
         when(imageRepository.findFirstByItem_IdOrderByIdAsc(anyInt())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> service.getFeatured());
+        assertThrows(NoSuchElementException.class, () -> service.getFeaturedItem());
     }
 }

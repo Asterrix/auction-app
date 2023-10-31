@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,7 +33,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -54,35 +55,51 @@ class ItemControllerTest {
     }
 
     @Test
-    public void ItemController_GetAll_ReturnsListOfItems_StatusOk() throws Exception {
-        final ItemImageDto imageDto = new ItemImageDto(1, "Image1", "ImageUrl");
-        final ItemSummaryDto item = new ItemSummaryDto(1, "Item", new BigDecimal("80.00"), List.of(imageDto));
-        final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(item));
+    void getAllItems_ShouldReturn_StatusOk() throws Exception {
+        final String path = "/api/v1/items";
 
-        given(itemService.getAll(any(Pageable.class))).willReturn(mockPage);
-
-        final MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(path).accept(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        JSONAssert.assertEquals(jacksonTester.write(mockPage).getJson(), response.getContentAsString(), false);
     }
 
     @Test
-    public void ItemController_GetAll_TakesParameters_ReturnsListOfItemsWithSpecifiedParameters_StatusOk() throws Exception {
-        final ItemImageDto imageDto = new ItemImageDto(1, "Image1", "ImageUrl");
-        final ItemSummaryDto item = new ItemSummaryDto(1, "Item", new BigDecimal("80.00"), List.of(imageDto));
-        final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(item));
+    void getAllItems_ShouldReturn_Content() throws Exception {
+        final String path = "/api/v1/items";
+        final ItemSummaryDto itemSummaryDto = new ItemSummaryDto(
+                1,
+                "Item",
+                new BigDecimal("80.00"),
+                List.of()
+        );
+        final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 
-        given(itemService.getAll(any(Pageable.class))).willReturn(mockPage);
+        given(itemService.getAll(Mockito.any(PageRequest.class))).willReturn(mockPage);
 
-        final MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items")
-                        .accept(MediaType.APPLICATION_JSON)
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(path).accept(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse();
+
+        final String json = jacksonTester.write(mockPage).getJson();
+        final String responseContentAsString = response.getContentAsString();
+        JSONAssert.assertEquals(json, responseContentAsString, false);
+    }
+
+    @Test
+    void getAllItems_ShouldTake_PageableParameters() throws Exception {
+        final String path = "/api/v1/items";
+
+        given(itemService.getAll(any(Pageable.class))).willReturn(Mockito.any());
+
+        mockMvc.perform(get(path).accept(MediaType.APPLICATION_JSON)
                         .queryParam("page", "0")
                         .queryParam("size", "3"))
                 .andReturn().getResponse();
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        JSONAssert.assertEquals(jacksonTester.write(mockPage).getJson(), response.getContentAsString(), false);
         final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
         verify(itemService).getAll(pageableCaptor.capture());
         assertEquals(0, pageableCaptor.getValue().getPageNumber());
@@ -90,40 +107,58 @@ class ItemControllerTest {
     }
 
     @Test
-    public void ItemController_GetById_ReturnsItem_StatusOk() throws Exception {
-        final ItemImageDto imageDto = new ItemImageDto(1, "Image1", "ImageUrl");
-        final ItemDto item = new ItemDto(1, "Item", "Desc", new BigDecimal("20.00"), "1 Day", List.of(imageDto));
-        final Optional<ItemDto> expected = Optional.of(item);
+    void getItemById_ShouldReturn_StatusOk() throws Exception {
+        final String path = "/api/v1/items/";
+        final int itemId = 1;
+        final String urlTemplate = path + itemId;
+        final Optional<ItemDto> optionalItemDto = Optional.of(new ItemDto(
+                itemId,
+                "Item",
+                "Desc",
+                new BigDecimal("20.00"),
+                "1 Day",
+                List.of())
+        );
 
-        given(itemService.getById(anyInt())).willReturn(expected);
+        given(itemService.getItemById(itemId)).willReturn(optionalItemDto);
 
-        final MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items/" + anyInt())
-                .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(urlTemplate).accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test
-    public void ItemController_GetById_ReturnsEmptyOptional_StatusNotFound() throws Exception {
-        final Optional<ItemDto> expected = Optional.empty();
+    void getItemById_ShouldReturn_NotFound() throws Exception {
+        final String path = "/api/v1/items/";
+        final int itemId = 19300;
+        final String urlTemplate = path + itemId;
 
-        given(itemService.getById(anyInt())).willReturn(expected);
+        given(itemService.getItemById(itemId)).willReturn(Optional.empty());
 
-        final MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items/" + anyInt())
-                .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(urlTemplate).accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
-    public void ItemController_GetFeaturedItem_ReturnsItem_StatusOk() throws Exception {
-        final ItemImageDto imageDto = new ItemImageDto(1, "Image1", "ImageUrl");
-        final ItemFeaturedDto itemFeaturedDto = new ItemFeaturedDto(1, "Item", "Desc", new BigDecimal("9.0"), imageDto);
+    void getFeaturedItem_ShouldReturn_StatusOk() throws Exception {
+        final ItemFeaturedDto itemFeaturedDto = new ItemFeaturedDto(1,
+                "Item",
+                "Desc",
+                new BigDecimal("9.0"),
+                new ItemImageDto(1, "Name", "ImageUrl")
+        );
 
-        given(itemService.getFeatured()).willReturn(itemFeaturedDto);
+        given(itemService.getFeaturedItem()).willReturn(itemFeaturedDto);
 
-        final MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items/featured")
-                .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        final String path = "/api/v1/items/featured";
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(path).accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
