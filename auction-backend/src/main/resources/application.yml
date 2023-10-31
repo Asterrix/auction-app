@@ -10,4 +10,4 @@ spring:
 
 app-properties:
   client-route: http://localhost:4200
-  api-version: api/v1
+  api-version: /api/v1

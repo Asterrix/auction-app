@@ -4,11 +4,12 @@ import com.atlantbh.internship.auction.app.config.constant.AuctionAppProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class CorsConfig {
+class CorsConfig {
     private final AuctionAppProperties appProperties;
 
     public CorsConfig(final AuctionAppProperties appProperties) {
@@ -24,11 +25,9 @@ public class CorsConfig {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(final CorsRegistry registry) {
-                createMapping(registry, "/items", new String[]{HttpMethod.GET.name()});
-                createMapping(registry, "/items/{id}", new String[]{HttpMethod.GET.name()});
-                createMapping(registry, "/category", new String[]{HttpMethod.GET.name()});
-                createMapping(registry, "/items/featured", new String[]{HttpMethod.GET.name()});
+            public void addCorsMappings(@NonNull final CorsRegistry registry) {
+                addItemMapping(registry);
+                addCategoryMapping(registry);
             }
         };
     }
@@ -41,8 +40,21 @@ public class CorsConfig {
      * @param allowedMethods the allowed methods for the path
      */
     private void createMapping(final CorsRegistry registry, final String path, final String[] allowedMethods) {
-        registry.addMapping("/" + appProperties.getApiVersion() + path)
+        final String pathPattern = appProperties.getApiVersion() + path;
+
+        registry.addMapping(pathPattern)
                 .allowedOrigins(appProperties.getClientRoute())
                 .allowedMethods(allowedMethods);
+    }
+
+    /* Cors Mappings For Controller Endpoints */
+    private void addItemMapping(final CorsRegistry registry) {
+        createMapping(registry, "/items", new String[]{HttpMethod.GET.name()});
+        createMapping(registry, "/items/{id}", new String[]{HttpMethod.GET.name()});
+        createMapping(registry, "/items/featured", new String[]{HttpMethod.GET.name()});
+    }
+
+    private void addCategoryMapping(final CorsRegistry registry) {
+        createMapping(registry, "/category", new String[]{HttpMethod.GET.name()});
     }
 }
