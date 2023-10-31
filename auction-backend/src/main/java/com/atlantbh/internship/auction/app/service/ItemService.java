@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface ItemService {
-    Page<ItemSummaryDto> getAll(final Pageable pageable);
+    Page<ItemSummaryDto> getAllItems(final Pageable pageable);
 
-    Optional<ItemDto> getItemById(Integer itemId);
+    Optional<ItemDto> getItemById(final Integer itemId);
 
     ItemFeaturedDto getFeaturedItem();
 }

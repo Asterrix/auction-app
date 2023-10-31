@@ -77,7 +77,7 @@ class ItemControllerTest {
         );
         final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 
-        given(itemService.getAll(Mockito.any(PageRequest.class))).willReturn(mockPage);
+        given(itemService.getAllItems(Mockito.any(PageRequest.class))).willReturn(mockPage);
 
         final MockHttpServletResponse response = mockMvc
                 .perform(get(path).accept(MediaType.APPLICATION_JSON))
@@ -93,7 +93,7 @@ class ItemControllerTest {
     void getAllItems_ShouldTake_PageableParameters() throws Exception {
         final String path = "/api/v1/items";
 
-        given(itemService.getAll(any(Pageable.class))).willReturn(Mockito.any());
+        given(itemService.getAllItems(any(Pageable.class))).willReturn(Mockito.any());
 
         mockMvc.perform(get(path).accept(MediaType.APPLICATION_JSON)
                         .queryParam("page", "0")
@@ -101,7 +101,7 @@ class ItemControllerTest {
                 .andReturn().getResponse();
 
         final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
-        verify(itemService).getAll(pageableCaptor.capture());
+        verify(itemService).getAllItems(pageableCaptor.capture());
         assertEquals(0, pageableCaptor.getValue().getPageNumber());
         assertEquals(3, pageableCaptor.getValue().getPageSize());
     }
