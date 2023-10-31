@@ -1,6 +1,6 @@
 package com.atlantbh.internship.auction.app.controller;
 
-import com.atlantbh.internship.auction.app.dto.CategoryDto;
+import com.atlantbh.internship.auction.app.dto.category.CategoryDto;
 import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

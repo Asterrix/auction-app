@@ -21,8 +21,8 @@ export class ItemShowcaseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.item$ = this.itemService.getItem();
     this.imagesSub = this.item$.subscribe((item: Item | undefined): void => {
-      if (item?.itemImages && item?.itemImages.length > 0) {
-        this.activeImage = item?.itemImages[0];
+      if (item?.images && item?.images.length > 0) {
+        this.activeImage = item?.images[0];
       }
     });
   }

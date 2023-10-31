@@ -1,8 +1,8 @@
 package com.atlantbh.internship.auction.app.mapper;
 
-import com.atlantbh.internship.auction.app.dto.ItemDto;
-import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
-import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
@@ -18,7 +18,7 @@ public final class ItemMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getInitialPrice(),
-                ItemImageMapper.convertToDto(entity.getItemImages())
+                ItemImageMapper.convertToDto(entity.getItemImages().getFirst())
         );
     }
 
