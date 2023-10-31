@@ -35,22 +35,22 @@ public final class TimeRemainingCalculator {
     }
 
     private static String convertToString(final DateInterval calculatedDateInterval) {
-        StringBuilder stringBuilder = new StringBuilder();
-        final String whiteSpace = " ";
+        final StringBuilder stringBuilder = new StringBuilder();
+        final String space = " ";
 
         final long remainingWeeks = calculatedDateInterval.weeks();
         final long remainingDays = calculatedDateInterval.remainingDays();
 
         if (remainingWeeks > 0) {
-            stringBuilder.append(remainingWeeks).append(whiteSpace).append(remainingWeeks == 1 ? "Week" : "Weeks");
+            stringBuilder.append(remainingWeeks).append(space).append(remainingWeeks == 1 ? "Week" : "Weeks");
         }
 
         if (remainingWeeks > 0 && remainingDays > 0) {
-            stringBuilder.append(whiteSpace);
+            stringBuilder.append(space);
         }
 
         if (remainingDays > 0) {
-            stringBuilder.append(remainingDays).append(whiteSpace).append(remainingDays == 1 ? "Day" : "Days");
+            stringBuilder.append(remainingDays).append(space).append(remainingDays == 1 ? "Day" : "Days");
         }
 
         return stringBuilder.toString();
