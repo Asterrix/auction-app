@@ -18,7 +18,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/v1/items")
 public final class ItemController {
-
     private final ItemService itemService;
 
     public ItemController(final ItemService itemService) {

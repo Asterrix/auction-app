@@ -41,15 +41,30 @@ class CategoryControllerTest {
     }
 
     @Test
-    void CategoryController_GetAllCategories_ReturnsListOfCategories_StatusOk() throws Exception {
-        final CategoryDto categoryDto = new CategoryDto(1, "Category1");
-        final List<CategoryDto> categoryDtos = List.of(categoryDto);
+    void getAllCategories_ShouldReturn_StatusOk() throws Exception {
+        final String path = "/api/v1/categories";
 
-        given(categoryService.getAll()).willReturn(categoryDtos);
-
-        final MockHttpServletResponse response = mockMvc.perform(get("/api/v1/category").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(path).accept(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        JSONAssert.assertEquals(jacksonTester.write(categoryDtos).getJson(), response.getContentAsString(), false);
+    }
+
+    @Test
+    void getAllCategories_ShouldReturn_Content() throws Exception {
+        final String path = "/api/v1/categories";
+        final CategoryDto category = new CategoryDto(1, "Cat");
+        List<CategoryDto> list = List.of(category);
+
+        given(categoryService.getAllCategories()).willReturn(list);
+
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(path).accept(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse();
+
+        JSONAssert.assertEquals(jacksonTester.write(list).getJson(), response.getContentAsString(), false);
     }
 }
