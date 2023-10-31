@@ -11,17 +11,17 @@ interface ItemBaseProperties {
 
 export interface FeaturedItem extends ItemBaseProperties {
   description: string;
-  itemImage: ItemImage;
+  thumbnail: ItemImage;
 }
 
 export interface ItemSummary extends ItemBaseProperties {
-  itemImages: [ItemImage];
+  thumbnail: ItemImage;
 }
 
 export interface Item extends ItemBaseProperties {
   description: string;
   timeLeft: string;
-  itemImages: [ItemImage];
+  images: [ItemImage];
 }
 
 export interface ItemImage {

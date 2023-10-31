@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.dto;
+package com.atlantbh.internship.auction.app.dto.item.image;
 
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 
@@ -10,5 +10,6 @@ import java.io.Serializable;
 public record ItemImageDto(
         Integer id,
         String name,
-        String imageUrl) implements Serializable {
+        String imageUrl
+) implements Serializable {
 }

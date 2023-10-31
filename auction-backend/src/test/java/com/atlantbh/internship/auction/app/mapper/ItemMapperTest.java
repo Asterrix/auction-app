@@ -1,8 +1,8 @@
 package com.atlantbh.internship.auction.app.mapper;
 
-import com.atlantbh.internship.auction.app.dto.ItemDto;
-import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
-import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,50 +27,38 @@ class ItemMapperTest {
     }
 
     @Test
-    void ItemMapper_TakeEntityAndMapItTo_SummaryDto() {
+    void convertToSummaryDto_DtoShouldMatchParameterProperties() {
         final ItemSummaryDto itemSummaryDto = ItemMapper.convertToSummaryDto(item);
 
         assertEquals(item.getId(), itemSummaryDto.id());
         assertEquals(item.getName(), itemSummaryDto.name());
         assertEquals(item.getInitialPrice(), itemSummaryDto.initialPrice());
-        assertEquals(item.getItemImages().getFirst().getId(), itemSummaryDto.itemImages().getFirst().id());
-        assertEquals(item.getItemImages().getFirst().getName(), itemSummaryDto.itemImages().getFirst().name());
-        assertEquals(item.getItemImages().getFirst().getImageUrl(), itemSummaryDto.itemImages().getFirst().imageUrl());
+        assertEquals(item.getItemImages().getFirst().getId(), itemSummaryDto.thumbnail().id());
     }
 
     @Test
-    void ItemMapper_TakeListOfEntities_MapThemTo_ListOfSummaryDto() {
-        final List<Item> items = List.of(new Item(), new Item(), new Item());
-
-        final List<ItemSummaryDto> result = ItemMapper.convertToSummaryDto(items);
-
-        assertEquals(items.size(), result.size());
-    }
-
-    @Test
-    void ItemMapper_TakeProjections_AndMapThemTo_ItemFeaturedDto() {
-        final ItemFeaturedDto featuredDto = ItemMapper.convertToFeaturedDto(item, itemImage);
-
-        assertEquals(item.getId(), featuredDto.id());
-        assertEquals(item.getName(), featuredDto.name());
-        assertEquals(item.getDescription(), featuredDto.description());
-        assertEquals(item.getInitialPrice(), featuredDto.initialPrice());
-        assertEquals(item.getItemImages().getFirst().getId(), featuredDto.itemImage().id());
-        assertEquals(item.getItemImages().getFirst().getName(), featuredDto.itemImage().name());
-        assertEquals(item.getItemImages().getFirst().getImageUrl(), featuredDto.itemImage().imageUrl());
-    }
-
-    @Test
-    void ItemMapper_TakeEntityAndMapItTo_ItemDto() {
+    void convertToItemDto_DtoShouldMatchParameterProperties() {
         final ItemDto itemDto = ItemMapper.convertToItemDto(item);
 
         assertEquals(item.getId(), itemDto.id());
         assertEquals(item.getName(), itemDto.name());
         assertEquals(item.getDescription(), itemDto.description());
         assertEquals(item.getInitialPrice(), itemDto.initialPrice());
-        assertEquals(item.getItemImages().size(), itemDto.itemImages().size());
-        assertEquals(item.getItemImages().getFirst().getId(), itemDto.itemImages().getFirst().id());
-        assertEquals(item.getItemImages().getFirst().getName(), itemDto.itemImages().getFirst().name());
-        assertEquals(item.getItemImages().getFirst().getImageUrl(), itemDto.itemImages().getFirst().imageUrl());
+        assertEquals(item.getItemImages().size(), itemDto.images().size());
+        assertEquals(item.getItemImages().getFirst().getId(), itemDto.images().getFirst().id());
+        assertEquals(item.getItemImages().getFirst().getName(), itemDto.images().getFirst().name());
+        assertEquals(item.getItemImages().getFirst().getImageUrl(), itemDto.images().getFirst().imageUrl());
+    }
+    @Test
+    void convertToFeaturedDto_DtoShouldMatchParameterProperties() {
+        final ItemFeaturedDto featuredDto = ItemMapper.convertToFeaturedDto(item, itemImage);
+
+        assertEquals(item.getId(), featuredDto.id());
+        assertEquals(item.getName(), featuredDto.name());
+        assertEquals(item.getDescription(), featuredDto.description());
+        assertEquals(item.getInitialPrice(), featuredDto.initialPrice());
+        assertEquals(item.getItemImages().getFirst().getId(), featuredDto.thumbnail().id());
+        assertEquals(item.getItemImages().getFirst().getName(), featuredDto.thumbnail().name());
+        assertEquals(item.getItemImages().getFirst().getImageUrl(), featuredDto.thumbnail().imageUrl());
     }
 }

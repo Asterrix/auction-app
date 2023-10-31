@@ -1,8 +1,8 @@
 package com.atlantbh.internship.auction.app.service;
 
-import com.atlantbh.internship.auction.app.dto.ItemDto;
-import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
-import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;

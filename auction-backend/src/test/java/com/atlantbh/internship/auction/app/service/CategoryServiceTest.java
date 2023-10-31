@@ -1,6 +1,6 @@
 package com.atlantbh.internship.auction.app.service;
 
-import com.atlantbh.internship.auction.app.dto.CategoryDto;
+import com.atlantbh.internship.auction.app.dto.category.CategoryDto;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.repository.CategoryRepository;
 import com.atlantbh.internship.auction.app.service.impl.CategoryServiceImpl;
