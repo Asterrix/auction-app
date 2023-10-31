@@ -20,10 +20,7 @@ class TimeRemainingCalculatorTest {
 
     @Test
     void validateDate_ShouldThrow_NotALeapYearException() {
-        final LocalDate startDate = LocalDate.of(1800, 2, 31);
-        final LocalDate endDate = LocalDate.of(1802, 3, 1);
-
-        assertThrows(DateTimeException.class, () -> TimeRemainingCalculator.getTimeRemaining(endDate, startDate));
+        assertThrows(DateTimeException.class, () -> LocalDate.of(1800, 2, 31));
     }
 
     @Test

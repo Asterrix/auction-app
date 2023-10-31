@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -29,21 +30,24 @@ public final class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<ItemSummaryDto> getAll(final Pageable pageable) {
+    public Page<ItemSummaryDto> getAllItems(final Pageable pageable) {
         final Page<Item> items = itemRepository.findAll(pageable);
-        return new PageImpl<>(ItemMapper.convertToSummaryDto(items.getContent()));
+        final List<ItemSummaryDto> itemList = ItemMapper.convertToSummaryDto(items.getContent());
+        final long totalElements = items.getTotalElements();
+
+        return new PageImpl<>(itemList, pageable, totalElements);
     }
 
     @Override
     public Optional<ItemDto> getItemById(final Integer itemId) {
         final Optional<Item> item = itemRepository.findById(itemId);
+
         return item.map(ItemMapper::convertToItemDto).or(Optional::empty);
     }
 
     @Override
     public ItemFeaturedDto getFeaturedItem() {
         final LocalDate endDateThreshold = LocalDate.now().plusDays(7);
-
         final Optional<Item> itemInfo = itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(endDateThreshold);
 
         if (itemInfo.isEmpty()) {
