@@ -14,7 +14,7 @@ export class ItemService {
   item$: BehaviorSubject<Item | undefined> = new BehaviorSubject<Item | undefined>(undefined);
   items$: BehaviorSubject<Array<ItemSummary> | undefined> = new BehaviorSubject<Array<ItemSummary> | undefined>(undefined);
 
-  constructor(public apiService: Api.Service) {
+  constructor(private apiService: Api.Service) {
   }
 
   initFeaturedItem(): void {
