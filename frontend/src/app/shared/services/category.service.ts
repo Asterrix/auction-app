@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {Api} from "./api.service";
 import Category = Api.CategoryApi.Category;
 
@@ -18,7 +18,7 @@ export class CategoryService {
     });
   }
 
-  getAllCategories(): BehaviorSubject<Array<Category> | undefined> {
-    return this.categories$;
+  getAllCategories(): Observable<Array<Category> | undefined> {
+    return this.categories$.asObservable();
   };
 }

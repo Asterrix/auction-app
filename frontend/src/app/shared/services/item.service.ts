@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, Subscription} from "rxjs";
+import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {Page} from "../models/interfaces/page";
 import {Api} from "./api.service";
 import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
@@ -23,8 +23,8 @@ export class ItemService {
     });
   }
 
-  getFeaturedItem(): BehaviorSubject<FeaturedItem | undefined> {
-    return this.featuredItem$;
+  getFeaturedItem(): Observable<FeaturedItem | undefined> {
+    return this.featuredItem$.asObservable();
   }
 
   initItemsNewestArrivals(): void {
@@ -39,8 +39,8 @@ export class ItemService {
     });
   }
 
-  getItems(): BehaviorSubject<Array<ItemSummary> | undefined> {
-    return this.items$;
+  getItems(): Observable<Array<ItemSummary> | undefined> {
+    return this.items$.asObservable();
   }
 
   initItem(itemId: number): Subscription {
@@ -49,7 +49,7 @@ export class ItemService {
     });
   }
 
-  getItem(): BehaviorSubject<Item | undefined> {
-    return this.item$;
+  getItem(): Observable<Item | undefined> {
+    return this.item$.asObservable();
   }
 }
