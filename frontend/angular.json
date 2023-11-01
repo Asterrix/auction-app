@@ -30,11 +30,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/global.styles.scss",
-              "src/styles/container.styles.scss",
-              "src/styles/grid.styles.scss",
-              "src/themes/typography.styles.scss",
-              "src/themes/colors.styles.scss"
+              "src/styles/global.scss",
+              "src/styles/container.scss",
+              "src/styles/grid.scss",
+              "src/themes/typography.scss",
+              "src/themes/colors.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -109,11 +109,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/global.styles.scss",
-              "src/styles/container.styles.scss",
-              "src/styles/grid.styles.scss",
-              "src/themes/typography.styles.scss",
-              "src/themes/colors.styles.scss"
+              "src/styles/global.scss",
+              "src/styles/container.scss",
+              "src/styles/grid.scss",
+              "src/themes/typography.scss",
+              "src/themes/colors.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

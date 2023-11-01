@@ -1,0 +1,102 @@
+@import "colors";
+@import "container";
+
+
+/* <-- Font Size */
+.font-size-regular {
+  font-size: 1.6rem;
+}
+
+.font-size-large {
+  font-size: 1.8rem;
+}
+
+.font-size-ex {
+  font-size: 2rem;
+}
+
+.font-size-ex2 {
+  font-size: 2.4rem;
+}
+
+.font-size-ex3 {
+  font-size: 3rem;
+}
+
+.font-size-ex4 {
+  font-size: 4rem;
+}
+
+/* --> Font Size */
+
+/* <-- Font Weight */
+.font-regular {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semi-bold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* --> Font Weight */
+
+/* --> Body Typography */
+body {
+  color: $neutral-dark;
+  font-family: "lato", sans-serif;
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+
+  @media (min-width: $small) {
+    font-size: 1.6rem;
+  }
+}
+
+/* <-- Body Typography */
+
+/* <-- Headers */
+h1 {
+  font-size: 6rem;
+  @extend .font-bold;
+  line-height: 1;
+}
+
+h2 {
+  font-size: 4.5rem;
+  @extend .font-bold;
+  line-height: 1;
+}
+
+h3 {
+  font-size: 3.75rem;
+  @extend .font-bold;
+  line-height: 1;
+}
+
+h4 {
+  font-size: 3rem;
+  @extend .font-semi-bold;
+  line-height: 1;
+}
+
+h5 {
+  font-size: 2.25rem;
+  @extend .font-semi-bold;
+  line-height: 2.5rem;
+}
+
+h6 {
+  font-size: 1.875rem;
+  @extend .font-semi-bold;
+  line-height: 2.25rem;
+}
+
+/* --> Headers */

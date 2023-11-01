@@ -1,10 +1,13 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Observable, Subscription} from "rxjs";
-import {Item, ItemImage, ItemService} from "../../../../../shared/services/item.service";
+import {Api} from "../../../../../shared/services/api.service";
+import {ItemService} from "../../../../../shared/services/item.service";
+import Item = Api.ItemApi.Interfaces.Item;
+import ItemImage = Api.ItemApi.Interfaces.ItemImage;
 
 @Component({
-  selector: "app-item-showcase",
+  selector: "shop-item-showcase",
   standalone: true,
   imports: [CommonModule],
   templateUrl: "./item-showcase.component.html",
