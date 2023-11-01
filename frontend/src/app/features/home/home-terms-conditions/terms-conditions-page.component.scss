@@ -1,0 +1,27 @@
+@import "colors";
+@import "typography";
+@import "container";
+
+.terms-conditions {
+  display: grid;
+  margin: 9.6rem 0;
+
+  &__layout {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__container {
+    width: 100%;
+
+    @media (min-width: $extra-large) {
+      width: 50%;
+    }
+  }
+
+  &__content {
+    display: grid;
+    gap: 3.2rem;
+  }
+}

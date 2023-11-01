@@ -1,12 +1,14 @@
-import {Component, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
+import {Component, OnInit} from "@angular/core";
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {TabComponent} from "../../../../../shared/components/tab/tab.component";
-import {Item, ItemService} from "../../../../../shared/services/item.service";
 import {Observable} from "rxjs";
+import {TabComponent} from "../../../../../shared/components/tab/tab.component";
+import {Api} from "../../../../../shared/services/api.service";
+import {ItemService} from "../../../../../shared/services/item.service";
+import Item = Api.ItemApi.Interfaces.Item;
 
 @Component({
-  selector: "app-item-information",
+  selector: "shop-item-information",
   standalone: true,
   imports: [CommonModule, RouterLinkActive, RouterLink, TabComponent],
   templateUrl: "./item-information.component.html",

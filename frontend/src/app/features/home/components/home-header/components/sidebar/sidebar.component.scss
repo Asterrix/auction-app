@@ -1,0 +1,30 @@
+@import "typography";
+@import "colors";
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  &__label {
+    color: $primary;
+    @extend .font-semi-bold;
+    padding-left: 1.6rem;
+    text-transform: uppercase;
+  }
+
+  &__category__list {
+    list-style: none;
+  }
+
+  &__item {
+    background-color: $white;
+    border-bottom: 1px solid $neutral-light-grey;
+    padding: 1.6rem;
+    transition: all 300ms ease-out;
+
+    &:hover {
+      border-bottom: 1px solid $primary;
+    }
+  }
+}

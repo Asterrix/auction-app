@@ -1,5 +1,5 @@
-@import "colors.styles";
-@import "typography.styles";
+@import "colors";
+@import "typography";
 
 :host{
   display: flex;
@@ -27,13 +27,13 @@
 
     &__title {
       color: $neutral-grey;
-      @extend .font-size-regular;
+      font-size: 1.6rem;
       text-transform: uppercase;
     }
 
     &__list {
       display: flex;
-      @extend .font-semibold;
+      @extend .font-semi-bold;
       flex-direction: column;
       gap: 0.4rem;
       list-style: none;

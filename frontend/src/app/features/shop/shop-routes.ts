@@ -1,8 +1,8 @@
 import {Route} from "@angular/router";
-import {Constant} from "../../shared/models/enums/constant";
 import {environment} from "../../../environments/environment";
-import {ShopItemComponent} from "./shop-item/shop-item.component";
-import {ShopComponent} from "./shop.component";
+import {Constant} from "../../shared/models/enums/constant";
+import {ShopItemPage} from "./shop-item/shop-item-page.component";
+import {ShopPage} from "./shop-page.component";
 
 export enum ShopRouteEndpoint {
   Shop = "shop",
@@ -26,11 +26,11 @@ export const SHOP_ROUTES: Route[] = [
       trail: ShopRouteTitles[ShopRouteEndpoint.Shop]
     },
     children: [
-      {path: Constant.EmptyValue, component: ShopComponent},
+      {path: Constant.EmptyValue, component: ShopPage},
       {
         path: `${ShopRouteEndpoint.Item}/:${ItemPageParameter.Id}`,
         title: `${environment.applicationName} - ${ShopRouteTitles[ShopRouteEndpoint.Item]}`,
-        component: ShopItemComponent,
+        component: ShopItemPage,
         data: {
           trail: `${ShopRouteTitles[ShopRouteEndpoint.Item]}`
         }
