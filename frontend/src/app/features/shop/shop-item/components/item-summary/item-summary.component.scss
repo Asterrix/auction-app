@@ -1,5 +1,5 @@
-@import "colors.styles";
-@import "typography.styles";
+@import "colors";
+@import "typography";
 
 .item-summary {
   display: flex;
@@ -9,7 +9,7 @@
   &__title {
     font-size: 3.2rem;
     line-height: normal;
-    @extend .font-semibold;
+    @extend .font-semi-bold;
   }
 
   p {
@@ -29,6 +29,6 @@
 
   &--info {
     color: $primary;
-    @extend .font-semibold;
+    @extend .font-semi-bold;
   }
 }

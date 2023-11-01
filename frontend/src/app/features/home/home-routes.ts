@@ -1,10 +1,10 @@
 import {Route} from "@angular/router";
-import {HomeComponent} from "./home.component";
 import {environment} from "../../../environments/environment";
 import {Constant} from "../../shared/models/enums/constant";
-import {HomeAboutUsComponent} from "./home-about-us/home-about-us.component";
-import {HomePrivacyPolicyComponent} from "./home-privacy-policy/home-privacy-policy.component";
-import {HomeTermsConditionsComponent} from "./home-terms-conditions/home-terms-conditions.component";
+import {AboutUsPage} from "./home-about-us/about-us-page.component";
+import {HomePage} from "./home-page.component";
+import {PrivacyPolicyPage} from "./home-privacy-policy/privacy-policy-page.component";
+import {TermsConditionsPage} from "./home-terms-conditions/terms-conditions-page.component";
 
 export enum HomeRouteEndpoint {
   Home = "home",
@@ -28,11 +28,11 @@ export const HOME_ROUTES: Route[] = [
       trail: HomeRouteTitles[HomeRouteEndpoint.Home]
     },
     children: [
-      {path: Constant.EmptyValue, component: HomeComponent},
+      {path: Constant.EmptyValue, component: HomePage},
       {
         path: HomeRouteEndpoint.AboutUs,
         title: `${environment.applicationName} - ${HomeRouteTitles[HomeRouteEndpoint.AboutUs]}`,
-        component: HomeAboutUsComponent,
+        component: AboutUsPage,
         data: {
           trail: `${HomeRouteTitles[HomeRouteEndpoint.AboutUs]}`
         }
@@ -40,7 +40,7 @@ export const HOME_ROUTES: Route[] = [
       {
         path: HomeRouteEndpoint.PrivacyPolicy,
         title: `${environment.applicationName} - ${HomeRouteTitles[HomeRouteEndpoint.PrivacyPolicy]}`,
-        component: HomePrivacyPolicyComponent,
+        component: PrivacyPolicyPage,
         data: {
           trail: `${HomeRouteTitles[HomeRouteEndpoint.PrivacyPolicy]}`
         }
@@ -48,7 +48,7 @@ export const HOME_ROUTES: Route[] = [
       {
         path: HomeRouteEndpoint.TermsAndConditions,
         title: `${environment.applicationName} - ${HomeRouteTitles[HomeRouteEndpoint.TermsAndConditions]}`,
-        component: HomeTermsConditionsComponent,
+        component: TermsConditionsPage,
         data: {
           trail: `${HomeRouteTitles[HomeRouteEndpoint.TermsAndConditions]}`
         }

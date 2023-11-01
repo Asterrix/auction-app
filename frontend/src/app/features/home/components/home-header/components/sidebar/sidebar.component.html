@@ -1,0 +1,9 @@
+<div class="sidebar">
+  <span class="sidebar__label">Categories</span>
+
+  <ul class="sidebar__category__list">
+    <ng-container *ngFor="let category of categories$ | async">
+      <li class="sidebar__item">{{category.name}}</li>
+    </ng-container>
+  </ul>
+</div>
