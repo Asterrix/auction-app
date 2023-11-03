@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-class CorsConfig {
+public class CorsConfig {
     private final AuctionAppProperties appProperties;
 
     public CorsConfig(final AuctionAppProperties appProperties) {
