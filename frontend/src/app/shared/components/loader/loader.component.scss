@@ -3,8 +3,10 @@
 .loader {
   align-items: center;
   display: flex;
-  min-height: 50vh;
+  height: inherit;
   justify-content: center;
+  max-height: inherit;
+  min-height: inherit;
   z-index: 9999;
 
   &__animation {
