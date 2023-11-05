@@ -81,9 +81,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private subscribeToQueryParamChanges(): void {
     this.subscription["queryParam"] = this.activatedRoute.queryParams.subscribe((params: Params): void => {
       const paramCategory: string = params[ShopPageParameter.Parameter.Category];
+      if (paramCategory) this.handleCategoryChange(paramCategory);
+
       const paramSubcategory: string = params[ShopPageParameter.Parameter.Subcategory];
-      this.handleCategoryChange(paramCategory);
-      this.handleSubcategoryChange(paramSubcategory);
+      if (paramCategory) this.handleSubcategoryChange(paramSubcategory);
     });
   }
 
@@ -96,7 +97,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private handleCategoryChange(paramCategory: string): void {
-    if(this.activeCategory === paramCategory.toLowerCase()) return;
+    if (this.activeCategory === paramCategory.toLowerCase()) return;
 
     if (this.categoryExists(paramCategory)) {
       this.activeCategory = paramCategory.toLowerCase();
