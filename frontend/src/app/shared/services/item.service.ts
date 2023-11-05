@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, catchError, Observable} from "rxjs";
 import {Page} from "../models/interfaces/page";
+import {IPagination} from "../models/pagination";
 import {Api} from "./api.service";
 import {LoaderService} from "./loader.service";
-import Pagination = Api.Interfaces.Pagination;
 import ItemParams = Api.ItemApi.GetMethods.ItemParams;
 import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
 import Item = Api.ItemApi.Interfaces.Item;
@@ -81,7 +81,7 @@ export class ItemService {
     return this.item$.asObservable();
   }
 
-  initItems(filter: Partial<ItemParams>, pagination: Required<Pagination>): void {
+  initItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {
     this.loader.showLoader();
 
     return this.apiService.getListOfAllItems(filter, pagination).pipe(
@@ -98,7 +98,7 @@ export class ItemService {
       });
   }
 
-  loadMoreData(filter: Partial<ItemParams>, pagination: Required<Pagination>): void {
+  loadMoreData(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {
     this.loader.showLoader();
 
     this.apiService.getListOfAllItems(filter, pagination).pipe(
