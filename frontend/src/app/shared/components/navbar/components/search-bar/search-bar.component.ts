@@ -1,10 +1,10 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {Router} from "@angular/router";
 import {debounceTime} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {Constant} from "../../../../models/enums/constant";
+import {SearchService} from "../../../../services/search.service";
 
 @Component({
   selector: "app-search-bar",
@@ -19,7 +19,7 @@ export class SearchBarComponent implements OnInit {
     searchValue: Constant.EmptyValue
   });
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private searchService: SearchService) {
   }
 
   ngOnInit(): void {
@@ -34,32 +34,15 @@ export class SearchBarComponent implements OnInit {
     this.search();
   }
 
-  search() {
-    // Clear query parameter if the input is empty
-    if (this.searchValue === Constant.EmptyValue) {
-      this.clearQueryParameter();
-    } else {
-      this.appendQueryParameter();
-    }
-  }
-
   handleSearchNavigation(): void {
-    this.router.navigate(["/shop"], {
-      queryParams: {itemName: this.searchValue},
-    }).then(null);
+    this.searchService.handleSearchNavigation(this.searchValue);
   }
 
-  private appendQueryParameter(): void {
-    this.router.navigate([], {
-      queryParams: {itemName: this.searchValue},
-      queryParamsHandling: "merge",
-    }).then(null);
-  }
-
-  private clearQueryParameter(): void {
-    this.router.navigate([], {
-      queryParams: {itemName: null},
-      queryParamsHandling: "merge",
-    }).then(null);
+  private search(): void {
+    if (this.searchValue === Constant.EmptyValue) {
+      this.searchService.clearQueryParameter();
+    } else {
+      this.searchService.appendQueryParameter(this.searchValue);
+    }
   }
 }
