@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Params} from "@angular/router";
+import {Params, Router} from "@angular/router";
 import {BehaviorSubject, Observable} from "rxjs";
 
 export enum Section {
@@ -27,6 +27,10 @@ export class SectionTabService {
   ];
   private sectionSet: Set<string> = new Set<string>(this.sections.map(section => section.value));
 
+
+  constructor(private router: Router) {
+  }
+
   getActiveSectionValue(): string {
     return this.activeSection.getValue();
   }
@@ -39,13 +43,21 @@ export class SectionTabService {
     return this.sections;
   }
 
-
   handleSectionChange(section: string, params: Params): void {
     if (this.sectionExists(section)) {
       this.setActiveSection(params);
     } else {
+      this.clearSectionQuery();
       this.setActiveSectionToDefault();
     }
+  }
+
+  private sectionExists(section: string): boolean {
+    return this.sectionSet.has(section);
+  }
+
+  private clearSectionQuery(): void {
+    this.router.navigate([], {queryParams: {section: null}, queryParamsHandling: "merge"}).then(null);
   }
 
   private setActiveSectionToDefault(): void {
@@ -54,9 +66,5 @@ export class SectionTabService {
 
   private setActiveSection(value: Params): void {
     this.activeSection.next(value[SectionQueryParam.Section]);
-  }
-
-  private sectionExists(section: string): boolean {
-    return this.sectionSet.has(section);
   }
 }

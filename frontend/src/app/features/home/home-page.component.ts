@@ -7,7 +7,11 @@ import {Api} from "../../shared/services/api.service";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item.service";
 import {HomeHeaderComponent} from "./components/home-header/home-header.component";
-import {Section, SectionQueryParam, SectionTabService} from "./components/home-items/components/section-tab/section-tab.service";
+import {
+  Section,
+  SectionQueryParam,
+  SectionTabService
+} from "./components/home-items/components/section-tab/section-tab.service";
 import {HomeItemsComponent} from "./components/home-items/home-items.component";
 import Category = Api.CategoryApi.Category;
 import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
@@ -36,7 +40,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.clearQueryParameters();
+    this.clearItemQueryParam();
     this.fetchFeaturedItem();
     this.fetchCategories();
     this.subscribeToQueryParamChanges();
@@ -56,8 +60,8 @@ export class HomePage implements OnInit, OnDestroy {
     this.featuredItem$ = this.itemService.getFeaturedItem();
   }
 
-  private clearQueryParameters(): void {
-    this.router.navigate([], {queryParams: {section: null, itemName: null}, queryParamsHandling: "merge"}).then(null);
+  private clearItemQueryParam(): void {
+    this.router.navigate([], {queryParams: {itemName: null}, queryParamsHandling: "merge"}).then(null);
   }
 
   private subscribeToQueryParamChanges(): void {
@@ -69,6 +73,7 @@ export class HomePage implements OnInit, OnDestroy {
       }
 
       const section: string = params[SectionQueryParam.Section];
+
       this.sectionTabService.handleSectionChange(section, params);
       this.fetchSectionItems();
       this.fetchItems();
