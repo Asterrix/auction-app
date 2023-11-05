@@ -1,3 +1,4 @@
+<ng-container *ngIf="(categories$ | async) && (items$ | async); else loader">
 <div class="shop">
   <div class="container">
     <div class="shop__layout">
@@ -6,3 +7,8 @@
     </div>
   </div>
 </div>
+</ng-container>
+
+<ng-template #loader>
+  <app-loader class="loader-placeholder"/>
+</ng-template>

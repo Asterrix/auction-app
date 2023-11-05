@@ -3,6 +3,7 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Params} from "@angular/router";
 import {debounceTime, Observable, Subscription} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
+import {LoaderComponent} from "../../shared/components/loader/loader.component";
 import {ItemFilterBuilder} from "../../shared/models/builders/item-filter-builder";
 import {Page} from "../../shared/models/interfaces/page";
 import {Pagination} from "../../shared/models/pagination";
@@ -19,7 +20,7 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 @Component({
   selector: "app-shop",
   standalone: true,
-  imports: [CommonModule, SidebarComponent, ContentSectionComponent],
+  imports: [CommonModule, SidebarComponent, ContentSectionComponent, LoaderComponent],
   templateUrl: "./shop-page.component.html",
   styleUrls: ["./shop-page.component.scss"]
 })
