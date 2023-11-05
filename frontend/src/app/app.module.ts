@@ -1,4 +1,4 @@
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -11,6 +11,7 @@ import {TermsConditionsPage} from "./features/home/home-terms-conditions/terms-c
 import {FooterComponent} from "./shared/components/footer/footer.component";
 import {LoaderComponent} from "./shared/components/loader/loader.component";
 import {NavbarComponent} from "./shared/components/navbar/navbar.component";
+import {LoadingInterceptor} from "./shared/directives/loading.interceptor";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import {NavbarComponent} from "./shared/components/navbar/navbar.component";
     TermsConditionsPage,
     LoaderComponent
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {
