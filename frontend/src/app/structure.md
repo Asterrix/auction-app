@@ -34,6 +34,11 @@ The "Shared" folder contains code that can be shared and used across the applica
 
 - **directives**: Used to contain reusable directives that can be applied to different parts of the application.
   - Example: Validation Forms
+  
+- **guards**: Contains Angular guards used to protect routes by implementing checks on specific routes.
+
+- **interceptor**: Contains methods that intercept HttpRequest or HttpResponse and performs a certain operations before continuing
+with the request. 
 
 - **models**: Holds interfaces and concrete class implementations.
   - Example: UserModel
@@ -44,4 +49,3 @@ The "Shared" folder contains code that can be shared and used across the applica
 - **services**: Houses services and their implementations.
   - Example: Authentication Service
 
-- **guards**: Contains Angular guards used to protect routes by implementing checks on specific routes.
