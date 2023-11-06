@@ -24,7 +24,7 @@
 }
 
 .items-grid {
-  @include items-grid(3);
+  @include items-grid(3, 3);
 }
 
 .loader-placeholder {
