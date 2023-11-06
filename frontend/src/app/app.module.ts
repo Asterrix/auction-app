@@ -11,7 +11,7 @@ import {TermsConditionsPage} from "./features/home/home-terms-conditions/terms-c
 import {FooterComponent} from "./shared/components/footer/footer.component";
 import {LoaderComponent} from "./shared/components/loader/loader.component";
 import {NavbarComponent} from "./shared/components/navbar/navbar.component";
-import {LoadingInterceptor} from "./shared/directives/loading.interceptor";
+import {LoadingInterceptor} from "./shared/interceptors/loading.interceptor";
 
 @NgModule({
   declarations: [
