@@ -51,7 +51,7 @@ public final class ItemServiceImpl implements ItemService {
                                             @Nullable final String itemName,
                                             final Pageable pageable) {
 
-        Specification<Item> specification = Specification.allOf(isActive());
+        Specification<Item> specification = Specification.allOf();
         if (category != null) specification = specification.and(isPartOfCategory(category));
         if(subcategory != null) specification = specification.and(isPartOfSubcategory(category, subcategory));
         if(itemName != null) specification = specification.and(isNameOf(itemName));
