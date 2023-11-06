@@ -8,12 +8,12 @@ import {Api} from "../../../../../shared/services/api.service";
 import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 @Component({
-  selector: "shop-item-information",
+  selector: "shop-item-description",
   standalone: true,
   imports: [CommonModule, RouterLinkActive, RouterLink, TabComponent, LoaderComponent],
-  templateUrl: "./item-information.component.html",
-  styleUrls: ["./item-information.component.scss"]
+  templateUrl: "./item-description.component.html",
+  styleUrls: ["./item-description.component.scss"]
 })
-export class ItemInformationComponent {
+export class ItemDescriptionComponent {
   @Input({required: true}) public item$: Observable<ItemAggregate | undefined> | undefined;
 }
