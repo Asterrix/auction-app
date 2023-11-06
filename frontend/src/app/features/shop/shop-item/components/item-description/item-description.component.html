@@ -1,9 +1,9 @@
 <div *ngIf="item$ | async as item" class="item-information">
   <app-tab>
     <li class="tab-item">
-      <a [routerLinkActiveOptions]="{exact: false}"
+      <a [routerLinkActiveOptions]="{exact: true}"
+         [routerLink]="['/shop/item', item.item.id]"
          class="tab-item__link"
-         routerLink="/shop/item/"
          routerLinkActive="--active">
         Details
       </a>

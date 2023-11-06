@@ -13,7 +13,7 @@ import {Api} from "../../../shared/services/api.service";
 import {ItemService} from "../../../shared/services/item.service";
 import {LoaderService} from "../../../shared/services/loader.service";
 import {ItemPageParameter} from "../shop-routes";
-import {ItemInformationComponent} from "./components/item-information/item-information.component";
+import {ItemDescriptionComponent} from "./components/item-description/item-description.component";
 import {ItemShowcaseComponent} from "./components/item-showcase/item-showcase.component";
 import {ItemSummaryComponent} from "./components/item-summary/item-summary.component";
 import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
@@ -22,7 +22,7 @@ import ItemImage = Api.ItemApi.Interfaces.ItemImage;
 @Component({
   selector: "shop-item",
   standalone: true,
-  imports: [CommonModule, NavigationTrailComponent, ItemShowcaseComponent, ItemSummaryComponent, ItemInformationComponent, LoaderComponent],
+  imports: [CommonModule, NavigationTrailComponent, ItemShowcaseComponent, ItemSummaryComponent, ItemDescriptionComponent, LoaderComponent],
   templateUrl: "./shop-item-page.component.html",
   styleUrls: ["./shop-item-page.component.scss"]
 })

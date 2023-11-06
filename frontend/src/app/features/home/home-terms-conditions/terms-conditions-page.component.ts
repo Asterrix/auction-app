@@ -1,18 +1,14 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
-import {
-  NavigationTrailComponent
-} from "../../../shared/components/navbar/components/navigation-trail/navigation-trail.component";
-import {
-  NavigationTrailService
-} from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
-import {ContentCardComponent} from "../components/content-card/content-card.component";
+import {NavigationTrailComponent} from "../../../shared/components/navbar/components/navigation-trail/navigation-trail.component";
+import {NavigationTrailService} from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
+import {ArticleCardComponent} from "../components/article-card/article-card.component";
 
 @Component({
   selector: "home-terms-conditions",
   standalone: true,
-  imports: [CommonModule, ContentCardComponent, NavigationTrailComponent],
+  imports: [CommonModule, ArticleCardComponent, NavigationTrailComponent],
   templateUrl: "terms-conditions-page.component.html",
   styleUrls: ["./terms-conditions-page.component.scss"]
 })
