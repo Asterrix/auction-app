@@ -1,6 +1,6 @@
 package com.atlantbh.internship.auction.app.service;
 
-import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import jakarta.annotation.Nullable;
@@ -15,7 +15,7 @@ public interface ItemService {
                                      @Nullable final String itemName,
                                      final Pageable pageable);
 
-    Optional<ItemDto> getItemById(final Integer itemId);
+    Optional<ItemAggregate> getItemById(final Integer itemId);
 
     ItemFeaturedDto getFeaturedItem();
 }

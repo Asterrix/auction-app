@@ -6,7 +6,7 @@ import {LoaderComponent} from "../../../../../shared/components/loader/loader.co
 import {TabComponent} from "../../../../../shared/components/tab/tab.component";
 import {Api} from "../../../../../shared/services/api.service";
 import {ItemService} from "../../../../../shared/services/item.service";
-import Item = Api.ItemApi.Interfaces.Item;
+import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 @Component({
   selector: "shop-item-information",
@@ -16,7 +16,7 @@ import Item = Api.ItemApi.Interfaces.Item;
   styleUrls: ["./item-information.component.scss"]
 })
 export class ItemInformationComponent implements OnInit {
-  public item$: Observable<Item | undefined> | undefined;
+  public item$: Observable<ItemAggregate | undefined> | undefined;
 
   constructor(private itemService: ItemService) {
   }

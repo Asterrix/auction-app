@@ -6,7 +6,7 @@
            src="{{activeImage?.imageUrl}}"/>
     </div>
     <div class="item-showcase__slide">
-      <div (click)="changeActiveImage(image)" *ngFor="let image of item.images" class="item-showcase__slide__item">
+      <div (click)="changeActiveImage(image)" *ngFor="let image of item.item.images" class="item-showcase__slide__item">
         <img alt="Image" src="{{image.imageUrl}}"/>
       </div>
     </div>
