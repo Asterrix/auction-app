@@ -1,6 +1,6 @@
 package com.atlantbh.internship.auction.app.controller;
 
-import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
@@ -31,8 +31,8 @@ public final class ItemController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ItemDto> getItemById(@PathVariable("id") final Integer itemId) {
-        final Optional<ItemDto> result = itemService.getItemById(itemId);
+    public ResponseEntity<ItemAggregate> getItemById(@PathVariable("id") final Integer itemId) {
+        final Optional<ItemAggregate> result = itemService.getItemById(itemId);
 
         return result.map(item -> new ResponseEntity<>(item, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

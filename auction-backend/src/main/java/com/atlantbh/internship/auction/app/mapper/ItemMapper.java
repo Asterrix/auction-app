@@ -1,5 +1,7 @@
 package com.atlantbh.internship.auction.app.mapper;
 
+import com.atlantbh.internship.auction.app.dto.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
@@ -43,5 +45,9 @@ public final class ItemMapper {
                 item.getDescription(),
                 item.getInitialPrice(),
                 ItemImageMapper.convertToDto(itemImage));
+    }
+
+    public static ItemAggregate convertToAggregate(final ItemDto itemDto, final UserItemBidDto itemBidDto){
+        return new ItemAggregate(itemDto, itemBidDto);
     }
 }

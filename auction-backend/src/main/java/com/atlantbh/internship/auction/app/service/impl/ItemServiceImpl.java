@@ -1,14 +1,20 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
+import com.atlantbh.internship.auction.app.dto.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
+import com.atlantbh.internship.auction.app.entity.UserItemBid;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
+import com.atlantbh.internship.auction.app.mapper.UserItemBidMapper;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
+import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
 import com.atlantbh.internship.auction.app.service.ItemService;
+import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,10 +35,14 @@ import static com.atlantbh.internship.auction.app.service.specification.ItemSpec
 public final class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemImageRepository itemImageRepository;
+    private final UserItemBidRepository userItemBidRepository;
 
-    public ItemServiceImpl(final ItemRepository itemRepository, final ItemImageRepository itemImageRepository) {
+    public ItemServiceImpl(final ItemRepository itemRepository,
+                           final ItemImageRepository itemImageRepository,
+                           final UserItemBidRepository userItemBidRepository) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
+        this.userItemBidRepository = userItemBidRepository;
     }
 
     @Override
@@ -55,10 +65,26 @@ public final class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Optional<ItemDto> getItemById(final Integer itemId) {
+    public Optional<ItemAggregate> getItemById(final Integer itemId) {
         final Optional<Item> item = itemRepository.findById(itemId);
+        if(item.isEmpty()) return Optional.empty();
 
-        return item.map(ItemMapper::convertToItemDto).or(Optional::empty);
+        final Specification<UserItemBid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
+
+        final long totalNumberOfBids = userItemBidRepository.getTotalCount(item.get().getId());
+        if(totalNumberOfBids == 0){
+            final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get());
+            final UserItemBidDto bidInformation = UserItemBidMapper.convertToValuesOfZeroDto();
+
+            return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation));
+        }
+
+        final Optional<UserItemBid> highestBid = userItemBidRepository.findOne(specification);
+
+        final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get());
+        final UserItemBidDto mappedBidInformation = UserItemBidMapper.convertToDto(highestBid.get(), totalNumberOfBids);
+
+        return Optional.of(ItemMapper.convertToAggregate(mappedItems, mappedBidInformation));
     }
 
     @Override

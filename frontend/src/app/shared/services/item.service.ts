@@ -7,13 +7,14 @@ import ItemParams = Api.ItemApi.GetMethods.ItemParams;
 import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
 import Item = Api.ItemApi.Interfaces.Item;
 import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
+import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 @Injectable({
   providedIn: "root"
 })
 export class ItemService {
   private featuredItem$ = new BehaviorSubject<FeaturedItem | undefined>(undefined);
-  private item$ = new BehaviorSubject<Item | undefined>(undefined);
+  private item$ = new BehaviorSubject<ItemAggregate | undefined>(undefined);
   private items$ = new BehaviorSubject<Page<ItemSummary> | undefined>(undefined);
 
   constructor(private apiService: Api.Service) {
@@ -55,7 +56,7 @@ export class ItemService {
       })).subscribe((item): void => this.item$.next(item));
   }
 
-  getItem(): Observable<Item | undefined> {
+  getItem(): Observable<ItemAggregate | undefined> {
     return this.item$.asObservable();
   }
 

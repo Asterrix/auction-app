@@ -1,0 +1,12 @@
+package com.atlantbh.internship.auction.app.dto;
+
+import com.atlantbh.internship.auction.app.entity.UserItemBid;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+/**
+ * DTO for {@link UserItemBid}
+ */
+public record UserItemBidDto(BigDecimal highestBid, Long totalNumberOfBids) implements Serializable {
+}
