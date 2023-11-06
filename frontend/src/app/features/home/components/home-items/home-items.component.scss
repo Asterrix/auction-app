@@ -1,5 +1,6 @@
 @import "colors";
 @import "typography";
+@import "grid";
 
 .home-items {
   margin-bottom: 3.2rem;
@@ -28,4 +29,8 @@
       height: 560px;
     }
   }
+}
+
+.items-grid {
+  @include items-grid(4);
 }
