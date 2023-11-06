@@ -38,9 +38,5 @@
 }
 
 .loader-placeholder {
-  height: 100vh;
-
-  @media (min-width: $large) {
-    height: 643px;
-  }
+  height: 80vh;
 }

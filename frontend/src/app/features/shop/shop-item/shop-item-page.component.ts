@@ -27,15 +27,14 @@ import ItemImage = Api.ItemApi.Interfaces.ItemImage;
   styleUrls: ["./shop-item-page.component.scss"]
 })
 export class ShopItemPage implements OnInit, OnDestroy {
-  loader$ = this.loader.loading$;
   item$: Observable<ItemAggregate | undefined> | undefined;
   activeImage: ItemImage | undefined;
   itemImageSub: Subscription | undefined;
 
   constructor(private itemService: ItemService,
               private activeRoute: ActivatedRoute,
-              private loader: LoaderService,
-              private trailService: NavigationTrailService) {
+              private trailService: NavigationTrailService,
+              public loader: LoaderService) {
   }
 
   ngOnInit(): void {

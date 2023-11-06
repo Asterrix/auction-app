@@ -7,6 +7,7 @@ import {LoaderComponent} from "../../../../shared/components/loader/loader.compo
 import {Page} from "../../../../shared/models/interfaces/page";
 import {Pagination} from "../../../../shared/models/pagination";
 import {Api} from "../../../../shared/services/api.service";
+import {LoaderService} from "../../../../shared/services/loader.service";
 import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
 @Component({
@@ -21,7 +22,7 @@ export class ContentSectionComponent {
   @Input({required: true}) pagination!: Pagination;
   @Output() increasePageSize = new EventEmitter<void>();
 
-  constructor(private router: Router) {
+  constructor(private router: Router, public loader: LoaderService) {
   }
 
   loadMoreElements(): void {

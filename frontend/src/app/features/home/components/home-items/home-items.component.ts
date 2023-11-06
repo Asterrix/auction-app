@@ -5,8 +5,8 @@ import {Observable} from "rxjs";
 import {ItemCardComponent} from "../../../../shared/components/item-card/item-card.component";
 import {LoaderComponent} from "../../../../shared/components/loader/loader.component";
 import {Page} from "../../../../shared/models/interfaces/page";
-import {Api} from "../../../../shared/services/api.service";
 import {LoaderService} from "../../../../shared/services/loader.service";
+import {Api} from "../../../../shared/services/api.service";
 import {SectionTabComponent} from "./components/section-tab/section-tab.component";
 import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
