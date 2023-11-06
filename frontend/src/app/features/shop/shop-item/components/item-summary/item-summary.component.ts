@@ -1,8 +1,7 @@
 import {CommonModule} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {Observable} from "rxjs";
 import {Api} from "../../../../../shared/services/api.service";
-import {ItemService} from "../../../../../shared/services/item.service";
 import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 @Component({
@@ -12,13 +11,6 @@ import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   templateUrl: "./item-summary.component.html",
   styleUrls: ["./item-summary.component.scss"]
 })
-export class ItemSummaryComponent implements OnInit {
-  public item$: Observable<ItemAggregate | undefined> | undefined;
-
-  constructor(private itemService: ItemService) {
-  }
-
-  ngOnInit(): void {
-    this.item$ = this.itemService.getItem();
-  }
+export class ItemSummaryComponent {
+  @Input({required: true}) public item$: Observable<ItemAggregate | undefined> | undefined;
 }
