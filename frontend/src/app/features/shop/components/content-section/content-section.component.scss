@@ -1,5 +1,6 @@
 @import "colors";
 @import "typography";
+@import "grid";
 
 .content_section {
   display: flex;
@@ -19,4 +20,8 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.items-grid {
+  @include items-grid(3);
 }
