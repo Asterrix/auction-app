@@ -3,6 +3,7 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
 import {Page} from "../../shared/models/interfaces/page";
+import {Pagination} from "../../shared/models/pagination";
 import {Api} from "../../shared/services/api.service";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item.service";
@@ -29,6 +30,7 @@ export class HomePage implements OnInit, OnDestroy {
   categories$: Observable<Array<Category> | undefined> | undefined;
   featuredItem$: Observable<FeaturedItem | undefined> | undefined;
   items$: Observable<Page<ItemSummary> | undefined> | undefined;
+  private pagination: Pagination = new Pagination({page: 0, size: 8});
 
   private queryParamSub: Subscription | undefined;
 
@@ -85,11 +87,11 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   private initNewestArrivals(): void {
-    this.itemService.initItemsNewestArrivals();
+    this.itemService.initItemsNewestArrivals(this.pagination.getPagination());
   }
 
   private initLastChance(): void {
-    this.itemService.initItemsLastChance();
+    this.itemService.initItemsLastChance(this.pagination.getPagination());
   }
 
   private fetchItems(): void {

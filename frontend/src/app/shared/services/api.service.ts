@@ -9,9 +9,8 @@ export namespace Api {
   import Category = Api.CategoryApi.Category;
   import ItemParams = Api.ItemApi.GetMethods.ItemParams;
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
-  import Item = Api.ItemApi.Interfaces.Item;
-  import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
   import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
+  import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
 
   @Injectable({providedIn: "root"})
@@ -23,12 +22,12 @@ export namespace Api {
       return CategoryApi.GetMethods.getAllCategories(this.httpClient);
     }
 
-    getListOfNewestArrivals(): Observable<Page<ItemSummary>> {
-      return ItemApi.GetMethods.getListOfNewestItems(this.httpClient);
+    getListOfNewestArrivals(pagination: IPagination): Observable<Page<ItemSummary>> {
+      return ItemApi.GetMethods.getListOfNewestItems(this.httpClient, pagination);
     }
 
-    getListOfLastChanceItems(): Observable<Page<ItemSummary>> {
-      return ItemApi.GetMethods.getListOfLastChanceItems(this.httpClient);
+    getListOfLastChanceItems(pagination: IPagination): Observable<Page<ItemSummary>> {
+      return ItemApi.GetMethods.getListOfLastChanceItems(this.httpClient, pagination);
     }
 
     getFeaturedItem(): Observable<FeaturedItem> {
@@ -137,7 +136,6 @@ export namespace Api {
       import extractParameters = Api.ItemApi.HelperMethods.extractItemParameters;
       import extractPagination = Api.ItemApi.HelperMethods.extractPagination;
       import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
-      import Item = Api.ItemApi.Interfaces.Item;
       import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
       export interface ItemParams {
@@ -166,29 +164,19 @@ export namespace Api {
         return param;
       }
 
-      export function getListOfNewestItems(httpClient: HttpClient): Observable<Page<ItemSummary>> {
+      export function getListOfNewestItems(httpClient: HttpClient, pagination: IPagination): Observable<Page<ItemSummary>> {
 
         const params: Partial<ItemParams> = {
           sort: `${SortBy.StartDate},${SortByDirection.DESC}`
         };
 
-        const pagination: Required<IPagination> = {
-          page: 0,
-          size: 8
-        };
-
         return getListOfItems(httpClient, params, pagination);
       }
 
-      export function getListOfLastChanceItems(httpClient: HttpClient): Observable<Page<ItemSummary>> {
+      export function getListOfLastChanceItems(httpClient: HttpClient, pagination: IPagination): Observable<Page<ItemSummary>> {
 
         const params: Partial<ItemParams> = {
           sort: `${SortBy.EndDate},${SortByDirection.DESC}`
-        };
-
-        const pagination: Required<IPagination> = {
-          page: 0,
-          size: 8
         };
 
         return getListOfItems(httpClient, params, pagination);
