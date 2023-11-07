@@ -52,9 +52,14 @@ public final class ItemServiceImpl implements ItemService {
                                             final Pageable pageable) {
 
         Specification<Item> specification = Specification.allOf();
-        if (category != null) specification = specification.and(isPartOfCategory(category));
-        if(subcategory != null) specification = specification.and(isPartOfSubcategory(category, subcategory));
-        if(itemName != null) specification = specification.and(isNameOf(itemName));
+
+        if (subcategory != null) {
+            specification = specification.and(isPartOfSubcategory(category, subcategory));
+        } else if (category != null) {
+            specification = specification.and(isPartOfCategory(category));
+        }
+
+        if (itemName != null) specification = specification.and(isNameOf(itemName));
 
         final Page<Item> items = itemRepository.findAll(specification, pageable);
 
@@ -67,12 +72,12 @@ public final class ItemServiceImpl implements ItemService {
     @Override
     public Optional<ItemAggregate> getItemById(final Integer itemId) {
         final Optional<Item> item = itemRepository.findById(itemId);
-        if(item.isEmpty()) return Optional.empty();
+        if (item.isEmpty()) return Optional.empty();
 
         final Specification<UserItemBid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
 
         final long totalNumberOfBids = userItemBidRepository.getTotalCount(item.get().getId());
-        if(totalNumberOfBids == 0){
+        if (totalNumberOfBids == 0) {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get());
             final UserItemBidDto bidInformation = UserItemBidMapper.convertToValuesOfZeroDto();
 
