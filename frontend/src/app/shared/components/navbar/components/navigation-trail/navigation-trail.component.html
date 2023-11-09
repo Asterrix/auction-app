@@ -2,7 +2,7 @@
   <div class="container">
     <div class="navigation-trail__layout">
       <div>
-        <p>{{ label$ | async}}</p>
+        <span class="navigation-trail__page-title" >{{ label$ | async}}</span>
       </div>
       <div class="navigation-trail__navigation">
         <ng-container *ngFor="let item of path$ | async; let last = last">
