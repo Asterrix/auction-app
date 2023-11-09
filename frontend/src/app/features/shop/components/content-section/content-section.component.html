@@ -11,7 +11,7 @@
 
     <div *ngIf="items$ | async as items" class="items-grid">
       <ng-container *ngFor="let item of items.content">
-        <app-item-card (click)="navigateToItem(item.id)" [item]="item"/>
+        <app-item-card (click)="navigateToItem(item.id)" [imageOrientation]="'v'" [item]="item"/>
       </ng-container>
     </div>
   </ng-template>
