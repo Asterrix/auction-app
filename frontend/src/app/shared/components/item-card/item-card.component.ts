@@ -13,4 +13,5 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 })
 export class ItemCardComponent {
   @Input({required: true}) item!: ItemSummary;
+  @Input({required: true}) imageOrientation: string = "v";
 }
