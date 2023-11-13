@@ -13,8 +13,6 @@ public final class JaccardIndex {
         patternCharFrequency = calculateCharacterFrequency(pattern);
     }
 
-    // Helper function
-    // O(n)
     private static Map<Character, Integer> calculateCharacterFrequency(final String str) {
         Map<Character, Integer> charFrequency = new HashMap<>();
 
@@ -56,19 +54,6 @@ public final class JaccardIndex {
         return textForHighestMatch.toString().toLowerCase();
     }
 
-    /*
-     *  Time Complexity Analysis:
-     * *** All iterations take O(n) + 1 time complexity; 1 being the last check which ends the loop; I will display it as O(n) for simplicity ***
-     * - Convert two strings to lowercase: O(n) + O(m)
-     * - Calculate character frequencies: O(n) + O(m)
-     * - Calculate intersection and union based on character frequencies of the first string: O(n)
-     * - Calculate union for characters present only in the second string: O(m)
-     * - Rounded Time Complexity: O(n) + O(m)
-     * - n and m represent the lengths of the input strings
-     *
-     * Space Complexity Analysis:
-     * Creation of two Map's takes O(n + m) space complexity
-     * */
     private double calculateJaccardSimilarity(final String text) {
         Map<Character, Integer> textCharFrequency = calculateCharacterFrequency(text); // O(n)
 
@@ -76,7 +61,6 @@ public final class JaccardIndex {
         int union = 0;
 
         // Calculate intersection and union based on character frequencies of the first string
-        // O(n)
         for (final char c : textCharFrequency.keySet()) {
             if (patternCharFrequency.containsKey(c)) {
                 intersection += Math.min(textCharFrequency.get(c), patternCharFrequency.get(c));
@@ -86,7 +70,6 @@ public final class JaccardIndex {
             }
         }
 
-        // O(m)
         // Calculate union for characters present only in the second string
         for (final char c : patternCharFrequency.keySet()) {
             if (!textCharFrequency.containsKey(c)) {
