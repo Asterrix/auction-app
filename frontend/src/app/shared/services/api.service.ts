@@ -11,6 +11,8 @@ export namespace Api {
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
+  import UserInput = Api.SearchSuggestionApi.Interfaces.UserInput;
+  import SearchSuggestion = Api.SearchSuggestionApi.Interfaces.SearchSuggestion;
 
 
   @Injectable({providedIn: "root"})
@@ -40,6 +42,10 @@ export namespace Api {
 
     getListOfAllItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
       return ItemApi.GetMethods.getListOfItems(this.httpClient, filter, pagination);
+    }
+
+    getSearchSuggestion(userInput: Required<UserInput>): Observable<SearchSuggestion> {
+      return SearchSuggestionApi.getSuggestion(this.httpClient, userInput);
     }
   }
 
@@ -193,6 +199,30 @@ export namespace Api {
       export function getListOfItems(httpClient: HttpClient, params: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
         return httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, {params: getParams(params, pagination)});
       }
+    }
+  }
+
+  export namespace SearchSuggestionApi {
+    import SearchSuggestion = Api.SearchSuggestionApi.Interfaces.SearchSuggestion;
+    import UserInput = Api.SearchSuggestionApi.Interfaces.UserInput;
+
+    export namespace Interfaces {
+      export interface UserInput {
+        searchInput: string;
+      }
+
+      export interface SearchSuggestion {
+        searchSuggestion: string;
+      }
+    }
+
+    export function getSuggestion(httpClient: HttpClient, userInput: Required<UserInput>): Observable<SearchSuggestion> {
+      let params = new HttpParams();
+      for (const [key, value] of Object.entries(userInput)) {
+        params = params.set(key, value);
+      }
+
+      return httpClient.get<SearchSuggestion>(`${environment.apiUrl}/search`, {params: params});
     }
   }
 }

@@ -1,0 +1,19 @@
+@import "colors";
+
+.search-suggestion {
+  display: flex;
+  padding: 1.6rem 0;
+
+  &__message {
+    color: $neutral-grey;
+  }
+
+  &__term {
+    color: $primary;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration-line: underline;
+    }
+  }
+}

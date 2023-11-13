@@ -53,6 +53,7 @@ export class ShopPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.searchService.hideDidYouMean();
     this.unsubscribe();
   }
 

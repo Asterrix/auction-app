@@ -1,6 +1,11 @@
 <div class="navbar">
   <app-top-bar/>
   <app-main-navbar/>
+
+  <ng-container *ngIf="(displaySearchSuggestion$ | async) && (itemService.getItemsCount() <= 3)">
+    <app-search-suggestion/>
+  </ng-container>
+
   <ng-container *ngIf="displayTrail$ | async">
     <app-navigation-trail/>
   </ng-container>

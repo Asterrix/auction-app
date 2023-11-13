@@ -26,6 +26,10 @@ export class ItemService {
     });
   }
 
+  getItemsCount(): number {
+    return this.items$.getValue()?.totalElements ?? 0;
+  }
+
   getFeaturedItem(): Observable<FeaturedItem | undefined> {
     return this.featuredItem$.asObservable();
   }

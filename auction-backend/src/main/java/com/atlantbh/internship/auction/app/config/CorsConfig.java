@@ -28,6 +28,7 @@ public class CorsConfig {
             public void addCorsMappings(@NonNull final CorsRegistry registry) {
                 addItemMapping(registry);
                 addCategoryMapping(registry);
+                addSearchSuggestionMapping(registry);
             }
         };
     }
@@ -56,5 +57,9 @@ public class CorsConfig {
 
     private void addCategoryMapping(final CorsRegistry registry) {
         createMapping(registry, "/categories", new String[]{HttpMethod.GET.name()});
+    }
+
+    private void addSearchSuggestionMapping(final CorsRegistry registry) {
+        createMapping(registry, "/search", new String[]{HttpMethod.GET.name()});
     }
 }

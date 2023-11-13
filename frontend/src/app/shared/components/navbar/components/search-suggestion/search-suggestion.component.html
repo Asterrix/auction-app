@@ -1,0 +1,10 @@
+<ng-container *ngIf="suggestion$ | async as s">
+  <div class="search-suggestion">
+    <div class="container">
+      <p class="search-suggestion__message">
+        Did you mean?
+        <span (click)="handleSearchSuggestionClick()" class="search-suggestion__term">{{s}}</span>
+      </p>
+    </div>
+  </div>
+</ng-container>

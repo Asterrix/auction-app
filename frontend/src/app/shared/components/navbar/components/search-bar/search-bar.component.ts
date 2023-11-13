@@ -1,7 +1,7 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {debounceTime} from "rxjs";
+import {debounceTime, Subscription} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {Constant} from "../../../../models/enums/constant";
 import {SearchService} from "../../../../services/search.service";
@@ -13,11 +13,14 @@ import {SearchService} from "../../../../services/search.service";
   templateUrl: "search-bar.component.html",
   styleUrls: ["./search-bar.component.scss"]
 })
-export class SearchBarComponent implements OnInit {
-  searchValue: string = Constant.EmptyValue;
+export class SearchBarComponent implements OnInit, OnDestroy {
   searchForm = this.formBuilder.nonNullable.group({
-    searchValue: Constant.EmptyValue
+    searchValue: ""
   });
+  private searchValue: string = Constant.EmptyValue;
+  private readonly searchSuggestionLowerThreshold = 3;
+  private readonly searchSuggestionHigherThreshold = 20;
+  private subscription: Record<string, Subscription> = {};
 
   constructor(private formBuilder: FormBuilder, private searchService: SearchService) {
   }
@@ -26,16 +29,37 @@ export class SearchBarComponent implements OnInit {
     this.searchForm.get("searchValue")?.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged()
-    ).subscribe();
+    ).subscribe(() => {
+      if (this.searchValue.length >= this.searchSuggestionLowerThreshold && this.searchValue.length <= this.searchSuggestionHigherThreshold) {
+        this.searchService.getSearchSuggestion();
+        this.searchService.handleDisplay();
+      } else {
+        this.searchService.hideDidYouMean();
+        this.searchService.resetSuggestion();
+      }
+    });
+
+    this.subscription["searchTerm"] = this.searchService.getSearchTerm().subscribe((value) => {
+      this.searchForm.patchValue({searchValue: value});
+    });
   }
 
   onChange(): void {
     this.searchValue = this.searchForm.value.searchValue ?? Constant.EmptyValue;
+    this.searchService.setSearchTerm(this.searchValue);
     this.search();
   }
 
   handleSearchNavigation(): void {
     this.searchService.handleSearchNavigation(this.searchValue);
+  }
+
+  ngOnDestroy(): void {
+    for (const key in this.subscription) {
+      if (this.subscription[key]) {
+        this.subscription[key].unsubscribe();
+      }
+    }
   }
 
   private search(): void {
