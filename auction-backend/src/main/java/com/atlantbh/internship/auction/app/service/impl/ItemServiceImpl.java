@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -45,6 +46,9 @@ public final class ItemServiceImpl implements ItemService {
         this.userItemBidRepository = userItemBidRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<ItemSummaryDto> getAllItems(@Nullable final String category,
                                             @Nullable final String subcategory,
@@ -69,6 +73,9 @@ public final class ItemServiceImpl implements ItemService {
         return new PageImpl<>(mappedItems, pageable, totalElements);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<ItemAggregate> getItemById(final Integer itemId) {
         final Optional<Item> item = itemRepository.findById(itemId);
