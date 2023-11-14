@@ -48,6 +48,7 @@ export class ShopPage implements OnInit, OnDestroy {
       this.pagination.resetPageNumber();
       this.handleQueryParameterChange(param);
       this.initialiseItems();
+      this.searchService.handleDisplay();
       this.updatePaginationState();
     });
   }
