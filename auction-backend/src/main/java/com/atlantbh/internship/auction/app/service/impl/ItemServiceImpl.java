@@ -76,7 +76,7 @@ public final class ItemServiceImpl implements ItemService {
 
         final Specification<UserItemBid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
 
-        final long totalNumberOfBids = userItemBidRepository.getTotalCount(item.get().getId());
+        final long totalNumberOfBids = userItemBidRepository.countDistinctByItem_Id(item.get().getId());
         if (totalNumberOfBids == 0) {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get());
             final UserItemBidDto bidInformation = UserItemBidMapper.convertToValuesOfZeroDto();
