@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 3, time = 1)
-@Measurement(iterations = 9, time = 1)
-@Fork(1)
+@Warmup(iterations = 9, time = 1)
+@Measurement(iterations = 24, time = 1)
+@Fork(3)
 public class JaccardIndexBenchmark {
 
     private static final List<String> names = new ArrayList<>();
@@ -33,7 +33,7 @@ public class JaccardIndexBenchmark {
     @Setup
     public void setup() throws IOException {
         try (CSVParser parser = new CSVParser(
-                new FileReader("auction-backend/src/test/benchmark/model/jaccard/MOCK_DATA_100_000.csv"),
+                new FileReader("auction-backend/src/test/benchmark/model/jaccard/MOCK_DATA_1_000.csv"),
                 CSVFormat.DEFAULT)
         ) {
             for (var record : parser) {
