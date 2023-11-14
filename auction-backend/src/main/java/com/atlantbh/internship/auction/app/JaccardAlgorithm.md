@@ -1,8 +1,8 @@
 # Jaccard Index
 
-**Time Complexity**: O(n + m)
+**Time Complexity**: O(k * (n + m) + p)
 
-**Space Complexity**: O(n + m)
+**Space Complexity**: O((k * n) + p)
 
 ## Description
 
