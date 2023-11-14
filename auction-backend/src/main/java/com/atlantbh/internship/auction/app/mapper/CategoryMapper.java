@@ -18,42 +18,29 @@ public final class CategoryMapper {
         return new CategoryDto(category.getId(), category.getName(), List.of());
     }
 
-    public static SubcategoryDto convertToSubcategoryDto(final CategoryDto category, final Integer subcategoryItemsCount) {
-        return new SubcategoryDto(category.id(), category.name(), subcategoryItemsCount);
+    public static SubcategoryDto convertToSubcategoryDto(final Category category, final Integer subcategoryItemsCount) {
+        return new SubcategoryDto(category.getId(), category.getName(), subcategoryItemsCount);
     }
 
-    public static List<CategoryDto> convertToCategoryDto(final List<Category> categories) {
+    public static List<CategoryDto> convertToCategoryDto(final List<Category> categories, final List<Category> subcategories) {
         Map<Integer, CategoryDto> map = new HashMap<>();
-        Map<Integer, Integer> itemsCount = new HashMap<>();
 
         // Initialise the hashmap with categories
         categories.forEach(category -> {
             CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(), new ArrayList<>());
             map.put(category.getId(), categoryDto);
-            itemsCount.put(category.getId(), category.getItems().size());
         });
 
         // Add subcategories to parent categories
-        categories.forEach(category -> {
-            final Category parentCategory = category.getParentCategory();
-            if (parentCategory != null) {
-                final CategoryDto parent = map.get(parentCategory.getId());
-                if (parent != null) {
-                    final CategoryDto subcategory = map.get(category.getId());
-                    final Integer subcategoryItemsCount = itemsCount.get(category.getId());
-                    parent.subcategories().add(convertToSubcategoryDto(subcategory, subcategoryItemsCount));
-                }
-            }
+        subcategories.forEach(subcategory -> {
+            final Category parentCategory = subcategory.getParentCategory();
+            final CategoryDto parent = map.get(parentCategory.getId());
+            parent.subcategories().add(convertToSubcategoryDto(subcategory, subcategory.getItems().size()));
         });
 
         // Find and return the top-level categories (those with no parents)
         List<CategoryDto> result = new ArrayList<>();
-        categories.forEach(category -> {
-            final Category parentCategory = category.getParentCategory();
-            if (parentCategory == null) {
-                result.add(map.get(category.getId()));
-            }
-        });
+        map.forEach((key, value) -> result.add(value));
 
         return result;
     }
