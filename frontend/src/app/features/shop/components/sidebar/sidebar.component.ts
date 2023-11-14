@@ -6,6 +6,7 @@ import {ActivatedRoute, Params, RouterLink, RouterLinkActive} from "@angular/rou
 import {Observable, Subscription} from "rxjs";
 import {Api} from "../../../../shared/services/api.service";
 import {CategoryService} from "../../../../shared/services/category.service";
+import {SearchService} from "../../../../shared/services/search.service";
 import {ShopPageParameter} from "../../shop-routes";
 import Category = Api.CategoryApi.Category;
 
@@ -39,7 +40,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   activeSubcategory: Observable<string> | undefined;
   private querySub: Subscription | undefined;
 
-  constructor(private categoryService: CategoryService, private activatedRoute: ActivatedRoute) {
+  constructor(private categoryService: CategoryService, private searchService: SearchService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -83,13 +84,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   private handleCategoryChange(params: Params): string {
     const paramCategory: string = params[ShopPageParameter.Parameter.Category];
-    if (paramCategory) this.categoryService.handleCategoryChange(paramCategory, this.activatedRoute);
+    if (paramCategory) {
+      this.categoryService.handleCategoryChange(paramCategory, this.activatedRoute);
+      this.searchService.hideDidYouMean();
+      this.searchService.resetSuggestion();
+    }
     return paramCategory;
   }
 
   private handleSubcategoryChange(params: Params, paramCategory: string): string {
     const paramSubcategory: string = params[ShopPageParameter.Parameter.Subcategory];
-    if (paramCategory) this.categoryService.handleSubcategoryChange(paramSubcategory);
+    if (paramCategory) {
+      this.categoryService.handleSubcategoryChange(paramSubcategory);
+      this.searchService.hideDidYouMean();
+      this.searchService.resetSuggestion();
+    }
     return paramSubcategory;
   }
 }
