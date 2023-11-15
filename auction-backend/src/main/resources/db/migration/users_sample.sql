@@ -1,0 +1,1 @@
+INSERT INTO public.users (email, first_name, last_name, password, role_id) VALUES ('admin@admin.com', 'Admin', 'Super', 'admin', 1);
