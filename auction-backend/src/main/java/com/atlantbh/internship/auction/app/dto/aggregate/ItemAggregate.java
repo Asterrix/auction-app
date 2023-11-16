@@ -1,6 +1,6 @@
 package com.atlantbh.internship.auction.app.dto.aggregate;
 
-import com.atlantbh.internship.auction.app.dto.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 
