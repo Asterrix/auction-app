@@ -6,6 +6,7 @@ import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.repository.RoleRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
 import com.atlantbh.internship.auction.app.service.RegistrationService;
+import com.atlantbh.internship.auction.app.service.validator.user.UserRegistrationValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                 passwordEncoder.encode(user.password()),
                 defaultRole.get(),
                 true);
+
+        UserRegistrationValidator.validate(user);
 
         userRepository.save(entity);
 
