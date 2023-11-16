@@ -25,7 +25,7 @@ public class User {
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    @Column(name = "date_of_birth", nullable = false)
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @ManyToOne(optional = false)
@@ -42,14 +42,12 @@ public class User {
                 final String lastName,
                 final String email,
                 final String password,
-                final LocalDate dateOfBirth,
                 final Role role,
                 final Boolean isActive) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.dateOfBirth = dateOfBirth;
         this.role = role;
         this.isActive = isActive;
     }
