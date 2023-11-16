@@ -14,9 +14,7 @@ public class EmailValidator extends Validator {
     private static final byte MINIMUM_DOMAIN_DOT_SEPARATOR_LENGTH = 2;
     private static final byte MAXIMUM_DOMAIN_DOT_SEPARATOR_LENGTH = 3;
 
-    public static void validateEmail(final String input) {
-        final String email = normaliseInput(input);
-
+    public static void validateEmail(final String email) {
         // Basic validation
         isEmptyOrNull(email, "Email field cannot be empty.");
         minimumLength(email, MINIMUM_EMAIL_LENGTH, String.format("Email field cannot contain less than %d characters.", MINIMUM_EMAIL_LENGTH));
