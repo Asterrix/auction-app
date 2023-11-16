@@ -19,7 +19,7 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<String> registerUser(@RequestBody final UserRegistrationDto user) {
+    public ResponseEntity<Boolean> registerUser(@RequestBody final UserRegistrationDto user) {
         return new ResponseEntity<>(registrationService.registerUser(user), HttpStatus.CREATED);
     }
 }

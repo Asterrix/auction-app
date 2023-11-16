@@ -22,10 +22,6 @@ public class Validator {
         }
     }
 
-    protected static String normaliseInput(final String input) {
-        return input.replaceAll("\\s+", " ").trim();
-    }
-
     protected static void isMadeUpOfLetters(final String input, final String message) {
         if (input == null) throw new ValidationException(message);
         final int n = input.length();

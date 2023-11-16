@@ -1,8 +1,10 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
+import com.atlantbh.internship.auction.app.builder.UserBuilder;
 import com.atlantbh.internship.auction.app.dto.user.UserRegistrationDto;
 import com.atlantbh.internship.auction.app.entity.Role;
 import com.atlantbh.internship.auction.app.entity.User;
+import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.repository.RoleRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
 import com.atlantbh.internship.auction.app.service.RegistrationService;
@@ -28,21 +30,32 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public String registerUser(final UserRegistrationDto user) {
+    public Boolean registerUser(final UserRegistrationDto user) {
         final Optional<Role> defaultRole = roleRepository.findByRoleAllIgnoreCase("user");
         if (defaultRole.isEmpty()) throw new NoSuchElementException();
 
-        User entity = new User(user.firstName(),
-                user.lastName(),
-                user.email(),
-                passwordEncoder.encode(user.password()),
-                defaultRole.get(),
-                true);
+        User entity = new UserBuilder()
+                .setFirstName(user.firstName())
+                .setLastName(user.lastName())
+                .setEmail(user.email())
+                .setPassword(passwordEncoder.encode(user.password()))
+                .setRole(defaultRole.get())
+                .setIsActive(true)
+                .createUser();
 
-        UserRegistrationValidator.validate(user);
+        // Validation
+        checkIfEmailIsInUse(entity.getEmail());
+        UserRegistrationValidator.validate(entity);
 
         userRepository.save(entity);
 
-        return "User was created successfully";
+        return true;
+    }
+
+    private void checkIfEmailIsInUse(final String email) {
+        final long emailCount = userRepository.countByEmail(email);
+        if (emailCount > 0) {
+            throw new ValidationException("Email address is already in use. Try logging in.");
+        }
     }
 }
