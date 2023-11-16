@@ -1,6 +1,6 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
-import com.atlantbh.internship.auction.app.dto.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
