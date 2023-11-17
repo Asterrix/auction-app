@@ -22,6 +22,7 @@ public class CorsConfigurer {
         buildItemCorsConfiguration();
         buildCategoryCorsConfiguration();
         buildUserRegistrationCorsConfiguration();
+        buildUserAuthenticationCorsConfiguration();
         return source;
     }
 
@@ -45,5 +46,9 @@ public class CorsConfigurer {
 
     private void buildUserRegistrationCorsConfiguration() {
         buildCorsConfiguration("/register", List.of(HttpMethod.POST.name()));
+    }
+
+    private void buildUserAuthenticationCorsConfiguration() {
+        buildCorsConfiguration("/authentication", List.of(HttpMethod.POST.name()));
     }
 }
