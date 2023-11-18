@@ -1,13 +1,14 @@
 package com.atlantbh.internship.auction.app.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +25,9 @@ public class Role {
     public Role() {
     }
 
-    public String getRoleName() {
+    @Override
+    public String getAuthority() {
         return role;
-    }
-
-    public Set<User> getUsers() {
-        return users;
     }
 
 }
