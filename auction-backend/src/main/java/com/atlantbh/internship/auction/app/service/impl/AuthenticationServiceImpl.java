@@ -27,14 +27,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public String authenticateUser(final AuthenticationRequest authenticationRequest) {
+        // Default exception message
+        final String message = "Check your credentials for potential mistakes and try again.";
+
         // Validate user exists
         Optional<User> user = userRepository.findFirstByEmailAllIgnoreCase(authenticationRequest.username());
         if (user.isEmpty()) {
-            throw new ValidationException("Check your credentials for potential mistakes and try again.");
+            throw new ValidationException(message);
         }
 
         // Validate password
-        passwordEncoder.matches(authenticationRequest.password(), user.get().getPassword());
+        final boolean matches = passwordEncoder.matches(authenticationRequest.password(), user.get().getPassword());
+        if (!matches) {
+            throw new ValidationException(message);
+        }
 
         return tokenService.generateToken(user.get());
     }
