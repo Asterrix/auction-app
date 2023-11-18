@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "tokens")
+@Table(name = "tokens", indexes = {
+        @Index(name = "idx_token_token_unq", columnList = "token", unique = true)
+})
 public class Token {
 
     @Id
