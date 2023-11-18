@@ -14,3 +14,4 @@ spring:
 logging:
   level:
     org.springframework.data: DEBUG
+    org.springframework.security: TRACE
