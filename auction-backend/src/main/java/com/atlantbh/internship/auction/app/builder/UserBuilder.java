@@ -22,7 +22,7 @@ public class UserBuilder {
     }
 
     public UserBuilder setEmail(final String email) {
-        this.email = email.replaceAll("\\s+", " ").trim();
+        this.email = email;
         return this;
     }
 
