@@ -4,6 +4,7 @@ import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {ActivatedRoute, Params, RouterLink, RouterLinkActive} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
+import {CheckboxComponent, CheckboxShape} from "../../../../shared/components/checkboxes/checkbox/checkbox.component";
 import {Api} from "../../../../shared/services/api.service";
 import {CategoryService} from "../../../../shared/services/category.service";
 import {ShopPageParameter} from "../../shop-routes";
@@ -27,7 +28,7 @@ const accordionAnimation: AnimationTriggerMetadata = trigger("expandCollapse", [
 @Component({
   selector: "shop-sidebar",
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, NgOptimizedImage, FormsModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NgOptimizedImage, FormsModule, CheckboxComponent],
   templateUrl: "./sidebar.component.html",
   styleUrls: ["./sidebar.component.scss"],
   animations: [accordionAnimation]
@@ -92,4 +93,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (paramCategory) this.categoryService.handleSubcategoryChange(paramSubcategory);
     return paramSubcategory;
   }
+
+  protected readonly CheckboxShape = CheckboxShape;
 }
