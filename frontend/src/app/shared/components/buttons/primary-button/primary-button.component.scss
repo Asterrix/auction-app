@@ -1,0 +1,17 @@
+@import "colors";
+@import "typography";
+
+.btn {
+  background-color: $primary;
+  border: none;
+  color: $white;
+  padding: 1.6rem;
+  width: 100%;
+  @extend .font-size-regular;
+  @extend .font-medium;
+
+  &:hover {
+    background-color: lighten($primary, 2);
+    cursor: pointer;
+  }
+}
