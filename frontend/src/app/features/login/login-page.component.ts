@@ -1,11 +1,12 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {MainNavbarService} from "../../shared/components/navbar/components/main-navbar/services/main-navbar.service";
+import {LoginFormComponent} from "./components/login-form/login-form.component";
 
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoginFormComponent],
   templateUrl: "./login-page.component.html",
   styleUrls: ["./login-page.component.scss"]
 })
