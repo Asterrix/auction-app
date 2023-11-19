@@ -72,37 +72,6 @@
       cursor: pointer;
     }
   }
-
-  &__checkbox {
-    -webkit-appearance: none;
-    border-radius: 0.4rem;
-    height: 1.6rem;
-    transition: background 300ms;
-    vertical-align: middle;
-    width: 1.6rem;
-
-    &::before {
-      background-color: transparent;
-      background-size: contain;
-      border-radius: inherit;
-      box-shadow: inset 0 0 0 2px $primary;
-      color: transparent;
-      content: "";
-      display: block;
-      height: inherit;
-      width: inherit;
-    }
-
-    &--active {
-      background-color: $primary;
-      transition: all 300ms ease-out;
-
-      &::before {
-        background-image: url("/assets/icons/checkbox.svg");
-        box-shadow: none;
-      }
-    }
-  }
 }
 
 .active {
