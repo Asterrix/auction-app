@@ -30,4 +30,7 @@ public class Token {
         this.expirationTime = expirationTime;
     }
 
+    public Instant getExpirationTime() {
+        return expirationTime;
+    }
 }
