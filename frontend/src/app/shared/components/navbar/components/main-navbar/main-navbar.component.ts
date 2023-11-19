@@ -5,7 +5,7 @@ import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component
 import {SearchBarComponent} from "../search-bar/search-bar.component";
 
 @Component({
-  selector: "app-main-navbar",
+  selector: "navbar-main",
   standalone: true,
   imports: [CommonModule, SearchBarComponent, NgOptimizedImage, RouterLink, AnchorImageComponent, RouterLinkActive],
   templateUrl: "main-navbar.component.html",
