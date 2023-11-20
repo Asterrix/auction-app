@@ -22,8 +22,18 @@
           link="https://twitter.com/atlantbh?lang=en"/>
       </div>
 
-      <div class="top-bar__action">
-        <a routerLink="/login">Login</a>
+      <div>
+        <ng-container *ngIf="username$ | async as username; else login">
+          <div class="top-bar__action">
+            <a>Hi, {{username}}</a>
+          </div>
+        </ng-container>
+
+        <ng-template #login>
+          <div class="top-bar__action">
+            <a routerLink="/login">Login</a>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
