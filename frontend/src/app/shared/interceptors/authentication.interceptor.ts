@@ -6,10 +6,6 @@ import {AuthenticationService} from "../services/authentication.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
-
-  constructor() {
-  }
-
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const isAuthenticated: boolean = AuthenticationService.isAuthenticated();
     const isCorrectServer: boolean = request.url.startsWith(environment.apiUrl);

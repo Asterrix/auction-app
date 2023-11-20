@@ -1,14 +1,15 @@
 import {HttpResponse} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
-import {jwtDecode, JwtPayload} from "jwt-decode";
+import {JwtPayload} from "jwt-decode";
 import {BehaviorSubject, catchError, Observable} from "rxjs";
+import {Constant} from "../models/enums/constant";
 import {TokenManager} from "../models/token-manager";
 import {Api} from "./api.service";
 import {ErrorService} from "./error.service";
 import Authentication = Api.UserApi.Authentication;
 
-interface UserDetails extends JwtPayload {
+export interface UserDetails extends JwtPayload {
   firstName: string;
   lastName: string;
 }
@@ -23,23 +24,47 @@ export class AuthenticationService {
   }
 
   static retrieveUserToken(): string | null {
-    return TokenManager.retrieveTokenFromStorage();
-  }
+    const token: string | null = TokenManager.retrieveTokenFromSessionStorage();
+    if (token !== null && token !== Constant.EmptyValue) {
+      return token;
+    }
 
-  static isAuthenticated(): boolean {
-    const token: string | null = TokenManager.retrieveTokenFromStorage();
-    return token !== null && token !== "";
-  }
-
-  private static getCurrentUsername(): string | null {
-    const token: string | null = TokenManager.retrieveTokenFromStorage();
-
-    if (token !== null) {
-      const decodedHeader: UserDetails = jwtDecode(token);
-      return decodedHeader.firstName + " " + decodedHeader.lastName;
+    const localToken: string | null = TokenManager.retrieveTokenFromLocalStorage();
+    if (localToken !== null && localToken !== Constant.EmptyValue) {
+      return localToken;
     }
 
     return null;
+  }
+
+  static isAuthenticated(): boolean {
+    const user: string | null = this.getCurrentUsername();
+    return user !== null && user !== Constant.EmptyValue;
+  }
+
+  private static getCurrentUsername(): string | null {
+    const sessionToken: string | null = TokenManager.retrieveTokenFromSessionStorage();
+    const sessionTokenFromStorage: string | null = this.getTokenFromStorage(sessionToken);
+    if (sessionTokenFromStorage !== null) return sessionTokenFromStorage;
+
+
+    const localToken: string | null = TokenManager.retrieveTokenFromLocalStorage();
+    const localTokenFromStorage: string | null = this.getTokenFromStorage(localToken);
+    if (localTokenFromStorage !== null) return localTokenFromStorage;
+
+    return null;
+  }
+
+  private static getTokenFromStorage(token: string | null): null | string {
+    if (token !== null && token !== Constant.EmptyValue) {
+      const decodedHeader: UserDetails = TokenManager.decodeToken(token);
+      return this.extractUsernameFromDecodedHeader(decodedHeader);
+    }
+    return null;
+  }
+
+  private static extractUsernameFromDecodedHeader(decodedHeader: UserDetails): string {
+    return decodedHeader.firstName + " " + decodedHeader.lastName;
   }
 
   getUsername(): Observable<string | null> {
@@ -50,7 +75,7 @@ export class AuthenticationService {
     this.setUsername();
   }
 
-  authenticateUser(auth: Required<Authentication>): void {
+  authenticateUser(auth: Required<Authentication>, rememberMe: boolean): void {
     this.apiService.authenticateUser(auth)
       .pipe(
         catchError((e) => {
@@ -60,15 +85,16 @@ export class AuthenticationService {
       )
       .subscribe(
         (response: HttpResponse<void>): void => {
-          const token: string | null = TokenManager.retrieveToken(response);
+          const token: string | null = TokenManager.retrieveTokenFromHeader(response);
           if (token !== null) {
-            TokenManager.storeToken(token);
+            TokenManager.determineLocationToStoreToken(rememberMe, token);
             this.setUsername();
             this.navigateToHomeRoute();
           }
         }
       );
   }
+
 
   private navigateToHomeRoute(): void {
     this.router.navigate(["/home"]).then(null);

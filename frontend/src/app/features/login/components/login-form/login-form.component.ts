@@ -7,9 +7,10 @@ import {PrimaryButtonComponent} from "../../../../shared/components/buttons/prim
 import {CheckboxComponent, CheckboxShape} from "../../../../shared/components/checkboxes/checkbox/checkbox.component";
 import {CheckboxFieldComponent} from "../../../../shared/components/forms/checkbox-field/checkbox-field.component";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
+import {Constant} from "../../../../shared/models/enums/constant";
 import {Api} from "../../../../shared/services/api.service";
-import {ErrorService} from "../../../../shared/services/error.service";
 import {AuthenticationService} from "../../../../shared/services/authentication.service";
+import {ErrorService} from "../../../../shared/services/error.service";
 import Authentication = Api.UserApi.Authentication;
 
 @Component({
@@ -37,10 +38,12 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     const auth: Required<Authentication> = {
-      username: this.loginForm.get("email")?.value ?? "",
-      password: this.loginForm.get("password")?.value ?? ""
+      username: this.loginForm.get("email")?.value ?? Constant.EmptyValue,
+      password: this.loginForm.get("password")?.value ?? Constant.EmptyValue
     };
-    this.userService.authenticateUser(auth);
+
+    const rememberMe: boolean = this.loginForm.get("rememberMe")?.value ?? false;
+    this.userService.authenticateUser(auth, rememberMe);
   }
 
   setRememberMe(): void {
