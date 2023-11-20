@@ -17,4 +17,8 @@ export class TokenManager {
   static storeToken(token: string): void {
     window.sessionStorage.setItem(Token.Key, JSON.stringify(token));
   }
+
+  static removeToken(): void {
+    window.sessionStorage.removeItem(Token.Key);
+  }
 }
