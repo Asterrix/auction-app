@@ -11,6 +11,7 @@ export namespace Api {
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
+  import Authentication = Api.UserApi.Authentication;
 
 
   @Injectable({providedIn: "root"})
@@ -40,6 +41,29 @@ export namespace Api {
 
     getListOfAllItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
       return ItemApi.GetMethods.getListOfItems(this.httpClient, filter, pagination);
+    }
+
+    authenticateUser(auth: Required<Authentication>) {
+      return UserApi.PostMethods.authenticate(this.httpClient, auth);
+    }
+  }
+
+
+  export namespace UserApi {
+    export interface Authentication {
+      username: string;
+      password: string;
+    }
+
+    enum Endpoint {
+      Authentication = "authentication"
+    }
+
+    export namespace PostMethods {
+      export function authenticate(httpClient: HttpClient, auth: Required<Authentication>) {
+        const body = {username: auth.username, password: auth.password};
+        return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}`, body, {observe: "response"});
+      }
     }
   }
 

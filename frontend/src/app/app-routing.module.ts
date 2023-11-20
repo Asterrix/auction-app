@@ -1,6 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {HomeRouteEndpoint} from "./features/home/home-routes";
+import {LoginRouteEndpoint} from "./features/login/login-routes";
 import {ShopRouteEndpoint} from "./features/shop/shop-routes";
 import {Constant} from "./shared/models/enums/constant";
 
@@ -15,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import("./features/shop/shop-routes").then(mod => mod.SHOP_ROUTES)
   },
   {
-    path: "login",
+    path: LoginRouteEndpoint.Login,
     loadChildren: () => import("./features/login/login-routes").then(mod => mod.LOGIN_ROUTES)
   },
   {path: "**", redirectTo: `/${HomeRouteEndpoint.Home}`}

@@ -18,6 +18,16 @@ public class CorsConfigurationBuilder {
         return this;
     }
 
+    public CorsConfigurationBuilder setAllowedHeaders(final String... allowedHeaders) {
+        configuration.setAllowedHeaders(List.of(allowedHeaders));
+        return this;
+    }
+
+    public CorsConfigurationBuilder setExposedHeaders(final String... exposedHeaders) {
+        configuration.setExposedHeaders(List.of(exposedHeaders));
+        return this;
+    }
+
     public CorsConfigurationBuilder allowCredentials() {
         configuration.setAllowCredentials(true);
         return this;
