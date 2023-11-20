@@ -1,3 +1,7 @@
-<div class="alert">
+<div [ngClass]="{
+'alert-low-severity': severity === Severity.LOW,
+'alert-normal-severity': severity === Severity.NORMAL,
+'alert-high-severity': severity === Severity.HIGH,
+}">
   <span>{{message}}</span>
 </div>

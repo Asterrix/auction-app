@@ -38,7 +38,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 final boolean valid = tokenService.isValid(instant, token);
                 if (!valid) throw new Exception();
             } catch (Exception e) {
-                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.getWriter().write("Invalid Token!");
                 response.getWriter().flush();
                 return;
