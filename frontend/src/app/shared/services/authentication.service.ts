@@ -46,6 +46,10 @@ export class AuthenticationService {
     return this.authenticatedSubjectUsername.asObservable();
   }
 
+  resetUsername(): void {
+    this.setUsername();
+  }
+
   authenticateUser(auth: Required<Authentication>): void {
     this.apiService.authenticateUser(auth)
       .pipe(

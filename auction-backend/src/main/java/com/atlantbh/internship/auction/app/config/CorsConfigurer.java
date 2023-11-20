@@ -37,6 +37,7 @@ public class CorsConfigurer {
         final CorsConfiguration itemsConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(GET)
+                .setAllowedHeaders("*")
                 .allowCredentials()
                 .build();
 
@@ -47,6 +48,7 @@ public class CorsConfigurer {
         final CorsConfiguration categoriesConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(GET)
+                .setAllowedHeaders("*")
                 .allowCredentials()
                 .build();
 
@@ -57,6 +59,7 @@ public class CorsConfigurer {
         final CorsConfiguration registerConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(POST)
+                .setAllowedHeaders("*")
                 .allowCredentials()
                 .build();
 
@@ -72,6 +75,6 @@ public class CorsConfigurer {
                 .allowCredentials()
                 .build();
 
-        registerCorsConfig("/authentication", authConfig);
+        registerCorsConfig("/authentication/**", authConfig);
     }
 }

@@ -1,4 +1,4 @@
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpParams, HttpResponse} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
@@ -46,6 +46,10 @@ export namespace Api {
     authenticateUser(auth: Required<Authentication>) {
       return UserApi.PostMethods.authenticate(this.httpClient, auth);
     }
+
+    logoutUser(): Observable<HttpResponse<void>> {
+      return UserApi.PostMethods.logout(this.httpClient);
+    }
   }
 
 
@@ -56,13 +60,18 @@ export namespace Api {
     }
 
     enum Endpoint {
-      Authentication = "authentication"
+      Authentication = "authentication",
+      Logout = "logout"
     }
 
     export namespace PostMethods {
       export function authenticate(httpClient: HttpClient, auth: Required<Authentication>) {
         const body = {username: auth.username, password: auth.password};
         return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}`, body, {observe: "response"});
+      }
+
+      export function logout(httpClient: HttpClient): Observable<HttpResponse<void>> {
+        return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}/${Endpoint.Logout}`, null, {observe: "response"});
       }
     }
   }

@@ -25,7 +25,7 @@
       <div>
         <ng-container *ngIf="username$ | async as username; else login">
           <div class="top-bar__action">
-            <a>Hi, {{username}}</a>
+            <span (click)="logoutUser()">Hi, {{username}}</span>
           </div>
         </ng-container>
 
