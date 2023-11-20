@@ -16,7 +16,7 @@ public class UserAuthentication implements Authentication {
     private final String lastName;
     private final Role role;
 
-    public UserAuthentication(final Integer id, final String email, final String firstName, final String lastName, final Role role) {
+    private UserAuthentication(final Integer id, final String email, final String firstName, final String lastName, final Role role) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
