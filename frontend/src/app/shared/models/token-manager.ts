@@ -1,6 +1,7 @@
 import {HttpResponse} from "@angular/common/http";
 import {jwtDecode} from "jwt-decode";
 import {UserDetails} from "../services/authentication.service";
+import {Constant} from "./enums/constant";
 
 enum Token {
   Key = "Token",
@@ -8,16 +9,16 @@ enum Token {
 }
 
 export class TokenManager {
-  static retrieveTokenFromHeader(httpResponse: HttpResponse<void>): string | null {
-    return httpResponse.headers.get(Token.Header);
+  static retrieveTokenFromHeader(httpResponse: HttpResponse<void>): string {
+    return httpResponse.headers.get(Token.Header) ?? Constant.EmptyValue;
   }
 
-  static retrieveTokenFromSessionStorage(): string | null {
-    return window.sessionStorage.getItem(Token.Key);
+  static retrieveTokenFromSessionStorage(): string {
+    return window.sessionStorage.getItem(Token.Key) ?? Constant.EmptyValue;
   }
 
-  static retrieveTokenFromLocalStorage(): string | null {
-    return window.localStorage.getItem(Token.Key);
+  static retrieveTokenFromLocalStorage(): string {
+    return window.localStorage.getItem(Token.Key) ?? Constant.EmptyValue;
   }
 
   static storeTokenToSessionStorage(token: string): void {
@@ -40,5 +41,10 @@ export class TokenManager {
   static determineLocationToStoreToken(rememberMe: boolean, token: string): void {
     if (rememberMe) TokenManager.storeTokenToLocalStorage(token);
     else TokenManager.storeTokenToSessionStorage(token);
+  }
+
+  // Remove `"` characters from the token
+  static createHeaderToken(token: string): string {
+    return token.substring(1, token.length - 1);
   }
 }

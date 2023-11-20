@@ -6,22 +6,30 @@ import {AuthenticationService} from "./authentication.service";
 
 @Injectable({providedIn: "root"})
 export class LogoutService {
-  constructor(private apiService: Api.Service, private router: Router, private authenticationService: AuthenticationService) {
+  constructor(private router: Router, private apiService: Api.Service, private authService: AuthenticationService) {
   }
 
   logoutUser(): void {
     this.triggerLogoutProcedure();
-    this.router.navigate(["/home"]).then(null);
+    this.navigateToHomeRoute();
   }
 
   logoutUserTokenInvalidated(): void {
     this.triggerLogoutProcedure();
-    this.router.navigate(["/login"]).then(null);
+    this.navigateToLoginRoute();
   };
+
+  private navigateToLoginRoute(): void {
+    this.router.navigate(["/login"]).then(null);
+  }
+
+  private navigateToHomeRoute(): void {
+    this.router.navigate(["/home"]).then(null);
+  }
 
   private triggerLogoutProcedure(): void {
     this.apiService.logoutUser();
     TokenManager.removeToken();
-    this.authenticationService.resetUsername();
+    this.authService.resetUsername();
   }
 }
