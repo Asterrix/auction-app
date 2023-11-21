@@ -23,17 +23,26 @@
       </div>
 
       <div>
-        <ng-container *ngIf="username$ | async as username; else login">
-          <div class="top-bar__action">
+        <ng-container *ngIf="username$ | async as username; else actionMenu">
+          <div class="member">
             <span (click)="logoutUser()">Hi, {{username}}</span>
           </div>
         </ng-container>
 
-        <ng-template #login>
-          <div class="top-bar__action">
-            <a routerLink="/login">Login</a>
+        <ng-template #actionMenu>
+          <div class="top-bar__action-menu">
+            <div>
+              <a routerLink="/login" class="member">Login</a>
+            </div>
+            <div>
+              <span class="divider">or</span>
+            </div>
+            <div>
+              <a routerLink="/register" class="member">Create an account</a>
+            </div>
           </div>
         </ng-template>
+
       </div>
     </div>
   </div>
