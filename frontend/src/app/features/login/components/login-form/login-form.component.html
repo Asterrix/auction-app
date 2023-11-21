@@ -1,33 +1,25 @@
-<div class="login-form">
-  <h1 class="login-form__title">Login</h1>
+<form-general (submitForm)="onSubmit()" [error$]="error$" [formFieldGroup]="loginForm" label="Login">
 
-  <ng-container *ngIf="error$ | async as error">
-    <app-alert [message]="error.message" [severity]="error.severity" class="container"/>
-  </ng-container>
+  <form-input-field
+    [formFieldGroup]="loginForm"
+    formField="email"
+    label="Enter Email"
+    placeholder="user@domain.com"
+    type="email"/>
 
-  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="container">
-    <form-input-field
-      [formFieldGroup]="loginForm"
-      formField="email"
-      label="Email"
-      placeholder="user@domain.com"
-      type="email"/>
+  <form-input-field
+    [formFieldGroup]="loginForm"
+    formField="password"
+    label="Password"
+    placeholder="********"
+    type="password"/>
 
-    <form-input-field
-      [formFieldGroup]="loginForm"
-      formField="password"
-      label="Password"
-      placeholder="********"
-      type="password"/>
+  <form-checkbox-field
+    (click)="setRememberMe()"
+    [isActive]="loginForm.get('rememberMe')?.value === true"
+    [shape]="CheckboxShape.Square"
+    label="Remember Me"/>
 
-    <form-checkbox-field
-      (click)="setRememberMe()"
-      [isActive]="loginForm.get('rememberMe')?.value === true"
-      [shape]="CheckboxShape.Square"
-      label="Remember Me"/>
+  <button-primary label="Login"/>
 
-    <div class="form__btn">
-      <button-primary label="Login"/>
-    </div>
-  </form>
-</div>
+</form-general>

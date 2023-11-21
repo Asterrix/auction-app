@@ -1,4 +1,4 @@
 <div class="login-page">
-  <app-login-form/>
+  <app-login-form (submitEvent)="submitForm($event)" [error$]="error$"/>
 </div>
 

@@ -57,6 +57,7 @@ export namespace Api {
     export interface Authentication {
       username: string;
       password: string;
+      rememberMe: boolean;
     }
 
     enum Endpoint {
