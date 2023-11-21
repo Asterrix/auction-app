@@ -31,12 +31,4 @@ public class AuthenticationController {
         httpHeaders.add("Authorization", token);
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
     }
-
-    @PostMapping("logout")
-    ResponseEntity<Void> logoutUser(@RequestHeader HttpHeaders headers) {
-        if (headers.containsKey("Authorization")) {
-            tokenService.deleteToken(headers.getFirst("Authorization"));
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
