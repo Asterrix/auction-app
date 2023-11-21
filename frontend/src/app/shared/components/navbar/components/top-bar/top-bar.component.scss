@@ -1,4 +1,5 @@
 @import "colors";
+@import "typography";
 
 @mixin flex-items-center {
   display: flex;
@@ -27,12 +28,21 @@
     }
   }
 
-  &__action {
-    color: $white;
-    transition: all 300ms ease-out;
+  &__action-menu {
+    display: flex;
+    gap: 2.4rem;
+  }
+}
 
-    &:hover {
-      color: $neutral-light-grey;
-    }
+.divider {
+  color: $neutral-grey;
+}
+
+.member {
+  color: $white;
+  transition: all 300ms ease-out;
+
+  &:hover {
+    color: $neutral-light-grey;
   }
 }

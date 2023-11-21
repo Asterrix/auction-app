@@ -1,0 +1,36 @@
+@import "typography";
+@import "container";
+@import "colors";
+
+$margin: 2.4rem;
+
+.general-form {
+  align-items: center;
+  border: 1px solid $neutral-light-grey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.2rem;
+  width: 90vw;
+
+  @media (min-width: $medium) {
+    width: $small;
+  }
+
+  &__title {
+    margin-bottom: $margin;
+    text-transform: uppercase;
+    @extend .font-size-ex2;
+  }
+
+  &__form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    width: 100%;
+
+    @media (min-width: $medium) {
+      padding: 0 3.2rem;
+    }
+  }
+}

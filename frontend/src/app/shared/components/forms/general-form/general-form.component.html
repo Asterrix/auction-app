@@ -1,0 +1,11 @@
+<div class="general-form">
+  <h1 class="general-form__title">{{label}}</h1>
+
+  <ng-container *ngIf="error$ | async as error">
+    <app-alert [message]="error.message" [severity]="error.severity" class="general-form__form-wrapper"/>
+  </ng-container>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="formFieldGroup" class="general-form__form-wrapper">
+    <ng-content></ng-content>
+  </form>
+</div>
