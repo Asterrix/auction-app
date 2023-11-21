@@ -51,6 +51,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(PagePrivacyManager::publicPages)
+                .authorizeHttpRequests(PagePrivacyManager::swagger)
                 .authorizeHttpRequests(PagePrivacyManager::privatePages)
                 .cors(Customizer.withDefaults())
                 .csrf(csrfConfig())
