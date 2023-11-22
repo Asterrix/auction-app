@@ -60,7 +60,7 @@ public class CorsConfigurer {
         final CorsConfiguration registerConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(POST)
-                .setAllowedHeaders(AUTHORIZATION)
+                .setAllowedHeaders("*")
                 .allowCredentials()
                 .build();
 

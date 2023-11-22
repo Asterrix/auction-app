@@ -44,7 +44,9 @@ public class SecurityConfig {
     }
 
     private static Customizer<CsrfConfigurer<HttpSecurity>> csrfConfig() {
-        return csrf -> csrf.ignoringRequestMatchers("api/v1/authentication");
+        return csrf -> csrf
+                .ignoringRequestMatchers("api/v1/authentication")
+                .ignoringRequestMatchers("api/v1/register");
     }
 
     @Bean
