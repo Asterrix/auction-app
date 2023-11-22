@@ -14,5 +14,6 @@ export class InputFieldComponent {
   @Input({required: true}) type!: string;
   @Input({required: true}) placeholder!: string;
   @Input({required: true}) formFieldGroup!: FormGroup;
-  @Input({required: true}) formField!: string | number | null;
+  @Input({required: true}) formField!: string;
+  @Input({required: false}) isInputValid!: boolean | undefined;
 }
