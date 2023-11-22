@@ -10,6 +10,7 @@
   margin: 1.2rem 0;
 }
 
+// Use different colors for text as to avoid low contrast
 .alert-low-severity {
   @include alert;
   background-color: $low-alert;
@@ -23,4 +24,10 @@
 .alert-high-severity {
   @include alert;
   background-color: $error;
+  color: white;
+}
+
+.alert-success-info {
+  @include alert;
+  background-color: #10B981;
 }
