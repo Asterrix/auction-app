@@ -9,15 +9,9 @@ public class PagePrivacyManager {
     ) {
         return auth
                 .requestMatchers("api/v1/authentication").permitAll()
+                .requestMatchers("api/v1/register").permitAll()
                 .requestMatchers("api/v1/categories").permitAll()
-                .requestMatchers("api/v1/items/**").permitAll()
-                .requestMatchers("api/v1/register").permitAll();
-    }
-
-    protected static AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry privatePages(
-            final AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth
-    ) {
-        return auth.anyRequest().authenticated();
+                .requestMatchers("api/v1/items/**").permitAll();
     }
 
     protected static AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry swagger(
@@ -26,5 +20,12 @@ public class PagePrivacyManager {
         return auth
                 .requestMatchers("swagger-ui/**").permitAll()
                 .requestMatchers("v3/api-docs/**").permitAll();
+    }
+
+    // Should be imported last
+    protected static AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry privatePages(
+            final AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth
+    ) {
+        return auth.anyRequest().authenticated();
     }
 }

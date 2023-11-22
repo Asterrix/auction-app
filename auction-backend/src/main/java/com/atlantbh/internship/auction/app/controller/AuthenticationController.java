@@ -24,11 +24,11 @@ public class AuthenticationController {
 
     @PostMapping
     ResponseEntity<Void> authenticateUser(@RequestBody AuthenticationRequest loginRequest) {
-        final Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
+        final Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.email(), loginRequest.password());
         final UserAuthentication authenticationResponse = (UserAuthentication) authenticationProvider.authenticate(authentication);
         final String token = tokenService.generateToken(authenticationResponse);
         final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", token);
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, token);
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
     }
 }
