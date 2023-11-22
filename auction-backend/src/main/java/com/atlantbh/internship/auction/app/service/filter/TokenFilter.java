@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +31,7 @@ public class TokenFilter extends OncePerRequestFilter {
         if (authentication != null && authentication.isAuthenticated()) {
             try {
                 // Validate that token is present in the header
-                final String token = request.getHeader("Authorization");
+                final String token = request.getHeader(HttpHeaders.AUTHORIZATION);
                 if (token == null || token.isEmpty()) throw new Exception();
 
                 // Validate token

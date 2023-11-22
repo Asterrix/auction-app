@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 
 /*
+Criteria:
 - Contains at least one uppercase letter (A-Z).
 - Contains at least one lowercase letter (a-z).
 - Contains at least one digit (0-9).

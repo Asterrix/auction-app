@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+/**
+ * Used for displaying error messages that occur during the validation process for JPA entities.
+ */
 @Configuration
 public class EntityValidationConfig {
     @Bean
