@@ -11,6 +11,7 @@ import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation/validation-message/validation-message.component";
 import {ErrorModel} from "../../../../shared/models/errorModel";
+import {EmailValidator} from "./validators/email.validator";
 import {FirstNameValidator} from "./validators/first-name.validator";
 import {LastNameValidator} from "./validators/last-name.validator";
 import {PasswordValidator} from "./validators/password.validator";
@@ -39,11 +40,12 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
   @Output() submitForm = new EventEmitter<void>();
   validateFirstName: ValidationPair = {valid: true};
   validateLastName: ValidationPair = {valid: true};
+  validateEmail: ValidationPair = {valid: true};
   validatePassword: ValidationPair = {valid: true};
   protected registerForm = this.fb.group({
     firstName: ["", [FirstNameValidator.validator()]],
     lastName: ["", [LastNameValidator.validator()]],
-    email: ["", [Validators.required]],
+    email: ["", [EmailValidator.validator()]],
     password: ["", [PasswordValidator.validator()]],
   });
   protected readonly RegisterForm = RegisterForm;
@@ -59,19 +61,13 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
         debounceTime(300)
       )
       .subscribe((value) => {
-        const newFirstNameValidation = FirstNameValidator.validateFirstNameInForm(
-          this.registerForm,
-          RegisterForm.FirstName
-        );
-        const newLastNameValidation = LastNameValidator.validateLastNameInForm(
-          this.registerForm,
-          RegisterForm.LastName
-        );
+        const newFirstNameValidation = FirstNameValidator.validateFirstNameInForm(this.registerForm, RegisterForm.FirstName);
 
-        const newPasswordValidation = PasswordValidator.validatePasswordInForm(
-          this.registerForm,
-          RegisterForm.Password
-        );
+        const newLastNameValidation = LastNameValidator.validateLastNameInForm(this.registerForm, RegisterForm.LastName);
+
+        const newEmailValidation = EmailValidator.validateEmailInForm(this.registerForm, RegisterForm.Email);
+
+        const newPasswordValidation = PasswordValidator.validatePasswordInForm(this.registerForm, RegisterForm.Password);
 
         if (this.validateFirstName !== newFirstNameValidation) {
           this.validateFirstName = newFirstNameValidation;
@@ -79,6 +75,10 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
 
         if (this.validateLastName !== newLastNameValidation) {
           this.validateLastName = newLastNameValidation;
+        }
+
+        if (this.validateEmail !== newEmailValidation) {
+          this.validateEmail = newEmailValidation;
         }
 
         if (this.validatePassword !== newPasswordValidation) {
