@@ -1,8 +1,12 @@
 <div [formGroup]="formFieldGroup" class="input-field">
   <label class="input-field__label">{{label}}</label>
+
   <input
     [formControlName]="formField"
+    [ngClass]="{'invalid': isInputValid !== undefined && !isInputValid}"
     [placeholder]="placeholder"
     [type]="type"
     class="input-field__input">
+
+  <ng-content></ng-content>
 </div>

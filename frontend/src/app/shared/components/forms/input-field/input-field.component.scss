@@ -24,3 +24,8 @@
     }
   }
 }
+
+.invalid {
+  background-color: $error-bg;
+  border: 1px solid $error;
+}
