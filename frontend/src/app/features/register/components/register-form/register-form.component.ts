@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {debounceTime, Observable, Subscription} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
@@ -12,24 +12,31 @@ import {
 } from "../../../../shared/components/forms/validation/validation-message/validation-message.component";
 import {Constant} from "../../../../shared/models/enums/constant";
 import {ErrorModel, Severity} from "../../../../shared/models/errorModel";
-import {Api} from "../../../../shared/services/api.service";
 import {ErrorService} from "../../../../shared/services/error.service";
 import {EmailValidator} from "./validators/email.validator";
 import {FirstNameValidator} from "./validators/first-name.validator";
 import {LastNameValidator} from "./validators/last-name.validator";
+import {NameValidator} from "./validators/name-validator";
 import {PasswordValidator} from "./validators/password.validator";
-import Register = Api.UserApi.Register;
+import {ValidationPair} from "./validators/validation.pair";
 
-enum RegisterForm {
+export enum RegisterForm {
   FirstName = "firstName",
   LastName = "lastName",
   Email = "email",
   Password = "password"
 }
 
-export interface ValidationPair {
-  valid: boolean;
-  message?: string;
+
+export interface RegisterFormFieldChange {
+  controlField: RegisterForm;
+  validationFn: (formGroup: FormGroup, fieldName: RegisterForm) => ValidationPair;
+}
+
+export interface RegisterFormNameFieldChange {
+  controlField: RegisterForm,
+  validationFn: (formGroup: FormGroup, fieldName: RegisterForm, config: NameValidator.Config) => ValidationPair,
+  config: NameValidator.Config
 }
 
 @Component({
@@ -41,75 +48,94 @@ export interface ValidationPair {
 })
 export class RegisterFormComponent implements OnInit, OnDestroy {
   @Input({required: true}) error$: Observable<ErrorModel | null> | undefined;
-  @Output() submitForm = new EventEmitter<Required<Register>>();
-  validateFirstName: ValidationPair = {valid: true};
-  validateLastName: ValidationPair = {valid: true};
-  validateEmail: ValidationPair = {valid: true};
-  validatePassword: ValidationPair = {valid: true};
-  protected registerForm = this.fb.group({
-    firstName: ["", [FirstNameValidator.validator()]],
-    lastName: ["", [LastNameValidator.validator()]],
-    email: ["", [EmailValidator.validator()]],
-    password: ["", [PasswordValidator.validator()]],
-  });
+  @Output() submitForm = new EventEmitter<FormGroup>();
+  // Set to true initially so that the invalid CSS class is not invoked
+  validationStatus: Record<RegisterForm, ValidationPair> = {
+    [RegisterForm.FirstName]: {valid: true},
+    [RegisterForm.LastName]: {valid: true},
+    [RegisterForm.Email]: {valid: true},
+    [RegisterForm.Password]: {valid: true}
+  };
   protected readonly RegisterForm = RegisterForm;
-  private formSub?: Subscription;
+  protected registerForm = this.formBuilder.group({
+    firstName: [Constant.EmptyValue, [NameValidator.validator(FirstNameValidator.config)]],
+    lastName: [Constant.EmptyValue, [NameValidator.validator(LastNameValidator.config)]],
+    email: [Constant.EmptyValue, [EmailValidator.validator()]],
+    password: [Constant.EmptyValue, [PasswordValidator.validator()]],
+  });
 
-  constructor(private fb: FormBuilder, private errorService: ErrorService) {
+  private formFieldSubscription: Record<string, Subscription | undefined> = {};
+
+  constructor(private formBuilder: FormBuilder, private errorService: ErrorService) {
   }
 
   public ngOnInit(): void {
-    this.formSub = this.registerForm.valueChanges
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev === curr),
-        debounceTime(300)
-      )
-      .subscribe(() => {
-        const newFirstNameValidation = FirstNameValidator.validateFirstNameInForm(this.registerForm, RegisterForm.FirstName);
+    this.formFieldSubscription[RegisterForm.FirstName] = this.subscribeToNameFieldChanges({
+      controlField: RegisterForm.FirstName,
+      validationFn: NameValidator.validateName,
+      config: FirstNameValidator.config
+    });
 
-        const newLastNameValidation = LastNameValidator.validateLastNameInForm(this.registerForm, RegisterForm.LastName);
+    this.formFieldSubscription[RegisterForm.LastName] = this.subscribeToNameFieldChanges({
+      controlField: RegisterForm.LastName,
+      validationFn: NameValidator.validateName,
+      config: LastNameValidator.config
+    });
 
-        const newEmailValidation = EmailValidator.validateEmailInForm(this.registerForm, RegisterForm.Email);
+    this.formFieldSubscription[RegisterForm.Email] = this.subscribeToFieldChanges({
+      controlField: RegisterForm.Email,
+      validationFn: EmailValidator.validateEmailInForm,
+    });
 
-        const newPasswordValidation = PasswordValidator.validatePasswordInForm(this.registerForm, RegisterForm.Password);
+    this.formFieldSubscription[RegisterForm.Email] = this.subscribeToFieldChanges({
+      controlField: RegisterForm.Password,
+      validationFn: PasswordValidator.validatePasswordInForm,
+    });
 
-        if (this.validateFirstName !== newFirstNameValidation) {
-          this.validateFirstName = newFirstNameValidation;
-        }
-
-        if (this.validateLastName !== newLastNameValidation) {
-          this.validateLastName = newLastNameValidation;
-        }
-
-        if (this.validateEmail !== newEmailValidation) {
-          this.validateEmail = newEmailValidation;
-        }
-
-        if (this.validatePassword !== newPasswordValidation) {
-          this.validatePassword = newPasswordValidation;
-        }
-
-        if (this.errorService.isPresent()) {
-          this.errorService.clearErrorSubject();
-        }
-      });
+    if (this.errorService.isPresent()) {
+      this.errorService.clearErrors();
+    }
   }
 
   public ngOnDestroy(): void {
-    this.formSub?.unsubscribe();
+    for (const subscription in this.formFieldSubscription) {
+      if (this.formFieldSubscription[subscription]) {
+        this.formFieldSubscription[subscription]?.unsubscribe();
+      }
+    }
   }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      const form: Required<Register> = {
-        email: this.registerForm.get(RegisterForm.Email)?.value ?? Constant.EmptyValue,
-        firstName: this.registerForm.get(RegisterForm.FirstName)?.value ?? Constant.EmptyValue,
-        lastName: this.registerForm.get(RegisterForm.LastName)?.value ?? Constant.EmptyValue,
-        password: this.registerForm.get(RegisterForm.Password)?.value ?? Constant.EmptyValue
-      };
-      this.submitForm.emit(form);
+      this.submitForm.emit(this.registerForm);
     } else {
       this.errorService.initialiseError(Severity.NORMAL, "Please fill in the form.");
     }
   }
+
+  public subscribeToFieldChanges(param: RegisterFormFieldChange): Subscription | undefined {
+    return this.registerForm.get(param.controlField)?.valueChanges
+      .pipe(distinctUntilChanged((prev, curr) => prev === curr), debounceTime(300))
+      .subscribe(() => {
+        const newValidation = param.validationFn(this.registerForm, param.controlField);
+
+        if (this.validationStatus[param.controlField] !== newValidation) {
+          this.validationStatus[param.controlField] = newValidation;
+        }
+      });
+  }
+
+  private subscribeToNameFieldChanges(param: RegisterFormNameFieldChange): Subscription | undefined {
+    return this.registerForm.get(param.controlField)?.valueChanges
+      .pipe(distinctUntilChanged((prev, curr) => prev === curr), debounceTime(300))
+      .subscribe(() => {
+        const newValidation = param.validationFn(this.registerForm, param.controlField, param.config);
+
+        if (this.validationStatus[param.controlField] !== newValidation) {
+          this.validationStatus[param.controlField] = newValidation;
+        }
+      });
+  }
 }
+
+

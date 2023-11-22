@@ -8,7 +8,7 @@ import {Severity} from "../../models/errorModel";
 import {TokenManager} from "../../models/token-manager";
 import {Api} from "../api.service";
 import {ErrorService} from "../error.service";
-import Authentication = Api.UserApi.Authentication;
+import Authentication = Api.UserApi.AuthenticationRequest;
 
 export interface UserDetails extends JwtPayload {
   firstName: string;

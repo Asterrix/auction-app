@@ -11,8 +11,8 @@ export namespace Api {
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
-  import Authentication = Api.UserApi.Authentication;
-  import Register = Api.UserApi.Register;
+  import Authentication = Api.UserApi.AuthenticationRequest;
+  import Register = Api.UserApi.RegisterRequest;
 
 
   @Injectable({providedIn: "root"})
@@ -59,13 +59,13 @@ export namespace Api {
 
 
   export namespace UserApi {
-    export interface Authentication {
+    export interface AuthenticationRequest {
       username: string;
       password: string;
       rememberMe: boolean;
     }
 
-    export interface Register {
+    export interface RegisterRequest {
       firstName: string;
       lastName: string;
       email: string;
@@ -79,7 +79,7 @@ export namespace Api {
     }
 
     export namespace PostMethods {
-      export function authenticate(httpClient: HttpClient, auth: Required<Authentication>): Observable<HttpResponse<void>> {
+      export function authenticate(httpClient: HttpClient, auth: Required<AuthenticationRequest>): Observable<HttpResponse<void>> {
         const body = {username: auth.username, password: auth.password};
         return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}`, body, {observe: "response"});
       }
@@ -88,8 +88,8 @@ export namespace Api {
         return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}/${Endpoint.Logout}`, null, {observe: "response"});
       }
 
-      export function register(httpClient: HttpClient, userDetails: Required<Register>): Observable<HttpResponse<boolean>> {
-        const body: Register = {
+      export function register(httpClient: HttpClient, userDetails: Required<RegisterRequest>): Observable<HttpResponse<boolean>> {
+        const body: RegisterRequest = {
           firstName: userDetails.firstName,
           lastName: userDetails.lastName,
           email: userDetails.email,

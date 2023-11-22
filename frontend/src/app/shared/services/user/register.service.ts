@@ -4,7 +4,7 @@ import {catchError} from "rxjs";
 import {Severity} from "../../models/errorModel";
 import {Api} from "../api.service";
 import {ErrorService} from "../error.service";
-import Register = Api.UserApi.Register;
+import RegisterRequest = Api.UserApi.RegisterRequest;
 
 @Injectable({
   providedIn: "root"
@@ -13,7 +13,7 @@ export class RegisterService {
   constructor(private apiService: Api.Service, private router: Router, private errorService: ErrorService) {
   }
 
-  registerUser(form: Required<Register>) {
+  registerUser(form: Required<RegisterRequest>) {
     this.apiService.registerUser(form)
       .pipe(
         catchError((e) => {

@@ -5,7 +5,8 @@ import {
   maxLengthFn,
   minLengthFn
 } from "../../../../../shared/models/validators/validator-functions";
-import {ValidationPair} from "../register-form.component";
+
+import {ValidationPair} from "./validation.pair";
 
 enum EmailValidatorError {
   REQUIRED,
