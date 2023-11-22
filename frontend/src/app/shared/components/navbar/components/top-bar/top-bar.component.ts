@@ -2,8 +2,8 @@ import {CommonModule} from "@angular/common";
 import {Component} from "@angular/core";
 import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
-import {AuthenticationService} from "../../../../services/authentication.service";
-import {LogoutService} from "../../../../services/logout.service";
+import {AuthenticationService} from "../../../../services/user/authentication.service";
+import {LogoutService} from "../../../../services/user/logout.service";
 import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component";
 
 @Component({

@@ -10,6 +10,10 @@ export class ErrorService {
     return this.errorSubject.asObservable();
   }
 
+  isPresent(): boolean {
+    return this.errorSubject.getValue() !== null;
+  }
+
   initialiseError(severity: Severity, message: string): void {
     this.errorSubject.next(ErrorModel.initialiseError(severity, message));
   }
