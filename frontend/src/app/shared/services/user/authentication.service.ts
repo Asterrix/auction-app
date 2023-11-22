@@ -3,11 +3,11 @@ import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
 import {JwtPayload} from "jwt-decode";
 import {BehaviorSubject, catchError, Observable} from "rxjs";
-import {Constant} from "../models/enums/constant";
-import {Severity} from "../models/errorModel";
-import {TokenManager} from "../models/token-manager";
-import {Api} from "./api.service";
-import {ErrorService} from "./error.service";
+import {Constant} from "../../models/enums/constant";
+import {Severity} from "../../models/errorModel";
+import {TokenManager} from "../../models/token-manager";
+import {Api} from "../api.service";
+import {ErrorService} from "../error.service";
 import Authentication = Api.UserApi.Authentication;
 
 export interface UserDetails extends JwtPayload {

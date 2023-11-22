@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {debounceTime, Observable, Subscription} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
@@ -10,11 +10,15 @@ import {InputFieldComponent} from "../../../../shared/components/forms/input-fie
 import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation/validation-message/validation-message.component";
-import {ErrorModel} from "../../../../shared/models/errorModel";
+import {Constant} from "../../../../shared/models/enums/constant";
+import {ErrorModel, Severity} from "../../../../shared/models/errorModel";
+import {Api} from "../../../../shared/services/api.service";
+import {ErrorService} from "../../../../shared/services/error.service";
 import {EmailValidator} from "./validators/email.validator";
 import {FirstNameValidator} from "./validators/first-name.validator";
 import {LastNameValidator} from "./validators/last-name.validator";
 import {PasswordValidator} from "./validators/password.validator";
+import Register = Api.UserApi.Register;
 
 enum RegisterForm {
   FirstName = "firstName",
@@ -37,7 +41,7 @@ export interface ValidationPair {
 })
 export class RegisterFormComponent implements OnInit, OnDestroy {
   @Input({required: true}) error$: Observable<ErrorModel | null> | undefined;
-  @Output() submitForm = new EventEmitter<void>();
+  @Output() submitForm = new EventEmitter<Required<Register>>();
   validateFirstName: ValidationPair = {valid: true};
   validateLastName: ValidationPair = {valid: true};
   validateEmail: ValidationPair = {valid: true};
@@ -51,7 +55,7 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
   protected readonly RegisterForm = RegisterForm;
   private formSub?: Subscription;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private errorService: ErrorService) {
   }
 
   public ngOnInit(): void {
@@ -60,7 +64,7 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
         distinctUntilChanged((prev, curr) => prev === curr),
         debounceTime(300)
       )
-      .subscribe((value) => {
+      .subscribe(() => {
         const newFirstNameValidation = FirstNameValidator.validateFirstNameInForm(this.registerForm, RegisterForm.FirstName);
 
         const newLastNameValidation = LastNameValidator.validateLastNameInForm(this.registerForm, RegisterForm.LastName);
@@ -84,6 +88,10 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
         if (this.validatePassword !== newPasswordValidation) {
           this.validatePassword = newPasswordValidation;
         }
+
+        if (this.errorService.isPresent()) {
+          this.errorService.clearErrorSubject();
+        }
       });
   }
 
@@ -92,6 +100,16 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.submitForm.emit();
+    if (this.registerForm.valid) {
+      const form: Required<Register> = {
+        email: this.registerForm.get(RegisterForm.Email)?.value ?? Constant.EmptyValue,
+        firstName: this.registerForm.get(RegisterForm.FirstName)?.value ?? Constant.EmptyValue,
+        lastName: this.registerForm.get(RegisterForm.LastName)?.value ?? Constant.EmptyValue,
+        password: this.registerForm.get(RegisterForm.Password)?.value ?? Constant.EmptyValue
+      };
+      this.submitForm.emit(form);
+    } else {
+      this.errorService.initialiseError(Severity.NORMAL, "Please fill in the form.");
+    }
   }
 }

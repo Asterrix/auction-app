@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {MainNavbarService} from "../../shared/components/navbar/components/main-navbar/services/main-navbar.service";
 import {ErrorModel} from "../../shared/models/errorModel";
 import {Api} from "../../shared/services/api.service";
-import {AuthenticationService} from "../../shared/services/authentication.service";
+import {AuthenticationService} from "../../shared/services/user/authentication.service";
 import {ErrorService} from "../../shared/services/error.service";
 import {LoginFormComponent} from "./components/login-form/login-form.component";
 import Authentication = Api.UserApi.Authentication;
