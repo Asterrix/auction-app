@@ -1,8 +1,8 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
 import {FormBuilder, Validators} from "@angular/forms";
 import {RouterLink} from "@angular/router";
-import {debounceTime, Observable} from "rxjs";
+import {debounceTime, Observable, Subscription} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {PrimaryButtonComponent} from "../../../../shared/components/buttons/primary-button/primary-button.component";
 import {GeneralFormComponent} from "../../../../shared/components/forms/general-form/general-form.component";
@@ -13,6 +13,7 @@ import {
 import {ErrorModel} from "../../../../shared/models/errorModel";
 import {FirstNameValidator} from "./validators/first-name.validator";
 import {LastNameValidator} from "./validators/last-name.validator";
+import {PasswordValidator} from "./validators/password.validator";
 
 enum RegisterForm {
   FirstName = "firstName",
@@ -33,31 +34,64 @@ export interface ValidationPair {
   templateUrl: "./register-form.component.html",
   styleUrls: ["./register-form.component.scss"]
 })
-export class RegisterFormComponent implements OnInit {
+export class RegisterFormComponent implements OnInit, OnDestroy {
   @Input({required: true}) error$: Observable<ErrorModel | null> | undefined;
   @Output() submitForm = new EventEmitter<void>();
   validateFirstName: ValidationPair = {valid: true};
   validateLastName: ValidationPair = {valid: true};
+  validatePassword: ValidationPair = {valid: true};
   protected registerForm = this.fb.group({
     firstName: ["", [FirstNameValidator.validator()]],
     lastName: ["", [LastNameValidator.validator()]],
     email: ["", [Validators.required]],
-    password: ["", [Validators.required]],
+    password: ["", [PasswordValidator.validator()]],
   });
   protected readonly RegisterForm = RegisterForm;
+  private formSub?: Subscription;
 
   constructor(private fb: FormBuilder) {
   }
 
   public ngOnInit(): void {
-    this.registerForm.valueChanges.pipe(distinctUntilChanged(), debounceTime(300)).subscribe(value => {
-      this.validateFirstName = FirstNameValidator.validateFirstNameInForm(this.registerForm, RegisterForm.FirstName);
-      this.validateLastName = LastNameValidator.validateLastNameInForm(this.registerForm, RegisterForm.LastName);
-    });
+    this.formSub = this.registerForm.valueChanges
+      .pipe(
+        distinctUntilChanged((prev, curr) => prev === curr),
+        debounceTime(300)
+      )
+      .subscribe((value) => {
+        const newFirstNameValidation = FirstNameValidator.validateFirstNameInForm(
+          this.registerForm,
+          RegisterForm.FirstName
+        );
+        const newLastNameValidation = LastNameValidator.validateLastNameInForm(
+          this.registerForm,
+          RegisterForm.LastName
+        );
+
+        const newPasswordValidation = PasswordValidator.validatePasswordInForm(
+          this.registerForm,
+          RegisterForm.Password
+        );
+
+        if (this.validateFirstName !== newFirstNameValidation) {
+          this.validateFirstName = newFirstNameValidation;
+        }
+
+        if (this.validateLastName !== newLastNameValidation) {
+          this.validateLastName = newLastNameValidation;
+        }
+
+        if (this.validatePassword !== newPasswordValidation) {
+          this.validatePassword = newPasswordValidation;
+        }
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.formSub?.unsubscribe();
   }
 
   onSubmit(): void {
     this.submitForm.emit();
   }
-
 }
