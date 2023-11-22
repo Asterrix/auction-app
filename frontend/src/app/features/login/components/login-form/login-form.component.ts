@@ -1,16 +1,23 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {FormBuilder} from "@angular/forms";
-import {Observable} from "rxjs";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {debounceTime, Observable, Subscription} from "rxjs";
+import {distinctUntilChanged} from "rxjs/operators";
 import {PrimaryButtonComponent} from "../../../../shared/components/buttons/primary-button/primary-button.component";
 import {CheckboxShape} from "../../../../shared/components/checkboxes/checkbox/checkbox.component";
 import {CheckboxFieldComponent} from "../../../../shared/components/forms/checkbox-field/checkbox-field.component";
 import {GeneralFormComponent} from "../../../../shared/components/forms/general-form/general-form.component";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
 import {Constant} from "../../../../shared/models/enums/constant";
-import {ErrorModel} from "../../../../shared/models/errorModel";
-import {Api} from "../../../../shared/services/api.service";
-import Authentication = Api.UserApi.Authentication;
+import {ErrorModel, Severity} from "../../../../shared/models/errorModel";
+import {ErrorService} from "../../../../shared/services/error.service";
+
+
+export enum LoginForm {
+  Email = "email",
+  Password = "password",
+  RememberMe = "rememberMe"
+}
 
 @Component({
   selector: "app-login-form",
@@ -18,35 +25,50 @@ import Authentication = Api.UserApi.Authentication;
   imports: [CommonModule, GeneralFormComponent, InputFieldComponent, CheckboxFieldComponent, PrimaryButtonComponent],
   templateUrl: "./login-form.component.html"
 })
-export class LoginFormComponent {
-  @Output() submitEvent = new EventEmitter<Required<Authentication>>();
-  @Input({required: true}) error$: Observable<ErrorModel | null> | undefined;
-  protected loginForm = this.fb.group({
-    email: "",
-    password: "",
+export class LoginFormComponent implements OnInit, OnDestroy {
+  @Output()
+  submitEvent = new EventEmitter<FormGroup>();
+
+  @Input({required: true})
+  error$?: Observable<ErrorModel | null>;
+  formSub?: Subscription;
+  protected readonly CheckboxShape = CheckboxShape;
+  protected loginForm = this.formBuilder.group({
+    email: [Constant.EmptyValue, [Validators.required]],
+    password: [Constant.EmptyValue, [Validators.required]],
     rememberMe: false
   });
-  protected readonly CheckboxShape = CheckboxShape;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private errorService: ErrorService) {
   }
 
-  onSubmit(): void {
-    this.submitEvent.emit(this.createAuthRequest());
+  public ngOnInit(): void {
+    this.formSub = this.loginForm.valueChanges.pipe(
+      distinctUntilChanged((prev, curr) => prev === curr),
+      debounceTime(300)
+    ).subscribe(value => {
+      if (this.errorService.isPresent() && this.loginForm.valid) {
+        this.errorService.clearErrors();
+      }
+    });
   }
 
-  setRememberMe(): void {
-    const currentVal = this.loginForm.get("rememberMe");
-    if (currentVal) {
-      currentVal.setValue(!currentVal.value);
+  public ngOnDestroy(): void {
+    this.formSub?.unsubscribe();
+  }
+
+  protected onSubmit(): void {
+    if (this.loginForm.valid) {
+      this.submitEvent.emit(this.loginForm);
+    } else {
+      this.errorService.initialiseError(Severity.NORMAL, "Please fill in the form.");
     }
   }
 
-  private createAuthRequest(): Required<Authentication> {
-    return {
-      username: this.loginForm.get("email")?.value ?? Constant.EmptyValue,
-      password: this.loginForm.get("password")?.value ?? Constant.EmptyValue,
-      rememberMe: this.loginForm.get("rememberMe")?.value ?? false
-    };
+  protected setRememberMe(): void {
+    const currentVal = this.loginForm.get(LoginForm.RememberMe);
+    if (currentVal) {
+      currentVal.setValue(!currentVal.value);
+    }
   }
 }

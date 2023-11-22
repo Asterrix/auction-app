@@ -3,7 +3,7 @@ import {jwtDecode} from "jwt-decode";
 import {UserDetails} from "../services/user/authentication.service";
 import {Constant} from "./enums/constant";
 
-enum Token {
+export enum Token {
   Key = "Token",
   Header = "Authorization"
 }

@@ -19,7 +19,7 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @NotBlank(message = "{firstName.blank", groups = FirstOrder.class)
+    @NotBlank(message = "{firstName.blank}", groups = FirstOrder.class)
     @Size(message = "{firstName.size}", min = 3, max = 20, groups = SecondOrder.class)
     @Pattern(message = "{firstName.pattern}", regexp = "^[a-zA-Z]+$", groups = ThirdOrder.class)
     @Column(name = "first_name", nullable = false, length = 20)
