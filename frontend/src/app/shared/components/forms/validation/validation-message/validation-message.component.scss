@@ -1,5 +1,6 @@
 @import "colors";
 
 .message {
+  white-space: pre-line;
   color: $error;
 }
