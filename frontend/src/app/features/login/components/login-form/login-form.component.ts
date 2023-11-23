@@ -46,18 +46,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.subscribeToAlerts();
-    this.subscribeToFormValueChanges();
-  }
-
-  private subscribeToFormValueChanges(): void {
-    this.formSub = this.loginForm.valueChanges.pipe(
-      distinctUntilChanged((prev, curr) => prev === curr),
-      debounceTime(300)
-    ).subscribe(value => {
-      if (this.errorService.isPresent() && this.loginForm.valid) {
-        this.errorService.clearErrors();
-      }
-    });
   }
 
   private subscribeToAlerts(): void {
