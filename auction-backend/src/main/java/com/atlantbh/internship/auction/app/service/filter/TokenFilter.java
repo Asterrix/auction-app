@@ -40,7 +40,6 @@ public class TokenFilter extends OncePerRequestFilter {
                 if (!valid) throw new Exception();
             } catch (Exception e) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.getWriter().write("Invalid Token!");
                 response.getWriter().flush();
                 return;
             }
