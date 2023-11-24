@@ -1,0 +1,55 @@
+@import "colors";
+@import "typography";
+
+$cube-shape: 8rem;
+
+@mixin table-layout {
+  display: grid;
+  grid-template-columns: $cube-shape 2fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+@mixin table-horizontal-spacing {
+  padding: 0 2.4rem;
+}
+
+@mixin table-row {
+  @include table-layout;
+  @include table-horizontal-spacing;
+}
+
+.table {
+  border: 1px solid $neutral-light-grey;
+  display: grid;
+
+  &__head {
+    background-color: $gray-100;
+  }
+
+  &__row {
+    @include table-row;
+  }
+
+  &__header {
+    padding: 1.2rem 0.4rem;
+
+    &:nth-child(1),
+    &:nth-child(2) {
+      text-align: left;
+    }
+
+    &:nth-child(2) {
+      margin-left: 2rem;
+    }
+  }
+
+  &__body {
+    @mixin table-vertical-spacing {
+      margin: 2.4rem 0;
+    }
+
+    display: flex;
+    flex-direction: column;
+    @include table-vertical-spacing;
+    gap: 3.2rem;
+  }
+}

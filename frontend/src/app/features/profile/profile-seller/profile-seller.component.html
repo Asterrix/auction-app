@@ -1,0 +1,28 @@
+<div class="table-nav">
+  <ng-container *ngFor="let section of sectionSet">
+    <a [ngClass]="{'btn--active' : activeSection === section}"
+       [queryParams]="{section: section}"
+       class="btn"
+       routerLink="/my-account/seller">
+      {{TabSectionName[section]}}
+    </a>
+  </ng-container>
+</div>
+
+<profile-table>
+  <ng-container *ngIf="activeSection === TabSection.Active">
+    <profile-table-empty
+      btnLabel="Start selling"
+      iconName="Shopping cart icon"
+      iconPath="assets/icons/shopping_cart.svg"
+      message="You do not have any active items for sale."/>
+  </ng-container>
+
+  <ng-container *ngIf="activeSection === TabSection.Sold">
+    <profile-table-empty
+      btnLabel="Start selling"
+      iconName="Shopping cart icon"
+      iconPath="assets/icons/shopping_cart.svg"
+      message="You do not have any scheduled items for sale."/>
+  </ng-container>
+</profile-table>

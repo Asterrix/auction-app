@@ -1,0 +1,18 @@
+@import "colors";
+@import "typography";
+
+.btn {
+  background-color: transparent;
+  border: 3px solid $primary;
+  display: block;
+  font-size: 1.7rem;
+  padding: 0.8rem 4.8rem;
+  text-transform: uppercase;
+  transition: all 200ms ease-out;
+  @extend .font-bold;
+
+  &:hover {
+    background-color: $primary;
+    color: $white;
+  }
+}

@@ -1,0 +1,20 @@
+@import "typography";
+
+.table-empty {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  &__container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+    justify-content: center;
+    width: fit-content;
+  }
+
+  &__message {
+    @extend .font-semi-bold;
+  }
+}
