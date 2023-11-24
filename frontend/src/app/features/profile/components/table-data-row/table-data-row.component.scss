@@ -1,0 +1,53 @@
+@use "../table/table.component";
+@import "colors";
+@import "typography";
+
+$cube-shape: 8rem;
+
+@mixin item-portrait-container {
+  height: $cube-shape;
+  width: $cube-shape;
+}
+
+.table-data-row {
+  @include table.table-row;
+}
+
+.cell {
+  align-items: center;
+  @extend .font-semi-bold;
+  display: flex;
+  justify-content: center;
+
+  // Item image
+  &__portrait {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  // Item image container
+  &:nth-child(1) {
+    @include item-portrait-container;
+  }
+
+  // Item Name
+  &:nth-child(2) {
+    justify-content: left;
+    margin-left: 2rem;
+  }
+}
+
+.view-btn {
+  border: 2px solid $neutral-light-grey;
+  padding: 0.8rem 2.4rem;
+  text-transform: uppercase;
+  transition: all 200ms ease-out;
+
+  &:hover {
+    border: 2px solid $primary;
+    color: $primary;
+  }
+}
+
+
