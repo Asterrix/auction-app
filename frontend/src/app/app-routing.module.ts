@@ -3,6 +3,7 @@ import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {HomeRouteEndpoint} from "./features/home/home-routes";
 import {LoginRouteEndpoint} from "./features/login/login-routes";
+import {ProfileRouteEndpoint} from "./features/profile/profile-routes";
 import {RegisterRouteEndpoint} from "./features/register/register-route";
 import {ShopRouteEndpoint} from "./features/shop/shop-routes";
 import {AuthenticationInterceptor} from "./shared/interceptors/authentication.interceptor";
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: RegisterRouteEndpoint.Register,
     loadChildren: () => import("./features/register/register-route").then(mod => mod.REGISTER_ROUTES)
+  },
+  {
+    path: ProfileRouteEndpoint.MyAccount,
+    loadChildren: () => import("./features/profile/profile-routes").then(mod => mod.PROFILE_ROUTES)
   },
   {path: "**", redirectTo: `/${HomeRouteEndpoint.Home}`},
 ];

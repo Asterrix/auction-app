@@ -1,0 +1,19 @@
+@import "colors";
+@import "typography";
+
+.btn {
+  align-items: center;
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.2rem 2.4rem;
+  @extend .font-semi-bold;
+}
+
+.active {
+  background-color: $primary;
+  color: $white;
+
+  img {
+    filter: brightness(0) invert(1);
+  }
+}

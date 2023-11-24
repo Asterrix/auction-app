@@ -1,6 +1,8 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component} from "@angular/core";
 import {RouterLink, RouterLinkActive} from "@angular/router";
+import {ProfileRouteEndpoint} from "../../../../../features/profile/profile-routes";
+import {AuthenticationService} from "../../../../services/user/authentication.service";
 import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component";
 import {SearchBarComponent} from "../search-bar/search-bar.component";
 
@@ -12,5 +14,6 @@ import {SearchBarComponent} from "../search-bar/search-bar.component";
   styleUrls: ["./main-navbar.component.scss"]
 })
 export class MainNavbarComponent {
-
+  protected readonly AuthenticationService = AuthenticationService;
+  protected readonly ProfileRouteEndpoint = ProfileRouteEndpoint;
 }
