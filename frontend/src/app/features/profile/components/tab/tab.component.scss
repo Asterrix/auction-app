@@ -1,0 +1,33 @@
+@import "colors";
+@import "typography";
+
+:host {
+  width: 100%;
+}
+
+.tab {
+  display: flex;
+
+  &__list {
+    display: inherit;
+    gap: 0.8rem;
+    list-style: none;
+    width: 100%;
+
+    li {
+      border: 1px solid $neutral-light-grey;
+
+      &:last-child {
+        background-color: $primary;
+        color: $white;
+        margin-left: auto;
+        padding: 0 3.2rem;
+        text-transform: uppercase;
+
+        &:hover {
+          background-color: lighten($primary, 2);
+        }
+      }
+    }
+  }
+}

@@ -21,10 +21,13 @@
         <div class="main-navbar__navigation">
           <ul>
             <li>
-              <a routerLinkActive="active" routerLink="/home">Home</a>
+              <a routerLink="/home" routerLinkActive="active">Home</a>
             </li>
             <li>
-              <a routerLinkActive="active" routerLink="/shop">Shop</a>
+              <a routerLink="/shop" routerLinkActive="active">Shop</a>
+            </li>
+            <li *ngIf="AuthenticationService.isAuthenticated()">
+              <a [routerLink]="ProfileRouteEndpoint.MyAccount" routerLinkActive="active">My Account</a>
             </li>
           </ul>
         </div>
