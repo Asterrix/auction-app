@@ -2,7 +2,8 @@ import {CommonModule} from "@angular/common";
 import {Component} from "@angular/core";
 import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
-import {AuthenticationService} from "../../../../services/user/authentication.service";
+import {Constant} from "../../../../models/enums/constant";
+import {AuthenticationService, UserDetails} from "../../../../services/user/authentication.service";
 import {LogoutService} from "../../../../services/user/logout.service";
 import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component";
 
@@ -14,14 +15,14 @@ import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component
   styleUrls: ["./top-bar.component.scss"]
 })
 export class TopBarComponent {
-  username$?: Observable<string>;
+  user$?: Observable<Constant | UserDetails>;
 
   constructor(private userService: AuthenticationService, private logoutService: LogoutService) {
 
   }
 
   ngOnInit(): void {
-    this.username$ = this.userService.getUsername();
+    this.user$ = this.userService.userObservable();
   }
 
   logoutUser(): void {
