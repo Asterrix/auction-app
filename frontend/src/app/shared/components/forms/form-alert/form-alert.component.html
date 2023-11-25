@@ -1,0 +1,13 @@
+<ng-container *ngIf="alert() as alert">
+  <div *ngIf="alert.type === AlertType.Info" class="alert-info">
+    <span>{{alert.message}}</span>
+  </div>
+
+  <div *ngIf="alert.type === AlertType.WarningLevelOne" class="alert-warning-level-one">
+    <span>{{alert.message}}</span>
+  </div>
+
+  <div *ngIf="alert.type === AlertType.WarningLevelTwo" class="alert-warning-level-two">
+    <span>{{alert.message}}</span>
+  </div>
+</ng-container>

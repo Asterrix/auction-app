@@ -1,16 +1,13 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Output} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {debounceTime, Observable, Subscription} from "rxjs";
-import {distinctUntilChanged} from "rxjs/operators";
 import {PrimaryButtonComponent} from "../../../../shared/components/buttons/primary-button/primary-button.component";
 import {CheckboxShape} from "../../../../shared/components/checkboxes/checkbox/checkbox.component";
 import {CheckboxFieldComponent} from "../../../../shared/components/forms/checkbox-field/checkbox-field.component";
 import {GeneralFormComponent} from "../../../../shared/components/forms/general-form/general-form.component";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
 import {Constant} from "../../../../shared/models/enums/constant";
-import {ErrorModel, Severity} from "../../../../shared/models/errorModel";
-import {AlertService} from "../../../../shared/services/alert.service";
+import {AlertType} from "../../../../shared/services/alert.service";
 import {ErrorService} from "../../../../shared/services/error.service";
 
 
@@ -26,14 +23,10 @@ export enum LoginForm {
   imports: [CommonModule, GeneralFormComponent, InputFieldComponent, CheckboxFieldComponent, PrimaryButtonComponent],
   templateUrl: "./login-form.component.html"
 })
-export class LoginFormComponent implements OnInit, OnDestroy {
+export class LoginFormComponent {
   @Output()
   submitEvent = new EventEmitter<FormGroup>();
 
-  @Input({required: true})
-  error$?: Observable<ErrorModel | null>;
-  alert$?: Observable<string>;
-  formSub?: Subscription;
   protected readonly CheckboxShape = CheckboxShape;
   protected loginForm = this.formBuilder.group({
     email: [Constant.EmptyValue, [Validators.required]],
@@ -41,26 +34,14 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     rememberMe: false
   });
 
-  constructor(private formBuilder: FormBuilder, private errorService: ErrorService, private alertService: AlertService) {
-  }
-
-  public ngOnInit(): void {
-    this.subscribeToAlerts();
-  }
-
-  private subscribeToAlerts(): void {
-    this.alert$ = this.alertService.getAlert();
-  }
-
-  public ngOnDestroy(): void {
-    this.formSub?.unsubscribe();
+  constructor(private formBuilder: FormBuilder, protected errorService: ErrorService) {
   }
 
   protected onSubmit(): void {
     if (this.loginForm.valid) {
       this.submitEvent.emit(this.loginForm);
     } else {
-      this.errorService.initialiseError(Severity.NORMAL, "Please fill in the form.");
+      this.errorService.setError({message: "Please fill in the form.", type: AlertType.WarningLevelOne});
     }
   }
 

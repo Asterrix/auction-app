@@ -1,24 +1,21 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
-import {ErrorModel, Severity} from "../models/errorModel";
+import {computed, Injectable, signal} from "@angular/core";
+import {Constant} from "../models/enums/constant";
+import {Alert, AlertType} from "./alert.service";
 
 @Injectable({providedIn: "root"})
 export class ErrorService {
-  private errorSubject = new BehaviorSubject<ErrorModel | null>(null);
-
-  getError(): Observable<ErrorModel | null> {
-    return this.errorSubject.asObservable();
-  }
+  private errorSignal = signal<Alert>({message: Constant.EmptyValue, type: AlertType.None});
+  error = computed(this.errorSignal);
 
   isPresent(): boolean {
-    return this.errorSubject.getValue() !== null;
+    return this.error().type !== AlertType.None;
   }
 
-  initialiseError(severity: Severity, message: string): void {
-    this.errorSubject.next(ErrorModel.initialiseError(severity, message));
+  setError(value: Alert): void {
+    this.errorSignal.set(value);
   }
 
-  clearErrors(): void {
-    this.errorSubject.next(null);
+  clearError(): void {
+    this.errorSignal.set({message: Constant.EmptyValue, type: AlertType.None});
   }
 }

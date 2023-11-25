@@ -1,12 +1,8 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {FormGroup} from "@angular/forms";
-import {Observable} from "rxjs";
-import {
-  MainNavbarHandler
-} from "../../shared/components/navbar/components/main-navbar/services/main-navbar-handler.service";
+import {MainNavbarHandler} from "../../shared/components/navbar/components/main-navbar/services/main-navbar-handler.service";
 import {Constant} from "../../shared/models/enums/constant";
-import {ErrorModel} from "../../shared/models/errorModel";
 import {AlertService} from "../../shared/services/alert.service";
 import {Api} from "../../shared/services/api.service";
 import {ErrorService} from "../../shared/services/error.service";
@@ -22,23 +18,21 @@ import AuthenticationRequest = Api.UserApi.AuthenticationRequest;
   styleUrls: ["./login-page.component.scss"]
 })
 export class LoginPage implements OnInit, OnDestroy {
-  error$?: Observable<ErrorModel | null>;
 
   constructor(private authService: AuthenticationService,
               private mainNavbarHandler: MainNavbarHandler,
-              private errorService: ErrorService,
+              protected errorService: ErrorService,
               private alertService: AlertService) {
 
   }
 
   ngOnInit(): void {
-    this.error$ = this.errorService.getError();
     this.mainNavbarHandler.hideMainNavbar();
   }
 
   ngOnDestroy(): void {
     this.mainNavbarHandler.showMainNavbar();
-    this.errorService.clearErrors();
+    this.errorService.clearError();
     this.alertService.clearAlert();
   }
 
