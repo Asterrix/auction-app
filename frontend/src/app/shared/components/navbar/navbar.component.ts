@@ -2,7 +2,7 @@ import {CommonModule} from "@angular/common";
 import {Component, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
 import {MainNavbarComponent} from "./components/main-navbar/main-navbar.component";
-import {MainNavbarService} from "./components/main-navbar/services/main-navbar.service";
+import {MainNavbarHandler} from "./components/main-navbar/services/main-navbar-handler.service";
 import {MinimalistMainNavbarComponent} from "./components/minimalist-main-navbar/minimalist-main-navbar.component";
 import {NavigationTrailComponent} from "./components/navigation-trail/navigation-trail.component";
 import {NavigationTrailService} from "./components/navigation-trail/services/navigation-trail.service";
@@ -17,13 +17,11 @@ import {TopBarComponent} from "./components/top-bar/top-bar.component";
 })
 export class NavbarComponent implements OnInit {
   displayTrail$: Observable<boolean> | undefined;
-  displayMinimalNavbar$: Observable<boolean> | undefined;
 
-  constructor(private trailService: NavigationTrailService, private mainNavbarService: MainNavbarService) {
+  constructor(private trailService: NavigationTrailService, protected mainNavbarHandler: MainNavbarHandler) {
   }
 
   ngOnInit(): void {
     this.displayTrail$ = this.trailService.getDisplayTrail();
-    this.displayMinimalNavbar$ = this.mainNavbarService.getDisplayMinimalNavbar();
   }
 }

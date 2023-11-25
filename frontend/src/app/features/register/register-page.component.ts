@@ -2,7 +2,7 @@ import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {FormGroup} from "@angular/forms";
 import {Observable} from "rxjs";
-import {MainNavbarService} from "../../shared/components/navbar/components/main-navbar/services/main-navbar.service";
+import {MainNavbarHandler} from "../../shared/components/navbar/components/main-navbar/services/main-navbar-handler.service";
 import {Constant} from "../../shared/models/enums/constant";
 import {ErrorModel} from "../../shared/models/errorModel";
 import {Api} from "../../shared/services/api.service";
@@ -21,12 +21,12 @@ import RegisterRequest = Api.UserApi.RegisterRequest;
 export class RegisterPage implements OnInit, OnDestroy {
   error$?: Observable<ErrorModel | null>;
 
-  constructor(private registerService: RegisterService, private navbarService: MainNavbarService, private errorService: ErrorService) {
+  constructor(private registerService: RegisterService, private mainNavbarHandler: MainNavbarHandler, private errorService: ErrorService) {
   }
 
   ngOnInit(): void {
     this.error$ = this.errorService.getError();
-    this.navbarService.displayMinimalNavbar(true);
+    this.mainNavbarHandler.hideMainNavbar();
   }
 
   onSubmit(registerForm: FormGroup): void {
@@ -36,7 +36,7 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.errorService.clearErrors();
-    this.navbarService.displayMinimalNavbar(false);
+    this.mainNavbarHandler.showMainNavbar();
   }
 
   private createRegisterRequest(registerForm: FormGroup): Required<RegisterRequest> {
