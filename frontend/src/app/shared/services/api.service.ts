@@ -80,7 +80,12 @@ export namespace Api {
 
     export namespace PostMethods {
       export function authenticate(httpClient: HttpClient, auth: Required<AuthenticationRequest>): Observable<HttpResponse<void>> {
-        const body = {email: auth.email, password: auth.password};
+        const body = {
+          email: auth.email,
+          password: auth.password,
+          rememberMe: auth.rememberMe
+        };
+
         return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}`, body, {observe: "response"});
       }
 

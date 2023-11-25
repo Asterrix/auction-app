@@ -26,17 +26,9 @@ export class AuthenticationService {
   }
 
   static retrieveUserToken(): string {
-    const token: string = TokenManager.retrieveTokenFromSessionStorage();
-    if (token !== Constant.EmptyValue) {
-      return token;
-    }
+    const token: string = TokenManager.retrieveTokenFromLocalStorage();
 
-    const localToken: string = TokenManager.retrieveTokenFromLocalStorage();
-    if (localToken !== Constant.EmptyValue) {
-      return localToken;
-    }
-
-    return Constant.EmptyValue;
+    return token !== Constant.EmptyValue ? token : Constant.EmptyValue;
   }
 
   static isAuthenticated(): boolean {
@@ -45,23 +37,14 @@ export class AuthenticationService {
   }
 
   private static getCurrentUser(): Constant | UserDetails {
-    const sessionToken: string = TokenManager.retrieveTokenFromSessionStorage();
-    const sessionTokenFromStorage: Constant | UserDetails = this.getUserDetailsFromToken(sessionToken);
-    if (sessionTokenFromStorage !== Constant.EmptyValue) return sessionTokenFromStorage;
-
-
     const localToken: string = TokenManager.retrieveTokenFromLocalStorage();
-    const localTokenFromStorage: Constant | UserDetails = this.getUserDetailsFromToken(localToken);
-    if (localTokenFromStorage !== Constant.EmptyValue) return localTokenFromStorage;
+    const userDetails: Constant | UserDetails = this.getUserDetailsFromToken(localToken);
 
-    return Constant.EmptyValue;
+    return userDetails !== Constant.EmptyValue ? userDetails : Constant.EmptyValue;
   }
 
   private static getUserDetailsFromToken(token: string): Constant | UserDetails {
-    if (token !== Constant.EmptyValue) {
-      return TokenManager.decodeToken(token);
-    }
-    return Constant.EmptyValue;
+    return token !== Constant.EmptyValue ? TokenManager.decodeToken(token) : Constant.EmptyValue;
   }
 
   userObservable(): Observable<Constant | UserDetails> {
@@ -84,7 +67,7 @@ export class AuthenticationService {
         (response: HttpResponse<void>): void => {
           const token: string = TokenManager.retrieveTokenFromHeader(response);
           if (token !== Constant.EmptyValue) {
-            TokenManager.determineLocationToStoreToken(auth.rememberMe, token);
+            TokenManager.storeTokenToLocalStorage(token);
             this.resetUserCredentials();
             this.navigateToHomeRoute();
           }

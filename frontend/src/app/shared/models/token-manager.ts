@@ -13,16 +13,8 @@ export class TokenManager {
     return httpResponse.headers.get(Token.Header) ?? Constant.EmptyValue;
   }
 
-  static retrieveTokenFromSessionStorage(): string {
-    return window.sessionStorage.getItem(Token.Key) ?? Constant.EmptyValue;
-  }
-
   static retrieveTokenFromLocalStorage(): string {
     return window.localStorage.getItem(Token.Key) ?? Constant.EmptyValue;
-  }
-
-  static storeTokenToSessionStorage(token: string): void {
-    window.sessionStorage.setItem(Token.Key, JSON.stringify(token));
   }
 
   static storeTokenToLocalStorage(token: string): void {
@@ -30,17 +22,11 @@ export class TokenManager {
   }
 
   static removeToken(): void {
-    window.sessionStorage.removeItem(Token.Key);
     window.localStorage.removeItem(Token.Key);
   }
 
   static decodeToken(sessionToken: string): UserDetails {
     return jwtDecode(sessionToken);
-  }
-
-  static determineLocationToStoreToken(rememberMe: boolean, token: string): void {
-    if (rememberMe) TokenManager.storeTokenToLocalStorage(token);
-    else TokenManager.storeTokenToSessionStorage(token);
   }
 
   // Remove `"` characters from the token
