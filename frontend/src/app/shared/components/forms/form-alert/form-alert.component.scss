@@ -11,23 +11,18 @@
 }
 
 // Use different colors for text as to avoid low contrast
-.alert-low-severity {
+.alert-warning-level-two {
   @include alert;
   background-color: $low-alert;
 }
 
-.alert-normal-severity {
-  @include alert;
-  background-color: $alert;
-}
-
-.alert-high-severity {
+.alert-warning-level-one {
   @include alert;
   background-color: $error;
   color: white;
 }
 
-.alert-success-info {
+.alert-info {
   @include alert;
   background-color: #10B981;
 }

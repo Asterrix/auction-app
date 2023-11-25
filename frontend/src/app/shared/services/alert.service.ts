@@ -1,20 +1,30 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
+import {computed, Injectable, signal} from "@angular/core";
 import {Constant} from "../models/enums/constant";
 
-@Injectable({providedIn: "root"})
+export enum AlertType {
+  None,
+  Info,
+  WarningLevelOne,
+  WarningLevelTwo,
+}
+
+export interface Alert {
+  message: string;
+  type: AlertType;
+}
+
+@Injectable({
+  providedIn: "root"
+})
 export class AlertService {
-  private alert = new BehaviorSubject<string>(Constant.EmptyValue);
+  private alertSignal = signal<Alert>({message: Constant.EmptyValue, type: AlertType.None});
+  alert = computed(this.alertSignal);
 
-  getAlert(): Observable<string> {
-    return this.alert.asObservable();
-  }
-
-  setAlert(message: string): void {
-    this.alert.next(message);
+  setAlert(value: Alert): void {
+    this.alertSignal.set(value);
   }
 
   clearAlert(): void {
-    this.alert.next(Constant.EmptyValue);
+    this.alertSignal.set({message: Constant.EmptyValue, type: AlertType.None});
   }
 }

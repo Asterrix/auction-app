@@ -1,10 +1,8 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {FormGroup} from "@angular/forms";
-import {Observable} from "rxjs";
 import {MainNavbarHandler} from "../../shared/components/navbar/components/main-navbar/services/main-navbar-handler.service";
 import {Constant} from "../../shared/models/enums/constant";
-import {ErrorModel} from "../../shared/models/errorModel";
 import {Api} from "../../shared/services/api.service";
 import {ErrorService} from "../../shared/services/error.service";
 import {RegisterService} from "../../shared/services/user/register.service";
@@ -19,13 +17,10 @@ import RegisterRequest = Api.UserApi.RegisterRequest;
   styleUrls: ["./register-page.component.scss"]
 })
 export class RegisterPage implements OnInit, OnDestroy {
-  error$?: Observable<ErrorModel | null>;
-
-  constructor(private registerService: RegisterService, private mainNavbarHandler: MainNavbarHandler, private errorService: ErrorService) {
+  constructor(private registerService: RegisterService, private mainNavbarHandler: MainNavbarHandler, protected errorService: ErrorService) {
   }
 
   ngOnInit(): void {
-    this.error$ = this.errorService.getError();
     this.mainNavbarHandler.hideMainNavbar();
   }
 
@@ -35,7 +30,7 @@ export class RegisterPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.errorService.clearErrors();
+    this.errorService.clearError();
     this.mainNavbarHandler.showMainNavbar();
   }
 
