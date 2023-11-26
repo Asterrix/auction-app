@@ -66,7 +66,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private void checkIfEmailIsInUse(final String email) {
-        final long emailCount = userRepository.countByEmail(email);
+        final long emailCount = userRepository.countByEmailAllIgnoreCase(email);
         if (emailCount > 0) {
             throw new ValidationException("Email address is already in use. Try logging in.");
         }
