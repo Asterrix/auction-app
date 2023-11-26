@@ -10,6 +10,7 @@ public class ValidationException extends RuntimeException {
     private final ErrorResponse errorResponse;
 
     public ValidationException(final String message) {
+        super(message);
         final ErrorResponseDetails errorResponseDetails = new ErrorResponseDetails(TYPE, REASON);
         errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), message, HttpStatus.BAD_REQUEST, errorResponseDetails);
     }
