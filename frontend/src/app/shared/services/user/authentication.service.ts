@@ -59,7 +59,7 @@ export class AuthenticationService {
     this.apiService.authenticateUser(auth)
       .pipe(
         catchError((e) => {
-          this.errorService.setError({message: e.error.error.message, type: AlertType.WarningLevelOne});
+          this.errorService.setError({message: e.error.message, type: AlertType.WarningLevelOne});
           throw e;
         })
       )
