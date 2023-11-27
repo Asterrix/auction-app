@@ -38,21 +38,25 @@ public class Item {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<UserItemBid> userItemBids = new ArrayList<>();
+
 
     public Item() {
     }
 
-    public Item(final Integer id,
-                final String name,
+    public Item(final String name,
                 final String description,
                 final BigDecimal initialPrice,
                 final LocalDate startDate,
                 final LocalDate endDate,
                 final List<ItemImage> itemImages,
-                final Category category) {
-        this.id = id;
+                final Category category,
+                final User owner) {
         this.name = name;
         this.description = description;
         this.initialPrice = initialPrice;
@@ -60,6 +64,7 @@ public class Item {
         this.endDate = endDate;
         this.itemImages = itemImages;
         this.category = category;
+        this.owner = owner;
     }
 
     public Integer getId() {
@@ -122,16 +127,28 @@ public class Item {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(final Category category) {
         this.category = category;
     }
 
-    public List<UserItemBid> getUserItemBids() {
-        return userItemBids;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUserItemBids(final List<UserItemBid> userItemBids) {
-        this.userItemBids = userItemBids;
+    public void setOwner(final User owner) {
+        this.owner = owner;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "name = " + name + ", " +
+                "description = " + description + ", " +
+                "initialPrice = " + initialPrice + ", " +
+                "startDate = " + startDate + ", " +
+                "endDate = " + endDate + ", " +
+                "category = " + category + ", " +
+                "owner = " + owner + ")";
+    }
 }
