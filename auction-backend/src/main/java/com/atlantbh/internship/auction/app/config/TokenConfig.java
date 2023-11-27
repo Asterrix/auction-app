@@ -18,31 +18,12 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-
 @Configuration
 public class TokenConfig {
-    public static final String ISSUER = "Auction Application";
-    private static final Byte PERSISTENT_EXPIRATION_TIME = 7;
-    private static final Byte REGULAR_EXPIRATION_TIME = 1;
-    private static final TemporalUnit TEMPORAL_UNIT = ChronoUnit.DAYS;
     private final RSAKeyProperties rsaKeyProperties;
 
     public TokenConfig(final RSAKeyProperties rsaKeyProperties) {
         this.rsaKeyProperties = rsaKeyProperties;
-    }
-
-    public static Instant issuedAt() {
-        return Instant.now();
-    }
-
-    public static Instant expirationDate(final Instant issuedAtTime, final Boolean rememberMe) {
-        if (rememberMe) {
-            return issuedAtTime.plus(PERSISTENT_EXPIRATION_TIME, TEMPORAL_UNIT);
-        }
-        return issuedAtTime.plus(REGULAR_EXPIRATION_TIME, TEMPORAL_UNIT);
     }
 
     @Bean

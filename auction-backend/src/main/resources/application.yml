@@ -12,6 +12,13 @@ app-properties:
   client-route: http://localhost:4200
   api-version: /api/v1
 
+token:
+  issuer: "Auction Application"
+  expiration:
+    regular: 1
+    persistent: 7
+  temporal-unit: DAYS
+
 rsa:
   public-key: 'classpath:cert/key.pub'
   private-key: 'classpath:cert/key.priv'
