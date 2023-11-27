@@ -49,7 +49,6 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String generateToken(final UserAuthentication user, final Boolean rememberMe) {
         final String userPrincipal = user.getPrincipal().toString();
-
         final HashMap<String, Object> userClaims = user.getClaims();
         final Instant issuedAt = issueToken();
         final Instant expirationDate = expirationDate(issuedAt, rememberMe);
@@ -63,7 +62,6 @@ public class TokenServiceImpl implements TokenService {
                 .build();
 
         final String tokenValue = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-
         saveTokenToDb(tokenValue, rememberMe, expirationDate);
 
         return tokenValue;
