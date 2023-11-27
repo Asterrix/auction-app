@@ -12,4 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer>, JpaSpecificationExecutor<Item> {
     Optional<Item> findFirstByEndDateGreaterThanEqualOrderByIdAsc(@NonNull LocalDate endDate);
+
+    Optional<Item> findByIdAndEndDateLessThanEqual(Integer id, LocalDate endDate);
 }

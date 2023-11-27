@@ -27,6 +27,12 @@ public class UserItemBid {
     public UserItemBid() {
     }
 
+    public UserItemBid(final User user, final Item item, final BigDecimal amount) {
+        this.user = user;
+        this.item = item;
+        this.amount = amount;
+    }
+
     public Integer getId() {
         return id;
     }

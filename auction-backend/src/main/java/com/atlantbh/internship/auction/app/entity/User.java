@@ -1,11 +1,15 @@
 package com.atlantbh.internship.auction.app.entity;
 
+import com.atlantbh.internship.auction.app.service.validator.order.FirstOrder;
+import com.atlantbh.internship.auction.app.service.validator.order.SecondOrder;
+import com.atlantbh.internship.auction.app.service.validator.order.ThirdOrder;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.GroupSequence;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -48,6 +52,9 @@ public class User {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = false;
 
+    @OneToMany(mappedBy = "owner")
+    private final List<Item> items = new ArrayList<>();
+
     public User() {
     }
 
@@ -67,6 +74,10 @@ public class User {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(final Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -123,6 +134,10 @@ public class User {
 
     public void setActive(final Boolean active) {
         isActive = active;
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 
 }

@@ -26,6 +26,10 @@ public class PagePrivacyManager {
     protected static AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry privatePages(
             final AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth
     ) {
-        return auth.anyRequest().authenticated();
+        auth.requestMatchers("api/v1/bids").hasRole("User");
+
+        auth.anyRequest().authenticated();
+
+        return auth;
     }
 }

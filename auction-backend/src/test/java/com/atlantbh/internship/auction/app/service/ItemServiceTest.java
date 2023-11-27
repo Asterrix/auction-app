@@ -1,9 +1,10 @@
 package com.atlantbh.internship.auction.app.service;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
-import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
+import com.atlantbh.internship.auction.app.builder.ItemBuilder;
+import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
@@ -45,16 +46,18 @@ class ItemServiceTest {
 
     @Test
     void getItemById_ShouldReturnItem() {
-        final Item item = new Item(
-                1,
-                "Item1",
-                "Desc",
-                new BigDecimal("40.00"),
-                LocalDate.MIN,
-                LocalDate.MAX,
-                List.of(),
-                new Category()
-        );
+        final Item item = new ItemBuilder()
+                .setName("Item1")
+                .setDescription("Desc")
+                .setInitialPrice(new BigDecimal("40.00"))
+                .setStartDate(LocalDate.MIN)
+                .setEndDate(LocalDate.MAX)
+                .setItemImages(List.of())
+                .setCategory(new Category())
+                .setOwner(new User())
+                .build();
+
+        item.setId(1);
         final Optional<Item> optionalItem = Optional.of(item);
 
         when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
@@ -83,16 +86,8 @@ class ItemServiceTest {
 
     @Test
     void getFeaturedItem_ShouldThrowException_WhenItemDoesntContainAnyImages() {
-        final Item item = new Item(
-                1,
-                "Item1",
-                "Desc",
-                BigDecimal.ZERO,
-                LocalDate.MIN,
-                LocalDate.MAX,
-                List.of(),
-                new Category()
-        );
+        final Item item = new ItemBuilder().setName("Item1").setDescription("Desc").setInitialPrice(BigDecimal.ZERO).setStartDate(LocalDate.MIN).setEndDate(LocalDate.MAX).setItemImages(List.of()).setCategory(new Category()).setOwner(new User()).build();
+        item.setId(1);
 
         when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class)))
                 .thenReturn(Optional.of(item));
