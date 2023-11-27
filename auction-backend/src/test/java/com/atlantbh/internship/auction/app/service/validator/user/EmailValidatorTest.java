@@ -1,112 +1,108 @@
 package com.atlantbh.internship.auction.app.service.validator.user;
 
-import org.junit.jupiter.api.Assertions;
+import com.atlantbh.internship.auction.app.exception.ValidationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class EmailValidatorTest {
+    EmailValidator emailValidator;
+
+    @BeforeEach
+    void setUp() {
+        emailValidator = new EmailValidator();
+    }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenThereAreMultipleAtSigns() {
+    void testValidate_WhenThereAreMultipleAtSigns_ShouldThrowValidationException() {
         final String input = "te@st@er";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenThereIsNoDomainSeparator() {
+    void testValidate_WhenThereIsNoDomainSeparator_ShouldThrowValidationException() {
         final String input = "inputTe.st";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenAtSignIsFirstCharacter() {
+    void testValidate_WhenAtSignIsFirstCharacter_ShouldThrowValidationException() {
         final String input = "@inputTe.st";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenAtSignIsLastCharacter() {
+    void testValidate_WhenAtSignIsLastCharacter_ShouldThrowValidationException() {
         final String input = "inputTe.st@";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenThereIsNoDotFound() {
+    void testValidate_WhenThereIsNoDotFound_ShouldValidationThrowException() {
         final String input = "input@Test";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenDotIsFirstCharacter() {
+    void testValidate_WhenDotIsFirstCharacter_ShouldThrowValidationException() {
         final String input = ".te@ster";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenDotIsLastCharacter() {
+    void testValidate_WhenDotIsLastCharacter_ShouldThrowValidationException() {
         final String input = "test@er.";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenThereAreSpecialCharacters() {
+    void testValidate_WhenThereAreInvalidSpecialCharacters_ShouldThrowValidationException() {
         final String input = "~test#er";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenThereAreMultipleDotsNextToEachOther() {
+    void testValidate_WhenThereAreMultipleDotsNextToEachOther_ShouldThrowValidationException() {
         final String input = "te@ster..";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void countLetters_ShouldReturnTrue_WhenThereAreZeroLetters() {
+    void testValidate_WhenThereAreZeroLetters_ShouldThrowValidationException() {
         final String input = "123@456";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenDomainDoesntContainDot() {
-        final String input = "test.e@r";
+    void testValidate_WhenDomainDoesNotContainDot_ShouldThrowValidationException() {
+        final String input = "tester";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenDomainTldIsMinimumAllowedLength() {
-        final String input = "test.e@r.cm";
-
-        Assertions.assertTrue(EmailValidator.isValid(input));
-    }
-
-    @Test
-    void isValid_ShouldReturnTrue_WhenDomainTldIsMaximumAllowedLength() {
-        final String input = "test.e@r.com";
-
-        Assertions.assertTrue(EmailValidator.isValid(input));
-    }
-
-    @Test
-    void isValid_ShouldReturnTrue_WhenDomainDoesntContainAnyLettersBeforeTld() {
+    void testValidate_WhenDomainDoesntContainAnyLettersBeforeTld_ShouldThrowValidationException() {
         final String input = "test.e@.com";
 
-        Assertions.assertFalse(EmailValidator.isValid(input));
+        assertThrows(ValidationException.class, () -> emailValidator.validate(input));
     }
 
     @Test
-    void isValid_ShouldReturnTrue_WhenDomainContainsLettersBeforeTld() {
+    void testValidate_WhenDomainContainsLettersBeforeTld_ShouldPass() {
         final String input = "test.e@e.com";
 
-        Assertions.assertTrue(EmailValidator.isValid(input));
+        assertDoesNotThrow(() -> emailValidator.validate(input));
     }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * DTO for {@link User}
  */
-public record UserRegistrationDto(
+public record RegistrationRequest(
         String firstName,
         String lastName,
         String email,

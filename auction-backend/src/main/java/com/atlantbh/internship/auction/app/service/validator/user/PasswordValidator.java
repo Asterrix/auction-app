@@ -1,5 +1,8 @@
 package com.atlantbh.internship.auction.app.service.validator.user;
 
+import com.atlantbh.internship.auction.app.exception.ValidationException;
+import com.atlantbh.internship.auction.app.service.validator.Validator;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,13 +14,16 @@ Criteria:
 - Contains at least one digit (0-9).
 - Contains at least one special character (#$@!%&*?).
 * */
-public class PasswordValidator {
-    public static final String Message = "Password must contain at least one lowercase and uppercase letter, one number and one special character.";
+public class PasswordValidator implements Validator<String> {
+    public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]+";
 
-    public static boolean isValid(final String password) {
-        var reg = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]+");
+    @Override
+    public void validate(final String password) {
+        final Pattern reg = Pattern.compile(PASSWORD_REGEX);
 
-        Matcher matcher = reg.matcher(password);
-        return matcher.find();
+        final Matcher matcher = reg.matcher(password);
+        if (!matcher.find()) {
+            throw new ValidationException("Password must contain at least one lowercase and uppercase letter, one number and one special character.");
+        }
     }
 }
