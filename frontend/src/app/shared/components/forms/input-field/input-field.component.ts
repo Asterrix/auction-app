@@ -10,7 +10,7 @@ import {FormGroup, ReactiveFormsModule} from "@angular/forms";
   styleUrls: ["./input-field.component.scss"]
 })
 export class InputFieldComponent {
-  @Input({required: true}) label!: string;
+  @Input({required: false}) label!: string | undefined;
   @Input({required: true}) type!: string;
   @Input({required: true}) placeholder!: string;
   @Input({required: true}) formFieldGroup!: FormGroup;

@@ -1,0 +1,23 @@
+@import "typography";
+
+.bid-notification {
+  display: flex;
+  margin-top: 0.8rem;
+  padding: 1.2rem 0;
+  @extend .font-semi-bold;
+}
+
+.notification {
+  align-items: center;
+  display: flex;
+}
+
+.success {
+  background-color: #F1F3EE;
+  color: #4F7423;
+}
+
+.alert {
+  background-color: #F5F2E6;
+  color: $accent;
+}
