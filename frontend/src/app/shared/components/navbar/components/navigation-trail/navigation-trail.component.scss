@@ -2,8 +2,9 @@
 @import "typography";
 
 .navigation-trail {
+  background-color: $gray-100;
   display: flex;
-  margin-top: 3.2rem;
+  padding: 1.2rem;
 
   &__layout {
     display: flex;

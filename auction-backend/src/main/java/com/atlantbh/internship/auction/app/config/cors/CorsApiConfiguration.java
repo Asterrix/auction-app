@@ -25,6 +25,7 @@ public class CorsApiConfiguration {
         categoryCorsConfig();
         registrationCorsConfig();
         authenticationCorsConfig();
+        biddingCorsConfig();
         return source;
     }
 
@@ -81,5 +82,15 @@ public class CorsApiConfiguration {
                 .build();
 
         registerCorsConfig("/authentication/logout", logoutConfig);
+    }
+
+    private void biddingCorsConfig(){
+        final CorsConfiguration bidConfig = new CorsConfigurationBuilder()
+                .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
+                .setAllowedMethods(List.of(HttpMethod.POST))
+                .setAllowedHeaders(List.of("*"))
+                .build();
+
+        registerCorsConfig("/bids", bidConfig);
     }
 }
