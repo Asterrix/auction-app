@@ -40,15 +40,15 @@ public class RSAKeyProperties {
                 .buildClient();
         final KeyVaultSecret retrievedSecret = secretClient.getSecret(secret);
 
-        var key = retrievedSecret.getValue()
+        final String key = retrievedSecret.getValue()
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
                 .replaceAll("\\s", "");
 
-        byte[] privateKeyBytes = Base64.getDecoder().decode(key);
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+        final byte[] privateKeyBytes = Base64.getDecoder().decode(key);
+        final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+        final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        final PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
 
         return (RSAPrivateKey) privateKey;
     }
