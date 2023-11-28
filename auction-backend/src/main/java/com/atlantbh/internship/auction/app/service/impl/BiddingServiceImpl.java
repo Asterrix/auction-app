@@ -75,6 +75,10 @@ public class BiddingServiceImpl implements BiddingService {
 
     @Override
     public void makeAnOfferOnItem(final BidRequest bidRequest) {
+        if (bidRequest.amount() == null || bidRequest.itemId() == null || bidRequest.bidderId() == null) {
+            throw new ValidationException("Bid request cannot be processed because the request doesnt contain valid information.");
+        }
+
         validateDecimalScale(bidRequest.amount());
         validateFractionalPart(bidRequest.amount());
 
@@ -101,12 +105,12 @@ public class BiddingServiceImpl implements BiddingService {
             final BigDecimal initialPrice = item.getInitialPrice();
 
             if (currentOffer.compareTo(initialPrice) < 0) {
-                throw new ValidationException("The bid must match or exceed the starting price.");
+                throw new ValidationException("Initial bid must match or exceed the starting price.");
             }
         } else {
             final BigDecimal highestBid = itemBidList.getFirst().getAmount();
 
-            if (currentOffer.compareTo(highestBid) < 0) {
+            if (currentOffer.compareTo(highestBid) <= 0) {
                 throw new ValidationException("Your bid must be greater than the current one.");
             }
         }

@@ -1,11 +1,11 @@
 import {inject} from "@angular/core";
 import {CanActivateFn, Router} from "@angular/router";
-import {Token} from "../models/token-manager";
+import {AuthenticationService} from "../services/user/authentication.service";
 
 export const userAlreadyAuthenticatedGuard: CanActivateFn = (route, state) => {
   const router: Router = inject(Router);
 
-  if (sessionStorage.getItem(Token.Key)) {
+  if (AuthenticationService.isAuthenticated()) {
     router.navigate(["/home"]).then(null);
     return false;
   }

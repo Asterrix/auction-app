@@ -12,27 +12,21 @@
         <shop-item-showcase [activeImage]="activeImage" [item$]="item$"/>
         <div class="shop-item__description__layout">
           <shop-item-summary [item$]="item$"/>
+
           <form (ngSubmit)="onSubmit()" class="form">
+            <ng-container *ngIf="item$ | async as item">
             <form-input-field
               [formFieldGroup]="bidForm"
               formField="offer"
-              placeholder="Enter $X or higher"
+              placeholder="Enter ${{item.biddingInformation.highestBid !== 0 ? item.biddingInformation.highestBid : item.item.initialPrice}} or higher"
               type="text"/>
 
-            <button class="btn" type="submit">Place bid
-              <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_2_14401)">
-                  <path d="M9.99984 6L8.58984 7.41L13.1698 12L8.58984 16.59L9.99984 18L15.9998 12L9.99984 6Z"
-                        fill="#252525"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_2_14401">
-                    <rect fill="white" height="24" width="24"/>
-                  </clipPath>
-                </defs>
-              </svg>
+            <button class="btn" type="submit">
+              Place bid
+              <img alt="Go right icon" src="assets/icons/right_pointer.svg"/>
             </button>
 
+            </ng-container>
           </form>
           <shop-item-description [item$]="item$"/>
         </div>
