@@ -1,6 +1,5 @@
 package com.atlantbh.internship.auction.app.service;
 
-import com.atlantbh.internship.auction.app.builder.ItemBuilder;
 import com.atlantbh.internship.auction.app.dto.bid.BidRequest;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
@@ -171,7 +170,7 @@ class BiddingServiceTest {
     @DisplayName("Bidder does not exist")
     void makeAnOfferOnItem_whenBidderDoesNotExist_throwValidationException() {
         when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
-                .thenReturn(Optional.of(new ItemBuilder().build()));
+                .thenReturn(Optional.of(new Item()));
 
         when(userRepository.findById(any(Integer.class))).thenReturn(Optional.empty());
 
@@ -185,9 +184,8 @@ class BiddingServiceTest {
     @DisplayName("The user is attempting to bid on his own item")
     void makeAnOfferOnItem_whenBidderTriesToBidOnHisOwnItem_throwValidationException() {
         final User user = new User();
-        final Item item = new ItemBuilder()
-                .setOwner(user)
-                .build();
+        final Item item = new Item();
+        item.setOwner(user);
 
         when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
                 .thenReturn(Optional.of(item));
@@ -204,11 +202,10 @@ class BiddingServiceTest {
     @Test
     @DisplayName("The offer is lower than the starting price")
     void makeAnOfferOnItem_whenBidderMakesAnOfferThatIsLessThanInitialPrice_throwValidationException() {
-        final Item item = new ItemBuilder()
-                .setInitialPrice(new BigDecimal("80"))
-                .setOwner(new User())
-                .build();
+        final Item item = new Item();
         item.setId(20);
+        item.setOwner(new User());
+        item.setInitialPrice(new BigDecimal("80"));
 
         final BidRequest bid = new BidRequest(72, 390, new BigDecimal("70"));
 
@@ -233,13 +230,10 @@ class BiddingServiceTest {
     @DisplayName("The offer matches the initialPrice")
     void makeAnOfferOnItem_whenThereAreNoOffersAndBidderMakesMatchingOfferForInitialPrice_continueExecution() {
         final BigDecimal price = new BigDecimal("50.50");
-
-        final Item item = new ItemBuilder()
-                .setInitialPrice(price)
-                .setOwner(new User())
-                .build();
+        final Item item = new Item();
         item.setId(20);
-
+        item.setOwner(new User());
+        item.setInitialPrice(price);
         final User user = new User();
         final BidRequest bid = new BidRequest(72, 390, price);
 
@@ -260,11 +254,10 @@ class BiddingServiceTest {
     @Test
     @DisplayName("Offer is less than the current highest bid")
     void makeAnOfferOnItem_whenBidderMakesAnOfferThatIsLessThanCurrentHighestBid_throwValidationException() {
-        final Item item = new ItemBuilder()
-                .setInitialPrice(new BigDecimal("20"))
-                .setOwner(new User())
-                .build();
+        final Item item = new Item();
         item.setId(20);
+        item.setOwner(new User());
+        item.setInitialPrice(new BigDecimal("20"));
         final BidRequest request = new BidRequest(72, 390, new BigDecimal("50"));
         final List<UserItemBid> itemBids = List.of(
                 new UserItemBid(new User(), item, new BigDecimal("80")),
