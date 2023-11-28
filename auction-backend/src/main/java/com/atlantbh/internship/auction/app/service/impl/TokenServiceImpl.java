@@ -7,7 +7,7 @@ import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.repository.TokenRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
 import com.atlantbh.internship.auction.app.service.TokenService;
-import com.atlantbh.internship.auction.app.service.provider.UserAuthentication;
+import com.atlantbh.internship.auction.app.service.auth.UserAuthentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;

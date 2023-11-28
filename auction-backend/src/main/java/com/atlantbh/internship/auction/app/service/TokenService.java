@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.service;
 
 import com.atlantbh.internship.auction.app.entity.Token;
-import com.atlantbh.internship.auction.app.service.provider.UserAuthentication;
+import com.atlantbh.internship.auction.app.service.auth.UserAuthentication;
 
 import java.time.Instant;
 import java.util.Optional;

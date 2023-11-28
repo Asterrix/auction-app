@@ -4,7 +4,7 @@ import com.atlantbh.internship.auction.app.entity.Token;
 import com.atlantbh.internship.auction.app.exception.token.TokenExpiredException;
 import com.atlantbh.internship.auction.app.exception.token.TokenNotFoundException;
 import com.atlantbh.internship.auction.app.service.TokenService;
-import com.atlantbh.internship.auction.app.service.impl.LogoutService;
+import com.atlantbh.internship.auction.app.service.auth.LogoutService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

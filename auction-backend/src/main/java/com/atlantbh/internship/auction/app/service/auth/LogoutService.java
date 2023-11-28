@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.impl;
+package com.atlantbh.internship.auction.app.service.auth;
 
 import com.atlantbh.internship.auction.app.service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;

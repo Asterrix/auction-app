@@ -1,8 +1,9 @@
-package com.atlantbh.internship.auction.app.service.validator;
+package com.atlantbh.internship.auction.app.config;
 
 import com.atlantbh.internship.auction.app.dto.user.RegistrationRequest;
-import com.atlantbh.internship.auction.app.service.validator.user.EmailValidator;
-import com.atlantbh.internship.auction.app.service.validator.user.PasswordValidator;
+import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
+import com.atlantbh.internship.auction.app.service.validation.EmailValidator;
+import com.atlantbh.internship.auction.app.service.validation.PasswordValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
