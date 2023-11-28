@@ -11,6 +11,11 @@ $cube-shape: 8rem;
 
 .table-data-row {
   @include table.table-row;
+  transition: all 300ms ease-out;
+
+  &:hover {
+    background-color: $gray-100;
+  }
 }
 
 .cell {
@@ -49,5 +54,3 @@ $cube-shape: 8rem;
     color: $primary;
   }
 }
-
-
