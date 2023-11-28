@@ -4,7 +4,7 @@ import com.atlantbh.internship.auction.app.config.constant.AuctionAppProperties;
 import com.atlantbh.internship.auction.app.config.cors.CorsApiConfiguration;
 import com.atlantbh.internship.auction.app.service.TokenService;
 import com.atlantbh.internship.auction.app.service.filter.TokenFilter;
-import com.atlantbh.internship.auction.app.service.impl.LogoutService;
+import com.atlantbh.internship.auction.app.service.auth.LogoutService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
