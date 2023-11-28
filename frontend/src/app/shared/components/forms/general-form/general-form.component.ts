@@ -1,7 +1,7 @@
 import {CommonModule} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {AlertService} from "../../../services/alert.service";
+import {AlertService, AlertType} from "../../../services/alert.service";
 import {ErrorService} from "../../../services/error.service";
 import {PrimaryButtonComponent} from "../../buttons/primary-button/primary-button.component";
 import {CheckboxFieldComponent} from "../checkbox-field/checkbox-field.component";
@@ -26,4 +26,6 @@ export class GeneralFormComponent {
   onSubmit(): void {
     this.submitForm.emit();
   }
+
+  protected readonly AlertType = AlertType;
 }
