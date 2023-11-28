@@ -47,13 +47,10 @@
   &:hover {
     background-color: $primary;
     color: $white;
+    cursor: pointer;
 
-    svg {
-      g {
-        path {
-          fill: $white;
-        }
-      }
+    img {
+      filter: brightness(0) invert(1);
     }
   }
 }
