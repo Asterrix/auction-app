@@ -1,10 +1,10 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
-import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.entity.UserItemBid;
@@ -23,10 +23,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.atlantbh.internship.auction.app.config.FeaturedItemConfig.FEATURED_ITEM_END_DATE_THRESHOLD;
 import static com.atlantbh.internship.auction.app.mapper.ItemMapper.convertToFeaturedDto;
 import static com.atlantbh.internship.auction.app.mapper.ItemMapper.convertToSummaryDto;
 import static com.atlantbh.internship.auction.app.service.specification.ItemSpecification.*;
@@ -100,8 +103,10 @@ public final class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemFeaturedDto getFeaturedItem() {
-        final LocalDate endDateThreshold = LocalDate.now().plusDays(1);
-        final Optional<Item> itemInfo = itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(endDateThreshold);
+        final LocalDateTime endTimeThreshold = LocalDateTime.of(
+                LocalDate.now().plusDays(FEATURED_ITEM_END_DATE_THRESHOLD),
+                LocalTime.now());
+        final Optional<Item> itemInfo = itemRepository.findFirstByEndTimeGreaterThanEqualOrderByIdAsc(endTimeThreshold);
 
         if (itemInfo.isEmpty()) {
             throw new NoSuchElementException("Featured item was not found.");

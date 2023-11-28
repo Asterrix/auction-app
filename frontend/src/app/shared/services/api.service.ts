@@ -213,8 +213,8 @@ export namespace Api {
       }
 
       enum SortBy {
-        StartDate = "startDate",
-        EndDate = "endDate"
+        StartTime = "startTime",
+        EndTime = "endTime"
       }
 
       enum SortByDirection {
@@ -234,7 +234,7 @@ export namespace Api {
       export function getListOfNewestItems(httpClient: HttpClient, pagination: IPagination): Observable<Page<ItemSummary>> {
 
         const params: Partial<ItemParams> = {
-          sort: `${SortBy.StartDate},${SortByDirection.DESC}`
+          sort: `${SortBy.StartTime},${SortByDirection.DESC}`
         };
 
         return getListOfItems(httpClient, params, pagination);
@@ -243,7 +243,7 @@ export namespace Api {
       export function getListOfLastChanceItems(httpClient: HttpClient, pagination: IPagination): Observable<Page<ItemSummary>> {
 
         const params: Partial<ItemParams> = {
-          sort: `${SortBy.EndDate},${SortByDirection.DESC}`
+          sort: `${SortBy.EndTime},${SortByDirection.DESC}`
         };
 
         return getListOfItems(httpClient, params, pagination);

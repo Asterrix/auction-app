@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,8 +27,8 @@ class ItemMapperTest {
                 "Item",
                 "Desc",
                 new BigDecimal("0"),
-                LocalDate.EPOCH,
-                LocalDate.EPOCH,
+                LocalDateTime.MIN,
+                LocalDateTime.MAX,
                 List.of(),
                 new Category(1, "Category"),
                 new User());

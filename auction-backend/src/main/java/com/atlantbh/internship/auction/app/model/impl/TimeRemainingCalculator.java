@@ -2,7 +2,7 @@ package com.atlantbh.internship.auction.app.model.impl;
 
 import com.atlantbh.internship.auction.app.model.DateInterval;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public final class TimeRemainingCalculator {
@@ -10,23 +10,23 @@ public final class TimeRemainingCalculator {
     private TimeRemainingCalculator() {
     }
 
-    public static String getTimeRemaining(final LocalDate startDate, final LocalDate endDate) {
-        validateDate(startDate, endDate);
+    public static String getTimeRemaining(final LocalDateTime startTime, final LocalDateTime endTime) {
+        validateDate(startTime, endTime);
 
-        final DateInterval calculatedDateInterval = calculateDateInterval(startDate, endDate);
+        final DateInterval calculatedDateInterval = calculateDateInterval(startTime, endTime);
 
         return convertToString(calculatedDateInterval);
     }
 
-    private static void validateDate(final LocalDate startDate, final LocalDate endDate) {
-        if (startDate.isAfter(endDate)) {
+    private static void validateDate(final LocalDateTime startTime, final LocalDateTime endTime) {
+        if (startTime.isAfter(endTime)) {
             throw new IllegalArgumentException("Start date is ahead of end date. Check your parameters.");
         }
     }
 
-    private static DateInterval calculateDateInterval(final LocalDate startDate, final LocalDate endDate) {
+    private static DateInterval calculateDateInterval(final LocalDateTime startTime, final LocalDateTime endTime) {
         final int daysInWeek = 7;
-        final long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        final long daysBetween = ChronoUnit.DAYS.between(startTime, endTime);
 
         final long weeks = daysBetween / daysInWeek;
         final long remainingDays = daysBetween % daysInWeek;

@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -47,8 +47,8 @@ class ItemServiceTest {
                 "Item",
                 "Desc",
                 new BigDecimal("40.00"),
-                LocalDate.MIN,
-                LocalDate.MAX,
+                LocalDateTime.MIN,
+                LocalDateTime.MAX,
                 List.of(),
                 new Category(),
                 new User());
@@ -77,7 +77,7 @@ class ItemServiceTest {
 
     @Test
     void getFeaturedItem_ShouldThrowException_WhenItemIsNotFound() {
-        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class)))
+        when(itemRepository.findFirstByEndTimeGreaterThanEqualOrderByIdAsc(any(LocalDateTime.class)))
                 .thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> service.getFeaturedItem());
@@ -85,7 +85,7 @@ class ItemServiceTest {
 
     @Test
     void getFeaturedItem_ShouldThrowException_WhenItemDoesntContainAnyImages() {
-        when(itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(any(LocalDate.class)))
+        when(itemRepository.findFirstByEndTimeGreaterThanEqualOrderByIdAsc(any(LocalDateTime.class)))
                 .thenReturn(Optional.of(item));
 
         when(imageRepository.findFirstByItem_IdOrderByIdAsc(anyInt())).thenReturn(Optional.empty());
