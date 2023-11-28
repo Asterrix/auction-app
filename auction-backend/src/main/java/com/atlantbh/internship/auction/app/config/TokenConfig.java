@@ -18,6 +18,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 @Configuration
 public class TokenConfig {
     private final RSAKeyProperties rsaKeyProperties;
@@ -32,7 +35,7 @@ public class TokenConfig {
     }
 
     @Bean
-    JwtEncoder jwtEncoder() {
+    JwtEncoder jwtEncoder() throws NoSuchAlgorithmException, InvalidKeySpecException {
         final JWK jwk = new RSAKey.Builder(rsaKeyProperties.getPublicKey())
                 .privateKey(rsaKeyProperties.getPrivateKey())
                 .build();
