@@ -8,6 +8,8 @@ spring:
   profiles:
     active: dev
 
+
+
 app-properties:
   client-route: http://localhost:4200
   api-version: /api/v1
@@ -20,5 +22,6 @@ token:
   temporal-unit: DAYS
 
 rsa:
-  public-key: 'classpath:cert/key.pub'
-  private-key: 'classpath:cert/key.priv'
+  public-key: 'classpath:cert/public.pem'
+  vault-uri: ${vault-uri}
+  vault-secret: ${vault-secret}
