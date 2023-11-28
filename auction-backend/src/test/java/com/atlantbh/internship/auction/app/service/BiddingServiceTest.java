@@ -20,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,7 +74,6 @@ class BiddingServiceTest {
             } catch (AllowedDecimalScaleException e) {
                 fail("Offer is within allowed decimal scale.");
             } catch (ValidationException e) {
-                return;
             }
         });
     }
@@ -91,7 +90,6 @@ class BiddingServiceTest {
             } catch (AllowedDecimalScaleException e) {
                 fail("Offer is within allowed decimal scale.");
             } catch (ValidationException e) {
-                return;
             }
         });
     }
@@ -108,7 +106,6 @@ class BiddingServiceTest {
             } catch (AllowedDecimalScaleException e) {
                 fail("Offer is within allowed decimal scale.");
             } catch (ValidationException e) {
-                return;
             }
         });
     }
@@ -132,7 +129,6 @@ class BiddingServiceTest {
             } catch (FractionalDivisionIsNotZero e) {
                 fail("Remainder should be zero when divided by 10");
             } catch (ValidationException e) {
-                return;
             }
         });
     }
@@ -148,7 +144,6 @@ class BiddingServiceTest {
             } catch (FractionalDivisionIsNotZero e) {
                 fail("Five should be allowed");
             } catch (ValidationException e) {
-                return;
             }
         });
     }
@@ -156,7 +151,7 @@ class BiddingServiceTest {
     @Test
     @DisplayName("Item does not exist")
     void makeAnOfferOnItem_whenItemDoesNotExist_throwValidationException() {
-        when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
+        when(itemRepository.findByIdAndEndTimeGreaterThan(any(Integer.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.empty());
 
         final ValidationException result = assertThrows(ValidationException.class,
@@ -169,7 +164,7 @@ class BiddingServiceTest {
     @Test
     @DisplayName("Bidder does not exist")
     void makeAnOfferOnItem_whenBidderDoesNotExist_throwValidationException() {
-        when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
+        when(itemRepository.findByIdAndEndTimeGreaterThan(any(Integer.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(new Item()));
 
         when(userRepository.findById(any(Integer.class))).thenReturn(Optional.empty());
@@ -187,7 +182,7 @@ class BiddingServiceTest {
         final Item item = new Item();
         item.setOwner(user);
 
-        when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
+        when(itemRepository.findByIdAndEndTimeGreaterThan(any(Integer.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(item));
 
         when(userRepository.findById(any(Integer.class)))
@@ -209,7 +204,7 @@ class BiddingServiceTest {
 
         final BidRequest bid = new BidRequest(72, 390, new BigDecimal("70"));
 
-        when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
+        when(itemRepository.findByIdAndEndTimeGreaterThan(any(Integer.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(item));
 
         when(userRepository.findById(any(Integer.class)))
@@ -237,7 +232,7 @@ class BiddingServiceTest {
         final User user = new User();
         final BidRequest bid = new BidRequest(72, 390, price);
 
-        when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
+        when(itemRepository.findByIdAndEndTimeGreaterThan(any(Integer.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(item));
 
         when(userRepository.findById(any(Integer.class)))
@@ -265,7 +260,7 @@ class BiddingServiceTest {
                 new UserItemBid(new User(), item, new BigDecimal("20"))
         );
 
-        when(itemRepository.findByIdAndEndDateLessThanEqual(any(Integer.class), any(LocalDate.class)))
+        when(itemRepository.findByIdAndEndTimeGreaterThan(any(Integer.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(item));
 
         when(userRepository.findById(any(Integer.class)))

@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,14 +35,13 @@ class CategoryServiceTest {
                 new Category(2, "Category2", categories.get(1)),
                 new Category(3, "Category3", categories.getLast())
         );
-        LocalDate localDate = LocalDate.now();
 
         when(repository.findAllCategories()).thenReturn(categories);
-        when(repository.findAllSubcategories(localDate)).thenReturn(subcategories);
+        when(repository.findAllSubcategories()).thenReturn(subcategories);
         List<CategoryDto> result = service.getAllCategories();
 
         assertEquals(categories.size(), result.size());
         verify(repository, times(1)).findAllCategories();
-        verify(repository, times(1)).findAllSubcategories(localDate);
+        verify(repository, times(1)).findAllSubcategories();
     }
 }

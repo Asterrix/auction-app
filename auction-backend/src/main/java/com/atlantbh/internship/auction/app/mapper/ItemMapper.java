@@ -1,10 +1,10 @@
 package com.atlantbh.internship.auction.app.mapper;
 
-import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
@@ -34,7 +34,7 @@ public final class ItemMapper {
                 entity.getName(),
                 entity.getDescription(),
                 entity.getInitialPrice(),
-                TimeRemainingCalculator.getTimeRemaining(entity.getStartDate(), entity.getEndDate()),
+                TimeRemainingCalculator.getTimeRemaining(entity.getStartTime(), entity.getEndTime()),
                 ItemImageMapper.convertToDto(entity.getItemImages()));
     }
 
@@ -47,7 +47,7 @@ public final class ItemMapper {
                 ItemImageMapper.convertToDto(itemImage));
     }
 
-    public static ItemAggregate convertToAggregate(final ItemDto itemDto, final UserItemBidDto itemBidDto){
+    public static ItemAggregate convertToAggregate(final ItemDto itemDto, final UserItemBidDto itemBidDto) {
         return new ItemAggregate(itemDto, itemBidDto);
     }
 }

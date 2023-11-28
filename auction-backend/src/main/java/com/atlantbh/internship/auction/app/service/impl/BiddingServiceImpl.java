@@ -14,7 +14,7 @@ import com.atlantbh.internship.auction.app.service.BiddingService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -65,8 +65,8 @@ public class BiddingServiceImpl implements BiddingService {
         String decimalPart = numberString.substring(decimalIndex + 1);
 
         int fractionalPart = Integer.parseInt(decimalPart);
-        final int remainderOfFive  = (fractionalPart * 2) % 5;
-        final int remainderOfTen  = fractionalPart % 10;
+        final int remainderOfFive = (fractionalPart * 2) % 5;
+        final int remainderOfTen = fractionalPart % 10;
 
         if (remainderOfFive != 0 && remainderOfTen != 0) {
             throw new FractionalDivisionIsNotZero("Offer must be a multiple of 5 or 10.");
@@ -78,8 +78,8 @@ public class BiddingServiceImpl implements BiddingService {
         validateDecimalScale(bidRequest.amount());
         validateFractionalPart(bidRequest.amount());
 
-        final LocalDate currentDate = LocalDate.now();
-        final Item item = getItem(bidRequest.itemId(), currentDate);
+        final LocalDateTime currentDateTime = LocalDateTime.now();
+        final Item item = getItem(bidRequest.itemId(), currentDateTime);
         final User bidder = getBidder(bidRequest.bidderId());
 
         validateOwner(item, bidder);
@@ -118,9 +118,9 @@ public class BiddingServiceImpl implements BiddingService {
                 .orElseThrow(() -> new ValidationException("The bidder could not be found."));
     }
 
-    private Item getItem(final Integer itemId, final LocalDate date) {
+    private Item getItem(final Integer itemId, final LocalDateTime dateTime) {
         return itemRepository
-                .findByIdAndEndDateLessThanEqual(itemId, date)
+                .findByIdAndEndTimeGreaterThan(itemId, dateTime)
                 .orElseThrow(() -> new ValidationException("The item does not exist."));
     }
 }
