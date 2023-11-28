@@ -57,7 +57,7 @@ public final class ItemServiceImpl implements ItemService {
                                             @Nullable final String itemName,
                                             final Pageable pageable) {
 
-        Specification<Item> specification = Specification.allOf();
+        Specification<Item> specification = Specification.allOf(isActive(LocalDateTime.now()));
 
         if (subcategory != null) {
             specification = specification.and(isPartOfSubcategory(category, subcategory));
@@ -83,11 +83,12 @@ public final class ItemServiceImpl implements ItemService {
         final Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) return Optional.empty();
 
+        final LocalDateTime dateTime = LocalDateTime.now();
         final Specification<UserItemBid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
 
         final long totalNumberOfBids = userItemBidRepository.countDistinctByItem_Id(item.get().getId());
         if (totalNumberOfBids == 0) {
-            final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get());
+            final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
             final UserItemBidDto bidInformation = UserItemBidMapper.convertToValuesOfZeroDto();
 
             return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation));
@@ -95,7 +96,7 @@ public final class ItemServiceImpl implements ItemService {
 
         final Optional<UserItemBid> highestBid = userItemBidRepository.findOne(specification);
 
-        final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get());
+        final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
         final UserItemBidDto mappedBidInformation = UserItemBidMapper.convertToDto(highestBid.get(), totalNumberOfBids);
 
         return Optional.of(ItemMapper.convertToAggregate(mappedItems, mappedBidInformation));

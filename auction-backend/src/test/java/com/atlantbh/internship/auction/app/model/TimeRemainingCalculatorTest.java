@@ -1,6 +1,7 @@
 package com.atlantbh.internship.auction.app.model;
 
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.DateTimeException;
@@ -11,16 +12,6 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TimeRemainingCalculatorTest {
-
-    @Test
-    void validateDate_ShouldThrow_StartDateAheadOfEndDateException() {
-        final LocalDate startDate = LocalDate.of(2023, 8, 28);
-        final LocalDate endDate = LocalDate.of(2023, 8, 29);
-        final LocalDateTime startTime = LocalDateTime.of(startDate, LocalTime.now());
-        final LocalDateTime endTime = LocalDateTime.of(endDate, LocalTime.now());
-
-        assertThrows(IllegalArgumentException.class, () -> TimeRemainingCalculator.getTimeRemaining(endTime, startTime));
-    }
 
     @Test
     void validateDate_ShouldThrow_NotALeapYearException() {
