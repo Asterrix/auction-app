@@ -1,11 +1,9 @@
 package com.atlantbh.internship.auction.app.entity;
 
-import com.atlantbh.internship.auction.app.service.validator.order.FirstOrder;
-import com.atlantbh.internship.auction.app.service.validator.order.SecondOrder;
-import com.atlantbh.internship.auction.app.service.validator.order.ThirdOrder;
 import jakarta.persistence.*;
-import jakarta.validation.GroupSequence;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,36 +17,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-
     @NotBlank(message = "Please provide a first name.")
     @Size(message = "Ensure that first name is between {min} and {max} characters in length.", min = 3, max = 20)
     @Pattern(message = "The first name should only contain alphabetical characters.", regexp = "^[a-zA-Z]+$")
     @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
-
     @NotBlank(message = "Please provide a last name.")
     @Size(message = "Ensure that last name is between {min} and {max} characters in length.", min = 3, max = 30)
     @Pattern(message = "The last name should only contain alphabetical characters.", regexp = "^[a-zA-Z]+$")
     @Column(name = "last_name", nullable = false, length = 30)
     private String lastName;
-
     @NotBlank(message = "Please provide an email address.")
     @Size(message = "Email must be between {min} and {max} characters in length.", min = 7, max = 40)
     @Column(name = "email", nullable = false, unique = true, length = 40)
     private String email;
-
     @NotBlank(message = "Please provide a password.")
     @Size(message = "Ensure that password is between {min} and {max} characters in length.", min = 8, max = 100)
     @Column(name = "password", nullable = false, length = 100)
     private String password;
-
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = false;
 
