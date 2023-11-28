@@ -41,19 +41,15 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public Boolean registerUser(final RegistrationRequest user) {
+    public void registerUser(final RegistrationRequest user) {
         registerValidator.validate(user);
-
         checkIfEmailIsInUse(user.email());
-        final Role defaultRole = getDefaultRole();
 
-        User entity = createUserEntity(user, defaultRole);
+        final Role defaultRole = getDefaultRole();
+        final User entity = createUserEntity(user, defaultRole);
 
         encodePassword(entity);
-
         userRepository.save(entity);
-
-        return true;
     }
 
     private Role getDefaultRole() {

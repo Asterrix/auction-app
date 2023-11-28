@@ -20,7 +20,7 @@ public class LogoutService implements LogoutHandler {
     public void logout(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) {
         final String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (token != null) {
-            tokenService.deleteTokenUponLogout(token);
+            tokenService.deleteToken(token);
         }
     }
 }
