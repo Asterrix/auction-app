@@ -50,7 +50,7 @@ class ItemMapperTest {
 
     @Test
     void convertToItemDto_DtoShouldMatchParameterProperties() {
-        final ItemDto itemDto = ItemMapper.convertToItemDto(item);
+        final ItemDto itemDto = ItemMapper.convertToItemDto(item, LocalDateTime.now());
 
         assertEquals(item.getId(), itemDto.id());
         assertEquals(item.getName(), itemDto.name());
