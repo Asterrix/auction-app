@@ -17,15 +17,18 @@
             <ng-container *ngIf="item$ | async as item">
               <form-input-field
                 [formFieldGroup]="bidForm"
+                [isInputValid]="bidForm.get('offer')?.valid"
                 formField="offer"
-                placeholder="Enter ${{item.biddingInformation.highestBid !== 0 ? item.biddingInformation.highestBid : item.item.initialPrice}} or higher"
+                placeholder="{{item.biddingInformation.highestBid === 0 ? 'Enter $' + item.item.initialPrice + ' or higher'
+                : 'Enter higher offer than $' + (item.biddingInformation.highestBid | number:'1.2-2') }}"
                 type="text"/>
-
               <button class="btn" type="submit">
                 Place bid
                 <img alt="Go right icon" src="assets/icons/right_pointer.svg"/>
               </button>
 
+              <app-validation-message *ngIf="!bidForm.get('offer')?.valid"
+                                      message="Make an offer in the following format: 100.00"/>
             </ng-container>
           </form>
           <shop-item-description [item$]="item$"/>

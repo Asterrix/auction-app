@@ -2,7 +2,7 @@ package com.atlantbh.internship.auction.app.service.impl;
 
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.bid.BidRequest;
-import com.atlantbh.internship.auction.app.dto.bid.BiddingItem;
+import com.atlantbh.internship.auction.app.dto.bid.BiddingItemInfo;
 import com.atlantbh.internship.auction.app.dto.bid.UserBiddingInfo;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
@@ -52,7 +52,7 @@ public class BiddingServiceImpl implements BiddingService {
             final BigDecimal initialPrice = item.getInitialPrice();
 
             if (offer.compareTo(initialPrice) < 0) {
-                throw new ValidationException("Initial bid must match or exceed the starting price.");
+                throw new ValidationException("Initial bid must match or exceed the starting biddingOffer.");
             }
         } else {
             final BigDecimal highestBid = biddingList.getFirst().getAmount();
@@ -68,8 +68,8 @@ public class BiddingServiceImpl implements BiddingService {
         validationClass.validate(bidRequest);
 
         final LocalDateTime currentDateTime = LocalDateTime.now();
-        final User bidder = getBidder(bidRequest.bidderId());
         final Item item = getItem(bidRequest.itemId(), currentDateTime);
+        final User bidder = getBidder(claimsExtractor.getUserId());
         validateOwner(item.getOwner(), bidder);
 
         final List<UserItemBid> listOfItemBids = userItemBidRepository.findAllBidsForItem(item.getId());
@@ -92,13 +92,19 @@ public class BiddingServiceImpl implements BiddingService {
         allBidsRelatedToUser.forEach(bid -> {
             final Item item = bid.getItem();
 
+            final BiddingItemInfo itemInfo = new BiddingItemInfo(item.getId(), item.getItemImages().getFirst().getImageUrl(), item.getName());
+            final String timeRemaining = TimeRemainingCalculator.getTimeRemaining(LocalDateTime.now(), bid.getItem().getEndTime());
+            final BigDecimal currentBid = bid.getAmount();
+            final int numberOfBids = item.getUserItemBids().size();
+            final BigDecimal highestBid = userItemBidRepository.listOfHighestBids(item.getId()).getFirst().getAmount();
+
             biddingInformation.add(
                     new UserBiddingInfo(
-                            new BiddingItem(item.getId(), item.getItemImages().getFirst().getImageUrl(), item.getName()),
-                            TimeRemainingCalculator.getTimeRemaining(LocalDateTime.now(), bid.getItem().getEndTime()),
-                            bid.getAmount().toString(),
-                            item.getUserItemBids().size(),
-                            userItemBidRepository.listOfHighestBids(item.getId()).getFirst().getAmount().toString()
+                            itemInfo,
+                            timeRemaining,
+                            currentBid,
+                            numberOfBids,
+                            highestBid
                     )
             );
         });
