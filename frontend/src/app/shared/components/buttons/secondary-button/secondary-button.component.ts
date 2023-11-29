@@ -11,6 +11,6 @@ import {BtnLabel} from "../interfaces/btn.label";
   styleUrls: ["./secondary-button.component.scss"]
 })
 export class SecondaryButtonComponent implements BtnLabel {
-  @Input({required: true})
-  label!: string;
+  @Input({required: true}) label!: string;
+  @Input({required: false}) redirectRoute!: string;
 }

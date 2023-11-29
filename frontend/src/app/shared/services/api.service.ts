@@ -7,6 +7,7 @@ import {IPagination} from "../models/pagination";
 
 export namespace Api {
   import BidRequest = Api.BidApi.BidRequest;
+  import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
   import Category = Api.CategoryApi.Category;
   import ItemParams = Api.ItemApi.GetMethods.ItemParams;
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
@@ -14,7 +15,6 @@ export namespace Api {
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
   import Authentication = Api.UserApi.AuthenticationRequest;
   import Register = Api.UserApi.RegisterRequest;
-  import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
 
 
   @Injectable({providedIn: "root"})

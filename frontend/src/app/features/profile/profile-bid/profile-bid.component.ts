@@ -19,12 +19,12 @@ import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
   styleUrls: ["./profile-bid.component.scss"]
 })
 export class ProfileBidComponent implements OnInit {
-  bids: Observable<Array<UserBiddingInfo>> | undefined;
+  bids$: Observable<Array<UserBiddingInfo>> | undefined;
 
   constructor(protected biddingService: BidService, protected loader: LoaderService) {
   }
 
   public ngOnInit(): void {
-    this.bids = this.biddingService.getAllUserBiddingInfo();
+    this.bids$ = this.biddingService.getAllUserBiddingInfo();
   }
 }
