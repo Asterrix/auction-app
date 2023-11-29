@@ -21,7 +21,6 @@ import {Alert, AlertService, AlertType} from "../../../shared/services/alert.ser
 import {BidService} from "../../../shared/services/bid.service";
 import {ErrorService} from "../../../shared/services/error.service";
 import {ItemService} from "../../../shared/services/item.service";
-import {LoaderService} from "../../../shared/services/loader.service";
 import {AuthenticationService} from "../../../shared/services/user/authentication.service";
 import {ItemPageParameter} from "../shop-routes";
 import {BidNotificationComponent} from "./components/bid-notification/bid-notification.component";
@@ -59,7 +58,6 @@ export class ShopItemPage implements OnInit, OnDestroy {
   constructor(protected itemService: ItemService,
               private activeRoute: ActivatedRoute,
               private trailService: NavigationTrailService,
-              public loader: LoaderService,
               private fb: FormBuilder,
               private biddingService: BidService,
               protected alertService: AlertService,
