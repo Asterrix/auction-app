@@ -15,5 +15,6 @@ import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   styleUrls: ["./item-description.component.scss"]
 })
 export class ItemDescriptionComponent {
-  @Input({required: true}) public item$: Observable<ItemAggregate | undefined> | undefined;
+  @Input({required: true}) description!: string;
+  @Input({required: true}) itemId!: number;
 }

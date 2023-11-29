@@ -1,11 +1,11 @@
-<div *ngIf="item$ | async as item" class="item-summary">
-  <h1 class="item-summary__title">{{item.item.name}}</h1>
-  <p>Starts from <span class="item-summary--info">${{ item.item.initialPrice | number: '1.2-2':'en-US' }}</span></p>
+<div class="item-summary">
+  <h1 class="item-summary__title">{{item.name}}</h1>
+  <p>Starts from <span class="item-summary--info">${{ item.initialPrice | number: '1.2-2':'en-US' }}</span></p>
   <div class="item-summary__auction">
     <p>Highest bid: <span
-      class="item-summary--info">${{item.biddingInformation.highestBid | number: '1.2-2':'en-US'}}</span>
+      class="item-summary--info">${{biddingInfo.highestBid | number: '1.2-2':'en-US'}}</span>
     </p>
-    <p>Number of bids: <span class="item-summary--info">{{item.biddingInformation.totalNumberOfBids}}</span></p>
-    <p>Time left: <span class="item-summary--info">{{item.item.timeLeft}}</span></p>
+    <p>Number of bids: <span class="item-summary--info">{{biddingInfo.totalNumberOfBids}}</span></p>
+    <p>Time left: <span class="item-summary--info">{{item.timeLeft}}</span></p>
   </div>
 </div>

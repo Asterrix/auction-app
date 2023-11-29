@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {computed, Injectable, signal} from "@angular/core";
 import {BehaviorSubject, catchError, Observable} from "rxjs";
 import {Page} from "../models/interfaces/page";
 import {IPagination} from "../models/pagination";
@@ -14,8 +14,8 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 })
 export class ItemService {
   private featuredItem$ = new BehaviorSubject<FeaturedItem | undefined>(undefined);
-  private item$ = new BehaviorSubject<ItemAggregate | undefined>(undefined);
   private items$ = new BehaviorSubject<Page<ItemSummary> | undefined>(undefined);
+  private item = signal<ItemAggregate>(<ItemAggregate>{item: {}, biddingInformation: {}});
 
   constructor(private apiService: Api.Service, private loader: LoaderService) {
   }
@@ -59,14 +59,14 @@ export class ItemService {
 
     this.apiService.getItemById(itemId).pipe(
       catchError((error: any) => {
-        console.error(error);
         throw error;
-      })).subscribe((item): void => this.item$.next(item))
+      }))
+      .subscribe((item): void => this.item.set(item))
       .add(() => this.loader.removeLoader("item"));
   }
 
-  getItem(): Observable<ItemAggregate | undefined> {
-    return this.item$.asObservable();
+  getItem() {
+    return computed(this.item);
   }
 
   initItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {
