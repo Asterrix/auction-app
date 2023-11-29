@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.service.validation;
 
 import com.atlantbh.internship.auction.app.exception.ValidationException;
-import com.atlantbh.internship.auction.app.service.validation.EmailValidator;
+import com.atlantbh.internship.auction.app.service.validation.registration.EmailValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

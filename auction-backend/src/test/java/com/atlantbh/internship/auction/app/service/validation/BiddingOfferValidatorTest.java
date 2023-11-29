@@ -4,6 +4,7 @@ import com.atlantbh.internship.auction.app.exception.AllowedDecimalScaleExceptio
 import com.atlantbh.internship.auction.app.exception.FractionalDivisionIsNotZero;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.model.utils.Validator;
+import com.atlantbh.internship.auction.app.service.validation.bidding.BiddingOfferValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
