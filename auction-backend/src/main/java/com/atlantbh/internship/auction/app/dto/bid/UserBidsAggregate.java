@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 /**
  * DTO for {@link UserItemBid}
  */
-public record UserBiddingInfo(
-        BiddingItemInfo item,
+public record UserBidsAggregate(
+        BidItemSummary item,
         String timeLeft,
         BigDecimal biddingOffer,
         int numberOfBids,

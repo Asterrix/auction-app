@@ -1,12 +1,13 @@
 package com.atlantbh.internship.auction.app.controller;
 
-import com.atlantbh.internship.auction.app.dto.bid.UserBiddingInfo;
 import com.atlantbh.internship.auction.app.dto.bid.BidRequest;
+import com.atlantbh.internship.auction.app.dto.bid.UserBidsAggregate;
 import com.atlantbh.internship.auction.app.service.BiddingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -20,12 +21,13 @@ public class BiddingController {
 
     @PostMapping
     ResponseEntity<Void> bidOnItem(@RequestBody BidRequest bidRequest) {
-        biddingService.makeAnOfferOnItem(bidRequest);
+        final LocalDateTime timeOfRequest = LocalDateTime.now();
+        biddingService.makeAnOfferOnItem(bidRequest, timeOfRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
-    final ResponseEntity<List<UserBiddingInfo>> getBiddingInformation() {
+    final ResponseEntity<List<UserBidsAggregate>> getBiddingInformation() {
         return new ResponseEntity<>(biddingService.getUsersBiddingInformation(), HttpStatus.OK);
     }
 }
