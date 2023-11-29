@@ -15,7 +15,7 @@ import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component
   styleUrls: ["./top-bar.component.scss"]
 })
 export class TopBarComponent {
-  user$?: Observable<Constant | UserDetails>;
+  user$: Observable<UserDetails | undefined> | undefined;
 
   constructor(private userService: AuthenticationService, private logoutService: LogoutService) {
 
