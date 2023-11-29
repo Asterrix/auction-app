@@ -20,7 +20,7 @@ public class CorsApiConfiguration {
     }
 
     // Initialise all configurations
-    public UrlBasedCorsConfigurationSource corsConfiguration(){
+    public UrlBasedCorsConfigurationSource corsConfiguration() {
         itemCorsConfig();
         categoryCorsConfig();
         registrationCorsConfig();
@@ -84,10 +84,10 @@ public class CorsApiConfiguration {
         registerCorsConfig("/authentication/logout", logoutConfig);
     }
 
-    private void biddingCorsConfig(){
+    private void biddingCorsConfig() {
         final CorsConfiguration bidConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
-                .setAllowedMethods(List.of(HttpMethod.POST))
+                .setAllowedMethods(List.of(HttpMethod.GET, HttpMethod.POST))
                 .setAllowedHeaders(List.of("*"))
                 .build();
 

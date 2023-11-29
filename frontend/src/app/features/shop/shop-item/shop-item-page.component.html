@@ -15,16 +15,16 @@
 
           <form (ngSubmit)="onSubmit()" class="form">
             <ng-container *ngIf="item$ | async as item">
-            <form-input-field
-              [formFieldGroup]="bidForm"
-              formField="offer"
-              placeholder="Enter ${{item.biddingInformation.highestBid !== 0 ? item.biddingInformation.highestBid : item.item.initialPrice}} or higher"
-              type="text"/>
+              <form-input-field
+                [formFieldGroup]="bidForm"
+                formField="offer"
+                placeholder="Enter ${{item.biddingInformation.highestBid !== 0 ? item.biddingInformation.highestBid : item.item.initialPrice}} or higher"
+                type="text"/>
 
-            <button class="btn" type="submit">
-              Place bid
-              <img alt="Go right icon" src="assets/icons/right_pointer.svg"/>
-            </button>
+              <button class="btn" type="submit">
+                Place bid
+                <img alt="Go right icon" src="assets/icons/right_pointer.svg"/>
+              </button>
 
             </ng-container>
           </form>
