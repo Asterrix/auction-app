@@ -1,8 +1,8 @@
 import {CommonModule} from "@angular/common";
 import {Component, Input} from "@angular/core";
-import {Observable} from "rxjs";
 import {Api} from "../../../../../shared/services/api.service";
-import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
+import BiddingInformation = Api.ItemApi.Interfaces.BiddingInformation;
+import Item = Api.ItemApi.Interfaces.Item;
 
 @Component({
   selector: "shop-item-summary",
@@ -12,5 +12,6 @@ import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   styleUrls: ["./item-summary.component.scss"]
 })
 export class ItemSummaryComponent {
-  @Input({required: true}) public item$: Observable<ItemAggregate | undefined> | undefined;
+  @Input({required: true}) item!: Item;
+  @Input({required: true}) biddingInfo!: BiddingInformation;
 }
