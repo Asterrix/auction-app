@@ -68,12 +68,11 @@ public class BiddingServiceImpl implements BiddingService {
         validationClass.validate(bidRequest);
 
         final LocalDateTime currentDateTime = LocalDateTime.now();
-        final Item item = getItem(bidRequest.itemId(), currentDateTime);
         final User bidder = getBidder(bidRequest.bidderId());
-
+        final Item item = getItem(bidRequest.itemId(), currentDateTime);
         validateOwner(item.getOwner(), bidder);
 
-        final List<UserItemBid> listOfItemBids = userItemBidRepository.findDistinctByItem_IdOrderByAmountDesc(item.getId());
+        final List<UserItemBid> listOfItemBids = userItemBidRepository.findAllBidsForItem(item.getId());
         validateOffer(bidRequest.amount(), item, listOfItemBids);
 
         final UserItemBid bid = new UserItemBid(bidder, item, bidRequest.amount());
@@ -83,7 +82,7 @@ public class BiddingServiceImpl implements BiddingService {
     @Override
     public List<UserBiddingInfo> getUsersBiddingInformation() {
         final Integer userId = claimsExtractor.getUserId();
-        final List<UserItemBid> allBidsRelatedToUser = userItemBidRepository.findByUser_Id(userId);
+        final List<UserItemBid> allBidsRelatedToUser = userItemBidRepository.findAllUserRelatedBids(userId);
 
         if (allBidsRelatedToUser.isEmpty()) {
             return new ArrayList<>();
