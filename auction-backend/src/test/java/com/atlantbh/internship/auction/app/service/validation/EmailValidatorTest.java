@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.validation.user;
+package com.atlantbh.internship.auction.app.service.validation;
 
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.service.validation.EmailValidator;

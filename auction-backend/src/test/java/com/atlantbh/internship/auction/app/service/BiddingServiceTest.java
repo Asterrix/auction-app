@@ -4,13 +4,13 @@ import com.atlantbh.internship.auction.app.dto.bid.BidRequest;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.entity.UserItemBid;
-import com.atlantbh.internship.auction.app.exception.AllowedDecimalScaleException;
-import com.atlantbh.internship.auction.app.exception.FractionalDivisionIsNotZero;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
+import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
 import com.atlantbh.internship.auction.app.service.impl.BiddingServiceImpl;
+import com.atlantbh.internship.auction.app.service.validation.BiddingOfferValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,9 +31,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BiddingServiceTest {
 
-    @InjectMocks
-    BiddingServiceImpl biddingService;
-
     @Mock
     UserRepository userRepository;
 
@@ -43,109 +40,17 @@ class BiddingServiceTest {
     @Mock
     UserItemBidRepository userItemBidRepository;
 
+    @Mock
+    MainValidationClass<BidRequest> validationClass;
+
+    @InjectMocks
+    BiddingServiceImpl biddingService;
+
     BidRequest bidRequest;
 
     @BeforeEach
     void setUp() {
         bidRequest = new BidRequest(1, 3, new BigDecimal("0"));
-    }
-
-    @Test
-    @DisplayName("Offer is above allowed decimal scale")
-    void makeAnOfferOnItem_offerDecimalScaleIsGreaterThanAllowed_throwValidationException() {
-        final BigDecimal price = new BigDecimal("50.500000000000000");
-        final BidRequest bid = new BidRequest(72, 390, price);
-
-        final ValidationException result = assertThrows(AllowedDecimalScaleException.class,
-                () -> biddingService.makeAnOfferOnItem(bid));
-
-        assertEquals("Decimal precision must be limited to no more than two decimal places.", result.getMessage());
-    }
-
-    @Test
-    @DisplayName("Offer is made with 2 decimal precision")
-    void makeAnOfferOnItem_offerDecimalScaleIsTwo_continueExecution() {
-        final BigDecimal price = new BigDecimal("50.00");
-        final BidRequest bid = new BidRequest(72, 390, price);
-
-        assertDoesNotThrow(() -> {
-            try {
-                biddingService.makeAnOfferOnItem(bid);
-            } catch (AllowedDecimalScaleException e) {
-                fail("Offer is within allowed decimal scale.");
-            } catch (ValidationException e) {
-            }
-        });
-    }
-
-    @Test
-    @DisplayName("Offer is made with 1 decimal precision")
-    void makeAnOfferOnItem_offerDecimalScaleIsOne_continueExecution() {
-        final BigDecimal price = new BigDecimal("50.0");
-        final BidRequest bid = new BidRequest(72, 390, price);
-
-        assertDoesNotThrow(() -> {
-            try {
-                biddingService.makeAnOfferOnItem(bid);
-            } catch (AllowedDecimalScaleException e) {
-                fail("Offer is within allowed decimal scale.");
-            } catch (ValidationException e) {
-            }
-        });
-    }
-
-    @Test
-    @DisplayName("Offer is made with 0 decimal precision")
-    void makeAnOfferOnItem_offerDecimalScaleIsZeroWithDot_continueExecution() {
-        final BigDecimal price = new BigDecimal("50.");
-        final BidRequest bid = new BidRequest(72, 390, price);
-
-        assertDoesNotThrow(() -> {
-            try {
-                biddingService.makeAnOfferOnItem(bid);
-            } catch (AllowedDecimalScaleException e) {
-                fail("Offer is within allowed decimal scale.");
-            } catch (ValidationException e) {
-            }
-        });
-    }
-
-    @Test
-    @DisplayName("Offer includes a fractional part with a non-zero remainder")
-    void makeAnOfferOnItem_offerRemainderIsNonZero_continueExecution() {
-        final BidRequest bid = new BidRequest(72, 390, new BigDecimal("50.51"));
-
-        assertThrows(FractionalDivisionIsNotZero.class, () -> biddingService.makeAnOfferOnItem(bid));
-    }
-
-    @Test
-    @DisplayName("Offer includes a fractional part divided by 10")
-    void makeAnOfferOnItem_offerDividedByTenRemainderIsZero_continueExecution() {
-        final BidRequest bid = new BidRequest(72, 390, new BigDecimal("50.90"));
-
-        assertDoesNotThrow(() -> {
-            try {
-                biddingService.makeAnOfferOnItem(bid);
-            } catch (FractionalDivisionIsNotZero e) {
-                fail("Remainder should be zero when divided by 10");
-            } catch (ValidationException e) {
-            }
-        });
-    }
-
-    @Test
-    @DisplayName("Offer includes a fractional part divided by 5")
-    void makeAnOfferOnItem_offerDividedByFiveRemainderIsZero_continueExecution() {
-        final BidRequest bid = new BidRequest(72, 390, new BigDecimal("50.15"));
-
-        assertDoesNotThrow(() -> {
-            try {
-                biddingService.makeAnOfferOnItem(bid);
-            } catch (FractionalDivisionIsNotZero e) {
-                fail("Five should be allowed");
-            } catch (ValidationException e) {
-            }
-        });
     }
 
     @Test
@@ -254,17 +159,18 @@ class BiddingServiceTest {
         item.setOwner(new User());
         item.setInitialPrice(new BigDecimal("20"));
         final BidRequest request = new BidRequest(72, 390, new BigDecimal("50"));
+        final User user = new User();
         final List<UserItemBid> itemBids = List.of(
-                new UserItemBid(new User(), item, new BigDecimal("80")),
-                new UserItemBid(new User(), item, new BigDecimal("40")),
-                new UserItemBid(new User(), item, new BigDecimal("20"))
+                new UserItemBid(user, item, new BigDecimal("80")),
+                new UserItemBid(user, item, new BigDecimal("40")),
+                new UserItemBid(user, item, new BigDecimal("20"))
         );
 
         when(itemRepository.findByIdAndEndTimeGreaterThan(any(Integer.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(item));
 
         when(userRepository.findById(any(Integer.class)))
-                .thenReturn(Optional.of(new User()));
+                .thenReturn(Optional.of(user));
 
         when(userItemBidRepository.findDistinctByItem_IdOrderByAmountDesc(any(Integer.class)))
                 .thenReturn(itemBids);
