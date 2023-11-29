@@ -271,7 +271,6 @@ export namespace Api {
   export namespace BidApi {
     export interface BidRequest {
       itemId: number,
-      bidderId: number,
       amount: number
     }
 
@@ -282,7 +281,7 @@ export namespace Api {
         name: string;
       };
       timeLeft: string;
-      price: string;
+      biddingOffer: string;
       numberOfBids: number;
       highestBid: string;
     }
@@ -302,7 +301,6 @@ export namespace Api {
       export function makeAnOffer(httpClient: HttpClient, req: Required<BidRequest>): Observable<HttpResponse<void>> {
         const body = {
           itemId: req.itemId,
-          bidderId: req.bidderId,
           amount: req.amount
         };
 
