@@ -5,10 +5,10 @@
     </td>
     <td class="cell">{{bid.item.name}}</td>
     <td class="cell">{{bid.timeLeft}}</td>
-    <td class="cell">$ {{bid.biddingOffer}}</td>
+    <td class="cell">$ {{bid.biddingOffer | number: '1.2-2'}}</td>
     <td class="cell">{{bid.numberOfBids}}</td>
     <td class="cell" [ngClass]="{'highest-bidder': bid.biddingOffer === bid.highestBid, 'outbid': bid.biddingOffer !== bid.highestBid}">
-      $ {{bid.highestBid}}
+      $ {{bid.highestBid | number : '1.2-2'}}
     </td>
   </tr>
 </a>
