@@ -48,7 +48,7 @@ public final class ItemMapper {
                 ItemImageMapper.convertToDto(itemImage));
     }
 
-    public static ItemAggregate convertToAggregate(final ItemDto itemDto, final BidNumberCount itemBidDto) {
-        return new ItemAggregate(itemDto, itemBidDto);
+    public static ItemAggregate convertToAggregate(final ItemDto itemDto, final BidNumberCount itemBidDto, final Integer ownerId) {
+        return new ItemAggregate(itemDto, itemBidDto, ownerId);
     }
 }

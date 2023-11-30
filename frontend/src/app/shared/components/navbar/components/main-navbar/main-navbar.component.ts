@@ -14,6 +14,8 @@ import {SearchBarComponent} from "../search-bar/search-bar.component";
   styleUrls: ["./main-navbar.component.scss"]
 })
 export class MainNavbarComponent {
-  protected readonly AuthenticationService = AuthenticationService;
   protected readonly ProfileRouteEndpoint = ProfileRouteEndpoint;
+
+  constructor(protected userService: AuthenticationService) {
+  }
 }
