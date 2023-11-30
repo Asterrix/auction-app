@@ -100,7 +100,7 @@ public final class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemFeaturedDto getFeaturedItem() {
-        final LocalDate endDateThreshold = LocalDate.now().plusDays(7);
+        final LocalDate endDateThreshold = LocalDate.now().plusDays(1);
         final Optional<Item> itemInfo = itemRepository.findFirstByEndDateGreaterThanEqualOrderByIdAsc(endDateThreshold);
 
         if (itemInfo.isEmpty()) {

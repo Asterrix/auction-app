@@ -1,5 +1,5 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal} from "@angular/core";
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from "@angular/core";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {debounceTime, Subscription} from "rxjs";
@@ -11,14 +11,16 @@ import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation-message/validation-message.component";
 import {Constant} from "../../../../shared/models/enums/constant";
-import {Alert, AlertType} from "../../../../shared/services/alert.service";
+import {AlertType} from "../../../../shared/services/alert.service";
 import {ErrorService} from "../../../../shared/services/error.service";
-import {EmailValidator} from "./validators/email.validator";
+import {EmailValidation} from "./validators/email.validator";
 import {FirstNameValidator} from "./validators/first-name.validator";
 import {LastNameValidator} from "./validators/last-name.validator";
 import {NameValidator} from "./validators/name-validator";
-import {PasswordValidator} from "./validators/password.validator";
+import {PasswordValidation} from "./validators/password.validator";
 import {ValidationPair} from "./validators/validation.pair";
+import EmailValidator = EmailValidation.EmailValidator;
+import PasswordValidator = PasswordValidation.PasswordValidator;
 
 export enum RegisterForm {
   FirstName = "firstName",

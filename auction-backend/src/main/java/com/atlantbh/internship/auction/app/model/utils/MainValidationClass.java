@@ -9,7 +9,7 @@ public class MainValidationClass<T> {
         this.validators = validators;
     }
 
-    public void validate(T object) {
+    public void validate(final T object) {
         validators.forEach(validator -> validator.validate(object));
     }
 }
