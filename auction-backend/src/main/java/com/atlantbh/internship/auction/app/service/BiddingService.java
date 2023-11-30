@@ -9,5 +9,5 @@ import java.util.List;
 public interface BiddingService {
     void makeAnOfferOnItem(final BidRequest bidRequest, final LocalDateTime timeOfRequest);
 
-    List<UserBidsAggregate> getUsersBiddingInformation();
+    List<UserBidsAggregate> getUserBiddingHistory();
 }

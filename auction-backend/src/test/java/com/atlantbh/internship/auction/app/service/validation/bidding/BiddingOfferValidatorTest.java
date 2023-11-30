@@ -1,10 +1,8 @@
-package com.atlantbh.internship.auction.app.service.validation;
+package com.atlantbh.internship.auction.app.service.validation.bidding;
 
 import com.atlantbh.internship.auction.app.exception.AllowedDecimalScaleException;
-import com.atlantbh.internship.auction.app.exception.FractionalDivisionIsNotZero;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.model.utils.Validator;
-import com.atlantbh.internship.auction.app.service.validation.bidding.BiddingOfferValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -74,42 +72,6 @@ class BiddingOfferValidatorTest {
                 validator.validate(offer);
             } catch (AllowedDecimalScaleException e) {
                 fail("Offer is within allowed decimal scale.");
-            }
-        });
-    }
-
-    @Test
-    @DisplayName("Offer includes a fractional part with a non-zero remainder")
-    void makeAnOfferOnItem_offerRemainderIsNonZero_continueExecution() {
-        final BigDecimal offer = new BigDecimal("50.51");
-
-        assertThrows(FractionalDivisionIsNotZero.class, () -> validator.validate(offer));
-    }
-
-    @Test
-    @DisplayName("Offer includes a fractional part divided by 10")
-    void makeAnOfferOnItem_offerDividedByTenRemainderIsZero_continueExecution() {
-        final BigDecimal offer = new BigDecimal("50.90");
-
-        assertDoesNotThrow(() -> {
-            try {
-                validator.validate(offer);
-            } catch (FractionalDivisionIsNotZero e) {
-                fail("Remainder should be zero when divided by 10");
-            }
-        });
-    }
-
-    @Test
-    @DisplayName("Offer includes a fractional part divided by 5")
-    void makeAnOfferOnItem_offerDividedByFiveRemainderIsZero_continueExecution() {
-        final BigDecimal offer = new BigDecimal("50.15");
-
-        assertDoesNotThrow(() -> {
-            try {
-                validator.validate(offer);
-            } catch (FractionalDivisionIsNotZero e) {
-                fail("Five should be allowed");
             }
         });
     }

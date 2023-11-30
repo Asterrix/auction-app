@@ -3,7 +3,7 @@ package com.atlantbh.internship.auction.app.service;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
-import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
+import com.atlantbh.internship.auction.app.repository.BidRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ public interface ItemService {
 
     /**
      * Retrieves full item details by their unique identifier.
-     * Method will make separate calls to {@link UserItemBidRepository} in order to fetch the total number of bids placed
+     * Method will make separate calls to {@link BidRepository} in order to fetch the total number of bids placed
      * on that item.
      *
      * @param itemId Unique identifier.

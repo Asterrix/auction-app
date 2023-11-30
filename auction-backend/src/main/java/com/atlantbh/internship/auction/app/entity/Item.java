@@ -43,7 +43,7 @@ public class Item {
     private User owner;
 
     @OneToMany(mappedBy = "item", orphanRemoval = true)
-    private List<UserItemBid> userItemBids = new ArrayList<>();
+    private List<Bid> bids = new ArrayList<>();
 
     public Item() {
     }
@@ -138,11 +138,11 @@ public class Item {
         this.owner = owner;
     }
 
-    public List<UserItemBid> getUserItemBids() {
-        return userItemBids;
+    public List<Bid> getUserItemBids() {
+        return bids;
     }
 
-    public void setUserItemBids(final List<UserItemBid> userItemBids) {
-        this.userItemBids = userItemBids;
+    public void setUserItemBids(final List<Bid> bids) {
+        this.bids = bids;
     }
 }

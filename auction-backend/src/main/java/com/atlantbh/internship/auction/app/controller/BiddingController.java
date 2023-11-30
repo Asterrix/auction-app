@@ -28,6 +28,6 @@ public class BiddingController {
 
     @GetMapping
     final ResponseEntity<List<UserBidsAggregate>> getBiddingInformation() {
-        return new ResponseEntity<>(biddingService.getUsersBiddingInformation(), HttpStatus.OK);
+        return new ResponseEntity<>(biddingService.getUserBiddingHistory(), HttpStatus.OK);
     }
 }

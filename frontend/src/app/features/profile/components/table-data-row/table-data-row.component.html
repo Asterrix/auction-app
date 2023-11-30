@@ -4,7 +4,7 @@
       <img alt="image" class="cell__portrait" src="{{bid.item.portrait}}"/>
     </td>
     <td class="cell">{{bid.item.name}}</td>
-    <td class="cell">{{bid.timeLeft}}</td>
+    <td class="cell">{{bid.timeRemaining}}</td>
     <td class="cell">$ {{bid.biddingOffer | number: '1.2-2'}}</td>
     <td class="cell">{{bid.numberOfBids}}</td>
     <td class="cell" [ngClass]="{'highest-bidder': bid.biddingOffer === bid.highestBid, 'outbid': bid.biddingOffer !== bid.highestBid}">

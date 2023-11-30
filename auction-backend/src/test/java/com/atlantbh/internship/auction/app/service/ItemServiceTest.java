@@ -6,7 +6,7 @@ import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
+import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.service.impl.ItemServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class ItemServiceTest {
     private ItemImageRepository imageRepository;
 
     @Mock
-    private UserItemBidRepository itemBidRepository;
+    private BidRepository itemBidRepository;
 
     private ItemServiceImpl service;
 

@@ -1,22 +1,24 @@
-<profile-table>
-  <ng-container *ngIf="bids$ | async as bidInfo; else loader">
+<profile-shared-nav-tab>
+  <profile-table>
+    <ng-container *ngIf="bids$ | async as bidInfo; else loader">
 
-    <profile-table-data-row
-      *ngFor="let bid of bidInfo"
-      [bid]="bid"/>
+      <profile-table-data-row
+        *ngFor="let bid of bidInfo"
+        [bid]="bid"/>
 
-    <ng-container *ngIf="bidInfo.length <= 0">
-      <profile-table-empty
-        btnLabel="Start Bidding"
-        iconName="gavel"
-        iconPath="assets/icons/gavel.svg"
-        message="You don't have any bids and there are so many cool items for sale."
-      />
+      <ng-container *ngIf="bidInfo.length <= 0">
+        <profile-table-empty
+          btnLabel="Start Bidding"
+          iconName="gavel"
+          iconPath="assets/icons/gavel.svg"
+          message="You don't have any bids and there are so many cool items for sale."
+        />
+      </ng-container>
+
     </ng-container>
 
-  </ng-container>
-
-  <ng-template #loader>
-    <app-loader class="loader-placeholder"/>
-  </ng-template>
-</profile-table>
+    <ng-template #loader>
+      <app-loader class="loader-placeholder"/>
+    </ng-template>
+  </profile-table>
+</profile-shared-nav-tab>
