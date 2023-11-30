@@ -139,7 +139,7 @@ class ItemControllerTest {
         );
 
         final BidNumberCount itemBidDto = new BidNumberCount(new BigDecimal("20"), 1L);
-        final ItemAggregate itemAggregate = new ItemAggregate(itemDto, itemBidDto);
+        final ItemAggregate itemAggregate = new ItemAggregate(itemDto, itemBidDto, 1);
 
         given(itemService.getItemById(itemId)).willReturn(Optional.of(itemAggregate));
 

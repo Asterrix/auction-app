@@ -4,8 +4,9 @@ import {AuthenticationService} from "../services/user/authentication.service";
 
 export const userAlreadyAuthenticatedGuard: CanActivateFn = (route, state) => {
   const router: Router = inject(Router);
+  const userService: AuthenticationService = inject(AuthenticationService);
 
-  if (AuthenticationService.isAuthenticated()) {
+  if (userService.user()) {
     router.navigate(["/home"]).then(null);
     return false;
   }

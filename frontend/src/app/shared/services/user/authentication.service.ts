@@ -1,8 +1,8 @@
 import {HttpResponse} from "@angular/common/http";
-import {Injectable} from "@angular/core";
+import {computed, Injectable, signal} from "@angular/core";
 import {Router} from "@angular/router";
 import {JwtPayload} from "jwt-decode";
-import {BehaviorSubject, catchError, Observable} from "rxjs";
+import {catchError} from "rxjs";
 import {Constant} from "../../models/enums/constant";
 import {TokenManager} from "../../models/token-manager";
 import {AlertType} from "../alert.service";
@@ -20,7 +20,8 @@ export interface UserDetails extends JwtPayload {
   providedIn: "root"
 })
 export class AuthenticationService {
-  private authUser = new BehaviorSubject<UserDetails | undefined>(AuthenticationService.getCurrentUser());
+  private userSignal = signal<UserDetails | undefined>(this.getCurrentUser());
+  user = computed(this.userSignal);
 
   constructor(private router: Router, private apiService: Api.Service, private errorService: ErrorService) {
   }
@@ -29,25 +30,14 @@ export class AuthenticationService {
     return TokenManager.retrieveTokenFromLocalStorage();
   }
 
-  static isAuthenticated(): boolean {
+  isAuthenticated(): boolean {
     const user: UserDetails | undefined = this.getCurrentUser();
     return user !== undefined;
   }
 
-  public static getCurrentUser(): UserDetails | undefined {
+  public getCurrentUser(): UserDetails | undefined {
     const localToken: string = TokenManager.retrieveTokenFromLocalStorage();
     return this.getUserDetailsFromToken(localToken);
-  }
-
-  private static getUserDetailsFromToken(token: string): UserDetails | undefined {
-    if (token) {
-      return TokenManager.decodeToken(token);
-    }
-    return undefined;
-  }
-
-  userObservable(): Observable<UserDetails | undefined> {
-    return this.authUser.asObservable();
   }
 
   resetUsername(): void {
@@ -74,11 +64,18 @@ export class AuthenticationService {
       );
   }
 
+  private getUserDetailsFromToken(token: string): UserDetails | undefined {
+    if (token) {
+      return TokenManager.decodeToken(token);
+    }
+    return undefined;
+  }
+
   private navigateToHomeRoute(): void {
     this.router.navigate(["/home"]).then(null);
   }
 
   private resetUserCredentials(): void {
-    this.authUser.next(AuthenticationService.getCurrentUser());
+    this.userSignal.set(this.getCurrentUser());
   }
 }

@@ -1,18 +1,18 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
+import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
-import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.mapper.BidsMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
+import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
 import jakarta.annotation.Nullable;
@@ -92,7 +92,8 @@ public final class ItemServiceImpl implements ItemService {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
             final BidNumberCount bidInformation = BidsMapper.mapToUserItemBidDto(new BigDecimal("0"), 0L);
 
-            return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation));
+            final Integer ownerId = item.get().getOwner().getId();
+            return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation, ownerId));
         }
 
         final Optional<Bid> highestBid = bidRepository.findOne(specification);
@@ -100,7 +101,8 @@ public final class ItemServiceImpl implements ItemService {
         final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
         final BidNumberCount mappedBidInformation = BidsMapper.mapToUserItemBidDto(highestBid.get().getAmount(), totalNumberOfBids);
 
-        return Optional.of(ItemMapper.convertToAggregate(mappedItems, mappedBidInformation));
+        final Integer ownerId = item.get().getOwner().getId();
+        return Optional.of(ItemMapper.convertToAggregate(mappedItems, mappedBidInformation, ownerId));
     }
 
     @Override

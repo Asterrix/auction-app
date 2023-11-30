@@ -62,7 +62,8 @@ export class ShopItemPage implements OnInit, OnDestroy {
               private biddingService: BidService,
               protected alertService: AlertService,
               private errorService: ErrorService,
-              private router: Router) {
+              private router: Router,
+              protected authService: AuthenticationService) {
   }
 
   ngOnInit(): void {
@@ -85,7 +86,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (!AuthenticationService.isAuthenticated()) {
+    if (!this.authService.isAuthenticated()) {
       this.errorService.setError({
         message: "You must be authenticated to make offers on items.",
         type: AlertType.WarningLevelTwo

@@ -13,25 +13,27 @@
             [biddingInfo]="item.biddingInformation"
             [item]="item.item"/>
 
-          <form (ngSubmit)="onSubmit()" class="form">
-            <form-input-field
-              [formFieldGroup]="bidForm"
-              [isInputValid]="bidForm.get('offer')?.valid"
-              formField="offer"
-              placeholder="{{item.biddingInformation.highestBid === 0 ? 'Enter $' + item.item.initialPrice + ' or higher'
+          <ng-container *ngIf="authService.getCurrentUser()?.id !== item.ownerId">
+            <form (ngSubmit)="onSubmit()" class="form">
+              <form-input-field
+                [formFieldGroup]="bidForm"
+                [isInputValid]="bidForm.get('offer')?.valid"
+                formField="offer"
+                placeholder="{{item.biddingInformation.highestBid === 0 ? 'Enter $' + item.item.initialPrice + ' or higher'
                             : 'Enter higher offer than $' + (item.biddingInformation.highestBid | number:'1.2-2') }}"
-              type="text"/>
+                type="text"/>
 
-            <button class="btn" type="submit">
-              Place bid
-              <img alt="Go right icon" height="24" ngSrc="assets/icons/right_pointer.svg" width="24"/>
-            </button>
+              <button class="btn" type="submit">
+                Place bid
+                <img alt="Go right icon" height="24" ngSrc="assets/icons/right_pointer.svg" width="24"/>
+              </button>
 
-            <app-validation-message
-              *ngIf="!bidForm.get('offer')?.valid"
-              message="Make an offer in the following format: 100.00"/>
+              <app-validation-message
+                *ngIf="!bidForm.get('offer')?.valid"
+                message="Make an offer in the following format: 100.00"/>
 
-          </form>
+            </form>
+          </ng-container>
 
           <shop-item-description
             [description]="item.item.description"
