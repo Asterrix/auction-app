@@ -1,7 +1,7 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {toObservable} from "@angular/core/rxjs-interop";
-import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {PrimaryButtonComponent} from "../../../shared/components/buttons/primary-button/primary-button.component";
@@ -18,6 +18,7 @@ import {
   NavigationTrailService
 } from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
 import {Alert, AlertService, AlertType} from "../../../shared/services/alert.service";
+import {Api} from "../../../shared/services/api.service";
 import {BidService} from "../../../shared/services/bid.service";
 import {ErrorService} from "../../../shared/services/error.service";
 import {ItemService} from "../../../shared/services/item.service";
@@ -27,6 +28,7 @@ import {BidNotificationComponent} from "./components/bid-notification/bid-notifi
 import {ItemDescriptionComponent} from "./components/item-description/item-description.component";
 import {ItemShowcaseComponent} from "./components/item-showcase/item-showcase.component";
 import {ItemSummaryComponent} from "./components/item-summary/item-summary.component";
+import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 @Component({
   selector: "shop-item",
@@ -53,7 +55,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
   bidForm: FormGroup = this.fb.group({
     offer: ["", [Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
-  alert: Observable<Alert> = toObservable(this.alertService.alert);
+  alert$: Observable<Alert> = toObservable(this.alertService.alert);
 
   constructor(protected itemService: ItemService,
               private activeRoute: ActivatedRoute,
@@ -71,7 +73,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
     this.itemService.initItem(param);
     this.trailService.displayNavigationTrail();
 
-    this.alert.subscribe(value => {
+    this.alert$.subscribe(value => {
       if (value.type !== AlertType.None) {
         setTimeout(() => {
           this.alertService.clearAlert();
@@ -86,14 +88,16 @@ export class ShopItemPage implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (!this.authService.isAuthenticated()) {
-      this.errorService.setError({
-        message: "You must be authenticated to make offers on items.",
-        type: AlertType.WarningLevelTwo
-      });
-      this.router.navigate(["/login"]).then(null);
-    }
+    this.checkIfTheUserIsAuthenticated();
 
+    if (this.isFormValid()) {
+      this.sendForm();
+    } else {
+      this.setAlert();
+    }
+  }
+
+  private sendForm(): void {
     if (this.bidForm.valid) {
       const itemId: number = this.activeRoute.snapshot.params["id"];
       this.biddingService.makeAnOffer({
@@ -101,5 +105,42 @@ export class ShopItemPage implements OnInit, OnDestroy {
         amount: this.bidForm.get("offer")?.value
       });
     }
+  }
+
+  private checkIfTheUserIsAuthenticated(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.errorService.setError({
+        message: "You must be authenticated to make offers on items.",
+        type: AlertType.WarningLevelTwo
+      });
+      this.router.navigate(["/login"]).then(null);
+    }
+  }
+
+  private isFormValid(): boolean {
+    if (this.itemService.item() && this.bidForm.get("offer")?.value) {
+      const item = this.itemService.item();
+      const bid = this.bidForm.get("offer");
+
+      if (item !== undefined && bid !== undefined) {
+        return this.isOfferAboveTheCurrentOffers(item, bid!);
+      }
+
+      return false;
+    }
+
+    return false;
+  }
+
+  private isOfferAboveTheCurrentOffers(item: ItemAggregate, bid: AbstractControl): boolean {
+    return !(item.biddingInformation.highestBid >= bid.value || item.item.initialPrice > bid.value);
+
+  }
+
+  private setAlert() {
+    this.alertService.setAlert({
+      message: "There are higher bids than yours. You could give a second try!",
+      type: AlertType.WarningLevelTwo
+    });
   }
 }
