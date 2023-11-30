@@ -16,4 +16,5 @@ export class TabButtonComponent {
   @Input({required: true}) iconWidth!: number;
   @Input({required: true}) iconHeight!: number;
   protected readonly ProfileRouteTitle = ProfileRouteTitle;
+  protected readonly ProfileRouteEndpoint = ProfileRouteEndpoint;
 }

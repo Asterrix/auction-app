@@ -1,11 +1,13 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {ActivatedRoute, Params, Router, RouterLink, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute, Params, Router, RouterLink, RouterLinkActive, ɵEmptyOutletComponent} from "@angular/router";
 import {filter, Subscription} from "rxjs";
+import {TabComponent} from "../components/tab/tab.component";
 import {TableDataRow} from "../components/table-data-row/table-data-row.component";
 import {TableEmptyComponent} from "../components/table-empty/table-empty.component";
 import {TableComponent} from "../components/table/table.component";
 import {ProfileRouteEndpoint} from "../profile-routes";
+import {ProfileSharedNavTabComponent} from "../shared-nav/profile-shared-nav-tab.component";
 
 enum Section {
   Active = "active",
@@ -20,7 +22,7 @@ const sectionName: Record<Section, string> = {
 @Component({
   selector: "app-profile-seller",
   standalone: true,
-  imports: [CommonModule, TableComponent, TableEmptyComponent, RouterLink, RouterLinkActive, TableDataRow],
+  imports: [CommonModule, TableComponent, TableEmptyComponent, RouterLink, RouterLinkActive, TableDataRow, TabComponent, ProfileSharedNavTabComponent, ɵEmptyOutletComponent],
   templateUrl: "./profile-seller.component.html",
   styleUrls: ["./profile-seller.component.scss"]
 })
