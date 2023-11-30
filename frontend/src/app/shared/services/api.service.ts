@@ -280,7 +280,7 @@ export namespace Api {
         portrait: string;
         name: string;
       };
-      timeLeft: string;
+      timeRemaining: string;
       biddingOffer: string;
       numberOfBids: number;
       highestBid: string;

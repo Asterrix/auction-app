@@ -4,7 +4,7 @@ import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
-import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
@@ -48,7 +48,7 @@ public final class ItemMapper {
                 ItemImageMapper.convertToDto(itemImage));
     }
 
-    public static ItemAggregate convertToAggregate(final ItemDto itemDto, final UserItemBidDto itemBidDto) {
+    public static ItemAggregate convertToAggregate(final ItemDto itemDto, final BidNumberCount itemBidDto) {
         return new ItemAggregate(itemDto, itemBidDto);
     }
 }

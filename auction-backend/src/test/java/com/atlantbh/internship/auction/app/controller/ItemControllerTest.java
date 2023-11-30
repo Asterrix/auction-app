@@ -5,7 +5,7 @@ import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
-import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -138,7 +138,7 @@ class ItemControllerTest {
                 List.of()
         );
 
-        final UserItemBidDto itemBidDto = new UserItemBidDto(new BigDecimal("20"), 1L);
+        final BidNumberCount itemBidDto = new BidNumberCount(new BigDecimal("20"), 1L);
         final ItemAggregate itemAggregate = new ItemAggregate(itemDto, itemBidDto);
 
         given(itemService.getItemById(itemId)).willReturn(Optional.of(itemAggregate));

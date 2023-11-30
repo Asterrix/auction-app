@@ -20,10 +20,15 @@ class OwnerValidationTest {
     @Test
     @DisplayName("The user is attempting to bid on his own item")
     void testValidate_WhenBidderIsTheOwner_ThrowValidationException() {
-        final User user = new User();
+        final User bidder = new User();
+        final User owner = new User();
+        bidder.setId(1);
+        owner.setId(1);
 
+
+        assertEquals(bidder.getId(), owner.getId());
         final ValidationException validationException = assertThrows(
-                ValidationException.class, () -> ownerValidation.validate(user, user));
+                ValidationException.class, () -> ownerValidation.validate(bidder, owner));
         assertEquals("Users are not permitted to make offers on their own items.", validationException.getMessage());
     }
 }
