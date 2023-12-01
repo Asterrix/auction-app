@@ -1,0 +1,42 @@
+@import "colors";
+@import "typography";
+
+.form {
+  display: grid;
+  gap: 0.8rem;
+
+  &__label {
+    color: $neutral-dark;
+    @extend .font-semi-bold;
+  }
+
+  &__input {
+    background-color: $input-gray;
+    border: 1px solid $neutral-light-grey;
+    padding: 1.6rem;
+
+    &::placeholder {
+      color: $neutral-grey;
+    }
+
+    &:focus {
+      border: 1px solid $primary;
+    }
+
+    &--layout {
+      display: grid;
+      grid-template-columns: 70% 30%;
+    }
+  }
+
+  &--verified {
+    align-items: center;
+    background-color: $neutral-light-grey;
+    color: $error;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+
+

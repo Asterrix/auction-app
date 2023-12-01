@@ -1,0 +1,85 @@
+@import "typography";
+@import "colors";
+
+@mixin buttonStyles {
+  transition: all 200ms ease-out;
+  text-transform: uppercase;
+  padding: 1.2rem 2.4rem;
+  @extend .font-semi-bold;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 2.4rem;
+  padding: 4.8rem 6.4rem;
+
+  &__navigation {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    justify-content: space-between;
+    margin-top: 2.4rem;
+
+    &__forward {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__city {
+    display: grid;
+    gap: 2.4rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__member {
+    display: grid;
+    gap: 0.8rem;
+
+    &__label {
+      color: $neutral-dark;
+      @extend .font-semi-bold;
+    }
+  }
+}
+
+
+.btn {
+  &--cancel {
+    @include buttonStyles;
+    background-color: transparent;
+    border: 2px solid $neutral-light-grey;
+
+    &:hover {
+      border: 2px solid $primary;
+    }
+  }
+
+  &--back {
+    @include buttonStyles;
+    background-color: transparent;
+    border: 2px solid $primary;
+
+    &:hover {
+      background-color: lighten($primary, 2);
+      border: 2px solid lighten($primary, 2);
+      color: $white;
+    }
+  }
+
+  &--next {
+    @include buttonStyles;
+    background-color: $primary;
+    border: 2px solid $primary;
+    color: $white;
+
+    &:hover {
+      background-color: lighten($primary, 2);
+      border: 2px solid lighten($primary, 2);
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@import "typography";
+@import "colors";
+
+.member {
+  display: grid;
+  gap: 0.8rem;
+
+  &__label {
+    color: $neutral-dark;
+    @extend .font-semi-bold;
+  }
+
+  &__input {
+    background-color: $input-gray;
+    border: 1px solid $neutral-light-grey;
+    padding: 1.6rem;
+
+    &::placeholder {
+      color: $neutral-grey;
+    }
+
+    &:focus {
+      border: 1px solid $primary;
+    }
+  }
+}
