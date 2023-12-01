@@ -2,6 +2,7 @@ import {Route} from "@angular/router";
 import {environment} from "../../../environments/environment";
 import {userAuthenticatedGuard} from "../../shared/guards/user-authenticated.guard";
 import {Constant} from "../../shared/models/enums/constant";
+import {AddItemComponent} from "./add-item/add-item.component";
 import {ProfileBidComponent} from "./profile-bid/profile-bid.component";
 import {ProfilePage} from "./profile-page.component";
 import {ProfileSellerComponent} from "./profile-seller/profile-seller.component";
@@ -46,7 +47,15 @@ export const PROFILE_ROUTES: Route[] = [
         data: {
           trail: ProfileRouteTitle[ProfileRouteEndpoint.Bid]
         },
-      }
+      },
+      {
+        path: ProfileRouteEndpoint.AddItem,
+        title: `${environment.applicationName} - ${ProfileRouteTitle[ProfileRouteEndpoint.AddItem]}`,
+        component: AddItemComponent,
+        data: {
+          trail: ProfileRouteTitle[ProfileRouteEndpoint.AddItem]
+        },
+      },
     ]
   }
 ];

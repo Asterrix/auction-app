@@ -1,0 +1,25 @@
+@import "colors";
+@import "typography";
+
+.form {
+  &__wrapper {
+    border: 1px solid $neutral-light-grey;
+    display: grid;
+    max-width: 648px;
+    min-width: 648px;
+  }
+
+  &__subject {
+    background-color: $gray-100;
+    display: grid;
+    justify-content: center;
+
+    &__name {
+      @extend .font-size-ex;
+      align-self: center;
+      @extend .font-bold;
+      padding: 2rem 0;
+      text-transform: uppercase;
+    }
+  }
+}

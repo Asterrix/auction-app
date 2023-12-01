@@ -1,0 +1,49 @@
+@import "typography";
+@import "colors";
+
+@mixin buttonStyles {
+  transition: all 200ms ease-out;
+  text-transform: uppercase;
+  padding: 1.2rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 2.4rem;
+  padding: 4.8rem 6.4rem;
+
+  &__btn {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 2.4rem;
+
+    &--cancel {
+      @include buttonStyles;
+      background-color: transparent;
+      border: 2px solid $neutral-light-grey;
+      @extend .font-bold;
+
+      &:hover {
+        border: 2px solid $primary;
+      }
+    }
+
+    &--next {
+      @include buttonStyles;
+      background-color: $primary;
+      border: 2px solid $primary;
+      color: $white;
+      @extend .font-bold;
+
+      &:hover {
+        background-color: lighten($primary, 2);
+        border: 2px solid lighten($primary, 2);
+      }
+    }
+  }
+}

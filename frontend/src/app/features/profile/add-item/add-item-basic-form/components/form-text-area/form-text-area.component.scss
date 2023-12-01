@@ -1,0 +1,36 @@
+@import "colors";
+@import "typography";
+
+.text-area {
+  display: grid;
+  gap: 0.8rem;
+
+  &__label {
+    color: $neutral-dark;
+    @extend .font-semi-bold;
+  }
+
+  &__input {
+    font-family: inherit;
+    appearance: none;
+    background-color: $input-gray;
+    border: 1px solid $neutral-light-grey;
+    padding: 1.6rem;
+    resize: none;
+
+    &::placeholder {
+      color: $neutral-grey;
+    }
+
+    &:focus {
+      border: 1px solid $primary;
+
+      outline: none;
+    }
+  }
+
+  &__char-count {
+    color: $neutral-grey;
+    justify-self: right;
+  }
+}
