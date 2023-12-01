@@ -1,0 +1,52 @@
+@import "colors";
+@import "typography";
+
+.form {
+  display: grid;
+  gap: 2.4rem;
+
+  &__header {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  &__name {
+    @extend .font-semi-bold;
+    border-bottom: 1px solid $neutral-light-grey;
+    padding-bottom: 0.8rem;
+  }
+
+  &__cards {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
+
+    &__list {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    p {
+      color: $neutral-grey;
+      font-size: 1.4rem;
+    }
+  }
+
+  &__dates {
+    align-items: end;
+    display: grid;
+    gap: 2.4rem;
+    grid-template-columns: repeat(3, 1fr);
+
+
+    &--expiration {
+      display: grid;
+      gap: 0.8rem;
+
+      label {
+        @extend .font-semi-bold;
+      }
+    }
+  }
+}
