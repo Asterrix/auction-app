@@ -1,0 +1,39 @@
+@import "colors";
+@import "typography";
+
+.form {
+  display: grid;
+  gap: 0.8rem;
+
+  &__label {
+    color: $neutral-dark;
+    @extend .font-semi-bold;
+  }
+
+  &__field {
+    align-items: center;
+    background-color: $input-gray;
+    border: 1px solid $neutral-light-grey;
+    display: grid;
+    grid-template-columns: 10% 90%;
+    width: 100%;
+
+    &:focus-within {
+      border: 1px solid $primary;
+    }
+
+    p {
+      text-align: center;
+    }
+  }
+
+  &__input {
+    background-color: inherit;
+    border-left: 1px solid $neutral-light-grey;
+    padding: 1.6rem;
+
+    &::placeholder {
+      color: $neutral-grey;
+    }
+  }
+}
