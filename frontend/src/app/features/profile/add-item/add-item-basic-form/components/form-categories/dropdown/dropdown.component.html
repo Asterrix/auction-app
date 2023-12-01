@@ -1,0 +1,21 @@
+<div class="relative">
+  <button
+    (click)="showDropdownMenu()"
+    (focusout)="hideDropdownMenu()"
+    class="dropdown__btn">
+    {{ buttonText }}
+    <img
+      alt="Open dropdown menu"
+      height="16"
+      ngSrc="../../../../../../../../assets/icons/chevron_down.svg"
+      width="16"/>
+  </button>
+
+  <div *ngIf="isActive" class="dropdown">
+    <ul>
+      <li class="dropdown__category">
+        Placeholder
+      </li>
+    </ul>
+  </div>
+</div>

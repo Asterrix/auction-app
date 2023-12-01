@@ -1,0 +1,56 @@
+@import "colors";
+@import "typography";
+
+@mixin buttonStyles {
+  align-items: center;
+  display: flex;
+  @extend .font-size-regular;
+  justify-content: space-between;
+  padding: 1.2rem 1.8rem;
+  width: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+.dropdown {
+  list-style: none;
+  position: absolute;
+  width: 100%;
+
+  &__btn {
+    background-color: $input-gray;
+    border: 1px solid $neutral-light-grey;
+    @include buttonStyles;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:focus {
+      border: 1px solid $primary;
+      outline: none;
+    }
+  }
+
+  &__category {
+    background-color: $input-gray;
+    border-bottom: 1px solid $neutral-light-grey;
+    border-left: 1px solid $neutral-light-grey;
+    border-right: 1px solid $neutral-light-grey;
+    border-top: 1px solid transparent;
+    @include buttonStyles;
+
+    &:first-child {
+      &:hover {
+        border-top: 1px solid transparent;
+      }
+    }
+
+    &:hover {
+      border: 1px solid $primary;
+      cursor: pointer;
+    }
+  }
+}

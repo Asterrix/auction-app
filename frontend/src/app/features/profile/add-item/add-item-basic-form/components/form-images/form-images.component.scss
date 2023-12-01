@@ -1,0 +1,92 @@
+@import "colors";
+@import "typography";
+
+.form {
+  background-color: $input-gray;
+  border: 2px dashed $neutral-light-grey;
+  display: grid;
+  gap: 0.8rem;
+
+  &__label {
+    display: grid;
+    gap: 0.8rem;
+    padding: 6.4rem;
+    text-align: center;
+  }
+
+  &__img-row {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 1fr);
+    min-height: 216px;
+
+    img {
+      object-fit: cover;
+      width: 100%;
+    }
+  }
+
+  &__message {
+    &--span {
+      color: $primary;
+      @extend .font-semi-bold;
+      font-size: 1.7rem;
+    }
+
+    &--drag {
+      color: $neutral-grey;
+      font-size: 1.2rem;
+    }
+  }
+
+  &__input {
+    display: none;
+  }
+}
+
+.img-container {
+  padding: 1.2rem;
+}
+
+.highlight {
+  border: 2px dashed $primary !important;
+  transition: all 200ms ease-out;
+}
+
+.img-card {
+  display: flex;
+  height: 96px;
+  position: relative;
+
+  &:before {
+    background: rgba(0, 0, 0, 0.05);
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+}
+
+.remove-btn {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  transition: background-color 300ms ease-out;
+  z-index: 1;
+
+  img {
+    filter: invert(10%) sepia(89%) saturate(6289%) hue-rotate(11deg) brightness(91%) contrast(119%);
+    height: 16px;
+    width: 16px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

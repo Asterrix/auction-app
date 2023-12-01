@@ -1,0 +1,19 @@
+<form-wrapper formSubject="Add Item">
+
+  <div class="form">
+    <add-item-basic-form-item-name/>
+    <add-item-basic-form-categories/>
+    <add-item-basic-form-text-area/>
+    <add-item-basic-form-images
+      (addImageEvent)="addImage($event)"
+      (removeImageEvent)="removeImage($event)"
+      [itemImages]="itemImages"
+    />
+
+    <div class="form__btn">
+      <button class="form__btn--cancel" type="reset">Cancel</button>
+      <button class="form__btn--next" type="button">Next</button>
+    </div>
+  </div>
+
+</form-wrapper>
