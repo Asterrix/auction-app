@@ -1,52 +1,50 @@
 <form-wrapper formSubject="Location & Shipping">
-  <div class="form">
+  <app-form-member
+    inputType="text"
+    memberId="address"
+    memberLabel="Address"
+    placeholder="123 Main Street"
+  />
+
+  <app-form-member
+    inputType="email"
+    memberId="email"
+    memberLabel="Enter email"
+    placeholder="user@domain.com"
+  />
+
+  <div class="form__city">
     <app-form-member
       inputType="text"
-      memberId="address"
-      memberLabel="Address"
-      placeholder="123 Main Street"
+      memberId="city"
+      memberLabel="City"
+      placeholder="ex. Madrid"
     />
 
     <app-form-member
-      inputType="email"
-      memberId="email"
-      memberLabel="Enter email"
-      placeholder="user@domain.com"
+      inputType="text"
+      memberId="zip"
+      memberLabel="Zip code"
+      placeholder="XXXXXXX"
     />
+  </div>
 
-    <div class="form__city">
-      <app-form-member
-        inputType="text"
-        memberId="city"
-        memberLabel="City"
-        placeholder="ex. Madrid"
-      />
+  <div class="form__member">
+    <label class="form__member__label">Country</label>
+    <form-dropdown [isActive]="false" buttonText="ex.Spain"/>
+  </div>
 
-      <app-form-member
-        inputType="text"
-        memberId="zip"
-        memberLabel="Zip code"
-        placeholder="XXXXXXX"
-      />
-    </div>
-
-    <div class="form__member">
-      <label class="form__member__label">Country</label>
-      <form-categories-dropdown [isActive]="false" buttonText="ex.Spain"/>
-    </div>
-
-    <app-form-phone-number/>
+  <app-form-phone-number/>
 
 
-    <app-add-item-credit-card-form/>
+  <app-add-item-credit-card-form/>
 
-    <div class="form__navigation">
-      <button class="btn btn--cancel">Cancel</button>
+  <div class="form__navigation">
+    <button class="btn--cancel">Cancel</button>
 
-      <div class="form__navigation__forward">
-        <button class="btn--back">Back</button>
-        <button class="btn--next">Next</button>
-      </div>
+    <div class="form__navigation__forward">
+      <button class="btn--back">Back</button>
+      <button class="btn--next">Next</button>
     </div>
   </div>
 </form-wrapper>

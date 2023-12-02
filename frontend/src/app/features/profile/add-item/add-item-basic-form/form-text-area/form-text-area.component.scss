@@ -1,7 +1,7 @@
-@import "colors";
-@import "typography";
+@use "colors" as *;
+@use "typography";
 
-.form {
+.text-area {
   display: grid;
   gap: 0.8rem;
 
@@ -11,9 +11,12 @@
   }
 
   &__input {
+    appearance: none;
     background-color: $input-gray;
     border: 1px solid $neutral-light-grey;
+    font-family: inherit;
     padding: 1.6rem;
+    resize: none;
 
     &::placeholder {
       color: $neutral-grey;
@@ -21,6 +24,13 @@
 
     &:focus {
       border: 1px solid $primary;
+
+      outline: none;
     }
+  }
+
+  &__count {
+    color: $neutral-grey;
+    justify-self: right;
   }
 }

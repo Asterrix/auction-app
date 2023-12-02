@@ -1,6 +1,6 @@
-import {CommonModule, NgOptimizedImage} from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {Component} from "@angular/core";
-import {DropdownComponent} from "./dropdown/dropdown.component";
+import {DropdownComponent} from "../../shared/dropdown/dropdown.component";
 
 enum CategoryType {
   Category,
@@ -10,7 +10,7 @@ enum CategoryType {
 @Component({
   selector: "add-item-basic-form-categories",
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, DropdownComponent],
+  imports: [CommonModule, DropdownComponent],
   templateUrl: "./form-categories.component.html",
   styleUrl: "./form-categories.component.scss"
 })

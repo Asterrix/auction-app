@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {DropdownComponent} from "../add-item-basic-form/components/form-categories/dropdown/dropdown.component";
+import {DropdownComponent} from "../shared/dropdown/dropdown.component";
 import {FormMemberComponent} from "../shared/form-member/form-member.component";
 
 @Component({

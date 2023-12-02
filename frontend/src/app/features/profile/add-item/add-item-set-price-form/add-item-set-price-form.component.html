@@ -1,28 +1,26 @@
 <form-wrapper formSubject="Set prices">
-  <div class="form">
 
-    <app-form-start-price/>
+  <app-form-start-price/>
 
-    <div class="form__dates">
-      <div class="form__dates--layout">
-        <app-form-date-picker fieldLabel="Start date"/>
-        <app-form-date-picker fieldLabel="End date"/>
-      </div>
-
-      <p class="form__dates__notice">
-        The auction will be automatically closed when the end time comes.
-        The highest bid will win the auction.
-      </p>
+  <div class="form__dates">
+    <div class="form__dates--layout">
+      <app-form-date-picker fieldLabel="Start date"/>
+      <app-form-date-picker fieldLabel="End date"/>
     </div>
 
-    <div class="form__navigation">
-      <button class="btn btn--cancel">Cancel</button>
-
-      <div class="form__navigation__forward">
-        <button class="btn--back">Back</button>
-        <button class="btn--next">Next</button>
-      </div>
-    </div>
-
+    <p class="form__dates__notice">
+      The auction will be automatically closed when the end time comes.
+      The highest bid will win the auction.
+    </p>
   </div>
+
+  <div class="form__navigation">
+    <button class="btn--cancel">Cancel</button>
+
+    <div class="form__navigation__forward">
+      <button class="btn--back">Back</button>
+      <button class="btn--next">Next</button>
+    </div>
+  </div>
+
 </form-wrapper>
