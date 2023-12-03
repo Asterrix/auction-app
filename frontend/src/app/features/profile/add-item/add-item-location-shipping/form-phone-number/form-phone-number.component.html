@@ -1,7 +1,7 @@
-<div class="form">
+<div class="form" [formGroup]="controlGroup">
   <label class="form__label" for="phone">Phone Number</label>
   <div class="form__input--layout">
-    <input class="form__input" id="phone" placeholder="+32534231564" type="text">
+    <input class="form__input" id="phone" placeholder="+32534231564" type="text" [formControlName]="controlName">
     <p class="form--verified">Not Verified</p>
   </div>
 </div>
