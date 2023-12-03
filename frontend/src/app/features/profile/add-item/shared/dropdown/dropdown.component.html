@@ -1,7 +1,9 @@
-<div class="relative">
+<div
+  (focusout)="emitSelectionChange(); hideDropdownMenu()"
+  [ngClass]="{'invalid': !isValid}"
+  class="relative">
   <button
     (click)="showDropdownMenu()"
-    (focusout)="hideDropdownMenu()"
     class="dropdown__btn">
     {{ buttonText }}
     <img
@@ -11,11 +13,15 @@
       width="24"/>
   </button>
 
-  <div *ngIf="isActive" class="dropdown">
-    <ul>
-      <li class="dropdown__category">
-        Placeholder
-      </li>
-    </ul>
-  </div>
+  <ng-container *ngIf="isActive">
+    <div class="dropdown">
+      <ul>
+        <li
+          (click)="emitSelectionChange(); hideDropdownMenu()"
+          class="dropdown__category">
+          Placeholder
+        </li>
+      </ul>
+    </div>
+  </ng-container>
 </div>

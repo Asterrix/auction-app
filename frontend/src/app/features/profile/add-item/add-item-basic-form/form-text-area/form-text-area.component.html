@@ -1,4 +1,4 @@
-<div class="text-area">
+<div [formGroup]="controlGroup" class="text-area">
   <label
     class="text-area__label"
     for="description">
@@ -7,13 +7,18 @@
 
   <textarea
     (input)="updateCounts()"
-    [(ngModel)]="textInput"
+    [formControlName]="controlName"
+    [ngClass]="{'invalid': !valid}"
     class="text-area__input"
     id="description"
-    rows="7">
+    rows="7"
+  >
   </textarea>
 
-  <span class="text-area__count">
+  <div class="text-area__info">
+    <ng-content></ng-content>
+    <span [ngClass]="{'invalid__text': !valid}" class="text-area__count">
     {{wordCount}} words ({{characterCount}} characters)
   </span>
+  </div>
 </div>

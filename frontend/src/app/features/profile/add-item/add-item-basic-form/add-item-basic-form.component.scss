@@ -6,3 +6,15 @@
   grid-template-columns: repeat(2, 1fr);
   margin-top: 2.4rem;
 }
+
+.form {
+  display: grid;
+  gap: 2.4rem;
+}
+
+.categories__validation__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  gap: 2.4rem;
+}
