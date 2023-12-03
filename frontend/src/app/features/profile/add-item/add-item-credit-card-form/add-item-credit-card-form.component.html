@@ -34,16 +34,23 @@
 
   <div class="form">
     <app-form-member
+      [controlGroup]="creditCardGroup"
+      [valid]="true"
+      controlName="nameOnCard"
       inputType="text"
       memberId="card-name"
       memberLabel="Name on Card"
       placeholder="JOHN DOE"/>
 
     <app-form-member
+      [controlGroup]="creditCardGroup"
+      [valid]="true"
+      controlName="cardNumber"
       inputType="text"
       memberId="card-number"
       memberLabel="Card Number"
-      placeholder="XXXX-XXXX-XXXX-XXXX"/>
+      placeholder="XXXX-XXXX-XXXX-XXXX"
+    />
 
     <div class="form__dates">
 
@@ -51,14 +58,19 @@
         <label>Expiration date</label>
         <form-dropdown
           [isActive]="false"
+          [isValid]="true"
           buttonText="MM"/>
       </div>
 
       <form-dropdown
         [isActive]="false"
-        buttonText="YY"/>
+        buttonText="YY"
+        [isValid]="true"/>
 
       <app-form-member
+        [controlGroup]="credCardExpirationGroup"
+        [valid]="true"
+        controlName="cvc"
         inputType="text"
         memberId="card-cvc-cvv"
         memberLabel="CVC/CVV"
