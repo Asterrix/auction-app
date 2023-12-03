@@ -12,6 +12,7 @@ import {EventService} from "../../../../../shared/services/event.service";
 })
 export class FormImagesComponent {
   @Input({required: true}) itemImages!: string[];
+  @Input({required: true}) isValid!: boolean;
   @Output() addImageEvent = new EventEmitter<Event>();
   @Output() removeImageEvent = new EventEmitter<string>();
   @ViewChild("fileInput") fileInput!: ElementRef;

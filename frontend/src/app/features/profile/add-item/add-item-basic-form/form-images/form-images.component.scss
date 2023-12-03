@@ -90,3 +90,7 @@
     cursor: pointer;
   }
 }
+
+.invalid {
+  border: 2px dashed $error;
+}

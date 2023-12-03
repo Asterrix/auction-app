@@ -12,5 +12,4 @@ import {AddItemSetPriceFormComponent} from "./add-item-set-price-form/add-item-s
   styleUrl: "./add-item.component.scss"
 })
 export class AddItemComponent {
-
 }
