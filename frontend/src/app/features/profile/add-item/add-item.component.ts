@@ -1,6 +1,7 @@
 import {CommonModule} from "@angular/common";
-import {Component, inject, OnDestroy} from "@angular/core";
+import {Component, HostListener, inject, OnDestroy} from "@angular/core";
 import {Router} from "@angular/router";
+import {EventService} from "../../../shared/services/event.service";
 import {HomeRouteEndpoint} from "../../home/home-routes";
 import {AddItemBasicFormComponent} from "./add-item-basic-form/add-item-basic-form.component";
 import {AddItemLocationShippingComponent} from "./add-item-location-shipping/add-item-location-shipping.component";
@@ -21,6 +22,7 @@ export class AddItemComponent implements FormNavigation, OnDestroy {
   protected totalFormNum = 3;
   protected displayCreditCardForm = false;
   private addItemFormService = inject(AddItemFormService);
+  private eventService = inject(EventService);
   private router = inject(Router);
 
   public cancelFormEvent(): void {
@@ -46,5 +48,10 @@ export class AddItemComponent implements FormNavigation, OnDestroy {
 
   public ngOnDestroy(): void {
     this.addItemFormService.resetForm();
+  }
+
+  @HostListener("window:beforeunload", ["$event"])
+  unloadNotification($event: Event): void {
+    this.eventService.preventDefaultBehaviour($event);
   }
 }
