@@ -1,7 +1,11 @@
 <section class="add-item">
   <div class="container">
     <div class="add-item__layout">
-      <ng-container [ngSwitch]="currentForm">
+      <app-progress-bar
+        [currentProgress]="currentFormNum"
+        [totalProgress]="totalFormNum"/>
+
+      <ng-container [ngSwitch]="currentFormNum">
         <add-item-basic-form
           (cancelForm)="cancelFormEvent()"
           (goBack)="goBackEvent()"

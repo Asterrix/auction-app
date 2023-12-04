@@ -6,17 +6,19 @@ import {AddItemBasicFormComponent} from "./add-item-basic-form/add-item-basic-fo
 import {AddItemLocationShippingComponent} from "./add-item-location-shipping/add-item-location-shipping.component";
 import {AddItemSetPriceFormComponent} from "./add-item-set-price-form/add-item-set-price-form.component";
 import {FormNavigation} from "./shared/form-navigation-handler";
+import {ProgressBarComponent} from "./shared/progress-bar/progress-bar.component";
 import {AddItemFormService} from "./shared/services/add-item-form.service";
 
 @Component({
   selector: "profile-add-item",
   standalone: true,
-  imports: [CommonModule, AddItemBasicFormComponent, AddItemSetPriceFormComponent, AddItemLocationShippingComponent],
+  imports: [CommonModule, AddItemBasicFormComponent, AddItemSetPriceFormComponent, AddItemLocationShippingComponent, ProgressBarComponent],
   templateUrl: "./add-item.component.html",
   styleUrl: "./add-item.component.scss"
 })
 export class AddItemComponent implements FormNavigation {
-  protected currentForm = 1;
+  protected currentFormNum = 1;
+  protected totalFormNum = 3;
   protected displayCreditCardForm = false;
   private addItemFormService = inject(AddItemFormService);
   private router = inject(Router);
@@ -29,16 +31,16 @@ export class AddItemComponent implements FormNavigation {
   public goBackEvent(): void {
     if (this.displayCreditCardForm) {
       this.displayCreditCardForm = false;
-    } else {
-      this.currentForm--;
+    } else if(this.currentFormNum > 1) {
+      this.currentFormNum--;
     }
   }
 
   public submitFormEvent(): void {
-    if (this.currentForm === 3) {
+    if (this.currentFormNum === this.totalFormNum) {
       this.displayCreditCardForm = true;
-    } else {
-      this.currentForm++;
+    } else if (this.currentFormNum < this.totalFormNum) {
+      this.currentFormNum++;
     }
   }
 }
