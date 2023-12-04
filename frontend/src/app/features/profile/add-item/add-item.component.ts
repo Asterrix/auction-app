@@ -1,5 +1,5 @@
 import {CommonModule} from "@angular/common";
-import {Component, inject} from "@angular/core";
+import {Component, inject, OnDestroy} from "@angular/core";
 import {Router} from "@angular/router";
 import {HomeRouteEndpoint} from "../../home/home-routes";
 import {AddItemBasicFormComponent} from "./add-item-basic-form/add-item-basic-form.component";
@@ -16,7 +16,7 @@ import {AddItemFormService} from "./shared/services/add-item-form.service";
   templateUrl: "./add-item.component.html",
   styleUrl: "./add-item.component.scss"
 })
-export class AddItemComponent implements FormNavigation {
+export class AddItemComponent implements FormNavigation, OnDestroy {
   protected currentFormNum = 1;
   protected totalFormNum = 3;
   protected displayCreditCardForm = false;
@@ -31,7 +31,7 @@ export class AddItemComponent implements FormNavigation {
   public goBackEvent(): void {
     if (this.displayCreditCardForm) {
       this.displayCreditCardForm = false;
-    } else if(this.currentFormNum > 1) {
+    } else if (this.currentFormNum > 1) {
       this.currentFormNum--;
     }
   }
@@ -42,5 +42,9 @@ export class AddItemComponent implements FormNavigation {
     } else if (this.currentFormNum < this.totalFormNum) {
       this.currentFormNum++;
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.addItemFormService.resetForm();
   }
 }

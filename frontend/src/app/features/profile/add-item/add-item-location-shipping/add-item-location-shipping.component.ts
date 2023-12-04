@@ -6,7 +6,7 @@ import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation-message/validation-message.component";
 import {AddItemCreditCardFormComponent} from "../add-item-credit-card-form/add-item-credit-card-form.component";
-import {DropdownComponent} from "../shared/dropdown/dropdown.component";
+import {CategoryDropdownComponent} from "../add-item-basic-form/category-dropdown/category-dropdown.component";
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
 import {FormMemberComponent} from "../shared/form-member/form-member.component";
 import {FormNavigationHandler} from "../shared/form-navigation-handler";
@@ -19,7 +19,7 @@ import {FormPhoneNumberComponent} from "./form-phone-number/form-phone-number.co
   imports: [
     CommonModule,
     FormWrapperComponent,
-    DropdownComponent,
+    CategoryDropdownComponent,
     FormMemberComponent,
     FormPhoneNumberComponent,
     AddItemCreditCardFormComponent,

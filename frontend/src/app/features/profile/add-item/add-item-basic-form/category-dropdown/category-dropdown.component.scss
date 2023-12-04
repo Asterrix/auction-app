@@ -43,12 +43,6 @@
     border-top: 1px solid transparent;
     @include buttonStyles;
 
-    &:first-child {
-      &:hover {
-        border-top: 1px solid transparent;
-      }
-    }
-
     &:hover {
       border: 1px solid $primary;
       cursor: pointer;
@@ -58,4 +52,8 @@
 
 .invalid {
   border: 1px solid $error;
+}
+
+.selected {
+  color: $neutral-dark;
 }

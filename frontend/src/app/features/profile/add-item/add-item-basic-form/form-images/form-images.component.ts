@@ -1,5 +1,5 @@
-import {Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
+import {Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild} from "@angular/core";
 import {Constant} from "../../../../../shared/models/enums/constant";
 import {EventService} from "../../../../../shared/services/event.service";
 

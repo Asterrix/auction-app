@@ -56,16 +56,16 @@
 
       <div class="form__dates--expiration">
         <label>Expiration date</label>
-        <form-dropdown
+        <app-card-dropdown
           [isActive]="false"
           [isValid]="true"
           buttonText="MM"/>
       </div>
 
-      <form-dropdown
+      <app-card-dropdown
         [isActive]="false"
-        buttonText="YY"
-        [isValid]="true"/>
+        [isValid]="true"
+        buttonText="YY"/>
 
       <app-form-member
         [controlGroup]="credCardExpirationGroup"

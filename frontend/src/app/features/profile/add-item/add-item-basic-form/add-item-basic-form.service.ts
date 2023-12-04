@@ -1,12 +1,12 @@
 import {inject, Injectable} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, ɵElement} from "@angular/forms";
-import {CategorySelection, CategoryType} from "./form-categories/form-categories.component";
-import {ImageService} from "./services/image.service";
 import {
   AddItemBasicFormValidationConfig,
   BasicFormValidation
 } from "../shared/validation/config/add-item-basic-form-validation-config";
 import {Validation, ValidationResult} from "../shared/validation/validation";
+import {CategorySelection, CategoryType} from "./form-categories/form-categories.component";
+import {ImageService} from "./services/image.service";
 
 export type Basic = {
   itemName: FormControl<string>,

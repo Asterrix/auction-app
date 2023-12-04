@@ -34,9 +34,9 @@ import {FormTextAreaComponent} from "./form-text-area/form-text-area.component";
   styleUrls: ["./add-item-basic-form.component.scss"]
 })
 export class AddItemBasicFormComponent extends FormNavigationHandler {
-  @Output() override submitForm: EventEmitter<void> = new EventEmitter<void>();
-  @Output() override goBack: EventEmitter<void> = new EventEmitter<void>();
-  @Output() override cancelForm: EventEmitter<void> = new EventEmitter<void>();
+  @Output() override submitForm = new EventEmitter<void>();
+  @Output() override goBack = new EventEmitter<void>();
+  @Output() override cancelForm = new EventEmitter<void>();
   protected addItemForm = inject(AddItemBasicFormService);
   protected formControls = this.addItemForm.form.controls;
   protected readonly BasicFormValidation = BasicFormValidation;
