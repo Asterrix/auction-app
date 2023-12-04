@@ -1,10 +1,11 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {ClickOutsideDirective} from "../directives/click-outside.directive";
 
 @Component({
   selector: "form-dropdown",
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage, ClickOutsideDirective],
   templateUrl: "./dropdown.component.html",
   styleUrl: "./dropdown.component.scss"
 })
