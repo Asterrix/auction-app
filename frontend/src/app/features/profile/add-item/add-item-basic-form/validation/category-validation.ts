@@ -1,23 +1,21 @@
 import {Constant} from "../../../../../shared/models/enums/constant";
 import {isEmptyFn} from "../../../../../shared/models/validators/validator-functions";
-import {Validate, ValidationResult} from "../../shared/validation/formFieldValidator";
+import {Validate, ValidationMessage, ValidationResult} from "../../shared/validation/validation";
 import {CategoryType} from "../form-categories/form-categories.component";
-import {AbstractValidationMessage} from "./abstract-validation-message";
 
 enum ValidationMessages {
   RequiredCategory,
   RequiredSubcategory
 }
 
-export class CategoryValidation extends AbstractValidationMessage implements Validate<string> {
-  protected override errorMessages: Record<ValidationMessages, string> = {
+export class CategoryValidation implements Validate<string> {
+  private errorMessages: ValidationMessage = {
     [ValidationMessages.RequiredCategory]: "Select a category.",
     [ValidationMessages.RequiredSubcategory]: "Select a subcategory."
   };
   private readonly categoryType: CategoryType;
 
   constructor(categoryType: CategoryType) {
-    super();
     this.categoryType = categoryType;
   }
 

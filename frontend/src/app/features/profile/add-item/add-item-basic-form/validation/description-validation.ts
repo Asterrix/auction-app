@@ -1,7 +1,6 @@
 import {Constant} from "../../../../../shared/models/enums/constant";
 import {isEmptyFn, maxLengthFn, minLengthFn} from "../../../../../shared/models/validators/validator-functions";
-import {Validate, ValidationResult} from "../../shared/validation/formFieldValidator";
-import {AbstractValidationMessage} from "./abstract-validation-message";
+import {Validate, ValidationMessage, ValidationResult} from "../../shared/validation/validation";
 
 enum ValidationError {
   Required,
@@ -9,11 +8,11 @@ enum ValidationError {
   MaxLength
 }
 
-export class DescriptionValidation extends AbstractValidationMessage implements Validate<string> {
+export class DescriptionValidation implements Validate<string> {
   private readonly minLength: number = 20;
   private readonly maxLength: number = 700;
 
-  protected override errorMessages: Record<ValidationError, string> = {
+  private errorMessages: ValidationMessage = {
     [ValidationError.Required]: "Enter item description.",
     [ValidationError.MinLength]: `Item description cannot be shorter than ${this.minLength} characters.`,
     [ValidationError.MaxLength]: `Item description cannot be longer than ${this.maxLength} characters.`
