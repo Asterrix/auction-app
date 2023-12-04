@@ -10,7 +10,7 @@ import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
-public class BidsMapper {
+public final class BidsMapper {
     private BidsMapper() {
     }
 
