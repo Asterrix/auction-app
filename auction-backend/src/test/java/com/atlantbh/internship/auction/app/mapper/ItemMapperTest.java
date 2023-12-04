@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,8 +27,8 @@ class ItemMapperTest {
                 "Item",
                 "Desc",
                 new BigDecimal("0"),
-                LocalDateTime.MIN,
-                LocalDateTime.MAX,
+                ZonedDateTime.now(),
+                ZonedDateTime.now(),
                 List.of(),
                 new Category(1, "Category"),
                 new User());
@@ -50,7 +50,7 @@ class ItemMapperTest {
 
     @Test
     void convertToItemDto_DtoShouldMatchParameterProperties() {
-        final ItemDto itemDto = ItemMapper.convertToItemDto(item, LocalDateTime.now());
+        final ItemDto itemDto = ItemMapper.convertToItemDto(item, ZonedDateTime.now());
 
         assertEquals(item.getId(), itemDto.id());
         assertEquals(item.getName(), itemDto.name());

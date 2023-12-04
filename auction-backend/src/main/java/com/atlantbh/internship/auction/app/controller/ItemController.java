@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @RestController
@@ -32,7 +33,8 @@ public final class ItemController {
 
     @GetMapping("{id}")
     public ResponseEntity<ItemAggregate> getItemById(@PathVariable("id") final Integer itemId) {
-        final Optional<ItemAggregate> result = itemService.getItemById(itemId);
+        final ZonedDateTime timeOfRequest = ZonedDateTime.now();
+        final Optional<ItemAggregate> result = itemService.getItemById(itemId, timeOfRequest);
 
         return result.map(item -> new ResponseEntity<>(item, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
