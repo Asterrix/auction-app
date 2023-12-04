@@ -1,21 +1,23 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {ClickOutsideDirective} from "../directives/click-outside.directive";
+import {ClickOutsideDirective} from "../../shared/directives/click-outside.directive";
+
 
 @Component({
-  selector: "form-dropdown",
+  selector: "app-card-dropdown",
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, ClickOutsideDirective],
-  templateUrl: "./dropdown.component.html",
-  styleUrl: "./dropdown.component.scss"
+  imports: [CommonModule, ClickOutsideDirective, NgOptimizedImage],
+  templateUrl: "./card-dropdown.component.html",
+  styleUrl: "./card-dropdown.component.scss"
 })
-export class DropdownComponent {
+export class CardDropdownComponent {
   @Input({required: true}) buttonText!: string;
   @Input({required: true}) isActive!: boolean;
   @Input({required: false}) isValid!: boolean;
   @Output() hideDropdown = new EventEmitter<void>();
   @Output() showDropdown = new EventEmitter<void>();
-  @Output() onSelect = new EventEmitter<string>();
+  @Output() onSelect = new EventEmitter<void>();
+  protected listToggled: boolean = false;
 
   protected showDropdownMenu(): void {
     this.showDropdown.emit();
@@ -26,6 +28,6 @@ export class DropdownComponent {
   }
 
   protected emitSelectionChange(): void {
-    this.onSelect.emit("Test");
+    this.listToggled = true;
   }
 }
