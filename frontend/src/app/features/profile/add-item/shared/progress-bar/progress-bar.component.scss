@@ -1,0 +1,15 @@
+@use "colors" as *;
+
+.progress-bar {
+  display: flex;
+
+  &__item {
+    align-items: center;
+    display: flex;
+
+    hr {
+      border: 1px solid $neutral-light-grey;
+      width: 8rem;
+    }
+  }
+}
