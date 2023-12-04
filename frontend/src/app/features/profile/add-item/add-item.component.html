@@ -1,9 +1,26 @@
 <section class="add-item">
   <div class="container">
     <div class="add-item__layout">
-      <add-item-basic-form/>
-      <add-item-set-price-form/>
-      <app-add-item-location-shipping/>
+      <ng-container [ngSwitch]="currentForm">
+        <add-item-basic-form
+          (cancelForm)="cancelFormEvent()"
+          (goBack)="goBackEvent()"
+          (submitForm)="submitFormEvent()"
+          *ngSwitchDefault/>
+
+        <add-item-set-price-form
+          (cancelForm)="cancelFormEvent()"
+          (goBack)="goBackEvent()"
+          (submitForm)="submitFormEvent()"
+          *ngSwitchCase="2"/>
+
+        <app-add-item-location-shipping
+          (cancelForm)="cancelFormEvent()"
+          (goBack)="goBackEvent()"
+          (submitForm)="submitFormEvent()"
+          *ngSwitchCase="3"
+          [showCreditCardForm]="displayCreditCardForm"/>
+      </ng-container>
     </div>
   </div>
 </section>

@@ -1,14 +1,13 @@
 import {Constant} from "../../../../../shared/models/enums/constant";
-import {AbstractValidationMessage} from "../../add-item-basic-form/validation/abstract-validation-message";
-import {Validate, ValidationResult} from "../../shared/validation/formFieldValidator";
+import {Validate, ValidationMessage, ValidationResult} from "../../shared/validation/validation";
 
 enum ValidationError {
   Regex,
 }
 
-export class PriceValidator extends AbstractValidationMessage implements Validate<string> {
-  private regex: RegExp = /^(?:1\d*|\d{2,})(?:\.\d{1,2})?$/;
-  protected errorMessages: Record<number, string> = {
+export class PriceValidator implements Validate<string> {
+  private regex: RegExp = /^([1-9]|\d{2,})(?:\.\d{1,2})?$/;
+  private errorMessages: ValidationMessage = {
     [ValidationError.Regex]: "You entered invalid initial price. Initial price must be a numeric value greater than 1. " +
     "Decimals with a maximum scale of 2 are allowed."
   };
