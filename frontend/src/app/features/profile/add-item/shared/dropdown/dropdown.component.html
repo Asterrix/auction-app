@@ -1,5 +1,5 @@
 <div
-  (focusout)="emitSelectionChange(); hideDropdownMenu()"
+  (clickOutside)="hideDropdownMenu()"
   [ngClass]="{'invalid': !isValid}"
   class="relative">
   <button
