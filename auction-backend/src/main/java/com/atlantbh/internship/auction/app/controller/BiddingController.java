@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -21,7 +21,7 @@ public class BiddingController {
 
     @PostMapping
     ResponseEntity<Void> bidOnItem(@RequestBody BidRequest bidRequest) {
-        final LocalDateTime timeOfRequest = LocalDateTime.now();
+        final ZonedDateTime timeOfRequest = ZonedDateTime.now();
         biddingService.makeAnOfferOnItem(bidRequest, timeOfRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -19,7 +19,7 @@ import com.atlantbh.internship.auction.app.service.validation.bidding.TimeValida
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +54,7 @@ public class BiddingServiceImpl implements BiddingService {
     }
 
     @Override
-    public void makeAnOfferOnItem(final BidRequest bidRequest, final LocalDateTime timeOfRequest) {
+    public void makeAnOfferOnItem(final BidRequest bidRequest, final ZonedDateTime timeOfRequest) {
         requestValidator.validate(bidRequest);
 
         final Item item = getItem(bidRequest.itemId());

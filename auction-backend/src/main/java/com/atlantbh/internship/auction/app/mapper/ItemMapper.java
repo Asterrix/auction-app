@@ -1,15 +1,15 @@
 package com.atlantbh.internship.auction.app.mapper;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
+import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
-import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public final class ItemMapper {
@@ -29,7 +29,7 @@ public final class ItemMapper {
         return entityList.stream().map(ItemMapper::convertToSummaryDto).toList();
     }
 
-    public static ItemDto convertToItemDto(final Item entity, final LocalDateTime currentTime) {
+    public static ItemDto convertToItemDto(final Item entity, final ZonedDateTime currentTime) {
         return new ItemDto(
                 entity.getId(),
                 entity.getName(),

@@ -2,7 +2,7 @@ package com.atlantbh.internship.auction.app.model.impl;
 
 import com.atlantbh.internship.auction.app.model.DateInterval;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
 public final class TimeRemainingCalculator {
@@ -10,13 +10,13 @@ public final class TimeRemainingCalculator {
     private TimeRemainingCalculator() {
     }
 
-    public static String getTimeRemaining(final LocalDateTime currentTime, final LocalDateTime endTime) {
+    public static String getTimeRemaining(final ZonedDateTime currentTime, final ZonedDateTime endTime) {
         final DateInterval calculatedDateInterval = calculateDateInterval(currentTime, endTime);
 
         return convertToString(calculatedDateInterval);
     }
 
-    private static DateInterval calculateDateInterval(final LocalDateTime startTime, final LocalDateTime endTime) {
+    private static DateInterval calculateDateInterval(final ZonedDateTime startTime, final ZonedDateTime endTime) {
         if (startTime.isAfter(endTime)) {
             return new DateInterval(0, 0, 0, 0);
         }

@@ -23,9 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -80,16 +78,15 @@ public final class ItemServiceImpl implements ItemService {
      * {@inheritDoc}
      */
     @Override
-    public Optional<ItemAggregate> getItemById(final Integer itemId) {
+    public Optional<ItemAggregate> getItemById(final Integer itemId, final ZonedDateTime timeOfRequest) {
         final Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) return Optional.empty();
 
-        final LocalDateTime dateTime = LocalDateTime.now();
         final Specification<Bid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
 
         final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(item.get().getId());
         if (totalNumberOfBids == 0) {
-            final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
+            final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
             final BidNumberCount bidInformation = BidsMapper.mapToUserItemBidDto(new BigDecimal("0"), 0L);
 
             final Integer ownerId = item.get().getOwner().getId();
@@ -98,18 +95,19 @@ public final class ItemServiceImpl implements ItemService {
 
         final Optional<Bid> highestBid = bidRepository.findOne(specification);
 
-        final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
+        final ItemDto mappedItem = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
         final BidNumberCount mappedBidInformation = BidsMapper.mapToUserItemBidDto(highestBid.get().getAmount(), totalNumberOfBids);
 
         final Integer ownerId = item.get().getOwner().getId();
-        return Optional.of(ItemMapper.convertToAggregate(mappedItems, mappedBidInformation, ownerId));
+        return Optional.of(ItemMapper.convertToAggregate(mappedItem, mappedBidInformation, ownerId));
     }
 
     @Override
     public ItemFeaturedDto getFeaturedItem() {
-        final LocalDateTime endTimeThreshold = LocalDateTime.of(
+        final ZonedDateTime endTimeThreshold = ZonedDateTime.of(
                 LocalDate.now().plusDays(FEATURED_ITEM_END_DATE_THRESHOLD),
-                LocalTime.now());
+                LocalTime.now(),
+                ZoneId.systemDefault());
         final Optional<Item> itemInfo = itemRepository.findFirstByEndTimeGreaterThanEqualOrderByIdAsc(endTimeThreshold);
 
         if (itemInfo.isEmpty()) {
