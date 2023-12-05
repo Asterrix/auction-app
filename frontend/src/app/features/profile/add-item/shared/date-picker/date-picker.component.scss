@@ -1,0 +1,132 @@
+@use "colors";
+@use "typography" as t;
+
+@mixin grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  gap: 1.2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin btn {
+  background-color: transparent;
+  border: none;
+  text-transform: uppercase;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.date-picker {
+  border: 1px solid colors.$neutral-light-grey;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4.8rem;
+  width: 320px;
+
+  &__container {
+    background-color: colors.$primary;
+    padding: 1.2rem;
+  }
+
+  &__header {
+    color: colors.$white;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+  }
+
+  &__title {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+  }
+
+  &__selected-date {
+    font-size: 3.2rem;
+  }
+
+  &__calendar {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+
+    &__navigation {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 1.2rem;
+    }
+
+    &__days {
+      @include grid;
+      border-bottom: 1px solid colors.$neutral-light-grey;
+      list-style: none;
+      padding: 1.2rem;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    gap: 2.4rem;
+
+    &-btn {
+      @include btn;
+      border-radius: 50%;
+      transition: all 300ms ease-out;
+      width: 2.4rem;
+
+      &:hover {
+        background-color: colors.$primary;
+        color: colors.$white;
+        cursor: pointer;
+      }
+
+      span {
+        display: inline-block;
+      }
+    }
+  }
+
+  &__content-row {
+    list-style: none;
+    @include grid;
+    padding: 1.2rem;
+  }
+
+  &__day {
+    &-button {
+      aspect-ratio: 1;
+      background-color: transparent;
+      border: none;
+      border-radius: 50%;
+      transition: all 300ms ease-out;
+      width: 100%;
+
+      &:hover {
+        background-color: colors.$primary;
+        color: colors.$white;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 2.4rem;
+    justify-content: flex-end;
+    padding: 1.2rem;
+
+    &--cancel {
+      @include btn;
+    }
+
+    &--time {
+      @include btn;
+      color: colors.$primary;
+      font-weight: bold;
+    }
+  }
+}
+
