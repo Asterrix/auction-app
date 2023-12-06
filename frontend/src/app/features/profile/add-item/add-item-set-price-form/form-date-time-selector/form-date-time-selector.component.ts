@@ -1,8 +1,9 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component, EventEmitter, inject, Input, Output} from "@angular/core";
 import {ClickOutsideDirective} from "../../shared/directives/click-outside.directive";
 import {ModalComponent} from "../../shared/modal/modal.component";
 import {DatePickerComponent} from "./date-picker/date-picker.component";
+import {DateSelectorService} from "./services/date-selector.service";
 import {TimeSelector} from "./time-selector/time-selector.component";
 
 export interface DateTimeForm {
@@ -36,14 +37,16 @@ enum DateTimeSelector {
 })
 export class FormDateTimeSelectorComponent implements DateTimeForm {
   @Input({required: true}) fieldLabel!: string;
-  @Output() closeEvent = new EventEmitter();
-  @Output() submitEvent = new EventEmitter();
+  @Output() closeEvent = new EventEmitter<void>();
+  @Output() submitEvent = new EventEmitter<void>();
   protected currentForm: DateTimeSelector = DateTimeSelector.None;
+  private dateSelectorService = inject(DateSelectorService);
   protected readonly DatePickerForm = DateTimeSelector;
 
   public closeForm(): void {
     if (this.currentForm === DateTimeSelector.TimeForm) {
       this.currentForm = DateTimeSelector.DateForm;
+      this.dateSelectorService.setListOfMonthToSelectedDate();
     } else {
       this.currentForm = DateTimeSelector.None;
     }

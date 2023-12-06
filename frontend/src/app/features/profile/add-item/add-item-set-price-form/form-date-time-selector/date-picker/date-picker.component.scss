@@ -14,6 +14,10 @@
   background-color: transparent;
   border: none;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 300ms ease-out;
 
   &:hover {
     cursor: pointer;
@@ -82,8 +86,10 @@
         cursor: pointer;
       }
 
-      span {
-        display: inline-block;
+      img {
+        &:hover {
+          filter: invert(1) brightness(100);
+        }
       }
     }
   }
@@ -100,6 +106,8 @@
       background-color: transparent;
       border: none;
       border-radius: 50%;
+      display: flex;
+      justify-content: center;
       transition: all 300ms ease-out;
       width: 100%;
 
@@ -129,3 +137,23 @@
   }
 }
 
+input {
+  display: flex;
+  width: 100%;
+}
+
+.active {
+  aspect-ratio: 1;
+  background-color: colors.$primary;
+  border: none;
+  border-radius: 50%;
+  color: colors.$white;
+  display: flex;
+  justify-content: center;
+  transition: all 300ms ease-out;
+  width: 100%;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
