@@ -5,7 +5,7 @@
     </div>
   </div>
 
-  <ng-container *ngIf="time | async as time">
+  @if (timeService.time(); as time){
     <div class="time-selector__timer">
       <div class="time-selector__time">
         <button
@@ -72,7 +72,7 @@
           <label class="time-selector__period__label">
             <input
               (click)="changeTimePeriod(TimePeriod.AM)"
-              [ngClass]="{'active': currentHour < 12}"
+              [ngClass]="{'active': time.getHours() < 12}"
               class="time-selector__period__input"
               name="period"
               type="button"
@@ -84,7 +84,7 @@
           <label class="time-selector__period__label">
             <input
               (click)="changeTimePeriod(TimePeriod.PM)"
-              [ngClass]="{'active': currentHour >= 12}"
+              [ngClass]="{'active': time.getHours() >= 12}"
               class="time-selector__period__input"
               name="period"
               type="button"
@@ -93,7 +93,7 @@
         </div>
       </div>
     </div>
-  </ng-container>
+  }
 
   <div class="time-selector__buttons">
     <button class="time-selector__buttons--cancel" (click)="closeForm()">Cancel</button>

@@ -1,4 +1,4 @@
-import {computed, Injectable, signal, WritableSignal} from "@angular/core";
+import {computed, Injectable, Signal, signal, WritableSignal} from "@angular/core";
 import {
   addHours,
   addMinutes,
@@ -12,7 +12,6 @@ import {
   subHours,
   subMinutes
 } from "date-fns";
-import {BehaviorSubject, Observable} from "rxjs";
 
 export enum TimePeriod {
   AM,
@@ -34,94 +33,86 @@ export interface TimeChanger {
 @Injectable()
 export class TimeService implements TimeChanger {
   private currentTime: Date = new Date();
+  private timeSignal: WritableSignal<Date> = signal<Date>(this.currentTime);
+  public time: Signal<Date> = computed(() => this.timeSignal());
   private timeAmount: number = 1;
-  private timeSubject: BehaviorSubject<Date> = new BehaviorSubject<Date>(this.currentTime);
-  public time: Observable<Date> = this.timeSubject.asObservable();
-  private currentHourSignal: WritableSignal<number> = signal(this.timeSubject.getValue().getHours());
-  public currentHour = computed(() => this.currentHourSignal());
+
 
   public addHours(hours: number = this.timeAmount): void {
-    const nextHour: Date = addHours(this.timeSubject.getValue(), hours);
+    const nextHour: Date = addHours(this.timeSignal(), hours);
+
 
     if (isEqual(nextHour.getDate(), this.currentTime.getDate())) {
-      this.timeSubject.next(nextHour);
+      this.timeSignal.set(nextHour);
     } else {
       const startDate: Date = startOfDay(this.currentTime);
-      this.timeSubject.next(
+      this.timeSignal.set(
         setMinutes(
           startDate,
-          this.timeSubject.getValue().getMinutes()
+          this.timeSignal().getMinutes()
         )
       );
     }
-    this.updateCurrentHourSignal();
   }
 
   public subtractHours(hours: number = this.timeAmount): void {
-    const previousHour: Date = subHours(this.timeSubject.getValue(), hours);
+    const previousHour: Date = subHours(this.timeSignal(), hours);
 
     if (isEqual(previousHour.getDate(), this.currentTime.getDate())) {
-      this.timeSubject.next(previousHour);
+      this.timeSignal.set(previousHour);
     } else {
       const endOfDayDate: Date = endOfDay(this.currentTime);
-      this.timeSubject.next(
+
+      this.timeSignal.set(
         setMinutes(
           endOfDayDate,
-          this.timeSubject.getValue().getMinutes()
+          this.timeSignal().getMinutes()
         )
       );
     }
-
-    this.updateCurrentHourSignal();
   }
 
   public addMinutes(minutes: number = this.timeAmount): void {
-    const nextMinute: Date = addMinutes(this.timeSubject.getValue(), minutes);
+    const nextMinute: Date = addMinutes(this.timeSignal(), minutes);
 
     if (isEqual(nextMinute.getMinutes(), 0)) {
-      const startOfHourDate: Date = startOfHour(this.timeSubject.getValue());
+      const startOfHourDate: Date = startOfHour(this.timeSignal());
 
-      this.timeSubject.next(
+      this.timeSignal.set(
         setHours(
           startOfHourDate,
-          this.timeSubject.getValue().getHours()
+          this.timeSignal().getHours()
         )
       );
     } else {
-      this.timeSubject.next(nextMinute);
+      this.timeSignal.set(nextMinute);
     }
   }
 
   public subtractMinutes(minutes: number = this.timeAmount): void {
-    const previousMinute: Date = subMinutes(this.timeSubject.getValue(), minutes);
+    const previousMinute: Date = subMinutes(this.timeSignal(), minutes);
 
     if (isEqual(previousMinute.getMinutes(), 59)) {
-      const endOfHourDate: Date = endOfHour(this.timeSubject.getValue());
+      const endOfHourDate: Date = endOfHour(this.timeSignal());
 
-      this.timeSubject.next(
+      this.timeSignal.set(
         setHours(
           endOfHourDate,
-          this.timeSubject.getValue().getHours()
+          this.timeSignal().getHours()
         )
       );
     } else {
-      this.timeSubject.next(previousMinute);
+      this.timeSignal.set(previousMinute);
     }
   }
 
   public changeTimePeriod(period: TimePeriod): void {
-    const currentHours: number = this.timeSubject.getValue().getHours();
+    const currentHours: number = this.timeSignal().getHours();
 
     if (period === TimePeriod.AM && currentHours >= 12) {
       this.subtractHours(12);
     } else if (period === TimePeriod.PM && currentHours < 12) {
       this.addHours(12);
     }
-
-    this.updateCurrentHourSignal();
-  }
-
-  private updateCurrentHourSignal(): void {
-    this.currentHourSignal.set(this.timeSubject.getValue().getHours());
   }
 }
