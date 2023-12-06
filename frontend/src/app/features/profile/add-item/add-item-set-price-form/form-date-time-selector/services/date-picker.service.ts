@@ -1,6 +1,5 @@
 import {computed, Injectable, signal} from "@angular/core";
-import {addMonths, eachDayOfInterval, endOfMonth, format, startOfMonth, subMonths} from "date-fns";
-import {BehaviorSubject, Observable} from "rxjs";
+import {addMonths, eachDayOfInterval, endOfMonth, startOfMonth, subMonths} from "date-fns";
 
 @Injectable({
   providedIn: "root"
