@@ -1,0 +1,102 @@
+<div class="time-selector">
+  <div class="time-selector__container">
+    <div class="time-selector__header">
+      <p class="time-selector__title">Select time</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="time | async as time">
+    <div class="time-selector__timer">
+      <div class="time-selector__time">
+        <button
+          (click)="addHours()"
+          class="time-selector__time-btn">
+          <img
+            alt="Add hour button"
+            height="24"
+            ngSrc="assets/icons/chevron_up.svg"
+            width="24"/>
+        </button>
+
+        <input
+          [value]="time |  date: 'h'"
+          [ngClass]="{'focus': focusedElement === FocusedTimeElement.Hour}"
+          disabled
+          id="hour"
+          type="number">
+
+        <button
+          (click)="subtractHours()"
+          class="time-selector__time-btn">
+          <img
+            alt="Subtract hour button"
+            height="24"
+            ngSrc="assets/icons/chevron_down.svg"
+            width="24"/>
+        </button>
+      </div>
+
+      <div>
+        <div class="time-selector__time">
+          <button
+            (click)="addMinutes()"
+            class="time-selector__time-btn">
+            <img
+              alt="Add minutes button"
+              height="24"
+              ngSrc="assets/icons/chevron_up.svg"
+              width="24"/>
+          </button>
+
+          <input
+            [value]="time | date: 'mm'"
+            [ngClass]="{'focus': focusedElement === FocusedTimeElement.Minute}"
+            disabled
+            id="minutes"
+            type="number">
+
+          <button
+            (click)="subtractMinutes()"
+            class="time-selector__time-btn">
+            <img
+              alt="Subtract minutes button"
+              height="24"
+              ngSrc="assets/icons/chevron_down.svg"
+              width="24"/>
+          </button>
+        </div>
+      </div>
+
+      <div class="time-selector__period">
+        <div class="time-selector__time">
+          <label class="time-selector__period__label">
+            <input
+              (click)="changeTimePeriod(TimePeriod.AM)"
+              [ngClass]="{'active': currentHour < 12}"
+              class="time-selector__period__input"
+              name="period"
+              type="button"
+              value="AM">
+          </label>
+        </div>
+
+        <div class="time-selector__time">
+          <label class="time-selector__period__label">
+            <input
+              (click)="changeTimePeriod(TimePeriod.PM)"
+              [ngClass]="{'active': currentHour >= 12}"
+              class="time-selector__period__input"
+              name="period"
+              type="button"
+              value="PM">
+          </label>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="time-selector__buttons">
+    <button class="time-selector__buttons--cancel" (click)="closeForm()">Cancel</button>
+    <button class="time-selector__buttons--time" (click)="submitForm()">Done</button>
+  </div>
+</div>
