@@ -1,6 +1,6 @@
 <div class="date-picker">
 
-  @if (dateService.date();as date) {
+  @if (dateTimeService.currentDate();as date) {
     <div class="date-picker__container">
       <div class="date-picker__header">
         <p class="date-picker__title">Select date</p>
@@ -60,9 +60,9 @@
         <td *ngFor="let member of date.dateList">
           <input
             (click)="changeDate(member)"
-            [disabled]="member < dateService.currentDate"
+            [disabled]="member < dateTimeService.currentDateVal"
             [value]="member.getDate()"
-            [ngClass]="{'active': dateService.isSameDateIgnoreTime(member)}"
+            [ngClass]="{'active': dateTimeService.isSameDateIgnoreTime(member)}"
             class="date-picker__day-button"
             type="button"/>
         </td>

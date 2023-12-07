@@ -1,7 +1,7 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, EventEmitter, inject, Input, Output} from "@angular/core";
-import {DateTimeForm} from "../form-date-time-selector.component";
-import {DateService} from "../services/date.service";
+import {Component, EventEmitter, inject, Output} from "@angular/core";
+import {DateTimeSelection} from "../form-date-time-selector.component";
+import {DateTimeService} from "../services/date-time.service";
 
 @Component({
   selector: "app-date-picker",
@@ -10,20 +10,20 @@ import {DateService} from "../services/date.service";
   templateUrl: "./date-selector.component.html",
   styleUrl: "./date-selector.component.scss"
 })
-export class DateSelectorComponent implements DateTimeForm {
+export class DateSelectorComponent implements DateTimeSelection {
   @Output() closeEvent = new EventEmitter<void>();
-  @Output() submitEvent = new EventEmitter<Date>();
-  protected dateService: DateService = inject(DateService);
-  protected firstDayOfMonthSpacing: number[] = new Array(this.dateService.firstDayOfMonthNumber());
+  @Output() submitEvent = new EventEmitter<void>();
+  protected dateTimeService: DateTimeService = inject(DateTimeService);
+  protected firstDayOfMonthSpacing: number[] = new Array(this.dateTimeService.firstDayOfMonthNumber());
 
   public goToNextMonth(): void {
-    this.dateService.goToNextMonth();
-    this.firstDayOfMonthSpacing = new Array(this.dateService.firstDayOfMonthNumber());
+    this.dateTimeService.goToNextMonth();
+    this.updateFirstDaySpacing();
   }
 
   public goToThePreviousMonth(): void {
-    this.dateService.goToPreviousMonth();
-    this.firstDayOfMonthSpacing = new Array(this.dateService.firstDayOfMonthNumber());
+    this.dateTimeService.goToNextMonth();
+    this.updateFirstDaySpacing();
   }
 
   public closeForm(): void {
@@ -31,10 +31,14 @@ export class DateSelectorComponent implements DateTimeForm {
   }
 
   public submitForm(): void {
-    this.submitEvent.emit(this.dateService.date().selected);
+    this.submitEvent.emit();
   }
 
   public changeDate(date: Date): void {
-    this.dateService.changeSelectedDate(date);
+    this.dateTimeService.changeSelectedDate(date);
+  }
+
+  private updateFirstDaySpacing(): void {
+    this.firstDayOfMonthSpacing = new Array(this.dateTimeService.firstDayOfMonthNumber());
   }
 }

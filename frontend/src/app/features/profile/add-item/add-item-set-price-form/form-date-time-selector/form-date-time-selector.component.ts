@@ -8,14 +8,14 @@ import {DateService} from "./services/date.service";
 import {TimeService} from "./services/time.service";
 import {TimeSelector} from "./time-selector/time-selector.component";
 
-export interface DateTimeForm {
-  submitEvent: EventEmitter<Date>;
+export interface DateTimeSelection {
+  submitEvent: EventEmitter<void>;
 
   closeEvent: EventEmitter<void>;
 
   closeForm(): void;
 
-  submitForm(date: Date): void;
+  submitForm(): void;
 }
 
 enum DateTimeSelector {
@@ -43,36 +43,33 @@ enum DateTimeSelector {
   templateUrl: "./form-date-time-selector.component.html",
   styleUrl: "./form-date-time-selector.component.scss"
 })
-export class FormDateTimeSelectorComponent implements DateTimeForm {
+export class FormDateTimeSelectorComponent {
   @Input({required: true}) fieldLabel!: string;
   @Output() closeEvent = new EventEmitter<void>();
   @Output() submitEvent = new EventEmitter<Date>();
-  protected currentForm: DateTimeSelector = DateTimeSelector.None;
   protected readonly DatePickerForm = DateTimeSelector;
-  protected dateService: DateService = inject(DateService);
+  protected currentSelection: DateTimeSelector = DateTimeSelector.None;
   protected dateTimeService: DateTimeService = inject(DateTimeService);
 
-  public closeForm(): void {
-    if (this.currentForm === DateTimeSelector.TimeForm) {
-      this.currentForm = DateTimeSelector.DateForm;
-    } else {
-      this.currentForm = DateTimeSelector.None;
-    }
-    this.dateService.setListOfMonthsToSelectedDate();
+  protected goToTimeSelection(): void {
+    this.currentSelection = DateTimeSelector.TimeForm;
   }
 
-  public submitForm(date: Date): void {
-    if (this.currentForm === DateTimeSelector.DateForm) {
-      this.dateTimeService.setDate(date);
-      this.currentForm = DateTimeSelector.TimeForm;
-    } else if (this.currentForm === DateTimeSelector.TimeForm) {
-      this.dateTimeService.setHoursMinutes(date);
-      this.currentForm = DateTimeSelector.None;
-    }
+  protected openDateTimeSelection(): void {
+    this.currentSelection = DateTimeSelector.DateForm;
   }
 
-  protected openForm(): void {
-    this.dateService.setListOfMonthsToSelectedDate();
-    this.currentForm = DateTimeSelector.DateForm;
+  protected closeDateTimeSelection(): void {
+    this.currentSelection =
+      this.currentSelection === DateTimeSelector.TimeForm
+        ? DateTimeSelector.DateForm
+        : DateTimeSelector.None;
+  }
+
+  protected submitDateTimeSelection(): void {
+    this.currentSelection = DateTimeSelector.None;
+    this.dateTimeService.setDate(this.dateTimeService.currentDate().selected);
+    this.dateTimeService.setHoursMinutes(this.dateTimeService.currentTime());
+    this.submitEvent.emit(this.dateTimeService.currentDateTime());
   }
 }

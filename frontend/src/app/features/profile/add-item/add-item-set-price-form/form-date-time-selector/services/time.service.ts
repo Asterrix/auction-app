@@ -30,7 +30,7 @@ export interface TimeChanger {
   changeTimePeriod(period: TimePeriod): void;
 }
 
-@Injectable()
+@Injectable({providedIn: "root"})
 export class TimeService implements TimeChanger {
   private currentTime: Date = new Date();
   private timeSignal: WritableSignal<Date> = signal<Date>(this.currentTime);
