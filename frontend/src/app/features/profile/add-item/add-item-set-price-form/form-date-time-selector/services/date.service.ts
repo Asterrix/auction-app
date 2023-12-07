@@ -31,7 +31,7 @@ export type DateType = {
   dateList: Date[];
 }
 
-@Injectable()
+@Injectable({providedIn: "root"})
 export class DateService implements DateChanger {
   public readonly currentDate: Date = new Date();
   private dateSignal = signal<DateType>({

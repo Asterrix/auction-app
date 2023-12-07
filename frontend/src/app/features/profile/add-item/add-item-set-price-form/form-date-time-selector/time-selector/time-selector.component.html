@@ -5,7 +5,7 @@
     </div>
   </div>
 
-  @if (timeService.time(); as time){
+  @if (timeDateService.currentTime(); as time){
     <div class="time-selector__timer">
       <div class="time-selector__time">
         <button
@@ -96,7 +96,7 @@
   }
 
   <div class="time-selector__buttons">
-    <button class="time-selector__buttons--cancel" (click)="closeForm()">Cancel</button>
+    <button class="time-selector__buttons--back" (click)="closeForm()">Go Back</button>
     <button class="time-selector__buttons--time" (click)="submitForm()">Done</button>
   </div>
 </div>

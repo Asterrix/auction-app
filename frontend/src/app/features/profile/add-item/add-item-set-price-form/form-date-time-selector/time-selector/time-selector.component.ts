@@ -1,7 +1,8 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, inject, Output} from "@angular/core";
-import {DateTimeForm} from "../form-date-time-selector.component";
-import {TimeChanger, TimePeriod, TimeService} from "../services/time.service";
+import {DateTimeSelection} from "../form-date-time-selector.component";
+import {DateTimeService} from "../services/date-time.service";
+import {TimeChanger, TimePeriod} from "../services/time.service";
 
 enum FocusedTimeElement {
   Hour,
@@ -12,42 +13,39 @@ enum FocusedTimeElement {
   selector: "add-item-form-time-selector",
   standalone: true,
   imports: [CommonModule, NgOptimizedImage],
-  providers: [
-    TimeService
-  ],
   templateUrl: "./time-selector.component.html",
   styleUrl: "./time-selector.component.scss"
 })
-export class TimeSelector implements TimeChanger, DateTimeForm {
-  @Output() submitEvent = new EventEmitter<Date>();
+export class TimeSelector implements TimeChanger, DateTimeSelection {
   @Output() closeEvent = new EventEmitter<void>();
+  @Output() submitEvent = new EventEmitter<void>();
   protected readonly TimePeriod = TimePeriod;
   protected readonly FocusedTimeElement = FocusedTimeElement;
   protected focusedElement: FocusedTimeElement = FocusedTimeElement.Hour;
-  protected timeService: TimeService = inject(TimeService);
+  protected timeDateService: DateTimeService = inject(DateTimeService);
 
   public addHours(): void {
     this.focusedElement = FocusedTimeElement.Hour;
-    this.timeService.addHours();
+    this.timeDateService.addHours(1);
   }
 
   public addMinutes(): void {
     this.focusedElement = FocusedTimeElement.Minute;
-    this.timeService.addMinutes();
+    this.timeDateService.addMinutes(1);
   }
 
   public subtractHours(): void {
     this.focusedElement = FocusedTimeElement.Hour;
-    this.timeService.subtractHours();
+    this.timeDateService.subtractHours(1);
   }
 
   public subtractMinutes(): void {
     this.focusedElement = FocusedTimeElement.Minute;
-    this.timeService.subtractMinutes();
+    this.timeDateService.subtractMinutes(1);
   }
 
   public changeTimePeriod(period: TimePeriod): void {
-    this.timeService.changeTimePeriod(period);
+    this.timeDateService.changeTimePeriod(period);
   }
 
   public closeForm(): void {
@@ -55,6 +53,6 @@ export class TimeSelector implements TimeChanger, DateTimeForm {
   }
 
   public submitForm(): void {
-    this.submitEvent.emit(this.timeService.time());
+    this.submitEvent.emit();
   }
 }
