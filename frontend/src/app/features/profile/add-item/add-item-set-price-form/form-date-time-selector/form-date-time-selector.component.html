@@ -1,24 +1,31 @@
 <div class="form">
   <label [for]="fieldLabel" class="form__label">{{fieldLabel}}</label>
-  <input
-    (click)="currentForm = DatePickerForm.DateForm"
-    [id]="fieldLabel"
-    class="form__input"
-    type="text">
+  <div class="form__input layout">
+    <input
+      [id]="fieldLabel"
+      type="text"
+      disabled
+      [placeholder]="dateTimeService.currentDate()  | date : 'MMM - d, y, h:mm a'">
+    <img ngSrc="assets/icons/calander.svg"
+         alt="Calendar"
+         (click)="openForm()"
+         height="20"
+         width="20"/>
+  </div>
+</div>
 
-  <app-modal
-    (closeModalEvent)="closeForm()"
-    *ngIf="currentForm === DatePickerForm.DateForm">
+@if (currentForm === DatePickerForm.DateForm) {
+  <app-modal (closeModalEvent)="closeForm()">
     <app-date-picker
       (closeEvent)="closeForm()"
-      (submitEvent)="submitForm()"/>
+      (submitEvent)="submitForm($event)"/>
   </app-modal>
+}
 
-  <app-modal
-    (closeModalEvent)="closeForm()"
-    *ngIf="currentForm === DatePickerForm.TimeForm">
+@if (currentForm === DatePickerForm.TimeForm) {
+  <app-modal (closeModalEvent)="closeForm()">
     <add-item-form-time-selector
       (closeEvent)="closeForm()"
-      (submitEvent)="submitForm()"/>
+      (submitEvent)="submitForm($event)"/>
   </app-modal>
-</div>
+}
