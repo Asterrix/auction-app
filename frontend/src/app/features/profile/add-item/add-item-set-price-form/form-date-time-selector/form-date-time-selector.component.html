@@ -1,11 +1,13 @@
 <div class="form">
-  <label [for]="fieldLabel" class="form__label">{{fieldLabel}}</label>
-  <div class="form__input layout">
+  <label [for]="fieldLabel" class="form__label">{{ fieldLabel }}</label>
+  <div
+    class="form__input layout"
+    [ngClass]="{'invalid': !validField}">
     <input
       [id]="fieldLabel"
       type="text"
       disabled
-      [placeholder]="dateTimeService.currentDateTime()  | date : 'MMM - d, y, h:mm a'">
+      [placeholder]="dateTimeService.dateTime().selected  | date : 'MMM - d, y, h:mm a'">
     <img ngSrc="assets/icons/calander.svg"
          alt="Calendar"
          (click)="openDateTimeSelection()"

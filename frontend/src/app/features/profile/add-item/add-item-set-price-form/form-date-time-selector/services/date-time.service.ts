@@ -1,89 +1,157 @@
 import {computed, inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
-import {getHours, getMinutes, isValid, set} from "date-fns";
-import {DateChanger, DateService, DateType} from "./date.service";
-import {TimeChanger, TimePeriod, TimeService} from "./time.service";
+import {eachDayOfInterval, endOfMonth, startOfMonth} from "date-fns";
+import {MemoService} from "../../../../../../shared/services/memo.service";
+import {DateService} from "./date.service";
+import {TimePeriod, TimeService} from "./time.service";
 
-interface DateTime {
-  setDate(date: Date): void;
+export type DateTime = {
+  currentDate: Date;
+  selected: Date;
+  selectedMonthDateList: Date[];
+}
 
-  setHoursMinutes(time: Date): void;
+interface MemoState {
+  saveState(state: DateTime): void;
 
-  getJsonValue(date: Date): string;
+  restoreDateTimeToOriginalState(): void;
+
+  restoreDateTimeToPreviousState(): void;
+
+  clearMemorisedState(): void;
 }
 
 @Injectable({providedIn: "root"})
-export class DateTimeService implements DateTime, DateChanger, TimeChanger {
-  public readonly currentDateVal: Date = new Date();
+export class DateTimeService implements MemoState {
+  private readonly currentDate: Date = new Date();
+  private readonly dateService: DateService = inject(DateService);
+  private readonly timeService: TimeService = inject(TimeService);
+  private readonly mementoService: MemoService<DateTime> = inject(MemoService);
 
-  private currentDateTimeSignal: WritableSignal<Date> = signal<Date>(this.currentDateVal);
-  currentDateTime: Signal<Date> = computed(() => this.currentDateTimeSignal());
+  private dateTimeSignal: WritableSignal<DateTime> = signal<DateTime>({
+    currentDate: this.currentDate,
+    selected: this.currentDate,
+    selectedMonthDateList: eachDayOfInterval({
+      start: startOfMonth(this.currentDate),
+      end: endOfMonth(this.currentDate)
+    })
+  });
 
-  private dateService: DateService = inject(DateService);
-  public timeService: TimeService = inject(TimeService);
+  public dateTime: Signal<DateTime> = computed(() => this.dateTimeSignal());
 
-  currentDate: Signal<DateType> = this.dateService.date;
-  currentTime: Signal<Date> = this.timeService.time;
+  public changeSelectedDate(nextDate: Date): void {
+    const selectedDate: Date = this.dateService.changeSelectedDate(this.currentDate, nextDate);
 
-  public setDate(date: Date): void {
-    if (isValid(date)) {
-      this.currentDateTimeSignal.set(date);
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selected: selectedDate,
+      selectedMonthDateList: this.dateService.getListOfMonthDays(selectedDate)
+    });
+  }
+
+  public isSameSelectedDateIgnoreTime(date: Date): boolean {
+    return this.dateService.isSameSelectedDateIgnoreTime(this.dateTime().selected, date);
+  }
+
+  public nextMonth(): void {
+    const nextMonthDates: Date[] = this.dateService.nextMonth(this.dateTime().selectedMonthDateList[0]);
+
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selectedMonthDateList: nextMonthDates
+    });
+  }
+
+  public previousMonth(): void {
+    const previousMonthDates: Date[] = this.dateService.previousMonth(this.currentDate, this.dateTime().selectedMonthDateList[0]);
+
+    if (previousMonthDates.length > 0) {
+      this.dateTimeSignal.set({
+        ...this.dateTime(),
+        selectedMonthDateList: previousMonthDates
+      });
     }
   }
 
-  public setHoursMinutes(time: Date): void {
-    if (isValid(time)) {
-      const hours: number = getHours(time);
-      const minutes: number = getMinutes(time);
-      const newDate: Date = set(this.currentDateTimeSignal(), {hours: hours, minutes: minutes});
-      this.currentDateTimeSignal.set(newDate);
+  public addDays(daysCount: number): void {
+    const newDate: Date = this.dateService.addDays(this.dateTime().selected, daysCount);
+
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selected: newDate,
+      selectedMonthDateList: this.dateService.getListOfMonthDays(newDate)
+    });
+  }
+
+  public addConstrainedHours(hours: number): void {
+    const newHours: Date = this.timeService.addConstrainedHours(this.dateTime().selected, hours);
+
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selected: newHours
+    });
+  }
+
+  public addConstrainedMinutes(minutes: number): void {
+    const newMinutes: Date = this.timeService.addConstrainedMinutes(this.dateTime().selected, minutes);
+
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selected: newMinutes
+    });
+  }
+
+  public changeTimePeriod(timePeriod: TimePeriod): void {
+    const changedTimePeriod: Date = this.timeService.changeTimePeriod(this.dateTime().selected, timePeriod);
+
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selected: changedTimePeriod
+    });
+  }
+
+  public subtractConstrainedHours(hours: number): void {
+    const subtractedHours: Date = this.timeService.subtractConstrainedHours(this.dateTime().selected, hours);
+
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selected: subtractedHours
+    });
+  }
+
+  public subtractConstrainedMinutes(minutes: number): void {
+    const subtractMinutes: Date = this.timeService.subtractConstrainedMinutes(this.dateTime().selected, minutes);
+
+    this.dateTimeSignal.set({
+      ...this.dateTime(),
+      selected: subtractMinutes
+    });
+  }
+
+  public saveState(state: DateTime): void {
+    this.mementoService.saveState(state);
+  }
+
+  public clearMemorisedState(): void {
+    this.mementoService.clearState();
+  }
+
+  public restoreDateTimeToPreviousState(): void {
+    const previousState: DateTime | undefined = this.mementoService.latestState();
+
+    if (previousState !== undefined) {
+      this.dateTimeSignal.set(previousState);
     }
   }
 
-  public getJsonValue(date: Date): string {
-    return date.toJSON();
+  public restoreDateTimeToOriginalState(): void {
+    const originalState: DateTime | undefined = this.mementoService.originalState();
+
+    if (originalState !== undefined) {
+      this.dateTimeSignal.set(originalState);
+    }
   }
 
-  public addHours(hours: number): void {
-    this.timeService.addHours(hours);
-  }
-
-  public addMinutes(minutes: number): void {
-    this.timeService.addMinutes(minutes);
-  }
-
-  public changeSelectedDate(date: Date): void {
-    this.dateService.changeSelectedDate(date);
-  }
-
-  public changeTimePeriod(period: TimePeriod): void {
-    this.timeService.changeTimePeriod(period);
-  }
-
-  public firstDayOfMonthNumber(): number {
-    return this.dateService.firstDayOfMonthNumber();
-  }
-
-  public goToNextMonth(): void {
-    this.dateService.goToNextMonth();
-  }
-
-  public goToPreviousMonth(): void {
-    this.dateService.goToPreviousMonth();
-  }
-
-  public isSameDateIgnoreTime(date: Date): boolean {
-    return this.dateService.isSameDateIgnoreTime(date);
-  }
-
-  public setListOfMonthsToSelectedDate(): void {
-    this.dateService.setListOfMonthsToSelectedDate();
-  }
-
-  public subtractHours(hours: number): void {
-    this.timeService.subtractHours(hours);
-  }
-
-  public subtractMinutes(minutes: number): void {
-    this.timeService.subtractMinutes(minutes);
+  public isLess(date: Date): boolean {
+    return this.dateService.isLess(this.currentDate, date);
   }
 }
