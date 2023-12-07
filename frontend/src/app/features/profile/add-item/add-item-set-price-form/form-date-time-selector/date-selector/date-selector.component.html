@@ -1,19 +1,20 @@
 <div class="date-picker">
-  <ng-container *ngIf="dateSelectorService.dateObservable | async as date">
+
+  @if (dateService.date();as date) {
     <div class="date-picker__container">
       <div class="date-picker__header">
         <p class="date-picker__title">Select date</p>
         <span class="date-picker__selected-date">
-          {{date.selected.day}}
+          {{ date.selected |  date: 'EEE' }}
           ,
-          {{date.selected.month}} {{date.selected.date.getDate()}}
+          {{ date.selected | date: 'MMM' }} {{ date.selected.getDate() }}
       </span>
       </div>
     </div>
 
     <div class="date-picker__calendar">
       <div class="date-picker__calendar__navigation">
-        <p>{{date.listOfDates.month}} {{date.listOfDates.list[0].getFullYear()}}</p>
+        <p>{{ date.dateList[0] | date: 'MMMM' }} {{ date.dateList[0].getFullYear() }}</p>
 
         <div class="date-picker__nav">
           <button
@@ -56,12 +57,12 @@
       <tr class="date-picker__content-row">
         <td *ngFor="let empty of firstDayOfMonthSpacing"></td>
 
-        <td *ngFor="let member of date.listOfDates.list">
+        <td *ngFor="let member of date.dateList">
           <input
             (click)="changeDate(member)"
-            [disabled]="member < dateSelectorService.currentDateSignal()"
+            [disabled]="member < dateService.currentDate"
             [value]="member.getDate()"
-            [ngClass]="{'active': dateSelectorService.isSameDateIgnoreTime(member)}"
+            [ngClass]="{'active': dateService.isSameDateIgnoreTime(member)}"
             class="date-picker__day-button"
             type="button"/>
         </td>
@@ -73,5 +74,5 @@
         <button (click)="submitForm()" class="date-picker__buttons--time">Set time</button>
       </div>
     </table>
-  </ng-container>
+  }
 </div>
