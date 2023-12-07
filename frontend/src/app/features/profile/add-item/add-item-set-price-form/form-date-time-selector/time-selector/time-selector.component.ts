@@ -23,7 +23,7 @@ export class TimeSelector implements TimeChanger, DateTimeForm {
   @Output() closeEvent = new EventEmitter<void>();
   protected readonly TimePeriod = TimePeriod;
   protected readonly FocusedTimeElement = FocusedTimeElement;
-  protected focusedElement = FocusedTimeElement.Hour;
+  protected focusedElement: FocusedTimeElement = FocusedTimeElement.Hour;
   protected timeService: TimeService = inject(TimeService);
 
   public addHours(): void {

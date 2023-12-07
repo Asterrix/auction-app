@@ -1,5 +1,5 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, EventEmitter, inject, Output} from "@angular/core";
+import {Component, EventEmitter, inject, Input, Output} from "@angular/core";
 import {DateTimeForm} from "../form-date-time-selector.component";
 import {DateService} from "../services/date.service";
 
@@ -13,7 +13,7 @@ import {DateService} from "../services/date.service";
 export class DateSelectorComponent implements DateTimeForm {
   @Output() closeEvent = new EventEmitter<void>();
   @Output() submitEvent = new EventEmitter<Date>();
-  protected dateService = inject(DateService);
+  protected dateService: DateService = inject(DateService);
   protected firstDayOfMonthSpacing: number[] = new Array(this.dateService.firstDayOfMonthNumber());
 
   public goToNextMonth(): void {

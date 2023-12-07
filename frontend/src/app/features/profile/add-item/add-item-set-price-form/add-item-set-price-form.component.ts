@@ -5,7 +5,7 @@ import {FormWrapperComponent} from "../../../../shared/components/forms/form-wra
 import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation-message/validation-message.component";
-import {DatePickerComponent} from "./form-date-time-selector/date-picker/date-picker.component";
+import {DateSelectorComponent} from "./form-date-time-selector/date-selector/date-selector.component";
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
 import {FormNavigation, FormNavigationHandler} from "../shared/form-navigation-handler";
 import {PriceValidation} from "../shared/validation/config/add-item-price-validation.config";
@@ -25,7 +25,7 @@ import {FormStartPriceComponent} from "./form-start-price/form-start-price.compo
     FormDateTimeSelectorComponent,
     FormFieldWrapperComponent,
     ValidationMessageComponent,
-    DatePickerComponent
+    DateSelectorComponent
   ],
   templateUrl: "./add-item-set-price-form.component.html",
   styleUrl: "./add-item-set-price-form.component.scss"

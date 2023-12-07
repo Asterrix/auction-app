@@ -41,7 +41,6 @@ export class TimeService implements TimeChanger {
   public addHours(hours: number = this.timeAmount): void {
     const nextHour: Date = addHours(this.timeSignal(), hours);
 
-
     if (isEqual(nextHour.getDate(), this.currentTime.getDate())) {
       this.timeSignal.set(nextHour);
     } else {

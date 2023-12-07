@@ -18,11 +18,17 @@
   &__input {
     background-color: $input-gray;
     border: 1px solid $neutral-light-grey;
-    padding: 1.6rem;
+    padding: 1.4rem;
   }
 }
 
-input[type=date] {
-  color: $neutral-grey;
-  font-family: inherit;
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 10%;
+}
+
+img {
+  &:hover {
+    cursor: pointer;
+  }
 }

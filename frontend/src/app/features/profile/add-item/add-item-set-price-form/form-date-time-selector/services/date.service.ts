@@ -23,7 +23,7 @@ export interface DateChanger {
 
   isSameDateIgnoreTime(date: Date): boolean;
 
-  setListOfMonthToSelectedDate(): void;
+  setListOfMonthsToSelectedDate(): void;
 }
 
 export type DateType = {
@@ -41,9 +41,7 @@ export class DateService implements DateChanger {
       end: endOfMonth(this.currentDate)
     })
   });
-
   public date: Signal<DateType> = computed(() => this.dateSignal());
-
 
   public changeSelectedDate(date: Date): void {
     if (isAfter(date, this.currentDate)) {
@@ -97,7 +95,7 @@ export class DateService implements DateChanger {
     );
   }
 
-  public setListOfMonthToSelectedDate(): void {
+  public setListOfMonthsToSelectedDate(): void {
     this.dateSignal.set({
       selected: this.dateSignal().selected,
       dateList: eachDayOfInterval({

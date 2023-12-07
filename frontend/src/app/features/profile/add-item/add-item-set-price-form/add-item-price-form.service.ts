@@ -1,10 +1,12 @@
 import {inject, Injectable} from "@angular/core";
-import {FormBuilder, FormControl, FormGroup, ɵElement} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {AddItemPriceValidationConfig} from "../shared/validation/config/add-item-price-validation.config";
 import {Validation, ValidationResult} from "../shared/validation/validation";
 
 export type PriceDate = {
-  price: FormControl<string>
+  price: FormControl<string>;
+  startTime: FormControl<string>;
+  endTime: FormControl<string>;
 }
 
 @Injectable({
@@ -13,11 +15,13 @@ export type PriceDate = {
 export class AddItemPriceFormService {
   private formBuilder = inject(FormBuilder);
   private _form = this.formBuilder.nonNullable.group<PriceDate>({
-    price: new FormControl<string>("", {nonNullable: true})
+    price: new FormControl<string>("", {nonNullable: true}),
+    startTime: new FormControl<string>("", {nonNullable: true}),
+    endTime: new FormControl<string>("", {nonNullable: true})
   });
   private validation = new Validation<string>(AddItemPriceValidationConfig.initialiseValidationConfig(this._form));
 
-  public get form(): FormGroup<{ [K in keyof PriceDate]: ɵElement<PriceDate[K], never> }> {
+  public get form(): FormGroup {
     return this._form;
   }
 
