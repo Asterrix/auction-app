@@ -1,10 +1,12 @@
-import {computed, Injectable, Signal, signal, WritableSignal} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {
   addHours,
   addMinutes,
   endOfDay,
   endOfHour,
+  isBefore,
   isEqual,
+  isSameDay,
   setHours,
   setMinutes,
   startOfDay,
@@ -18,100 +20,81 @@ export enum TimePeriod {
   PM
 }
 
-export interface TimeChanger {
-  addHours(hours: number): void;
+interface TimeMethod {
+  addConstrainedHours(date: Date, hours: number): Date;
 
-  subtractHours(hours: number): void;
+  subtractConstrainedHours(date: Date, hours: number): Date;
 
-  addMinutes(minutes: number): void;
+  addConstrainedMinutes(date: Date, minutes: number): Date;
 
-  subtractMinutes(minutes: number): void;
+  subtractConstrainedMinutes(date: Date, minutes: number): Date;
 
-  changeTimePeriod(period: TimePeriod): void;
+  changeTimePeriod(date: Date, timePeriod: TimePeriod): Date;
 }
 
 @Injectable({providedIn: "root"})
-export class TimeService implements TimeChanger {
-  private currentTime: Date = new Date();
-  private timeSignal: WritableSignal<Date> = signal<Date>(this.currentTime);
-  public time: Signal<Date> = computed(() => this.timeSignal());
-  private timeAmount: number = 1;
+export class TimeService implements TimeMethod {
+  public addConstrainedHours(date: Date, hours: number): Date {
+    const newDateHours: Date = addHours(date, hours);
 
-
-  public addHours(hours: number = this.timeAmount): void {
-    const nextHour: Date = addHours(this.timeSignal(), hours);
-
-    if (isEqual(nextHour.getDate(), this.currentTime.getDate())) {
-      this.timeSignal.set(nextHour);
-    } else {
-      const startDate: Date = startOfDay(this.currentTime);
-      this.timeSignal.set(
-        setMinutes(
-          startDate,
-          this.timeSignal().getMinutes()
-        )
-      );
+    if (isEqual(date.getDate(), newDateHours.getDate())) {
+      return newDateHours;
     }
+
+    // Stop the date change
+    const startDate: Date = startOfDay(date);
+    return setMinutes(startDate, date.getMinutes());
   }
 
-  public subtractHours(hours: number = this.timeAmount): void {
-    const previousHour: Date = subHours(this.timeSignal(), hours);
+  public subtractConstrainedHours(date: Date, hours: number): Date {
+    const previousHour: Date = subHours(date, hours);
 
-    if (isEqual(previousHour.getDate(), this.currentTime.getDate())) {
-      this.timeSignal.set(previousHour);
-    } else {
-      const endOfDayDate: Date = endOfDay(this.currentTime);
-
-      this.timeSignal.set(
-        setMinutes(
-          endOfDayDate,
-          this.timeSignal().getMinutes()
-        )
-      );
+    if (isSameDay(date, previousHour) && isBefore(date, previousHour)) {
+      return date;
     }
+
+    if (isEqual(date.getDate(), previousHour.getDate())) {
+      return previousHour;
+    }
+
+    // Stop the date change
+    const endDate: Date = endOfDay(date);
+    return setMinutes(endDate, date.getMinutes());
   }
 
-  public addMinutes(minutes: number = this.timeAmount): void {
-    const nextMinute: Date = addMinutes(this.timeSignal(), minutes);
+  public addConstrainedMinutes(date: Date, minutes: number): Date {
+    const nextMinuteDate: Date = addMinutes(date, minutes);
 
-    if (isEqual(nextMinute.getMinutes(), 0)) {
-      const startOfHourDate: Date = startOfHour(this.timeSignal());
-
-      this.timeSignal.set(
-        setHours(
-          startOfHourDate,
-          this.timeSignal().getHours()
-        )
-      );
-    } else {
-      this.timeSignal.set(nextMinute);
+    if (isEqual(nextMinuteDate.getMinutes(), 0)) {
+      const startOfHourDate: Date = startOfHour(date);
+      return setHours(startOfHourDate, date.getHours());
     }
+
+    return nextMinuteDate;
   }
 
-  public subtractMinutes(minutes: number = this.timeAmount): void {
-    const previousMinute: Date = subMinutes(this.timeSignal(), minutes);
+  public subtractConstrainedMinutes(date: Date, minutes: number): Date {
+    const previousMinuteDate: Date = subMinutes(date, minutes);
 
-    if (isEqual(previousMinute.getMinutes(), 59)) {
-      const endOfHourDate: Date = endOfHour(this.timeSignal());
-
-      this.timeSignal.set(
-        setHours(
-          endOfHourDate,
-          this.timeSignal().getHours()
-        )
-      );
-    } else {
-      this.timeSignal.set(previousMinute);
+    if (isEqual(previousMinuteDate, 59)) {
+      const endOfHourDate: Date = endOfHour(date);
+      return setHours(endOfHourDate, date.getHours());
     }
+
+    return previousMinuteDate;
   }
 
-  public changeTimePeriod(period: TimePeriod): void {
-    const currentHours: number = this.timeSignal().getHours();
+  public changeTimePeriod(date: Date, timePeriod: TimePeriod): Date {
+    const currentHours: number = date.getHours();
 
-    if (period === TimePeriod.AM && currentHours >= 12) {
-      this.subtractHours(12);
-    } else if (period === TimePeriod.PM && currentHours < 12) {
-      this.addHours(12);
+    const timePeriodSeparator: number = 12;
+
+    if (timePeriod === TimePeriod.AM && currentHours >= timePeriodSeparator) {
+      return this.subtractConstrainedHours(date, timePeriodSeparator);
+    } else if (timePeriod === TimePeriod.PM && currentHours < timePeriodSeparator) {
+      return this.addConstrainedHours(date, timePeriodSeparator);
     }
+
+    return date;
   }
 }

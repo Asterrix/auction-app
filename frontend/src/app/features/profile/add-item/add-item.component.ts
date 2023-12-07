@@ -18,7 +18,7 @@ import {AddItemFormService} from "./shared/services/add-item-form.service";
   styleUrl: "./add-item.component.scss"
 })
 export class AddItemComponent implements FormNavigation, OnDestroy {
-  protected currentFormNum = 1;
+  protected currentFormNum = 2;
   protected totalFormNum = 3;
   protected displayCreditCardForm = false;
   private addItemFormService = inject(AddItemFormService);
@@ -50,8 +50,8 @@ export class AddItemComponent implements FormNavigation, OnDestroy {
     this.addItemFormService.resetForm();
   }
 
-  @HostListener("window:beforeunload", ["$event"])
-  unloadNotification($event: Event): void {
-    this.eventService.preventDefaultBehaviour($event);
-  }
+  // @HostListener("window:beforeunload", ["$event"])
+  // unloadNotification($event: Event): void {
+  //   this.eventService.preventDefaultBehaviour($event);
+  // }
 }

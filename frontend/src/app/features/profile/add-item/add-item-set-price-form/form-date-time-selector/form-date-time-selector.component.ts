@@ -4,12 +4,10 @@ import {ClickOutsideDirective} from "../../shared/directives/click-outside.direc
 import {ModalComponent} from "../../shared/modal/modal.component";
 import {DateSelectorComponent} from "./date-selector/date-selector.component";
 import {DateTimeService} from "./services/date-time.service";
-import {DateService} from "./services/date.service";
-import {TimeService} from "./services/time.service";
 import {TimeSelector} from "./time-selector/time-selector.component";
 
 export interface DateTimeSelection {
-  submitEvent: EventEmitter<void>;
+  submitEvent: EventEmitter<Date>;
 
   closeEvent: EventEmitter<void>;
 
@@ -25,7 +23,7 @@ enum DateTimeSelector {
 }
 
 @Component({
-  selector: "app-form-date-picker",
+  selector: "add-item-form-date-time-selector",
   standalone: true,
   imports: [
     CommonModule,
@@ -36,8 +34,6 @@ enum DateTimeSelector {
     NgOptimizedImage,
   ],
   providers: [
-    DateService,
-    TimeService,
     DateTimeService
   ],
   templateUrl: "./form-date-time-selector.component.html",
@@ -45,6 +41,7 @@ enum DateTimeSelector {
 })
 export class FormDateTimeSelectorComponent {
   @Input({required: true}) fieldLabel!: string;
+  @Input({required: true}) validField!: boolean;
   @Output() closeEvent = new EventEmitter<void>();
   @Output() submitEvent = new EventEmitter<Date>();
   protected readonly DatePickerForm = DateTimeSelector;
@@ -53,23 +50,27 @@ export class FormDateTimeSelectorComponent {
 
   protected goToTimeSelection(): void {
     this.currentSelection = DateTimeSelector.TimeForm;
+    this.dateTimeService.saveState(this.dateTimeService.dateTime());
   }
 
   protected openDateTimeSelection(): void {
     this.currentSelection = DateTimeSelector.DateForm;
+    this.dateTimeService.saveState(this.dateTimeService.dateTime());
   }
 
   protected closeDateTimeSelection(): void {
-    this.currentSelection =
-      this.currentSelection === DateTimeSelector.TimeForm
-        ? DateTimeSelector.DateForm
-        : DateTimeSelector.None;
+    if (this.currentSelection === DateTimeSelector.DateForm) {
+      this.dateTimeService.restoreDateTimeToOriginalState();
+      this.currentSelection = DateTimeSelector.None;
+    } else if (this.currentSelection === DateTimeSelector.TimeForm) {
+      this.dateTimeService.restoreDateTimeToPreviousState();
+      this.currentSelection = DateTimeSelector.DateForm;
+    }
   }
 
   protected submitDateTimeSelection(): void {
     this.currentSelection = DateTimeSelector.None;
-    this.dateTimeService.setDate(this.dateTimeService.currentDate().selected);
-    this.dateTimeService.setHoursMinutes(this.dateTimeService.currentTime());
-    this.submitEvent.emit(this.dateTimeService.currentDateTime());
+    this.dateTimeService.clearMemorisedState();
+    this.submitEvent.emit(this.dateTimeService.dateTime().selected);
   }
 }
