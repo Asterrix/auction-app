@@ -18,26 +18,30 @@
           fieldLabel="Start date"
           (submitEvent)="submitDateTimeEvent($event, DateTimeForm.StartTime)"
           [validField]="setPriceDateFormService.getValidationStatus(PriceValidation.StartDateTime).valid"/>
+
         <app-validation-message
           *ngIf="!setPriceDateFormService.getValidationStatus(PriceValidation.StartDateTime).valid"
           [message]="setPriceDateFormService.getValidationStatus(PriceValidation.StartDateTime).message"/>
       </form-field-wrapper>
 
       <form-field-wrapper>
-
         <add-item-form-date-time-selector
           (submitEvent)="submitDateTimeEvent($event, DateTimeForm.EndTime)"
           fieldLabel="End date"
           [validField]="setPriceDateFormService.getValidationStatus(PriceValidation.EndDateTime).valid"/>
+
         <app-validation-message
           *ngIf="!setPriceDateFormService.getValidationStatus(PriceValidation.EndDateTime).valid"
           [message]="setPriceDateFormService.getValidationStatus(PriceValidation.EndDateTime).message"/>
       </form-field-wrapper>
     </div>
 
-    <app-validation-message
-      *ngIf="!setPriceDateFormService.getValidationStatus(PriceValidation.FullDateTime).valid"
-      [message]="setPriceDateFormService.getValidationStatus(PriceValidation.FullDateTime).message"/>
+    @if (setPriceDateFormService.getValidationStatus(PriceValidation.StartDateTime).valid
+        && setPriceDateFormService.getValidationStatus(PriceValidation.EndDateTime).valid) {
+      <app-validation-message
+        *ngIf="!setPriceDateFormService.getValidationStatus(PriceValidation.FullDateTime).valid"
+        [message]="setPriceDateFormService.getValidationStatus(PriceValidation.FullDateTime).message"/>
+    }
 
     <p class="form__dates__notice">
       The auction will be automatically closed when the end time comes.

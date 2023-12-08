@@ -1,7 +1,7 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Api} from "../../../../../shared/services/api.service";
-import {ClickOutsideDirective} from "../../shared/directives/click-outside.directive";
+import {ClickOutsideDirective} from "../../../../../shared/directives/click-outside.directive";
 import Category = Api.CategoryApi.Category;
 import Subcategory = Api.CategoryApi.Subcategory;
 

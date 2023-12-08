@@ -4,7 +4,6 @@
       <app-progress-bar
         [currentProgress]="currentFormNum"
         [totalProgress]="totalFormNum"/>
-
       <ng-container [ngSwitch]="currentFormNum">
         <add-item-basic-form
           (cancelForm)="cancelFormEvent()"
