@@ -15,6 +15,7 @@ export namespace Api {
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
   import Authentication = Api.UserApi.AuthenticationRequest;
   import Register = Api.UserApi.RegisterRequest;
+  import CreateItemRequest = Api.ItemApi.PostMethods.CreateItemRequest;
 
 
   @Injectable({providedIn: "root"})
@@ -64,6 +65,10 @@ export namespace Api {
 
     getAllUserBiddingInformation(): Observable<Array<UserBiddingInfo>> {
       return BidApi.GetMethod.getAllUserBidInformation(this.httpClient);
+    }
+
+    createItem(req: Required<CreateItemRequest>): Observable<HttpResponse<void>> {
+      return ItemApi.PostMethods.createItem(this.httpClient, req);
     }
   }
 
@@ -264,6 +269,24 @@ export namespace Api {
 
       export function getListOfItems(httpClient: HttpClient, params: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
         return httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, {params: getParams(params, pagination)});
+      }
+    }
+
+    export namespace PostMethods {
+      export type CreateItemRequest = {
+        name: string;
+        category: number;
+        subcategory: number;
+        description: string;
+        images: string[],
+        initialPrice: string;
+        startTime: string;
+        endTime: string;
+      };
+
+
+      export function createItem(httpClient: HttpClient, body: CreateItemRequest): Observable<HttpResponse<void>> {
+        return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Items}`, body, {observe: "response"});
       }
     }
   }

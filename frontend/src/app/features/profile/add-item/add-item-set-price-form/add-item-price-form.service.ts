@@ -27,7 +27,7 @@ export class AddItemPriceFormService implements FormActions {
 
   private validation = AddItemPriceValidationConfig.initialise(this._form);
 
-  public get form(): FormGroup {
+  public get form() {
     return this._form;
   }
 

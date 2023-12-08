@@ -39,11 +39,17 @@ export class AddItemComponent implements FormNavigation, OnDestroy {
   }
 
   public submitFormEvent(): void {
-    if (this.currentFormNum === this.totalFormNum) {
-      this.displayCreditCardForm = true;
-    } else if (this.currentFormNum < this.totalFormNum) {
-      this.currentFormNum++;
+    if (this.currentFormNum === this.totalFormNum && this.displayCreditCardForm) {
+      this.addItemFormService.submitForm();
+      return;
     }
+
+    if (this.currentFormNum < this.totalFormNum) {
+      this.currentFormNum++;
+      return;
+    }
+
+    this.displayCreditCardForm = true;
   }
 
   public ngOnDestroy(): void {

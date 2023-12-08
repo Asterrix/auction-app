@@ -6,6 +6,7 @@ import {InputFieldComponent} from "../../../../shared/components/forms/input-fie
 import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation-message/validation-message.component";
+import {CategoryService} from "../../../../shared/services/category.service";
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
 import {FormMemberComponent} from "../shared/form-member/form-member.component";
 import {FormNavigationHandler} from "../shared/form-navigation-handler";
@@ -40,6 +41,7 @@ export class AddItemBasicFormComponent extends FormNavigationHandler {
   protected addItemForm = inject(AddItemBasicFormService);
   protected formControls = this.addItemForm.form.controls;
   protected readonly BasicFormValidation = BasicFormValidation;
+  protected categoryService: CategoryService = inject(CategoryService);
 
   public override submitFormEvent(): void {
     if (this.addItemForm.validateForm()) {

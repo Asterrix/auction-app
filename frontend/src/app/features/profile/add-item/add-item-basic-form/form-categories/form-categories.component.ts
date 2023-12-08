@@ -1,6 +1,5 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, inject, Input, OnInit, Output} from "@angular/core";
-import {Constant} from "../../../../../shared/models/enums/constant";
 import {Api} from "../../../../../shared/services/api.service";
 import {CategoryService} from "../../../../../shared/services/category.service";
 import {CategoryDropdownComponent, DropdownSelection} from "../category-dropdown/category-dropdown.component";
@@ -14,7 +13,7 @@ export enum CategoryType {
 
 export type CategorySelection = {
   type: CategoryType,
-  value: string
+  value: number
 }
 
 @Component({
@@ -70,7 +69,7 @@ export class FormCategoriesComponent implements OnInit {
 
     this.onSelect.emit({
       type: CategoryType.Subcategory,
-      value: Constant.EmptyValue
+      value: 0
     });
   }
 }
