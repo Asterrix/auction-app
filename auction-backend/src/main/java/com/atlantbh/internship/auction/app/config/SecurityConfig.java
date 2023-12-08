@@ -3,12 +3,13 @@ package com.atlantbh.internship.auction.app.config;
 import com.atlantbh.internship.auction.app.config.constant.AuctionAppProperties;
 import com.atlantbh.internship.auction.app.config.cors.CorsApiConfiguration;
 import com.atlantbh.internship.auction.app.service.TokenService;
-import com.atlantbh.internship.auction.app.service.filter.TokenFilter;
 import com.atlantbh.internship.auction.app.service.auth.LogoutService;
+import com.atlantbh.internship.auction.app.service.filter.TokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
     private final AuctionAppProperties appProperties;
     private final TokenService tokenService;

@@ -1,6 +1,8 @@
 package com.atlantbh.internship.auction.app.controller;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
+import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
+import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
@@ -16,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/items")
-public final class ItemController {
+public class ItemController {
     private final ItemService itemService;
 
     public ItemController(final ItemService itemService) {
@@ -43,5 +46,12 @@ public final class ItemController {
     @GetMapping("featured")
     public ResponseEntity<ItemFeaturedDto> getFeaturedItem() {
         return new ResponseEntity<>(itemService.getFeaturedItem(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('User')")
+    public ResponseEntity<ItemDto> createItem(@RequestBody final CreateItemRequest request) {
+        itemService.createItem(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
