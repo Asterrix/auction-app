@@ -13,12 +13,13 @@ enum ValidationError {
 export class ItemNameValidation implements Validate<string> {
   private readonly minLength: number = 3;
   private readonly maxLength: number = 50;
-  private readonly regexPattern: RegExp = /^[a-zA-Z0-9.,"':;*]*$/;
+  private readonly regexPattern: RegExp = /^[a-zA-Z0-9.," ':;*]*$/;
   private errorMessages: ValidationMessage = {
     [ValidationError.Required]: "Item name is required.",
     [ValidationError.MinLength]: `Item name must cannot be shorter than ${this.minLength} characters.`,
     [ValidationError.MaxLength]: `Item name cannot be longer than ${this.maxLength} characters.`,
-    [ValidationError.Regex]: "Item name cannot contain any special characters.",
+    [ValidationError.Regex]: "The name can contain letters (both uppercase and lowercase), numbers, " +
+    "and the following special characters: ',', '.', '\"', '\'', ' ', ':', ';', '*'."
   };
 
   validate(itemName: string): ValidationResult {
