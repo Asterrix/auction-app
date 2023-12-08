@@ -15,7 +15,7 @@
     <div class="dropdown">
       <ng-container *ngIf="listOfSubcategories; else categories">
         <ul *ngFor="let subcategory of listOfSubcategories">
-          <li (click)="emitSelectionChange(subcategory.name, []); hideDropdownMenu();"
+          <li (click)="emitSelectionChange(subcategory.id, []); hideDropdownMenu();"
               class="dropdown__category">
             {{subcategory.name}}
           </li>
@@ -24,7 +24,7 @@
 
       <ng-template #categories>
         <ul *ngFor="let category of listOfCategories">
-          <li (click)="emitSelectionChange(category.name, category.subcategories); hideDropdownMenu();"
+          <li (click)="emitSelectionChange(category.id,category.subcategories); hideDropdownMenu();"
               class="dropdown__category">
             {{category.name}}
           </li>

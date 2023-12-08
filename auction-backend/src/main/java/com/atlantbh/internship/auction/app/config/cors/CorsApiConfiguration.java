@@ -38,8 +38,8 @@ public class CorsApiConfiguration {
     private void itemCorsConfig() {
         final CorsConfiguration itemsConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
-                .setAllowedMethods(List.of(HttpMethod.GET))
-                .setAllowedHeaders(List.of(AUTHORIZATION))
+                .setAllowedMethods(List.of(HttpMethod.GET, HttpMethod.POST))
+                .setAllowedHeaders(List.of("*"))
                 .build();
 
         registerCorsConfig("/items/**", itemsConfig);

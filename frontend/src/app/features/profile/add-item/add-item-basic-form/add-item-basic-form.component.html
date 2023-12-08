@@ -20,8 +20,8 @@
     <form-field-wrapper>
       <add-item-basic-form-categories
         (onSelect)="updateCategorySelection($event)"
-        [activeCategory]="formControls.category.value"
-        [activeSubcategory]="formControls.subcategory.value"
+        [activeCategory]="categoryService.findCategoryById(formControls.category.value)"
+        [activeSubcategory]="categoryService.findCategoryById(formControls.subcategory.value)"
         [categoryValid]="addItemForm.getValidationStatus(BasicFormValidation.Category).valid"
         [subcategoryValid]="addItemForm.getValidationStatus(BasicFormValidation.Subcategory).valid"
       />

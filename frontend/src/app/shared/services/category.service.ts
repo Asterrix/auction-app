@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {Constant} from "../models/enums/constant";
 import {Api} from "./api.service";
 import Category = Api.CategoryApi.Category;
+import Subcategory = Api.CategoryApi.Subcategory;
 
 @Injectable({
   providedIn: "root"
@@ -61,6 +62,32 @@ export class CategoryService {
   resetActiveCategories(): void {
     this.activeCategory.next(Constant.EmptyValue);
     this.activeSubcategory.next(Constant.EmptyValue);
+  }
+
+  public findCategoryById(categoryId: number): string {
+    const findCategory = (categories: Category[] | Subcategory[]): string => {
+      for (const category of categories) {
+        if (category.id === categoryId) {
+          return category.name;
+        }
+        if ("subcategories" in category && category.subcategories && category.subcategories.length > 0) {
+          const subcategoryResult = findCategory(category.subcategories);
+          if (subcategoryResult !== Constant.EmptyValue) {
+            return subcategoryResult;
+          }
+        }
+      }
+      return Constant.EmptyValue;
+    };
+
+    const categories: Array<Category> | undefined = this.categoriesSubject.getValue();
+
+    if (categories) {
+      const result: string = findCategory(categories);
+      return result !== Constant.EmptyValue ? result : Constant.EmptyValue;
+    }
+
+    return Constant.EmptyValue;
   }
 
   private mapCategoriesToSet(value: Category[] | undefined): void {
