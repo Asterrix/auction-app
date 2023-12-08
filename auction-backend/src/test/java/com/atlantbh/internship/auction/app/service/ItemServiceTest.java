@@ -5,12 +5,14 @@ import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
+import com.atlantbh.internship.auction.app.repository.CategoryRepository;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.impl.ItemServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -28,6 +30,9 @@ import static org.mockito.Mockito.*;
 class ItemServiceTest {
 
     @Mock
+    CategoryRepository categoryRepository;
+
+    @Mock
     private ItemRepository itemRepository;
 
     @Mock
@@ -36,13 +41,13 @@ class ItemServiceTest {
     @Mock
     private BidRepository itemBidRepository;
 
+    @InjectMocks
     private ItemServiceImpl service;
 
     private Item item;
 
     @BeforeEach
     void setUp() {
-        service = new ItemServiceImpl(itemRepository, imageRepository, itemBidRepository);
         item = new Item(
                 "Item",
                 "Desc",

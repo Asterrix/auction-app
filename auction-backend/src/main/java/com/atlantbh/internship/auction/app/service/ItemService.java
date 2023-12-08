@@ -1,6 +1,7 @@
 package com.atlantbh.internship.auction.app.service;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
+import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
@@ -39,4 +40,6 @@ public interface ItemService {
     Optional<ItemAggregate> getItemById(final Integer itemId, final ZonedDateTime timeOfRequest);
 
     ItemFeaturedDto getFeaturedItem();
+
+    void createItem(final CreateItemRequest createItemRequest);
 }
