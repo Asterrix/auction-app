@@ -34,7 +34,7 @@ class ItemMapperTest {
                 new User());
 
         item.setId(1);
-        itemImage = new ItemImage(1, "Image1", "ImageUrl", item);
+        itemImage = new ItemImage("ImageUrl", item);
         item.setItemImages(List.of(itemImage));
     }
 
@@ -58,7 +58,6 @@ class ItemMapperTest {
         assertEquals(item.getInitialPrice(), itemDto.initialPrice());
         assertEquals(item.getItemImages().size(), itemDto.images().size());
         assertEquals(item.getItemImages().getFirst().getId(), itemDto.images().getFirst().id());
-        assertEquals(item.getItemImages().getFirst().getName(), itemDto.images().getFirst().name());
         assertEquals(item.getItemImages().getFirst().getImageUrl(), itemDto.images().getFirst().imageUrl());
     }
 
@@ -71,7 +70,6 @@ class ItemMapperTest {
         assertEquals(item.getDescription(), featuredDto.description());
         assertEquals(item.getInitialPrice(), featuredDto.initialPrice());
         assertEquals(item.getItemImages().getFirst().getId(), featuredDto.thumbnail().id());
-        assertEquals(item.getItemImages().getFirst().getName(), featuredDto.thumbnail().name());
         assertEquals(item.getItemImages().getFirst().getImageUrl(), featuredDto.thumbnail().imageUrl());
     }
 }

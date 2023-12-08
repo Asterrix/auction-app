@@ -12,9 +12,6 @@ public class ItemImage {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
-
     @Column(name = "image_url", nullable = false, length = 1000)
     private String imageUrl;
 
@@ -26,9 +23,7 @@ public class ItemImage {
     public ItemImage() {
     }
 
-    public ItemImage(final Integer id, final String name, final String imageUrl, final Item item) {
-        this.id = id;
-        this.name = name;
+    public ItemImage(final String imageUrl, final Item item) {
         this.imageUrl = imageUrl;
         this.item = item;
     }
@@ -39,14 +34,6 @@ public class ItemImage {
 
     public void setId(final Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
     }
 
     public String getImageUrl() {

@@ -12,6 +12,7 @@ import ItemImage = Api.ItemApi.Interfaces.ItemImage;
 })
 export class ItemShowcaseComponent {
   @Input({required: true}) images!: Array<ItemImage>;
+  @Input({required: true}) itemName!: string;
   protected activeImage: ItemImage | undefined;
 
   changeActiveImage(image: ItemImage): void {

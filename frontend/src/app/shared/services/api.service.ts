@@ -166,7 +166,6 @@ export namespace Api {
 
       export interface ItemImage {
         id: number;
-        name: string;
         imageUrl: string;
       }
 
