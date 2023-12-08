@@ -1,10 +1,11 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, inject, Input, Output} from "@angular/core";
+import {Component, EventEmitter, inject, Input, OnInit, Output} from "@angular/core";
 import {ReactiveFormsModule} from "@angular/forms";
 import {FormWrapperComponent} from "../../../../shared/components/forms/form-wrapper/form-wrapper.component";
 import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation-message/validation-message.component";
+import {AuthenticationService} from "../../../../shared/services/user/authentication.service";
 import {CategoryDropdownComponent} from "../add-item-basic-form/category-dropdown/category-dropdown.component";
 import {AddItemCreditCardFormComponent} from "../add-item-credit-card-form/add-item-credit-card-form.component";
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
@@ -29,10 +30,17 @@ import {FormPhoneNumberComponent} from "./form-phone-number/form-phone-number.co
   templateUrl: "./add-item-location-shipping.component.html",
   styleUrl: "./add-item-location-shipping.component.scss"
 })
-export class AddItemLocationShippingComponent extends FormNavigationHandler {
+export class AddItemLocationShippingComponent extends FormNavigationHandler implements OnInit {
   @Output() override submitForm: EventEmitter<void> = new EventEmitter<void>();
   @Output() override goBack: EventEmitter<void> = new EventEmitter<void>();
   @Output() override cancelForm: EventEmitter<void> = new EventEmitter<void>();
   @Input({required: true}) showCreditCardForm!: boolean;
   protected locationShippingForm = inject(AddItemLocationShippingService);
+  protected userService = inject(AuthenticationService);
+
+  public ngOnInit(): void {
+    this.locationShippingForm.form.patchValue({
+      email: this.userService.user()?.sub
+    });
+  }
 }
