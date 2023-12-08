@@ -1,10 +1,10 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {ClickOutsideDirective} from "../../shared/directives/click-outside.directive";
+import {ClickOutsideDirective} from "../../../../../shared/directives/click-outside.directive";
 
 
 @Component({
-  selector: "app-card-dropdown",
+  selector: "add-item-form-card-dropdown",
   standalone: true,
   imports: [CommonModule, ClickOutsideDirective, NgOptimizedImage],
   templateUrl: "./card-dropdown.component.html",
