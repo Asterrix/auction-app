@@ -44,7 +44,9 @@ export class AddItemBasicFormService implements AddItemBasicForm {
     photos: new FormControl<string[]>(this.itemImages, {nonNullable: true}),
   });
 
-  private validation = new Validation<string | string[]>(AddItemBasicFormValidationConfig.initialiseValidationConfig(this._form));
+  private validation = new Validation<string | string[]>(
+    AddItemBasicFormValidationConfig.initialiseValidationConfig(this._form)
+  );
 
   public get form(): FormGroup<{ [K in keyof Basic]: ɵElement<Basic[K], never> }> {
     return this._form;
