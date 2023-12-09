@@ -1,10 +1,10 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, EventEmitter, inject, Input, OnInit, Output} from "@angular/core";
+import {Component, effect, EventEmitter, inject, Input, Output} from "@angular/core";
 import {Api} from "../../../../../shared/services/api.service";
 import {CategoryService} from "../../../../../shared/services/category.service";
-import {CategoryDropdownComponent, DropdownSelection} from "../category-dropdown/category-dropdown.component";
-import Category = Api.CategoryApi.Category;
+import {CategoriesDropdown} from "../categories-dropdown/categories-dropdown.component";
 import Subcategory = Api.CategoryApi.Subcategory;
+
 
 export enum CategoryType {
   Category,
@@ -13,17 +13,17 @@ export enum CategoryType {
 
 export type CategorySelection = {
   type: CategoryType,
-  value: number
+  value: string
 }
 
 @Component({
   selector: "add-item-basic-form-categories",
   standalone: true,
-  imports: [CommonModule, CategoryDropdownComponent, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage, CategoriesDropdown],
   templateUrl: "./form-categories.component.html",
   styleUrl: "./form-categories.component.scss"
 })
-export class FormCategoriesComponent implements OnInit {
+export class FormCategoriesComponent {
   @Output() onSelect = new EventEmitter<CategorySelection>();
   @Input({required: true}) activeCategory!: string;
   @Input({required: true}) activeSubcategory!: string;
@@ -31,17 +31,15 @@ export class FormCategoriesComponent implements OnInit {
   @Input({required: true}) subcategoryValid!: boolean;
   protected type = CategoryType;
   protected dropdown: boolean[] = [];
-  protected categoryType = CategoryType;
-  protected categories: Category[] = [];
-  protected subcategories: Subcategory[] = [];
-  protected categoryService = inject(CategoryService);
 
-  public ngOnInit(): void {
-    this.categoryService.initCategories();
-    this.categoryService.getAllCategories().subscribe(value => {
-      if (value) {
-        this.categories = value;
-      }
+  protected categoryService = inject(CategoryService);
+  protected categoryMap = new Map<string, Subcategory[]>;
+
+  constructor() {
+    effect(() => {
+      this.categoryService.categories().forEach(category => {
+        this.categoryMap.set(category.name, category.subcategories);
+      });
     });
   }
 
@@ -53,23 +51,21 @@ export class FormCategoriesComponent implements OnInit {
     this.dropdown[type] = false;
   }
 
-  protected propagateCategorySelectionEvent(categoryType: CategoryType, content: DropdownSelection): void {
-    if (categoryType === CategoryType.Category) {
-      this.resetSubcategoryValue(content);
+  protected propagateCategorySelection(category: CategoryType, selection: string): void {
+    if (category === CategoryType.Category) {
+      this.resetSubcategoryValue();
     }
 
     this.onSelect.emit({
-      type: categoryType,
-      value: content.category
+      type: category,
+      value: selection
     });
   }
 
-  private resetSubcategoryValue(content: DropdownSelection): void {
-    this.subcategories = content.subcategory;
-
+  private resetSubcategoryValue(): void {
     this.onSelect.emit({
       type: CategoryType.Subcategory,
-      value: 0
+      value: ""
     });
   }
 }

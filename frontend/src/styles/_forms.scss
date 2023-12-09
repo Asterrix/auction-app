@@ -1,0 +1,5 @@
+@use "colors";
+
+@mixin invalid-field($border-type: solid) {
+  border: 1px $border-type colors.$error;
+}

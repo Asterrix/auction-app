@@ -1,4 +1,4 @@
-@use "../shared/buttons/add-item-buttons";
+@use "buttons";
 
 .navigation {
   display: grid;
@@ -17,4 +17,12 @@
   grid-template-columns: 1fr 1fr;
   justify-content: space-between;
   gap: 2.4rem;
+}
+
+.btn--cancel {
+  @include buttons.tertiary-btn;
+}
+
+.btn--next{
+  @include buttons.primary-btn;
 }

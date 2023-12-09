@@ -1,6 +1,6 @@
 <div
   (clickOutside)="hideDropdownMenu()"
-  [ngClass]="{'invalid': !isValid}"
+  [ngClass]="{'invalid-field': !isValid}"
   class="relative">
 
   <button
@@ -15,7 +15,7 @@
     <div class="dropdown">
       <ul>
         <li
-          (click)="emitSelectionChange(); hideDropdownMenu()"
+          (click)="selectionChange(); hideDropdownMenu()"
           class="dropdown__category">
           Placeholder
         </li>

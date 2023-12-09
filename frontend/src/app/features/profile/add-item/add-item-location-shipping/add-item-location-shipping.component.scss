@@ -1,6 +1,6 @@
-@use "../shared/buttons/add-item-buttons";
-@use "colors" as *;
+@use "colors";
 @use "typography";
+@use "buttons";
 
 .form {
   &__navigation {
@@ -27,8 +27,20 @@
     gap: 0.8rem;
 
     &__label {
-      color: $neutral-dark;
+      color: colors.$neutral-dark;
       @extend .font-semi-bold;
     }
   }
+}
+
+.btn--cancel {
+  @include buttons.tertiary-btn;
+}
+
+.btn--back {
+  @include buttons.secondary-btn;
+}
+
+.btn--next {
+  @include buttons.primary-btn;
 }

@@ -275,8 +275,8 @@ export namespace Api {
     export namespace PostMethods {
       export type CreateItemRequest = {
         name: string;
-        category: number;
-        subcategory: number;
+        category: string;
+        subcategory: string;
         description: string;
         images: string[],
         initialPrice: string;

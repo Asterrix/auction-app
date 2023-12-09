@@ -1,0 +1,57 @@
+@use "colors";
+@use "typography";
+@use "forms";
+
+@mixin buttonStyles {
+  align-items: center;
+  display: flex;
+  @extend .font-size-regular;
+  justify-content: space-between;
+  padding: 1.2rem 1.8rem;
+  width: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+.dropdown {
+  list-style: none;
+  position: absolute;
+  width: 100%;
+}
+
+.dropdown__btn {
+  background-color: colors.$input-gray;
+  border: 1px solid colors.$neutral-light-grey;
+  color: colors.$neutral-grey;
+  @include buttonStyles;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    border: 1px solid colors.$primary;
+    outline: none;
+  }
+}
+
+.dropdown__category {
+  background-color: colors.$input-gray;
+  border: 1px solid colors.$neutral-light-grey;
+  @include buttonStyles;
+
+  &:hover {
+    border: 1px solid colors.$primary;
+    cursor: pointer;
+  }
+}
+
+.invalid-field {
+  @include forms.invalid-field;
+}
+
+.selected {
+  color: colors.$neutral-dark;
+}

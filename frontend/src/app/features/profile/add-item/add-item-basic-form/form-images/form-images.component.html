@@ -1,7 +1,7 @@
 <div (dragenter)="highlightInputField($event, true)"
      (dragover)="eventService.preventDefaultBehaviour($event)"
      (drop)="addImage($event); highlightInputField($event, false)"
-     [ngClass]="{'highlight': highlighted, 'invalid': !isValid}"
+     [ngClass]="{'highlight': highlighted, 'invalid-field': !isValid}"
      class="form">
 
   <label [ngClass]="{'img-container': itemImages.length > 0}"
