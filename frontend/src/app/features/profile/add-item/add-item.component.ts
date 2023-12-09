@@ -18,7 +18,7 @@ import {AddItemFormService} from "./shared/services/add-item-form.service";
   styleUrl: "./add-item.component.scss"
 })
 export class AddItemComponent implements FormNavigation, OnDestroy {
-  protected currentFormNum = 3;
+  protected currentFormNum = 1;
   protected totalFormNum = 3;
   protected displayCreditCardForm = false;
   private addItemFormService = inject(AddItemFormService);
