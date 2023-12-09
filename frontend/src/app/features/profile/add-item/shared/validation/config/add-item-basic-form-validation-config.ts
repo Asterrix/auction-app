@@ -1,5 +1,5 @@
 import {FormGroup} from "@angular/forms";
-import {Basic} from "../../../add-item-basic-form/add-item-basic-form.service";
+import {Basic} from "../../../add-item-basic-form/services/add-item-basic-form.service";
 import {CategoryType} from "../../../add-item-basic-form/form-categories/form-categories.component";
 import {CategoryValidation} from "../../../add-item-basic-form/validation/category-validation";
 import {DescriptionValidation} from "../../../add-item-basic-form/validation/description-validation";

@@ -1,19 +1,21 @@
-<div class="form-categories">
-  <add-item-category-dropdown
-    (hideDropdown)="hideDropdownMenu(type.Category)"
-    (onSelect)="propagateCategorySelectionEvent(categoryType.Category, $event)"
-    (showDropdown)="showDropdownMenu(type.Category)"
-    [buttonText]="activeCategory === '' ? 'Select Category' : activeCategory"
-    [isActive]="dropdown[type.Category]"
-    [isValid]="categoryValid"
-    [listOfCategories]="categories"/>
+@if (categoryService.categories();as categories) {
+  <div class="form-categories">
+    <categories-dropdown
+      (showDropdownEvent)="showDropdownMenu(type.Category)"
+      (hideDropdownEvent)="hideDropdownMenu(type.Category)"
+      (selectionEvent)="propagateCategorySelection(type.Category, $event); hideDropdownMenu(type.Category)"
+      [label]="activeCategory === '' ? 'Select Category' : activeCategory"
+      [isActive]="dropdown[type.Category]"
+      [content]="categories"
+      [isValid]="categoryValid"/>
 
-  <add-item-category-dropdown
-    (hideDropdown)="hideDropdownMenu(type.Subcategory)"
-    (onSelect)="propagateCategorySelectionEvent(categoryType.Subcategory, $event)"
-    (showDropdown)="showDropdownMenu(type.Subcategory)"
-    [buttonText]="activeSubcategory === '' ? 'Select Subcategory' : activeSubcategory"
-    [isActive]="dropdown[type.Subcategory]"
-    [isValid]="subcategoryValid"
-    [listOfSubcategories]="subcategories"/>
-</div>
+    <categories-dropdown
+      (showDropdownEvent)="showDropdownMenu(type.Subcategory)"
+      (hideDropdownEvent)="hideDropdownMenu(type.Subcategory)"
+      (selectionEvent)="propagateCategorySelection(type.Subcategory, $event); hideDropdownMenu(type.Subcategory)"
+      [label]="activeSubcategory === '' ? 'Select Subcategory' : activeSubcategory"
+      [isActive]="dropdown[type.Subcategory]"
+      [content]="categoryMap.get(activeCategory)!"
+      [isValid]="subcategoryValid"/>
+  </div>
+}

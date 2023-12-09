@@ -2,7 +2,7 @@ import {inject, Injectable} from "@angular/core";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Api} from "../../../../../shared/services/api.service";
 import {ItemService} from "../../../../../shared/services/item.service";
-import {AddItemBasicFormService, Basic} from "../../add-item-basic-form/add-item-basic-form.service";
+import {AddItemBasicFormService, Basic} from "../../add-item-basic-form/services/add-item-basic-form.service";
 import {
   AddItemLocationShippingService,
   LocationShipping
@@ -51,6 +51,9 @@ export class AddItemFormService {
   }
 
   public resetForm(): void {
+    this.basicForm.form.reset();
+    this.priceDateForm.form.reset();
+    this.locationShipping.form.reset();
     this.form.reset();
   }
 }

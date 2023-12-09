@@ -1,0 +1,27 @@
+<div
+  class="relative"
+  (clickOutside)="hideDropdownMenu()"
+  [ngClass]="{'invalid-field' : !isValid}"
+>
+
+  <button
+    class="dropdown__btn"
+    [ngClass]="{'selected': !selectionEmptyEffect}"
+    (click)="showDropdownMenu()">
+    {{ label }}
+    <img alt="Open dropdown menu" ngSrc="assets/icons/chevron_down.svg" height="24" width="24"/>
+  </button>
+
+  @if (isActive) {
+    <div class="dropdown">
+      <ul>
+        @for (section of content; track section.id) {
+          <li
+            class="dropdown__category"
+            (click)="selectionChange(section.name)">{{ section.name }}
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

@@ -1,25 +1,26 @@
-@use "colors" as *;
+@use "colors";
 @use "typography";
+@use "forms";
 
 .form {
   display: grid;
   gap: 0.8rem;
 
   &__label {
-    color: $neutral-dark;
+    color: colors.$neutral-dark;
     @extend .font-semi-bold;
   }
 
   &__field {
     align-items: center;
-    background-color: $input-gray;
-    border: 1px solid $neutral-light-grey;
+    background-color: colors.$input-gray;
+    border: 1px solid colors.$neutral-light-grey;
     display: grid;
     grid-template-columns: 10% 90%;
     width: 100%;
 
     &:focus-within {
-      border: 1px solid $primary;
+      border: 1px solid colors.$primary;
     }
 
     p {
@@ -29,15 +30,15 @@
 
   &__input {
     background-color: inherit;
-    border-left: 1px solid $neutral-light-grey;
+    border-left: 1px solid colors.$neutral-light-grey;
     padding: 1.6rem;
 
     &::placeholder {
-      color: $neutral-grey;
+      color: colors.$neutral-grey;
     }
   }
 }
 
-.invalid {
-  border: 1px solid $error;
+.invalid-field {
+  @include forms.invalid-field;
 }

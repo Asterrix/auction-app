@@ -1,30 +1,31 @@
 @use "typography";
-@use "colors" as *;
+@use "colors";
+@use "forms";
 
 .member {
   display: grid;
   gap: 0.8rem;
 
   &__label {
-    color: $neutral-dark;
+    color: colors.$neutral-dark;
     @extend .font-semi-bold;
   }
 
   &__input {
-    background-color: $input-gray;
-    border: 1px solid $neutral-light-grey;
+    background-color: colors.$input-gray;
+    border: 1px solid colors.$neutral-light-grey;
     padding: 1.6rem;
 
     &::placeholder {
-      color: $neutral-grey;
+      color: colors.$neutral-grey;
     }
 
     &:focus {
-      border: 1px solid $primary;
+      border: 1px solid colors.$primary;
     }
   }
 }
 
-.invalid {
-  border: 1px solid $error;
+.invalid-field {
+  @include forms.invalid-field;
 }

@@ -1,5 +1,7 @@
-@use "colors" as *;
+@use "colors";
 @use "typography";
+@use "forms";
+
 
 @mixin buttonStyles {
   align-items: center;
@@ -20,9 +22,9 @@
   width: 100%;
 
   &__btn {
-    background-color: $input-gray;
-    border: 1px solid $neutral-light-grey;
-    color: $neutral-grey;
+    background-color: colors.$input-gray;
+    border: 1px solid colors.$neutral-light-grey;
+    color: colors.$neutral-grey;
     @include buttonStyles;
 
     &:hover {
@@ -30,30 +32,30 @@
     }
 
     &:focus {
-      border: 1px solid $primary;
+      border: 1px solid colors.$primary;
       outline: none;
     }
   }
 
   &__category {
-    background-color: $input-gray;
-    border-bottom: 1px solid $neutral-light-grey;
-    border-left: 1px solid $neutral-light-grey;
-    border-right: 1px solid $neutral-light-grey;
+    background-color: colors.$input-gray;
+    border-bottom: 1px solid colors.$neutral-light-grey;
+    border-left: 1px solid colors.$neutral-light-grey;
+    border-right: 1px solid colors.$neutral-light-grey;
     border-top: 1px solid transparent;
     @include buttonStyles;
 
     &:hover {
-      border: 1px solid $primary;
+      border: 1px solid colors.$primary;
       cursor: pointer;
     }
   }
 }
 
 .invalid {
-  border: 1px solid $error;
+  @include forms.invalid-field;
 }
 
 .selected {
-  color: $neutral-dark;
+  color: colors.$neutral-dark;
 }

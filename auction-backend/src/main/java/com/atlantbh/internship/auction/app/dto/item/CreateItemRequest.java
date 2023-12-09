@@ -13,8 +13,8 @@ import java.util.List;
 
 public record CreateItemRequest(
         String name,
-        Integer category,
-        Integer subcategory,
+        String category,
+        String subcategory,
         String description,
         List<String> images,
         BigDecimal initialPrice,

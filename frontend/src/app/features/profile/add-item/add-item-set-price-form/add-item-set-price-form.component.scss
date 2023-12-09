@@ -1,5 +1,5 @@
-@use "../shared/buttons/add-item-buttons";
-@use "colors" as *;
+@use "colors";
+@use "buttons";
 
 .form {
   &__dates {
@@ -13,7 +13,7 @@
     }
 
     &__notice {
-      color: $neutral-grey;
+      color: colors.$neutral-grey;
       font-size: 1.4rem;
     }
   }
@@ -32,3 +32,14 @@
   }
 }
 
+.btn--cancel {
+  @include buttons.tertiary-btn;
+}
+
+.btn--back {
+  @include buttons.secondary-btn;
+}
+
+.btn--next {
+  @include buttons.primary-btn;
+ }

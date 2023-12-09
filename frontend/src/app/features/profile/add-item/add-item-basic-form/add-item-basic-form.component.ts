@@ -1,20 +1,20 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, inject, Output} from "@angular/core";
+import {Component, EventEmitter, inject, OnDestroy, OnInit, Output} from "@angular/core";
 import {ReactiveFormsModule} from "@angular/forms";
 import {FormWrapperComponent} from "../../../../shared/components/forms/form-wrapper/form-wrapper.component";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
 import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation-message/validation-message.component";
-import {CategoryService} from "../../../../shared/services/category.service";
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
 import {FormMemberComponent} from "../shared/form-member/form-member.component";
 import {FormNavigationHandler} from "../shared/form-navigation-handler";
 import {BasicFormValidation} from "../shared/validation/config/add-item-basic-form-validation-config";
-import {AddItemBasicFormService} from "./add-item-basic-form.service";
 import {CategorySelection, FormCategoriesComponent} from "./form-categories/form-categories.component";
 import {FormImagesComponent} from "./form-images/form-images.component";
 import {FormTextAreaComponent} from "./form-text-area/form-text-area.component";
+import {CategoriesDropdown} from "././categories-dropdown/categories-dropdown.component";
+import {AddItemBasicFormService} from "./services/add-item-basic-form.service";
 
 @Component({
   selector: "add-item-basic-form",
@@ -29,24 +29,28 @@ import {FormTextAreaComponent} from "./form-text-area/form-text-area.component";
     FormMemberComponent,
     ReactiveFormsModule,
     ValidationMessageComponent,
-    FormFieldWrapperComponent
+    FormFieldWrapperComponent,
+    CategoriesDropdown
   ],
   templateUrl: "./add-item-basic-form.component.html",
   styleUrls: ["./add-item-basic-form.component.scss"]
 })
-export class AddItemBasicFormComponent extends FormNavigationHandler {
+export class AddItemBasicFormComponent extends FormNavigationHandler implements OnDestroy {
   @Output() override submitForm = new EventEmitter<void>();
   @Output() override goBack = new EventEmitter<void>();
   @Output() override cancelForm = new EventEmitter<void>();
   protected addItemForm = inject(AddItemBasicFormService);
   protected formControls = this.addItemForm.form.controls;
   protected readonly BasicFormValidation = BasicFormValidation;
-  protected categoryService: CategoryService = inject(CategoryService);
 
   public override submitFormEvent(): void {
     if (this.addItemForm.validateForm()) {
       super.submitFormEvent();
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.addItemForm.resetImageArray();
   }
 
   protected async addImage($event: Event): Promise<void> {

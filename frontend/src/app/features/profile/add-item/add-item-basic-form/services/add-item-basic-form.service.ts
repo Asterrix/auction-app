@@ -1,17 +1,17 @@
 import {inject, Injectable} from "@angular/core";
-import {FormBuilder, FormControl, FormGroup, ɵElement} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 import {
   AddItemBasicFormValidationConfig,
   BasicFormValidation
-} from "../shared/validation/config/add-item-basic-form-validation-config";
-import {Validation, ValidationResult} from "../shared/validation/validation";
-import {CategorySelection, CategoryType} from "./form-categories/form-categories.component";
-import {ImageService} from "./services/image.service";
+} from "../../shared/validation/config/add-item-basic-form-validation-config";
+import {Validation, ValidationResult} from "../../shared/validation/validation";
+import {CategorySelection, CategoryType} from "../form-categories/form-categories.component";
+import {ImageService} from "./image.service";
 
 export type Basic = {
   itemName: FormControl<string>,
-  category: FormControl<number>,
-  subcategory: FormControl<number>,
+  category: FormControl<string>,
+  subcategory: FormControl<string>,
   description: FormControl<string>,
   photos: FormControl<string[]>,
 }
@@ -37,18 +37,18 @@ export class AddItemBasicFormService implements AddItemBasicForm {
   private imageService: ImageService = inject(ImageService);
 
   private _form = this.formBuilder.nonNullable.group<Basic>({
-    category: new FormControl<number>(0, {nonNullable: true}),
-    subcategory: new FormControl<number>(0, {nonNullable: true}),
+    category: new FormControl<string>("", {nonNullable: true}),
+    subcategory: new FormControl<string>("", {nonNullable: true}),
     description: new FormControl<string>("", {nonNullable: true}),
     itemName: new FormControl<string>("", {nonNullable: true}),
-    photos: new FormControl<string[]>(this.itemImages, {nonNullable: true}),
+    photos: new FormControl<string[]>([], {nonNullable: true}),
   });
 
   private validation = new Validation<string | string[]>(
     AddItemBasicFormValidationConfig.initialiseValidationConfig(this._form)
   );
 
-  public get form(): FormGroup<{ [K in keyof Basic]: ɵElement<Basic[K], never> }> {
+  public get form() {
     return this._form;
   }
 
@@ -81,6 +81,11 @@ export class AddItemBasicFormService implements AddItemBasicForm {
     this._form.patchValue({
       photos: this.itemImages
     });
+  }
+
+  // If the image array doesn't get cleared, previous images will be set as default value on second form fill
+  public resetImageArray(): void {
+    this.itemImages = [];
   }
 
   public updateCategory(category: CategorySelection): void {

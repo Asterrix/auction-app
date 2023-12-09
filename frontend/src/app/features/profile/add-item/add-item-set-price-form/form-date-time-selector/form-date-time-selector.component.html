@@ -2,7 +2,7 @@
   <label [for]="fieldLabel" class="form__label">{{ fieldLabel }}</label>
   <div
     class="form__input layout"
-    [ngClass]="{'invalid': !validField}">
+    [ngClass]="{'invalid-field': !validField}">
     <input
       [id]="fieldLabel"
       type="text"

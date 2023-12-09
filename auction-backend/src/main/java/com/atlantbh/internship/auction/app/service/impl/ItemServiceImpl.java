@@ -168,7 +168,7 @@ public final class ItemServiceImpl implements ItemService {
 
     private Category getCategory(final CreateItemRequest createItemRequest) {
         return categoryRepository
-                .findById(createItemRequest.category())
+                .findByNameAllIgnoreCase(createItemRequest.category())
                 .orElseThrow(() -> new ValidationException("Category could not be found."));
     }
 }

@@ -1,9 +1,10 @@
-@use "colors" as *;
+@use "colors";
 @use "typography";
+@use "forms";
 
 .form {
-  background-color: $input-gray;
-  border: 2px dashed $neutral-light-grey;
+  background-color: colors.$input-gray;
+  border: 2px dashed colors.$neutral-light-grey;
   display: grid;
   gap: 0.8rem;
 
@@ -29,13 +30,13 @@
 
   &__message {
     &--span {
-      color: $primary;
+      color: colors.$primary;
       @extend .font-semi-bold;
       font-size: 1.7rem;
     }
 
     &--drag {
-      color: $neutral-grey;
+      color: colors.$neutral-grey;
       font-size: 1.2rem;
     }
   }
@@ -50,7 +51,7 @@
 }
 
 .highlight {
-  border: 2px dashed $primary !important;
+  border: 2px dashed colors.$primary !important;
   transition: all 200ms ease-out;
 }
 
@@ -91,6 +92,6 @@
   }
 }
 
-.invalid {
-  border: 2px dashed $error;
+.invalid-field {
+  @include forms.invalid-field(dashed);
 }
