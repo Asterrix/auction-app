@@ -17,7 +17,7 @@ export enum BasicFormValidation {
 
 export class AddItemBasicFormValidationConfig {
   static initialiseValidationConfig(form: FormGroup<Basic>) {
-    const validationConfig: Record<number, ValidationField<string | string[]>> = {
+    const validationConfig: Record<number, ValidationField<string | number | string[]>> = {
       [BasicFormValidation.ItemName]: {
         formControl: form.controls.itemName,
         validator: new ItemNameValidation()
