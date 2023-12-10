@@ -1,7 +1,7 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, Input} from "@angular/core";
 import {ClickOutsideDirective} from "../../../../../shared/directives/click-outside.directive";
-import {DropdownInterface} from "../../../../../shared/interfaces/dropdown.interface";
+import {Dropdown} from "../../../../../shared/interfaces/dropdown.interface";
 
 
 @Component({
@@ -11,7 +11,7 @@ import {DropdownInterface} from "../../../../../shared/interfaces/dropdown.inter
   templateUrl: "./card-dropdown.component.html",
   styleUrl: "./card-dropdown.component.scss"
 })
-export class CardDropdownComponent implements DropdownInterface<void> {
+export class CardDropdownComponent implements Dropdown<void> {
   @Input({required: true}) buttonText!: string;
   @Input({required: true}) isActive!: boolean;
   @Input({required: false}) isValid!: boolean;

@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {ActivatedRoute, Params, Router, RouterLink, RouterLinkActive, ɵEmptyOutletComponent} from "@angular/router";
+import {ActivatedRoute, Params, Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {filter, Subscription} from "rxjs";
 import {TabComponent} from "../components/tab/tab.component";
 import {TableDataRow} from "../components/table-data-row/table-data-row.component";
@@ -22,7 +22,15 @@ const sectionName: Record<Section, string> = {
 @Component({
   selector: "app-profile-seller",
   standalone: true,
-  imports: [CommonModule, TableComponent, TableEmptyComponent, RouterLink, RouterLinkActive, TableDataRow, TabComponent, ProfileSharedNavTabComponent, ɵEmptyOutletComponent],
+  imports: [
+    CommonModule,
+    TableComponent,
+    TableEmptyComponent,
+    RouterLink,
+    RouterLinkActive,
+    TableDataRow,
+    TabComponent,
+    ProfileSharedNavTabComponent],
   templateUrl: "./profile-seller.component.html",
   styleUrls: ["./profile-seller.component.scss"]
 })
@@ -35,6 +43,7 @@ export class ProfileSellerComponent implements OnInit, OnDestroy {
     ]);
   protected readonly TabSectionName = sectionName;
   protected readonly TabSection = Section;
+  protected readonly ProfileRouteEndpoint = ProfileRouteEndpoint;
   private querySub: Subscription | undefined;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {

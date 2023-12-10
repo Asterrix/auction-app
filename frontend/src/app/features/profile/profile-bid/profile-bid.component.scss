@@ -1,3 +1,14 @@
+@use "buttons";
+
 .loader-placeholder {
   height: 320px;
+}
+
+
+.btn {
+  @include buttons.secondary-btn;
+  padding: 1rem 4.8rem;
+  @extend .font-semi-bold;
+  @extend .font-size-large;
+  text-transform: uppercase;
 }
