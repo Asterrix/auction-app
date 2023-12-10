@@ -1,25 +1,20 @@
 import {inject, Injectable} from "@angular/core";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {AddItemPriceValidationConfig} from "../shared/validation/config/add-item-price-validation.config";
-import {ValidationResult} from "../shared/validation/validation";
+import {FormBuilder, FormControl} from "@angular/forms";
+import {ResetForm} from "../../shared/interfaces/reset-form";
+import {AddItemPriceValidationConfig} from "../../shared/validation/config/add-item-price-validation.config";
+import {ValidationResult} from "../../shared/validation/validation";
 
-export type PriceDate = {
+export type PriceDateTime = {
   price: FormControl<string>;
   startTime: FormControl<string>;
   endTime: FormControl<string>;
 }
 
-interface FormActions {
-  patchStartTime(startTime: Date): void;
-
-  patchEndTime(endTime: Date): void;
-}
-
 @Injectable({providedIn: "root"})
-export class AddItemPriceFormService implements FormActions {
+export class AddItemPriceFormService implements ResetForm {
   private formBuilder = inject(FormBuilder);
 
-  private _form = this.formBuilder.nonNullable.group<PriceDate>({
+  private _form = this.formBuilder.nonNullable.group<PriceDateTime>({
     price: new FormControl<string>("", {nonNullable: true}),
     startTime: new FormControl<string>("", {nonNullable: true}),
     endTime: new FormControl<string>("", {nonNullable: true})
@@ -49,5 +44,9 @@ export class AddItemPriceFormService implements FormActions {
 
   public validateForm(): boolean {
     return this.validation.validateAllFields();
+  }
+
+  public resetForm(): void {
+    this._form.reset();
   }
 }

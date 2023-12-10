@@ -45,7 +45,6 @@ public class Item {
     @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
     private ZonedDateTime endTime;
 
-    @Size(message = "Item must have a minimum of {min} images and a maximum of {max} images.", min = 3, max = 30)
     @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<ItemImage> itemImages = new ArrayList<>();
 

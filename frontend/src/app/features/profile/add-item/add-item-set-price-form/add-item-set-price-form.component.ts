@@ -8,7 +8,7 @@ import {
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
 import {FormNavigation, FormNavigationHandler} from "../shared/form-navigation-handler";
 import {PriceValidation} from "../shared/validation/config/add-item-price-validation.config";
-import {AddItemPriceFormService} from "./add-item-price-form.service";
+import {AddItemPriceFormService} from "./services/add-item-price-form.service";
 import {DateSelectorComponent} from "./form-date-time-selector/date-selector/date-selector.component";
 import {FormDateTimeSelectorComponent} from "./form-date-time-selector/form-date-time-selector.component";
 import {FormStartPriceComponent} from "./form-start-price/form-start-price.component";

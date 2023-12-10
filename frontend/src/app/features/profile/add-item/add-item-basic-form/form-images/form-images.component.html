@@ -4,23 +4,26 @@
      [ngClass]="{'highlight': highlighted, 'invalid-field': !isValid}"
      class="form">
 
+
   <label [ngClass]="{'img-container': itemImages.length > 0}"
          class="form__label"
          for="image">
 
     <ng-container *ngIf="itemImages.length > 0; else empty">
       <div class="form__img-row">
-        <div
-          (click)="eventService.preventDefaultBehaviour($event)"
-          *ngFor="let image of itemImages"
-          class="img-card">
 
-          <img [alt]="image" [src]="image"/>
+        @for (image of itemImages;track $index) {
+          <div
+            (click)="eventService.preventDefaultBehaviour($event)"
+            class="img-card">
 
-          <button (click)="removeImage($event, image)" class="remove-btn">
-            <img alt="Remove image" src="assets/icons/cancel.svg"/>
-          </button>
-        </div>
+            <img [alt]="image" [src]="image"/>
+
+            <button class="remove-btn" (click)="removeImage($event, image)">
+              <img alt="Remove image" src="assets/icons/cancel.svg"/>
+            </button>
+          </div>
+        }
       </div>
     </ng-container>
 

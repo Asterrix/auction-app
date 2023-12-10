@@ -1,50 +1,42 @@
 import {Injectable} from "@angular/core";
 
-interface ImageServiceInterface {
-  addImage(images: FileList): Promise<string[]>;
+@Injectable({
+  providedIn: "root"
+})
+export class ImageService {
+  private allowedImageTypes: Set<string> = new Set<string>(["image/jpeg", "image/png", "image/jpg"]);
 
-  removeImage(images: string[], image: string): string[];
+  public async addImage(images: FileList): Promise<Map<string, File>> {
+    const result: Map<string, File> = new Map<string, File>();
 
-  filterDuplicates(images: string[], newImages: string[]): string[];
-}
+    for (let i = 0; i < images.length; i++) {
+      const imageFile: File | null = images.item(i);
 
-@Injectable({providedIn: "root"})
-export class ImageService implements ImageServiceInterface {
-  protected allowedImageTypes = new Set<string>(["image/jpeg", "image/png", "image/jpg"]);
-
-  public async addImage(images: FileList): Promise<string[]> {
-    const result: string[] = [];
-    const imagesLength = images.length;
-
-    if (images && imagesLength > 0) {
-      for (let i = 0; i < imagesLength; i++) {
-
-        if (!this.allowedImageTypes.has(images.item(i)!.type)) {
-          break;
-        }
-
-        const reader: FileReader = new FileReader();
-
-        const [imageData] = await Promise.all([new Promise((resolve) => {
-          reader.onload = (e: ProgressEvent<FileReader>) => {
-            resolve(e.target?.result);
-          };
-          reader.readAsDataURL(images.item(i)!);
-        })]);
-
-        result.push(<string>imageData);
+      if (!imageFile || !this.allowedImageTypes.has(imageFile.type)) {
+        break;
       }
+
+      const reader: FileReader = new FileReader();
+
+      const [newImage] = await Promise.all([
+        new Promise(resolve => {
+          reader.onload = ev => {
+            resolve(ev.target?.result);
+          };
+          reader.readAsDataURL(imageFile);
+        })
+      ]);
+
+      result.set(<string>newImage, imageFile);
     }
 
     return result;
-  };
+  }
 
-  public removeImage(images: string[], image: string): string[] {
-    return images.filter((img: string) => img !== image);
-  };
-
-  public filterDuplicates(images: string[], newImages: string[]): string[] {
-    const concatenatedArray: string[] = images.concat(newImages);
-    return Array.from(new Set(concatenatedArray));
+  public removeImage(imageMap: Map<string, File>, image: string): Map<string, File> {
+    if (imageMap.has(image)) {
+      imageMap.delete(image);
+    }
+    return imageMap;
   }
 }

@@ -8,8 +8,11 @@ import com.atlantbh.internship.auction.app.repository.BidRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface ItemService {
@@ -41,5 +44,5 @@ public interface ItemService {
 
     ItemFeaturedDto getFeaturedItem();
 
-    void createItem(final CreateItemRequest createItemRequest);
+    void createItem(final CreateItemRequest createItemRequest, final List<MultipartFile> file) throws IOException;
 }

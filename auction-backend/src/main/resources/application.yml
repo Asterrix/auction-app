@@ -8,7 +8,10 @@ spring:
   profiles:
     active: dev
 
-
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 60MB
 
 app-properties:
   client-route: http://localhost:4200
@@ -25,3 +28,6 @@ rsa:
   public-key: 'classpath:cert/public.pem'
   vault-uri: ${vault-uri}
   vault-secret: ${vault-secret}
+
+firebase:
+  credentials: ${firebase_credentials}}
