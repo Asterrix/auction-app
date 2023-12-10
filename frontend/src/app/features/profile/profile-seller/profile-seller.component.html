@@ -1,32 +1,35 @@
 <profile-shared-nav-tab>
   <section>
     <div class="table-nav">
-      <ng-container *ngFor="let section of sectionSet">
-        <a [ngClass]="{'btn--active' : activeSection === section}"
+
+      @for (section of sectionSet;track $index) {
+        <a [ngClass]="{'section-btn--active' : activeSection === section}"
            [queryParams]="{section: section}"
-           class="btn"
+           class="section-btn"
            routerLink="/my-account/seller">
-          {{TabSectionName[section]}}
+          {{ TabSectionName[section] }}
         </a>
-      </ng-container>
+      }
     </div>
 
     <profile-table>
-      <ng-container *ngIf="activeSection === TabSection.Active">
+      @if (activeSection === TabSection.Active) {
         <profile-table-empty
           btnLabel="Start selling"
           iconName="Shopping cart icon"
           iconPath="assets/icons/shopping_cart.svg"
-          message="You do not have any active items for sale."/>
-      </ng-container>
-
-      <ng-container *ngIf="activeSection === TabSection.Sold">
+          message="You do not have any active items for sale.">
+          <a class="btn" [routerLink]="['/', ProfileRouteEndpoint.MyAccount, ProfileRouteEndpoint.AddItem]">Start selling</a>
+        </profile-table-empty>
+      } @else if (activeSection === TabSection.Sold) {
         <profile-table-empty
           btnLabel="Start selling"
           iconName="Shopping cart icon"
           iconPath="assets/icons/shopping_cart.svg"
-          message="You do not have any scheduled items for sale."/>
-      </ng-container>
+          message="You do not have any scheduled items for sale.">
+          <a class="btn" [routerLink]="['/', ProfileRouteEndpoint.MyAccount, ProfileRouteEndpoint.AddItem]">Start selling</a>
+        </profile-table-empty>
+      }
     </profile-table>
   </section>
 </profile-shared-nav-tab>
