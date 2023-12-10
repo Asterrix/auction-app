@@ -13,18 +13,26 @@ import com.atlantbh.internship.auction.app.mapper.BidsMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
+import com.atlantbh.internship.auction.app.model.utils.Validator;
 import com.atlantbh.internship.auction.app.repository.*;
 import com.atlantbh.internship.auction.app.service.ItemService;
+import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
+import com.atlantbh.internship.auction.app.service.validation.item.ItemEntityValidation;
+import com.google.cloud.storage.Blob;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -41,23 +49,32 @@ public final class ItemServiceImpl implements ItemService {
     private final BidRepository bidRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final MainValidationClass<CreateItemRequest> createItemValidation;
+    private final MainValidationClass<CreateItemRequest> createItemInitialValidation;
     private final ClaimsExtractor claimsExtractor;
+    private final ItemEntityValidation entityValidation;
+    private final FirebaseStorageService firebaseStorageService;
+    private final Validator<List<MultipartFile>> imageValidation;
 
     public ItemServiceImpl(final ItemRepository itemRepository,
                            final ItemImageRepository itemImageRepository,
                            final BidRepository bidRepository,
                            final CategoryRepository categoryRepository,
                            final UserRepository userRepository,
-                           final MainValidationClass<CreateItemRequest> createItemValidation,
-                           ClaimsExtractor claimsExtractor) {
+                           final MainValidationClass<CreateItemRequest> createItemInitialValidation,
+                           final ClaimsExtractor claimsExtractor,
+                           final FirebaseStorageService firebaseStorageService,
+                           final ItemEntityValidation entityValidation,
+                           final Validator<List<MultipartFile>> imageValidation) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
         this.bidRepository = bidRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
-        this.createItemValidation = createItemValidation;
+        this.createItemInitialValidation = createItemInitialValidation;
         this.claimsExtractor = claimsExtractor;
+        this.entityValidation = entityValidation;
+        this.firebaseStorageService = firebaseStorageService;
+        this.imageValidation = imageValidation;
     }
 
     /**
@@ -137,13 +154,13 @@ public final class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void createItem(final CreateItemRequest createItemRequest) {
-        createItemValidation.validate(createItemRequest);
+    public void createItem(final CreateItemRequest createItemRequest, final List<MultipartFile> images) {
+        createItemInitialValidation.validate(createItemRequest);
 
-        final Category category = getCategory(createItemRequest);
+        final Category category = getCategory(createItemRequest.subcategory());
         final User user = getUser();
 
-        final Item item = new Item(
+        Item item = new Item(
                 createItemRequest.name(),
                 createItemRequest.description(),
                 createItemRequest.initialPrice(),
@@ -154,9 +171,13 @@ public final class ItemServiceImpl implements ItemService {
                 user
         );
 
-        final List<ItemImage> itemImages = ItemImageMapper.convertToEntity(createItemRequest.images(), item);
-        item.setItemImages(itemImages);
+        entityValidation.validate(item);
+        imageValidation.validate(images);
 
+        final List<Blob> blobList = firebaseStorageService.uploadFiles(images);
+        final List<ItemImage> itemImages = ItemImageMapper.convertFromBlob(blobList, item);
+
+        item.setItemImages(itemImages);
         itemRepository.save(item);
     }
 
@@ -166,9 +187,9 @@ public final class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new ValidationException("User could not be found."));
     }
 
-    private Category getCategory(final CreateItemRequest createItemRequest) {
+    private Category getCategory(final String category) {
         return categoryRepository
-                .findByNameAllIgnoreCase(createItemRequest.category())
+                .findByNameAllIgnoreCase(category)
                 .orElseThrow(() -> new ValidationException("Category could not be found."));
     }
 }

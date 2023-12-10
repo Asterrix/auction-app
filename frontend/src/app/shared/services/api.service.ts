@@ -13,9 +13,9 @@ export namespace Api {
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
+  import CreateItemRequest = Api.ItemApi.PostMethods.CreateItemRequest;
   import Authentication = Api.UserApi.AuthenticationRequest;
   import Register = Api.UserApi.RegisterRequest;
-  import CreateItemRequest = Api.ItemApi.PostMethods.CreateItemRequest;
 
 
   @Injectable({providedIn: "root"})
@@ -278,15 +278,33 @@ export namespace Api {
         category: string;
         subcategory: string;
         description: string;
-        images: string[],
+        images: File[];
         initialPrice: string;
         startTime: string;
         endTime: string;
       };
 
-
       export function createItem(httpClient: HttpClient, body: CreateItemRequest): Observable<HttpResponse<void>> {
-        return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Items}`, body, {observe: "response"});
+        const formData = new FormData();
+
+        for (let i = 0; i < body.images.length; i++) {
+          formData.append("images", body.images[i]);
+        }
+
+        const item = {
+          name: body.name,
+          category: body.category,
+          subcategory: body.subcategory,
+          description: body.description,
+          initialPrice: body.initialPrice,
+          startTime: body.startTime,
+          endTime: body.endTime
+        };
+
+        const itemBlob: Blob = new Blob([JSON.stringify(item)], {type: "application/json"});
+        formData.append("item", itemBlob, "item.json");
+
+        return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Items}`, formData, {observe: "response"});
       }
     }
   }

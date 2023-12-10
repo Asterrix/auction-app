@@ -1,10 +1,10 @@
 <form-wrapper formSubject="Add Item">
-  <form [formGroup]="addItemForm.form" class="form">
+  <form [formGroup]="addItemBasicFormService.form" class="form">
 
     <form-field-wrapper>
       <app-form-member
-        [controlGroup]="addItemForm.form"
-        [valid]="addItemForm.getValidationStatus(BasicFormValidation.ItemName).valid"
+        [controlGroup]="addItemBasicFormService.form"
+        [valid]="addItemBasicFormService.getValidationStatus(BasicFormValidation.ItemName).valid"
         controlName="itemName"
         inputType="text"
         memberId="name"
@@ -12,8 +12,8 @@
         placeholder="ex. Playstation 5"/>
 
       <app-validation-message
-        *ngIf="!addItemForm.getValidationStatus(BasicFormValidation.ItemName).valid"
-        message="{{addItemForm.getValidationStatus(BasicFormValidation.ItemName).message}}"/>
+        *ngIf="!addItemBasicFormService.getValidationStatus(BasicFormValidation.ItemName).valid"
+        message="{{addItemBasicFormService.getValidationStatus(BasicFormValidation.ItemName).message}}"/>
     </form-field-wrapper>
 
 
@@ -22,36 +22,36 @@
         (onSelect)="updateCategorySelection($event)"
         [activeCategory]="formControls.category.value"
         [activeSubcategory]="formControls.subcategory.value"
-        [categoryValid]="addItemForm.getValidationStatus(BasicFormValidation.Category).valid"
-        [subcategoryValid]="addItemForm.getValidationStatus(BasicFormValidation.Subcategory).valid"
+        [categoryValid]="addItemBasicFormService.getValidationStatus(BasicFormValidation.Category).valid"
+        [subcategoryValid]="addItemBasicFormService.getValidationStatus(BasicFormValidation.Subcategory).valid"
       />
 
       <div class="categories__validation__layout">
         <app-validation-message
-          *ngIf="!addItemForm.getValidationStatus(BasicFormValidation.Category).valid"
-          message="{{addItemForm.getValidationStatus(BasicFormValidation.Category).message}}"
+          *ngIf="!addItemBasicFormService.getValidationStatus(BasicFormValidation.Category).valid"
+          message="{{addItemBasicFormService.getValidationStatus(BasicFormValidation.Category).message}}"
         />
 
         <div *ngIf="
-        addItemForm.getValidationStatus(BasicFormValidation.Category).valid
-        && !addItemForm.getValidationStatus(BasicFormValidation.Subcategory).valid">
+        addItemBasicFormService.getValidationStatus(BasicFormValidation.Category).valid
+        && !addItemBasicFormService.getValidationStatus(BasicFormValidation.Subcategory).valid">
         </div>
 
         <app-validation-message
-          *ngIf="!addItemForm.getValidationStatus(BasicFormValidation.Subcategory).valid"
-          message="{{addItemForm.getValidationStatus(BasicFormValidation.Subcategory).message}}"
+          *ngIf="!addItemBasicFormService.getValidationStatus(BasicFormValidation.Subcategory).valid"
+          message="{{addItemBasicFormService.getValidationStatus(BasicFormValidation.Subcategory).message}}"
         />
       </div>
     </form-field-wrapper>
 
     <add-item-basic-form-text-area
-      [controlGroup]="addItemForm.form"
-      [valid]="addItemForm.getValidationStatus(BasicFormValidation.Description).valid"
+      [controlGroup]="addItemBasicFormService.form"
+      [valid]="addItemBasicFormService.getValidationStatus(BasicFormValidation.Description).valid"
       controlName="description">
 
       <app-validation-message
-        *ngIf="!addItemForm.getValidationStatus(BasicFormValidation.Description).valid"
-        message="{{addItemForm.getValidationStatus(BasicFormValidation.Description).message}}"
+        *ngIf="!addItemBasicFormService.getValidationStatus(BasicFormValidation.Description).valid"
+        message="{{addItemBasicFormService.getValidationStatus(BasicFormValidation.Description).message}}"
       />
     </add-item-basic-form-text-area>
 
@@ -60,12 +60,12 @@
       <add-item-basic-form-images
         (addImageEvent)="addImage($event)"
         (removeImageEvent)="removeImage($event)"
-        [isValid]="addItemForm.getValidationStatus(BasicFormValidation.Photos).valid"
-        [itemImages]="addItemForm.form.controls.photos.value"/>
+        [isValid]="addItemBasicFormService.getValidationStatus(BasicFormValidation.Photos).valid"
+        [itemImages]="itemImages"/>
 
       <app-validation-message
-        *ngIf="!addItemForm.getValidationStatus(BasicFormValidation.Photos).valid"
-        message="{{addItemForm.getValidationStatus(BasicFormValidation.Photos).message}}"/>
+        *ngIf="!addItemBasicFormService.getValidationStatus(BasicFormValidation.Photos).valid"
+        message="{{addItemBasicFormService.getValidationStatus(BasicFormValidation.Photos).message}}"/>
     </form-field-wrapper>
 
     <div class="navigation">

@@ -1,5 +1,5 @@
 import {FormGroup} from "@angular/forms";
-import {PriceDate} from "../../../add-item-set-price-form/add-item-price-form.service";
+import {PriceDateTime} from "../../../add-item-set-price-form/services/add-item-price-form.service";
 import {EndDateTimeValidator} from "../../../add-item-set-price-form/validation/end-date-time-validator";
 import {FullDateTimeValidator} from "../../../add-item-set-price-form/validation/full-date-time-validator";
 import {PriceValidator} from "../../../add-item-set-price-form/validation/price-validator";
@@ -14,7 +14,7 @@ export enum PriceValidation {
 }
 
 export class AddItemPriceValidationConfig {
-  static initialise(form: FormGroup<PriceDate>) {
+  static initialise(form: FormGroup<PriceDateTime>) {
     return new Validation<string | [string, string]>({
       [PriceValidation.Price]: {
         formControl: form.controls.price,
