@@ -8,6 +8,7 @@ import com.atlantbh.internship.auction.app.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -15,6 +16,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     public CategoryServiceImpl(final CategoryRepository repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public Optional<Category> findCategoryByName(final String categoryName) {
+        return repository.findByNameAllIgnoreCase(categoryName);
     }
 
     @Override

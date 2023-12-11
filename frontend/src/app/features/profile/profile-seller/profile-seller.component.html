@@ -15,8 +15,8 @@
     <profile-table [tableSection]="TableSection.Seller">
 
       @if (activeSection === TabSection.Active) {
-        @if (activeItems();as items) {
-          @for (item of items;track $index) {
+        @if (items().active;as activeItems) {
+          @for (item of activeItems;track $index) {
             <profile-table-data-row [sellerItem]="item"/>
           } @empty {
             <profile-table-empty
@@ -34,15 +34,21 @@
         }
 
       } @else if (activeSection === TabSection.Sold) {
-        <profile-table-empty
-          btnLabel="Start selling"
-          iconName="Shopping cart icon"
-          iconPath="assets/icons/shopping_cart.svg"
-          message="You do not have any scheduled items for sale.">
-          <a class="btn" [routerLink]="['/', ProfileRouteEndpoint.MyAccount, ProfileRouteEndpoint.AddItem]">
-            Start selling
-          </a>
-        </profile-table-empty>
+        @if (items().sold;as soldItems) {
+          @for (item of soldItems;track $index) {
+            <profile-table-data-row [sellerItem]="item"/>
+          } @empty {
+            <profile-table-empty
+              btnLabel="Start selling"
+              iconName="Shopping cart icon"
+              iconPath="assets/icons/shopping_cart.svg"
+              message="You do not have any scheduled items for sale.">
+              <a class="btn" [routerLink]="['/', ProfileRouteEndpoint.MyAccount, ProfileRouteEndpoint.AddItem]">
+                Start selling
+              </a>
+            </profile-table-empty>
+          }
+        }
       }
     </profile-table>
   </section>

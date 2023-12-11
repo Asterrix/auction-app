@@ -24,6 +24,11 @@ const sectionName: Record<Section, string> = {
   [Section.Sold]: "Sold",
 };
 
+type SellerItem = {
+  active: UserItem[];
+  sold: UserItem[];
+}
+
 @Component({
   selector: "app-profile-seller",
   standalone: true,
@@ -53,16 +58,25 @@ export class ProfileSellerComponent implements OnInit, OnDestroy {
   protected readonly ProfileRouteEndpoint = ProfileRouteEndpoint;
   protected userItemsService: UserItemsService = inject(UserItemsService);
   protected readonly TableSection = TableSection;
-  protected activeItems = signal<UserItem[]>([]);
+
+  protected items = signal<SellerItem>({
+    active: [],
+    sold: []
+  });
   private querySub: Subscription | undefined;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+
     this.userItemsService
       .fetchUserItems()
       .pipe(takeUntilDestroyed())
       .subscribe((userItems: UserItem[]) => {
-        this.activeItems.set(userItems);
+        this.items.set({
+          active: userItems.filter(item => !item.finished),
+          sold: userItems.filter(item => item.finished)
+        });
       });
+
   }
 
   ngOnInit(): void {
