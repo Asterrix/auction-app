@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     long countByEmailAllIgnoreCase(final String email);
+
     Optional<User> findFirstByEmailAllIgnoreCase(final String email);
 }

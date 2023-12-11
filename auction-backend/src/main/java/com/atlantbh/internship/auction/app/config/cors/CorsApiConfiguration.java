@@ -26,6 +26,7 @@ public class CorsApiConfiguration {
         registrationCorsConfig();
         authenticationCorsConfig();
         biddingCorsConfig();
+        userItemsCorsConfig();
         return source;
     }
 
@@ -92,5 +93,15 @@ public class CorsApiConfiguration {
                 .build();
 
         registerCorsConfig("/bids", bidConfig);
+    }
+
+    private void userItemsCorsConfig(){
+        final CorsConfiguration userItemsConfig = new CorsConfigurationBuilder()
+                .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
+                .setAllowedMethods(List.of(HttpMethod.GET))
+                .setAllowedHeaders(List.of("*"))
+                .build();
+
+        registerCorsConfig("/users/items", userItemsConfig);
     }
 }

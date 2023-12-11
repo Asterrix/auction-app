@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {catchError, Observable} from "rxjs";
-import {AlertService, AlertType} from "./alert.service";
-import {Api} from "./api.service";
-import {ItemService} from "./item.service";
+import {AlertService, AlertType} from "../alert.service";
+import {Api} from "../api.service";
+import {ItemService} from "../item.service";
 import BidRequest = Api.BidApi.BidRequest;
 import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
 
