@@ -9,7 +9,7 @@ import {Page} from "../../shared/models/interfaces/page";
 import {Pagination} from "../../shared/models/pagination";
 import {Api} from "../../shared/services/api.service";
 import {CategoryService} from "../../shared/services/category.service";
-import {ItemService} from "../../shared/services/item.service";
+import {ItemService} from "../../shared/services/item/item.service";
 import {SearchService} from "../../shared/services/search.service";
 import {ContentSectionComponent} from "./components/content-section/content-section.component";
 import {SidebarComponent} from "./components/sidebar/sidebar.component";

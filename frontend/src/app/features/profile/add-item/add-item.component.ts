@@ -1,8 +1,13 @@
 import {CommonModule} from "@angular/common";
+import {HttpResponse} from "@angular/common/http";
 import {Component, HostListener, inject, OnDestroy} from "@angular/core";
 import {Router} from "@angular/router";
+import {tr} from "date-fns/locale";
+import {LoaderComponent} from "../../../shared/components/loader/loader.component";
 import {EventService} from "../../../shared/services/event.service";
+import {LoaderService} from "../../../shared/services/loader.service";
 import {HomeRouteEndpoint} from "../../home/home-routes";
+import {ProfileRouteEndpoint} from "../profile-routes";
 import {AddItemBasicFormComponent} from "./add-item-basic-form/add-item-basic-form.component";
 import {AddItemLocationShippingComponent} from "./add-item-location-shipping/add-item-location-shipping.component";
 import {AddItemSetPriceFormComponent} from "./add-item-set-price-form/add-item-set-price-form.component";
@@ -13,7 +18,7 @@ import {AddItemFormService} from "./shared/services/add-item-form.service";
 @Component({
   selector: "profile-add-item",
   standalone: true,
-  imports: [CommonModule, AddItemBasicFormComponent, AddItemSetPriceFormComponent, AddItemLocationShippingComponent, ProgressBarComponent],
+  imports: [CommonModule, AddItemBasicFormComponent, AddItemSetPriceFormComponent, AddItemLocationShippingComponent, ProgressBarComponent, LoaderComponent],
   templateUrl: "./add-item.component.html",
   styleUrl: "./add-item.component.scss"
 })
@@ -24,6 +29,8 @@ export class AddItemComponent implements FormNavigation, OnDestroy {
   private addItemFormService = inject(AddItemFormService);
   private eventService = inject(EventService);
   private router = inject(Router);
+  private loaderService = inject(LoaderService);
+  protected loader = false;
 
   public cancelFormEvent(): void {
     this.addItemFormService.resetForm();
@@ -40,7 +47,19 @@ export class AddItemComponent implements FormNavigation, OnDestroy {
 
   public submitFormEvent(): void {
     if (this.currentFormNum === this.totalFormNum && this.displayCreditCardForm) {
-      this.addItemFormService.submitForm();
+      this.loaderService.getLoader("processing-form");
+      this.loader = true;
+
+      this.addItemFormService.submitForm().subscribe((httpResponse: HttpResponse<void>): void => {
+        if (httpResponse.ok) {
+          this.router
+            .navigate([ProfileRouteEndpoint.MyAccount])
+            .then(null);
+        }
+      }).add(()=> {
+        this.loaderService.removeLoader("processing-form");
+        this.loader = false;
+      });
       return;
     }
 

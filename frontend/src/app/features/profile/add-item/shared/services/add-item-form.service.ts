@@ -1,7 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Api} from "../../../../../shared/services/api.service";
-import {ItemService} from "../../../../../shared/services/item.service";
+import {ItemService} from "../../../../../shared/services/item/item.service";
 import {AddItemBasicFormService, Basic} from "../../add-item-basic-form/services/add-item-basic-form.service";
 import {
   AddItemLocationShippingService,
@@ -51,7 +51,7 @@ export class AddItemFormService implements ResetForm {
       endTime: priceDateForm.endTime.value
     };
 
-    this.itemService.createItem(item);
+    return this.itemService.createItem(item);
   }
 
   public resetForm(): void {
