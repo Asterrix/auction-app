@@ -1,6 +1,7 @@
 <section class="add-item">
   <div class="container">
     <div class="add-item__layout">
+
       <app-progress-bar
         [currentProgress]="currentFormNum"
         [totalProgress]="totalFormNum"/>
@@ -23,7 +24,8 @@
             (cancelForm)="cancelFormEvent()"
             (goBack)="goBackEvent()"
             (submitForm)="submitFormEvent()"
-            [showCreditCardForm]="displayCreditCardForm"/>
+            [showCreditCardForm]="displayCreditCardForm"
+            [error]="errorService.error"/>
         }
       }
 
