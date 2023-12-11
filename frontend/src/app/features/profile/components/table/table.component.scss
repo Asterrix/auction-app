@@ -3,7 +3,12 @@
 
 $cube-shape: 8rem;
 
-@mixin table-layout {
+@mixin seller-layout {
+  display: grid;
+  grid-template-columns: $cube-shape 2fr 1fr 1fr 1fr;
+}
+
+@mixin bids-layout {
   display: grid;
   grid-template-columns: $cube-shape 2fr 1fr 1fr 1fr 1fr;
 }
@@ -13,7 +18,7 @@ $cube-shape: 8rem;
 }
 
 @mixin table-row {
-  @include table-layout;
+  @include seller-layout;
   @include table-horizontal-spacing;
 }
 
@@ -23,10 +28,6 @@ $cube-shape: 8rem;
 
   &__head {
     background-color: $gray-100;
-  }
-
-  &__row {
-    @include table-row;
   }
 
   &__header {
@@ -42,6 +43,10 @@ $cube-shape: 8rem;
     }
   }
 
+  &__row {
+    @include table-row;
+  }
+
   &__body {
     @mixin table-vertical-spacing {
       margin: 2.4rem 0;
@@ -52,4 +57,8 @@ $cube-shape: 8rem;
     @include table-vertical-spacing;
     gap: 3.2rem;
   }
+}
+
+.six-column-layout {
+  @include bids-layout;
 }

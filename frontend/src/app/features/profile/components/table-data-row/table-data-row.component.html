@@ -1,14 +1,31 @@
-<a [routerLink]="['/', ShopRouteEndpoint.Shop, ShopRouteEndpoint.Item, bid.item.id]">
-  <tr class="table-data-row">
-    <td class="cell">
-      <img alt="image" class="cell__portrait" src="{{bid.item.portrait}}"/>
-    </td>
-    <td class="cell">{{bid.item.name}}</td>
-    <td class="cell">{{bid.timeRemaining}}</td>
-    <td class="cell">$ {{bid.biddingOffer | number: '1.2-2'}}</td>
-    <td class="cell">{{bid.numberOfBids}}</td>
-    <td class="cell" [ngClass]="{'highest-bidder': bid.biddingOffer === bid.highestBid, 'outbid': bid.biddingOffer !== bid.highestBid}">
-      $ {{bid.highestBid | number : '1.2-2'}}
-    </td>
-  </tr>
-</a>
+@if (sellerItem) {
+  <a [routerLink]="['/', ShopRouteEndpoint.Shop, ShopRouteEndpoint.Item, sellerItem.item.id]">
+    <tr class="table-data-row seller-layout">
+      <td class="cell">
+        <img alt="image" class="cell__portrait" src="{{sellerItem.item.portrait}}"/>
+      </td>
+      <td class="cell">{{ sellerItem.item.name }}</td>
+      <td class="cell">{{ sellerItem.timeRemaining }}</td>
+      <td class="cell">{{ sellerItem.numberOfBids }}</td>
+      <td class="cell" [ngClass]="{'highest-bidder': sellerItem.highestBid > 0, 'outbid': sellerItem.highestBid === 0}">
+        $ {{ sellerItem.highestBid | number : '1.2-2' }}
+      </td>
+    </tr>
+  </a>
+} @else {
+  <a [routerLink]="['/', ShopRouteEndpoint.Shop, ShopRouteEndpoint.Item, biddingInfo.item.id]">
+    <tr class="table-data-row bids-layout">
+      <td class="cell">
+        <img alt="image" class="cell__portrait" src="{{biddingInfo.item.portrait}}"/>
+      </td>
+      <td class="cell">{{ biddingInfo.item.name }}</td>
+      <td class="cell">{{ biddingInfo.timeRemaining }}</td>
+      <td class="cell">$ {{ biddingInfo.biddingOffer | number: '1.2-2' }}</td>
+      <td class="cell">{{ biddingInfo.numberOfBids }}</td>
+      <td class="cell"
+          [ngClass]="{'highest-bidder': biddingInfo.biddingOffer === biddingInfo.highestBid, 'outbid': biddingInfo.biddingOffer !== biddingInfo.highestBid}">
+        $ {{ biddingInfo.highestBid | number : '1.2-2' }}
+      </td>
+    </tr>
+  </a>
+}

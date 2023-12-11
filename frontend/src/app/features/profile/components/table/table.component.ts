@@ -1,6 +1,11 @@
 import {CommonModule} from "@angular/common";
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {RouterLink} from "@angular/router";
+
+export enum TableSection {
+  Seller,
+  Bids
+}
 
 @Component({
   selector: "profile-table",
@@ -10,5 +15,6 @@ import {RouterLink} from "@angular/router";
   styleUrls: ["./table.component.scss"]
 })
 export class TableComponent {
-
+  @Input({required: true}) tableSection!: TableSection;
+  protected readonly TableSection = TableSection;
 }

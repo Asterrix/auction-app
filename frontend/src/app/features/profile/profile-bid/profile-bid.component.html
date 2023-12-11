@@ -1,10 +1,10 @@
 <profile-shared-nav-tab>
-  <profile-table>
+  <profile-table [tableSection]="TableSection.Bids">
 
     @if (bids$ | async;as bidInfo) {
-      <profile-table-data-row
-        *ngFor="let bid of bidInfo"
-        [bid]="bid"/>
+      @for (bid of bidInfo;track $index) {
+        <profile-table-data-row [biddingInfo]="bid"/>
+      }
 
       @if (bidInfo.length <= 0) {
         <profile-table-empty
