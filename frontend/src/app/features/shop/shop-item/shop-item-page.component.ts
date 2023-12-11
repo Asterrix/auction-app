@@ -21,7 +21,7 @@ import {Alert, AlertService, AlertType} from "../../../shared/services/alert.ser
 import {Api} from "../../../shared/services/api.service";
 import {BidService} from "../../../shared/services/user/bid.service";
 import {ErrorService} from "../../../shared/services/error.service";
-import {ItemService} from "../../../shared/services/item.service";
+import {ItemService} from "../../../shared/services/item/item.service";
 import {AuthenticationService} from "../../../shared/services/user/authentication.service";
 import {ItemPageParameter} from "../shop-routes";
 import {BidNotificationComponent} from "./components/bid-notification/bid-notification.component";

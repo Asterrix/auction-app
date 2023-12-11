@@ -26,6 +26,12 @@
             [showCreditCardForm]="displayCreditCardForm"/>
         }
       }
+
+      @if (loader) {
+        <app-loader class="loader">
+          <span>Processing your request...</span>
+        </app-loader>
+      }
     </div>
   </div>
 </section>

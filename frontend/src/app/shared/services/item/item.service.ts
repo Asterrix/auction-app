@@ -2,11 +2,11 @@ import {HttpResponse} from "@angular/common/http";
 import {computed, Injectable, signal} from "@angular/core";
 import {Router} from "@angular/router";
 import {BehaviorSubject, catchError, Observable} from "rxjs";
-import {ProfileRouteEndpoint} from "../../features/profile/profile-routes";
-import {Page} from "../models/interfaces/page";
-import {IPagination} from "../models/pagination";
-import {Api} from "./api.service";
-import {LoaderService} from "./loader.service";
+import {ProfileRouteEndpoint} from "../../../features/profile/profile-routes";
+import {Page} from "../../models/interfaces/page";
+import {IPagination} from "../../models/pagination";
+import {Api} from "../api.service";
+import {LoaderService} from "../loader.service";
 import ItemParams = Api.ItemApi.GetMethods.ItemParams;
 import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
 import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
@@ -94,14 +94,8 @@ export class ItemService {
       .add(() => this.loader.removeLoader("load-more"));
   }
 
-  createItem(request: CreateItemRequest): void {
-    this.apiService.createItem(request).subscribe((httpResponse: HttpResponse<void>): void => {
-      if (httpResponse.ok) {
-        this.router
-          .navigate([ProfileRouteEndpoint.MyAccount])
-          .then(null);
-      }
-    });
+  createItem(request: CreateItemRequest): Observable<HttpResponse<void>> {
+    return this.apiService.createItem(request);
   }
 
   private addNewDataToExistingState(page: Page<ItemSummary>): void {
