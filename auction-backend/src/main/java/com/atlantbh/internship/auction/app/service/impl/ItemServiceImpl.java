@@ -14,13 +14,19 @@ import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.model.utils.Validator;
-import com.atlantbh.internship.auction.app.repository.*;
+import com.atlantbh.internship.auction.app.repository.BidRepository;
+import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
+import com.atlantbh.internship.auction.app.repository.ItemRepository;
+import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.ItemService;
+import com.atlantbh.internship.auction.app.service.UserService;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
+import com.atlantbh.internship.auction.app.service.item.ItemStateService;
 import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
 import com.atlantbh.internship.auction.app.service.validation.item.ItemEntityValidation;
 import com.google.cloud.storage.Blob;
 import jakarta.annotation.Nullable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -47,34 +53,37 @@ public final class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemImageRepository itemImageRepository;
     private final BidRepository bidRepository;
-    private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
+    private final CategoryService categoryService;
+    private final UserService userService;
     private final MainValidationClass<CreateItemRequest> createItemInitialValidation;
     private final ClaimsExtractor claimsExtractor;
     private final ItemEntityValidation entityValidation;
     private final FirebaseStorageService firebaseStorageService;
     private final Validator<List<MultipartFile>> imageValidation;
+    private final ItemStateService itemStateService;
 
     public ItemServiceImpl(final ItemRepository itemRepository,
                            final ItemImageRepository itemImageRepository,
                            final BidRepository bidRepository,
-                           final CategoryRepository categoryRepository,
-                           final UserRepository userRepository,
+                           final CategoryService categoryService,
+                           @Lazy final UserService userService,
                            final MainValidationClass<CreateItemRequest> createItemInitialValidation,
                            final ClaimsExtractor claimsExtractor,
                            final FirebaseStorageService firebaseStorageService,
                            final ItemEntityValidation entityValidation,
-                           final Validator<List<MultipartFile>> imageValidation) {
+                           final Validator<List<MultipartFile>> imageValidation,
+                           final ItemStateService itemStateService) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
         this.bidRepository = bidRepository;
-        this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
+        this.categoryService = categoryService;
+        this.userService = userService;
         this.createItemInitialValidation = createItemInitialValidation;
         this.claimsExtractor = claimsExtractor;
         this.entityValidation = entityValidation;
         this.firebaseStorageService = firebaseStorageService;
         this.imageValidation = imageValidation;
+        this.itemStateService = itemStateService;
     }
 
     /**
@@ -97,8 +106,9 @@ public final class ItemServiceImpl implements ItemService {
         if (itemName != null) specification = specification.and(isNameOf(itemName));
 
         final Page<Item> items = itemRepository.findAll(specification, pageable);
+        final List<Item> listOfUpdatedItems = updateItemFinishedAttribute(items.getContent());
 
-        final List<ItemSummaryDto> mappedItems = convertToSummaryDto(items.getContent());
+        final List<ItemSummaryDto> mappedItems = convertToSummaryDto(listOfUpdatedItems);
         final long totalElements = items.getTotalElements();
 
         return new PageImpl<>(mappedItems, pageable, totalElements);
@@ -112,14 +122,16 @@ public final class ItemServiceImpl implements ItemService {
         final Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) return Optional.empty();
 
-        final Specification<Bid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
+        final Item updatedItem = updateItemFinishedAttribute(item.get());
 
-        final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(item.get().getId());
+        final Specification<Bid> specification = UserItemBidSpecification.isHighestBid(updatedItem.getId());
+
+        final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(updatedItem.getId());
         if (totalNumberOfBids == 0) {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
             final BidNumberCount bidInformation = BidsMapper.mapToUserItemBidDto(new BigDecimal("0"), 0L);
 
-            final Integer ownerId = item.get().getOwner().getId();
+            final Integer ownerId = updatedItem.getOwner().getId();
             return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation, ownerId));
         }
 
@@ -128,7 +140,7 @@ public final class ItemServiceImpl implements ItemService {
         final ItemDto mappedItem = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
         final BidNumberCount mappedBidInformation = BidsMapper.mapToUserItemBidDto(highestBid.get().getAmount(), totalNumberOfBids);
 
-        final Integer ownerId = item.get().getOwner().getId();
+        final Integer ownerId = updatedItem.getOwner().getId();
         return Optional.of(ItemMapper.convertToAggregate(mappedItem, mappedBidInformation, ownerId));
     }
 
@@ -157,8 +169,13 @@ public final class ItemServiceImpl implements ItemService {
     public void createItem(final CreateItemRequest createItemRequest, final List<MultipartFile> images) {
         createItemInitialValidation.validate(createItemRequest);
 
-        final Category category = getCategory(createItemRequest.subcategory());
-        final User user = getUser();
+        final Category category = categoryService
+                .findCategoryByName(createItemRequest.subcategory())
+                .orElseThrow(() -> new ValidationException("Category could not be found."));;
+
+        final User user = userService
+                .findUserById(claimsExtractor.getUserId())
+                .orElseThrow(() -> new ValidationException("User could not be found."));
 
         Item item = new Item(
                 createItemRequest.name(),
@@ -181,15 +198,22 @@ public final class ItemServiceImpl implements ItemService {
         itemRepository.save(item);
     }
 
-    private User getUser() {
-        return userRepository
-                .findById(claimsExtractor.getUserId())
-                .orElseThrow(() -> new ValidationException("User could not be found."));
+    private List<Item> updateItemFinishedAttribute(final List<Item> items) {
+        final List<Item> listOfUpdatedItems = itemStateService.updateFinishedAttribute(items);
+        itemRepository.saveAll(items);
+
+        return listOfUpdatedItems;
     }
 
-    private Category getCategory(final String category) {
-        return categoryRepository
-                .findByNameAllIgnoreCase(category)
-                .orElseThrow(() -> new ValidationException("Category could not be found."));
+    private Item updateItemFinishedAttribute(final Item item) {
+        final Item updatedItem = itemStateService.updateFinishedAttribute(item);
+        itemRepository.save(item);
+
+        return updatedItem;
+    }
+
+    @Override
+    public List<Item> findAllItemsByOwnerId(final Integer ownerId) {
+        return itemRepository.findByOwner_Id(ownerId);
     }
 }

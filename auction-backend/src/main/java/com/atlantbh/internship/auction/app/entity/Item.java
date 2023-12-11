@@ -59,6 +59,9 @@ public class Item {
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<Bid> bids = new ArrayList<>();
 
+    @Column(name = "finished", nullable = false)
+    private Boolean finished = false;
+
     public Item() {
     }
 
@@ -159,4 +162,21 @@ public class Item {
     public void setUserItemBids(final List<Bid> bids) {
         this.bids = bids;
     }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(final List<Bid> bids) {
+        this.bids = bids;
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(final Boolean finished) {
+        this.finished = finished;
+    }
+
 }

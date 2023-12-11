@@ -16,6 +16,6 @@ public record ItemDto(
         String description,
         BigDecimal initialPrice,
         String timeLeft,
-        List<ItemImageDto> images
-) implements Serializable {
+        List<ItemImageDto> images,
+        Boolean finished) implements Serializable {
 }

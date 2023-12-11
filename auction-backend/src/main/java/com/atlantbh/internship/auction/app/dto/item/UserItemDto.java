@@ -14,6 +14,6 @@ public record UserItemDto(
         TableItemSummary item,
         String timeRemaining,
         Integer numberOfBids,
-        BigDecimal highestBid
-) implements Serializable {
+        BigDecimal highestBid,
+        Boolean finished) implements Serializable {
 }
