@@ -5,8 +5,8 @@ import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.google.cloud.storage.Blob;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ItemImageMapper {
     private ItemImageMapper() {
@@ -24,12 +24,8 @@ public final class ItemImageMapper {
     }
 
     public static List<ItemImage> convertFromBlob(final List<Blob> blobList, final Item item) {
-        List<ItemImage> itemImages = new ArrayList<>();
-
-        blobList.forEach(blob -> {
-            itemImages.add(new ItemImage(blob.getMediaLink(), item));
-        });
-
-        return itemImages;
+        return blobList.stream()
+                .map(blob -> new ItemImage(blob.getMediaLink(), item))
+                .collect(Collectors.toList());
     }
 }

@@ -1,12 +1,18 @@
 package com.atlantbh.internship.auction.app.controller;
 
+import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
+import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
+import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
+import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.ItemService;
+import com.atlantbh.internship.auction.app.service.UserService;
+import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -47,12 +53,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(MockitoExtension.class)
 class ItemControllerTest {
 
+    @MockBean
+    ClaimsExtractor claimsExtractor;
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private ItemService itemService;
-
+    @MockBean
+    private CategoryService categoryService;
+    @MockBean
+    private UserService userService;
+    @MockBean
+    private MainValidationClass<CreateItemRequest> requestMainValidationClass;
+    @MockBean
+    private FirebaseStorageService firebaseStorageService;
     private JacksonTester<Page<ItemSummaryDto>> jacksonTester;
 
     @BeforeEach

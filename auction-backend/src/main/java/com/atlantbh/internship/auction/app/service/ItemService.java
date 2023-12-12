@@ -4,14 +4,15 @@ import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
+import com.atlantbh.internship.auction.app.entity.ItemImage;
+import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,14 @@ public interface ItemService {
 
     ItemFeaturedDto getFeaturedItem();
 
-    void createItem(final CreateItemRequest createItemRequest, final List<MultipartFile> file) throws IOException;
+    Item createItem(final CreateItemRequest createItemRequest,
+                    final Category category,
+                    final User owner);
+
+
+    Item setItemImages(final Item item, final List<ItemImage> itemImages);
 
     List<Item> findAllItemsByOwnerId(final Integer ownerId);
+
+    void saveItem(final Item item);
 }
