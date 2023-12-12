@@ -7,20 +7,20 @@ enum ValidationError {
 }
 
 export class ImageValidation implements Validate<string[]> {
-  private readonly minLength: number = 3;
-  private readonly maxLength: number = 30;
+  private readonly minNumber: number = 3;
+  private readonly maxNumber: number = 30;
 
   private errorMessages: ValidationMessage = {
-    [ValidationError.MinNumberOfImages]: `You must upload at least ${this.minLength} photos of an item.`,
-    [ValidationError.MaxNumberOfImages]: `You cannot upload more than ${this.maxLength} photos of an item.`
+    [ValidationError.MinNumberOfImages]: `You must upload at least ${this.minNumber} photos of an item.`,
+    [ValidationError.MaxNumberOfImages]: `You cannot upload more than ${this.maxNumber} photos of an item.`
   };
 
   public validate(imageList: string[]): ValidationResult {
-    if (imageList.length < this.minLength) {
+    if (imageList.length < this.minNumber) {
       return {valid: false, message: this.errorMessages[ValidationError.MinNumberOfImages]};
     }
 
-    if (imageList.length > this.maxLength) {
+    if (imageList.length > this.maxNumber) {
       return {valid: false, message: this.errorMessages[ValidationError.MaxNumberOfImages]};
     }
 

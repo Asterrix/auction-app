@@ -1,1 +1,0 @@
-INSERT INTO public.users (date_of_birth, email, first_name, is_active, last_name, password, role_id) VALUES (null, 'admin@admin.com', 'Admin', true, 'Super', 'admin', 1);

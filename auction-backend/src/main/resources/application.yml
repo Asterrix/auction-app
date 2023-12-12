@@ -31,3 +31,4 @@ rsa:
 
 firebase:
   credentials: ${firebase_credentials}}
+  bucket: "auctionapp-4dbe4.appspot.com"
