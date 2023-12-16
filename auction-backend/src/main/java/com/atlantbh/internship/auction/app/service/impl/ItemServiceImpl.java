@@ -175,7 +175,8 @@ public final class ItemServiceImpl implements ItemService {
         return listOfUpdatedItems;
     }
 
-    private Item updateItemFinishedAttribute(final Item item) {
+    @Override
+    public Item updateItemFinishedAttribute(final Item item) {
         final Item updatedItem = itemStateChecker.updateFinishedAttribute(item);
         itemRepository.save(item);
 
@@ -185,5 +186,10 @@ public final class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> findAllItemsByOwnerId(final Integer ownerId) {
         return itemRepository.findByOwner_Id(ownerId);
+    }
+
+    @Override
+    public Optional<Item> findItemById(final Integer itemId) {
+        return itemRepository.findById(itemId);
     }
 }

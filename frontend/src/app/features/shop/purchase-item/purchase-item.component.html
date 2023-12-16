@@ -1,0 +1,24 @@
+<div class="purchase-item">
+  @if (loader) {
+    <div class="loader">
+      <app-loader/>
+    </div>
+  }
+  <div class="container">
+    <div class="layout">
+      <form-wrapper formSubject="Payment Info">
+
+        @if (errorService.error().type !== AlertType.None) {
+          <span class="error">{{ errorService.error().message }}</span>
+        }
+
+        <form id="payment-form" (ngSubmit)="submitForm()">
+          <div #paymentElement>
+            <!-- Elements will create form elements here -->
+          </div>
+          <button id="submit" class="btn--submit">Submit</button>
+        </form>
+      </form-wrapper>
+    </div>
+  </div>
+</div>

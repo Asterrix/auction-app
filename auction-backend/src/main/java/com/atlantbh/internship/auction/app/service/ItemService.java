@@ -56,4 +56,8 @@ public interface ItemService {
     List<Item> findAllItemsByOwnerId(final Integer ownerId);
 
     void saveItem(final Item item);
+
+    Optional<Item> findItemById(final Integer itemId);
+
+    Item updateItemFinishedAttribute(final Item item);
 }
