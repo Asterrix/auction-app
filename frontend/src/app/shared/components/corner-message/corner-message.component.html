@@ -1,0 +1,11 @@
+@if (displayMessage | async;as m) {
+  @if (m.display) {
+    <div class="corner-message">
+      <img ngSrc="../../../../assets/icons/green_checkbox.png" alt="Successful purchase" height="24" width="24"/>
+      <div>
+        <span>{{ m.title }}</span>
+        <p>{{ m.message }}</p>
+      </div>
+    </div>
+  }
+}

@@ -41,7 +41,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void registerUser(final RegistrationRequest user) {
+    public User registerUser(final RegistrationRequest user) {
         registerValidator.validate(user);
         checkIfEmailIsInUse(user.email());
 
@@ -49,7 +49,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         final User entity = createUserEntity(user, defaultRole);
 
         encodePassword(entity);
-        userRepository.save(entity);
+        return userRepository.save(entity);
     }
 
     private Role getDefaultRole() {

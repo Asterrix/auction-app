@@ -27,6 +27,7 @@ public class CorsApiConfiguration {
         authenticationCorsConfig();
         biddingCorsConfig();
         userItemsCorsConfig();
+        stripeCorsConfig();
         return source;
     }
 
@@ -103,5 +104,15 @@ public class CorsApiConfiguration {
                 .build();
 
         registerCorsConfig("/users/items", userItemsConfig);
+    }
+
+    private void stripeCorsConfig(){
+        final CorsConfiguration userItemsConfig = new CorsConfigurationBuilder()
+                .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
+                .setAllowedMethods(List.of(HttpMethod.GET, HttpMethod.POST))
+                .setAllowedHeaders(List.of("*"))
+                .build();
+
+        registerCorsConfig("/stripe/**", userItemsConfig);
     }
 }
