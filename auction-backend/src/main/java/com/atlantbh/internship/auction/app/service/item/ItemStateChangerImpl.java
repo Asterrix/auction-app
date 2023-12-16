@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Component
-public class ItemStateCheckerImpl implements ItemStateChecker {
+public class ItemStateChangerImpl implements ItemStateChanger {
 
     @Override
     public Item updateFinishedAttribute(final Item item) {

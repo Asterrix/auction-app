@@ -2,7 +2,6 @@ import {HttpResponse} from "@angular/common/http";
 import {computed, Injectable, signal} from "@angular/core";
 import {Router} from "@angular/router";
 import {BehaviorSubject, catchError, Observable} from "rxjs";
-import {ProfileRouteEndpoint} from "../../../features/profile/profile-routes";
 import {Page} from "../../models/interfaces/page";
 import {IPagination} from "../../models/pagination";
 import {Api} from "../api.service";
@@ -59,16 +58,18 @@ export class ItemService {
     return this.items$.asObservable();
   }
 
+  public getItemById(itemId: number): Observable<ItemAggregate> {
+    return this.apiService.getItemById(itemId);
+  }
+
   initItem(itemId: number): void {
-    this.loader.getLoader("item").showLoader();
     this.itemSignal.set(undefined);
 
     this.apiService.getItemById(itemId).pipe(
       catchError((error: any) => {
         throw error;
       }))
-      .subscribe((item): void => this.itemSignal.set(item))
-      .add(() => this.loader.removeLoader("item"));
+      .subscribe((item): void => this.itemSignal.set(item));
   }
 
   initItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {

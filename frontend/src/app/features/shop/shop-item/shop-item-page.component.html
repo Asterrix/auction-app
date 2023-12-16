@@ -1,8 +1,8 @@
-<div class="shop-item">
+@if (item$ | async;as item) {
+  <div class="shop-item">
 
-  <app-bid-notification [alert]="alertService.alert"/>
+    <app-bid-notification [alert]="alertService.alert"/>
 
-  <ng-container *ngIf="itemService.item() as item; else loader">
     <div class="container">
       <div class="shop-item__page__layout">
 
@@ -16,7 +16,7 @@
 
           @if (authService.getCurrentUser()?.id !== item.ownerId) {
 
-            @if (!item.item.finished) {
+            @if (item.item.timeLeft !== 'Finished') {
               <form (ngSubmit)="onSubmit()" class="form">
                 <form-input-field
                   [formFieldGroup]="bidForm"
@@ -48,10 +48,7 @@
 
       </div>
     </div>
-  </ng-container>
-
-  <ng-template #loader>
-    <app-loader class="loader-placeholder"/>
-  </ng-template>
-</div>
-
+  </div>
+} @else {
+  <app-loader class="loader-placeholder"/>
+}

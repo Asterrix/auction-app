@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.impl;
+package com.atlantbh.internship.auction.app.service.item;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
@@ -12,8 +12,6 @@ import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.service.ItemService;
-import com.atlantbh.internship.auction.app.service.item.ItemStateChecker;
 import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
 import com.atlantbh.internship.auction.app.service.validation.item.ItemEntityValidation;
 import jakarta.annotation.Nullable;
@@ -43,18 +41,18 @@ public final class ItemServiceImpl implements ItemService {
     private final ItemImageRepository itemImageRepository;
     private final BidRepository bidRepository;
     private final ItemEntityValidation entityValidation;
-    private final ItemStateChecker itemStateChecker;
+    private final ItemStateChanger itemStateChanger;
 
     public ItemServiceImpl(final ItemRepository itemRepository,
                            final ItemImageRepository itemImageRepository,
                            final BidRepository bidRepository,
                            final ItemEntityValidation entityValidation,
-                           final ItemStateChecker itemStateChecker) {
+                           final ItemStateChanger itemStateChanger) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
         this.bidRepository = bidRepository;
         this.entityValidation = entityValidation;
-        this.itemStateChecker = itemStateChecker;
+        this.itemStateChanger = itemStateChanger;
     }
 
     /**
@@ -77,9 +75,8 @@ public final class ItemServiceImpl implements ItemService {
         if (itemName != null) specification = specification.and(isNameOf(itemName));
 
         final Page<Item> items = itemRepository.findAll(specification, pageable);
-        final List<Item> listOfUpdatedItems = updateItemFinishedAttribute(items.getContent());
 
-        final List<ItemSummaryDto> mappedItems = convertToSummaryDto(listOfUpdatedItems);
+        final List<ItemSummaryDto> mappedItems = convertToSummaryDto(items.getContent());
         final long totalElements = items.getTotalElements();
 
         return new PageImpl<>(mappedItems, pageable, totalElements);
@@ -93,16 +90,14 @@ public final class ItemServiceImpl implements ItemService {
         final Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) return Optional.empty();
 
-        final Item updatedItem = updateItemFinishedAttribute(item.get());
+        final Specification<Bid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
 
-        final Specification<Bid> specification = UserItemBidSpecification.isHighestBid(updatedItem.getId());
-
-        final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(updatedItem.getId());
+        final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(item.get().getId());
         if (totalNumberOfBids == 0) {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
             final BidNumberCount bidInformation = BidsMapper.mapToUserItemBidDto(new BigDecimal("0"), 0L);
 
-            final Integer ownerId = updatedItem.getOwner().getId();
+            final Integer ownerId = item.get().getOwner().getId();
             return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation, ownerId));
         }
 
@@ -111,7 +106,7 @@ public final class ItemServiceImpl implements ItemService {
         final ItemDto mappedItem = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
         final BidNumberCount mappedBidInformation = BidsMapper.mapToUserItemBidDto(highestBid.get().getAmount(), totalNumberOfBids);
 
-        final Integer ownerId = updatedItem.getOwner().getId();
+        final Integer ownerId = item.get().getOwner().getId();
         return Optional.of(ItemMapper.convertToAggregate(mappedItem, mappedBidInformation, ownerId));
     }
 
@@ -168,16 +163,9 @@ public final class ItemServiceImpl implements ItemService {
         return item;
     }
 
-    private List<Item> updateItemFinishedAttribute(final List<Item> items) {
-        final List<Item> listOfUpdatedItems = itemStateChecker.updateFinishedAttribute(items);
-        itemRepository.saveAll(items);
-
-        return listOfUpdatedItems;
-    }
-
     @Override
     public Item updateItemFinishedAttribute(final Item item) {
-        final Item updatedItem = itemStateChecker.updateFinishedAttribute(item);
+        final Item updatedItem = itemStateChanger.updateFinishedAttribute(item);
         itemRepository.save(item);
 
         return updatedItem;
