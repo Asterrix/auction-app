@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service;
+package com.atlantbh.internship.auction.app.service.item;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;

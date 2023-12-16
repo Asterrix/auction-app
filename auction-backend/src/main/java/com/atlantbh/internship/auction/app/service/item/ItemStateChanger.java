@@ -4,7 +4,7 @@ import com.atlantbh.internship.auction.app.entity.Item;
 
 import java.util.List;
 
-public interface ItemStateChecker {
+public interface ItemStateChanger {
     Item updateFinishedAttribute(final Item item);
 
     List<Item> updateFinishedAttribute(final List<Item> items);

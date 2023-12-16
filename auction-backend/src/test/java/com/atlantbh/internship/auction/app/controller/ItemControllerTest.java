@@ -10,7 +10,7 @@ import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.service.CategoryService;
-import com.atlantbh.internship.auction.app.service.ItemService;
+import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.UserService;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;

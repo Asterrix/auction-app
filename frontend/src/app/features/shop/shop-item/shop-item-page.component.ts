@@ -19,10 +19,10 @@ import {
 } from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
 import {Alert, AlertService, AlertType} from "../../../shared/services/alert.service";
 import {Api} from "../../../shared/services/api.service";
-import {BidService} from "../../../shared/services/user/bid.service";
 import {ErrorService} from "../../../shared/services/error.service";
 import {ItemService} from "../../../shared/services/item/item.service";
 import {AuthenticationService} from "../../../shared/services/user/authentication.service";
+import {BidService} from "../../../shared/services/user/bid.service";
 import {ItemPageParameter} from "../shop-routes";
 import {BidNotificationComponent} from "./components/bid-notification/bid-notification.component";
 import {ItemDescriptionComponent} from "./components/item-description/item-description.component";
@@ -57,6 +57,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
     offer: ["", [Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
   alert$: Observable<Alert> = toObservable(this.alertService.alert);
+  item$: Observable<ItemAggregate>;
 
   constructor(protected itemService: ItemService,
               private activeRoute: ActivatedRoute,
@@ -67,11 +68,13 @@ export class ShopItemPage implements OnInit, OnDestroy {
               private errorService: ErrorService,
               private router: Router,
               protected authService: AuthenticationService) {
+
+    const param = this.activeRoute.snapshot.params[ItemPageParameter.Id];
+
+    this.item$ = this.itemService.getItemById(param);
   }
 
   ngOnInit(): void {
-    const param = this.activeRoute.snapshot.params[ItemPageParameter.Id];
-    this.itemService.initItem(param);
     this.trailService.displayNavigationTrail();
 
     this.alert$.subscribe(value => {
