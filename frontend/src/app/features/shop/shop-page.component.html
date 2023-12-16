@@ -1,12 +1,20 @@
 <ng-container *ngIf="(categories$ | async) && (items$ | async); else loader">
-<div class="shop">
-  <div class="container">
-    <div class="shop__layout">
-      <shop-sidebar [categories$]="categories$"/>
-      <shop-content-section [items$]="items$" [pagination]="pagination" (increasePageSize)="loadMoreElements()"/>
+  <div class="shop">
+    <div class="container">
+      <div class="shop__layout">
+        <shop-sidebar [categories$]="categories$"/>
+
+        <div class="main_section">
+          <shop-sorting-tab/>
+          <shop-content-section
+            [items$]="items$"
+            [pagination]="pagination"
+            (increasePageSize)="loadMoreElements()"/>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
 </ng-container>
 
 <ng-template #loader>

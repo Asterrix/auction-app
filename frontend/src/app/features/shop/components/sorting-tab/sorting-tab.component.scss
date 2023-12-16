@@ -1,0 +1,11 @@
+@use "container";
+
+.sorting-tab {
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: container.$large) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

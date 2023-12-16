@@ -14,13 +14,14 @@ import {SearchService} from "../../shared/services/search.service";
 import {ContentSectionComponent} from "./components/content-section/content-section.component";
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {ShopPageParameter} from "./shop-routes";
+import {SortingTabComponent} from "./components/sorting-tab/sorting-tab.component";
 import Category = Api.CategoryApi.Category;
 import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
 @Component({
   selector: "app-shop",
   standalone: true,
-  imports: [CommonModule, SidebarComponent, ContentSectionComponent, LoaderComponent],
+  imports: [CommonModule, SidebarComponent, ContentSectionComponent, LoaderComponent, SortingTabComponent],
   templateUrl: "./shop-page.component.html",
   styleUrls: ["./shop-page.component.scss"]
 })
