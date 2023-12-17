@@ -1,5 +1,5 @@
 import {CommonModule} from "@angular/common";
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit, signal} from "@angular/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ActivatedRoute, Params} from "@angular/router";
 import {debounceTime, Observable, Subscription} from "rxjs";
@@ -29,7 +29,7 @@ import Category = Api.CategoryApi.Category;
 export class ShopPage implements OnInit, OnDestroy {
   categories$: Observable<Array<Category> | undefined> | undefined;
   pagination: Pagination = new Pagination({page: 0, size: 9});
-  items: Page<ItemSummary> | undefined;
+  protected items = signal<ItemSummary[]>([]);
   private subscription: Set<Subscription> = new Set<Subscription>();
   private itemFilterBuilder: ItemFilterBuilder = new ItemFilterBuilder();
 
@@ -61,7 +61,22 @@ export class ShopPage implements OnInit, OnDestroy {
   loadMoreElements(): void {
     if (!this.pagination.isLastPageValue()) {
       this.pagination.increasePageNumber();
-      this.fetchItems();
+
+      this.subscription.add(
+        this.itemService.getItems({
+          pageable: {
+            page: this.pagination.getPagination().page,
+            size: this.pagination.getPagination().size
+          },
+          name: this.itemFilterBuilder.build().name,
+          category: this.itemFilterBuilder.build().category,
+          subcategory: this.itemFilterBuilder.build().subcategory,
+          orderBy: this.itemFilterBuilder.build().orderBy
+        }).subscribe((items: Page<ItemSummary> | undefined) => {
+          this.items.update((item: ItemSummary[]) => item.concat(items?.content || []));
+          this.pagination.updatePaginationDetails(items?.last, items?.totalElements);
+        })
+      );
     }
   }
 
@@ -81,7 +96,7 @@ export class ShopPage implements OnInit, OnDestroy {
         subcategory: filter.subcategory,
         orderBy: filter.orderBy
       }).subscribe((items: Page<ItemSummary> | undefined) => {
-        this.items = items;
+        this.items.set(items?.content || []);
         this.pagination.updatePaginationDetails(items?.last, items?.totalElements);
       })
     );
