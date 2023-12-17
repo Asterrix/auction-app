@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.dto.item;
+package com.atlantbh.internship.auction.app.dto.item.requests;
 
 
 import com.atlantbh.internship.auction.app.entity.Item;

@@ -11,7 +11,8 @@ export namespace ShopPageParameter {
   export enum Parameter {
     Category = "category",
     Subcategory = "subcategory",
-    ItemName = "itemName"
+    ItemName = "itemName",
+    OrderBy = "orderBy",
   }
 }
 

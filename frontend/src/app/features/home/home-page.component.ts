@@ -1,12 +1,16 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
 import {Page} from "../../shared/models/interfaces/page";
 import {Pagination} from "../../shared/models/pagination";
 import {Api} from "../../shared/services/api.service";
+import {ItemOrderBy} from "../../shared/services/api/item/item.enum";
+import {FeaturedItem, ItemSummary} from "../../shared/services/api/item/item.interface";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item/item.service";
+import {NewItemService} from "../../shared/services/item/new-item.service";
 import {HomeHeaderComponent} from "./components/home-header/home-header.component";
 import {
   Section,
@@ -15,8 +19,6 @@ import {
 } from "./components/home-items/components/section-tab/section-tab.service";
 import {HomeItemsComponent} from "./components/home-items/home-items.component";
 import Category = Api.CategoryApi.Category;
-import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
-import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
 
 @Component({
@@ -31,21 +33,35 @@ export class HomePage implements OnInit, OnDestroy {
   featuredItem$: Observable<FeaturedItem | undefined> | undefined;
   items$: Observable<Page<ItemSummary> | undefined> | undefined;
   private pagination: Pagination = new Pagination({page: 0, size: 8});
-
   private queryParamSub: Subscription | undefined;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private itemService: ItemService,
               private categoryService: CategoryService,
-              private sectionTabService: SectionTabService) {
+              private sectionTabService: SectionTabService,
+              private newItemService: NewItemService) {
+
+    this.activatedRoute.queryParams
+      .pipe(takeUntilDestroyed())
+      .subscribe((params: Params): void => {
+
+        // Quickfix
+        if (this.ignoreItemName(params)) {
+          return;
+        }
+
+        const section: string = params[SectionQueryParam.Section];
+
+        this.sectionTabService.handleSectionChange(section, params);
+        this.fetchSectionItems();
+      });
   }
 
   ngOnInit(): void {
     this.clearItemQueryParam();
     this.fetchFeaturedItem();
     this.fetchCategories();
-    this.subscribeToQueryParamChanges();
   }
 
   ngOnDestroy(): void {
@@ -66,37 +82,29 @@ export class HomePage implements OnInit, OnDestroy {
     this.router.navigate([], {queryParams: {itemName: null}, queryParamsHandling: "merge"}).then(null);
   }
 
-  private subscribeToQueryParamChanges(): void {
-    this.queryParamSub = this.activatedRoute.queryParams.subscribe((params: Params): void => {
-
-      // Quickfix
-      if (this.ignoreItemName(params)) {
-        return;
-      }
-
-      const section: string = params[SectionQueryParam.Section];
-
-      this.sectionTabService.handleSectionChange(section, params);
-      this.fetchSectionItems();
-      this.fetchItems();
-    });
-  }
-
   private fetchSectionItems(): void {
     this.sectionTabService.getActiveSectionValue() === Section.LastChance ? this.initLastChance() : this.initNewestArrivals();
   }
 
   private initNewestArrivals(): void {
-    this.itemService.initItemsNewestArrivals(this.pagination.getPagination());
+    this.items$ = this.newItemService.getItems({
+      pageable: {
+        page: this.pagination.getPagination().page,
+        size: this.pagination.getPagination().size
+      },
+      orderBy: ItemOrderBy.Newest
+    });
   }
 
   private initLastChance(): void {
-    this.itemService.initItemsLastChance(this.pagination.getPagination());
+    this.items$ = this.newItemService.getItems({
+      pageable: {
+        page: this.pagination.getPagination().page,
+        size: this.pagination.getPagination().size
+      },
+      orderBy: ItemOrderBy.TimeLeft
+    });
   }
-
-  private fetchItems(): void {
-    this.items$ = this.itemService.getItems();
-  };
 
   private ignoreItemName(params: Params): boolean {
     return !!params["itemName"];

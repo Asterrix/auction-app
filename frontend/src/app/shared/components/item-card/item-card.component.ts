@@ -1,8 +1,7 @@
 import {CommonModule} from "@angular/common";
 import {Component, Input} from "@angular/core";
 import {RouterLink} from "@angular/router";
-import {Api} from "../../services/api.service";
-import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
+import {ItemSummary} from "../../services/api/item/item.interface";
 
 @Component({
   selector: "app-item-card",

@@ -1,7 +1,6 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, Input} from "@angular/core";
-import {Api} from "../../../../../shared/services/api.service";
-import ItemImage = Api.ItemApi.Interfaces.ItemImage;
+import {ItemImage} from "../../../../../shared/services/api/item/item.interface";
 
 @Component({
   selector: "shop-item-showcase",
