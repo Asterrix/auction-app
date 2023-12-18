@@ -6,7 +6,10 @@ import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
-import com.atlantbh.internship.auction.app.entity.*;
+import com.atlantbh.internship.auction.app.entity.Category;
+import com.atlantbh.internship.auction.app.entity.Item;
+import com.atlantbh.internship.auction.app.entity.ItemImage;
+import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
@@ -21,12 +24,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.ZonedDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,12 +68,7 @@ public class ItemController {
         final ZonedDateTime timeOfRequest = ZonedDateTime.now();
         final Optional<Item> optionalItem = itemService.findItemById(itemId);
 
-        if (optionalItem.isEmpty() || optionalItem.get().getFinished()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        final Item item = optionalItem.get();
-        if (shouldNotDisplayItem(item, timeOfRequest)) {
+        if (optionalItem.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -108,48 +104,5 @@ public class ItemController {
         itemService.saveItem(finalItem);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    private boolean shouldNotDisplayItem(final Item item, final ZonedDateTime timeOfRequest) {
-        if (auctionTimeFinished(item, timeOfRequest)) {
-            if (userNotAuthorized(item)) {
-                return true;
-            }
-
-            final Integer requestUserId = claimsExtractor.getUserId();
-            final Integer ownerId = item.getOwner().getId();
-
-            if (itemHasBids(item)) {
-                final Integer highestBidderId = getHighestBidderId(item);
-
-                return !highestBidderId.equals(requestUserId);
-            }
-
-            return !requestUserId.equals(ownerId);
-        }
-
-        return false;
-    }
-
-    private boolean auctionTimeFinished(final Item item, final ZonedDateTime timeOfRequest) {
-        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-                item.getEndTime().isBefore(timeOfRequest);
-    }
-
-    private boolean userNotAuthorized(final Item item) {
-        return !SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-                item.getEndTime().isBefore(ZonedDateTime.now());
-    }
-
-    private boolean itemHasBids(final Item item) {
-        return !item.getUserItemBids().isEmpty();
-    }
-
-    private Integer getHighestBidderId(final Item item) {
-        return item.getUserItemBids()
-                .stream()
-                .max(Comparator.comparing(Bid::getAmount))
-                .map(bid -> bid.getUser().getId())
-                .orElseThrow();
     }
 }

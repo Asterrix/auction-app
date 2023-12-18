@@ -1,6 +1,7 @@
 package com.atlantbh.internship.auction.app.controller;
 
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
+import com.atlantbh.internship.auction.app.config.stripe.StripeConfig;
 import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
@@ -20,7 +21,6 @@ public class StripeController {
     private final StripeService stripeService;
     private final ClaimsExtractor claimsExtractor;
     private final ItemService itemService;
-
 
     public StripeController(final StripeService stripeService,
                             final ClaimsExtractor claimsExtractor,
@@ -52,7 +52,7 @@ public class StripeController {
 
         final Integer ownerId = item.getOwner().getId();
         if (requestUserId.equals(ownerId)) {
-            throw new ValidationException("User cannot purchase his own items");
+            throw new ValidationException("User is not allowed to purchase his own items.");
         }
 
         final BigDecimal itemPrice = item
@@ -64,13 +64,16 @@ public class StripeController {
 
         final Long finalPrice = stripeService.convertPriceToStripeCents(itemPrice);
 
-        final String paymentIntent = stripeService.createPaymentIntent(finalPrice, "eur", customerId);
+        final String paymentIntent = stripeService.createPaymentIntent(finalPrice, StripeConfig.CURRENCY, customerId);
         return new ResponseEntity<>(paymentIntent, HttpStatus.OK);
     }
 
+    // There is a potential that stripe purchase will succeed but the item will not be updated duo to connection issues, intentional exits, etc...
+    // Stripe handles these cases with the use of webhooks, but for the sake of simplicity this is not implemented, yet.
     @PostMapping("confirm-purchase")
     public ResponseEntity<Void> confirmPurchase(@RequestParam final Integer itemId) {
-        final Item item = itemService.findItemById(itemId)
+        final Item item = itemService
+                .findItemById(itemId)
                 .orElseThrow(() -> new NoSuchElementException("Item with the id of: %d could not be found".formatted(itemId)));
 
         itemService.updateItemFinishedAttribute(item);
