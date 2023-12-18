@@ -49,6 +49,10 @@ public class StripeController {
                 .findItemById(itemId)
                 .orElseThrow(() -> new NoSuchElementException("Item with the id of: %d could not be found".formatted(itemId)));
 
+        if (item.getFinished()) {
+            throw new ValidationException("Item with the id of: %d has already been purchased".formatted(itemId));
+        }
+
         final Integer ownerId = item.getOwner().getId();
         if (requestUserId.equals(ownerId)) {
             throw new ValidationException("User is not allowed to purchase his own items.");

@@ -147,7 +147,7 @@ public final class ItemServiceImpl implements ItemService {
     @Override
     public Item updateItemFinishedAttribute(final Item item) {
         final Item updatedItem = itemStateChanger.updateFinishedAttribute(item);
-        itemRepository.save(item);
+        itemRepository.save(updatedItem);
 
         return updatedItem;
     }

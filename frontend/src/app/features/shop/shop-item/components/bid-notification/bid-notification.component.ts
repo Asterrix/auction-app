@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
-import {Component, Input, Signal} from "@angular/core";
-import {Alert, AlertService, AlertType} from "../../../../../shared/services/alert.service";
+import {Component, Input} from "@angular/core";
+import {Alert, AlertType} from "../../../../../shared/services/alert.service";
 
 @Component({
   selector: "app-bid-notification",
@@ -10,6 +10,6 @@ import {Alert, AlertService, AlertType} from "../../../../../shared/services/ale
   styleUrls: ["./bid-notification.component.scss"]
 })
 export class BidNotificationComponent {
-  @Input({required: true}) alert!: Signal<Alert>;
+  @Input({required: true}) alert!: Alert;
   protected readonly AlertType = AlertType;
 }
