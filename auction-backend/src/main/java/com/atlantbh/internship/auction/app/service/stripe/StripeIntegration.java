@@ -81,6 +81,7 @@ public class StripeIntegration implements StripeService {
             throw new RuntimeException("Error occurred while trying to create payment intent");
         }
 
+        // Used for setting up the Stripe form on the frontend which contains the information about the payment details
         HashMap<String, String> clientSecret = new HashMap<>();
         clientSecret.put("clientSecret", paymentIntent.getClientSecret());
 
