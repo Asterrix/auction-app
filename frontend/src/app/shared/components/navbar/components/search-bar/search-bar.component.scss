@@ -1,14 +1,14 @@
-@import "colors";
-@import "container";
+@use "colors";
+@use "container";
 
 .search-bar {
-  border: 1px solid $neutral-light-grey;
+  border: 1px solid colors.$neutral-light-grey;
   display: flex;
   justify-content: space-between;
   padding: 1.2rem 2rem;
 
   &:focus-within {
-    outline: 2px solid $primary;
+    outline: 2px solid colors.$primary;
     outline-offset: 2px;
   }
 
@@ -16,7 +16,13 @@
     width: 100%;
   }
 
-  img {
+  &__btn {
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    justify-content: center;
     margin-left: 1.2rem;
   }
 }

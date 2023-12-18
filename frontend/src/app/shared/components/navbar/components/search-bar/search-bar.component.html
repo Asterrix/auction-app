@@ -4,5 +4,14 @@
          formControlName="searchValue"
          (input)="onChange()"
          (keydown.enter)="handleSearchNavigation()">
-  <img ngSrc="assets/icons/magnify_icon.svg" alt="Search icon" height="24" width="24"/>
+
+  <button type="button"
+          class="search-bar__btn"
+          (click)="handleSearchNavigation()">
+
+    <img ngSrc="assets/icons/magnify_icon.svg"
+         alt="Search icon"
+         height="24"
+         width="24"/>
+  </button>
 </form>
