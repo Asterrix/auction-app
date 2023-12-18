@@ -1,6 +1,8 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
+import {Component, inject, OnInit} from "@angular/core";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {NavigationStart, Router} from "@angular/router";
 import {debounceTime} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {Constant} from "../../../../models/enums/constant";
@@ -18,8 +20,25 @@ export class SearchBarComponent implements OnInit {
   searchForm = this.formBuilder.nonNullable.group({
     searchValue: Constant.EmptyValue
   });
+  private router = inject(Router);
 
   constructor(private formBuilder: FormBuilder, private searchService: SearchService) {
+
+    this.router.events
+      .pipe(takeUntilDestroyed())
+      .subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          if (!event.url.includes("itemName")
+            && this.searchValue !== Constant.EmptyValue
+            && this.searchForm.controls.searchValue.value !== Constant.EmptyValue) {
+
+            this.searchValue = Constant.EmptyValue;
+            this.searchForm.patchValue({
+              searchValue: Constant.EmptyValue
+            });
+          }
+        }
+      });
   }
 
   ngOnInit(): void {
