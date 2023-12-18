@@ -94,6 +94,7 @@ class ItemControllerTest {
                 1,
                 "Item",
                 new BigDecimal("80.00"),
+                new BigDecimal("20.00"),
                 new ItemImageDto(1, "ImageUrl")
         );
         final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));

@@ -44,6 +44,12 @@
   &--price {
     color: $primary;
   }
+
+
+  &__price-section {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 // Vertical
