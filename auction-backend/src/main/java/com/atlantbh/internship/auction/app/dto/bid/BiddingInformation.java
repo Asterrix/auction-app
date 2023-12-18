@@ -8,5 +8,9 @@ import java.math.BigDecimal;
 /**
  * DTO for {@link Bid}
  */
-public record BidNumberCount(BigDecimal highestBid, Long totalNumberOfBids) implements Serializable {
+public record BiddingInformation(
+        BigDecimal highestBid,
+        Long totalNumberOfBids,
+        Integer highestBidderId
+) implements Serializable {
 }
