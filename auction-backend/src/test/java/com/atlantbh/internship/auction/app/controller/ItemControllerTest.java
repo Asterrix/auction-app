@@ -2,7 +2,7 @@ package com.atlantbh.internship.auction.app.controller;
 
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
-import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
+import com.atlantbh.internship.auction.app.dto.bid.BiddingInformation;
 import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
@@ -156,7 +156,10 @@ class ItemControllerTest {
                 false
         );
 
-        final BidNumberCount itemBidDto = new BidNumberCount(new BigDecimal("20"), 1L);
+        final BiddingInformation itemBidDto = new BiddingInformation(
+                new BigDecimal("20"),
+                1L,
+                1);
         final ItemAggregate itemAggregate = new ItemAggregate(itemDto, itemBidDto, 1);
         final ZonedDateTime timeOfRequest = ZonedDateTime.now();
 

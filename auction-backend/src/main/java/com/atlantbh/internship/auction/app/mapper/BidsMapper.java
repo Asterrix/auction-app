@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.mapper;
 
+import com.atlantbh.internship.auction.app.dto.bid.BiddingInformation;
 import com.atlantbh.internship.auction.app.dto.bid.TableItemSummary;
-import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.dto.bid.UserBidsAggregate;
 import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
@@ -14,8 +14,10 @@ public final class BidsMapper {
     private BidsMapper() {
     }
 
-    public static BidNumberCount mapToUserItemBidDto(final BigDecimal bid, final Long totalNumberOfBids) {
-        return new BidNumberCount(bid, totalNumberOfBids);
+    public static BiddingInformation mapToUserItemBidDto(final BigDecimal bid,
+                                                         final Long totalNumberOfBids,
+                                                         final Integer highestBidderId) {
+        return new BiddingInformation(bid, totalNumberOfBids, highestBidderId);
     }
 
     public static TableItemSummary mapToBidItemSummary(final Integer id, final String portrait, final String name) {

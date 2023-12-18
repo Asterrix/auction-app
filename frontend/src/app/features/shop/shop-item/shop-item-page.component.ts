@@ -1,6 +1,6 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {toObservable} from "@angular/core/rxjs-interop";
+import {takeUntilDestroyed, toObservable} from "@angular/core/rxjs-interop";
 import {AbstractControl, FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
@@ -57,7 +57,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
     offer: ["", [Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
   alert$: Observable<Alert> = toObservable(this.alertService.alert);
-  item$: Observable<ItemAggregate>;
+  item: ItemAggregate | undefined;
 
   constructor(protected itemService: ItemService,
               private activeRoute: ActivatedRoute,
@@ -71,7 +71,11 @@ export class ShopItemPage implements OnInit, OnDestroy {
 
     const param = this.activeRoute.snapshot.params[ItemPageParameter.Id];
 
-    this.item$ = this.itemService.getItemById(param);
+    this.itemService.getItemById(param)
+      .pipe(takeUntilDestroyed())
+      .subscribe((itemAggregate: ItemAggregate) => {
+        this.item = itemAggregate;
+      });
   }
 
   ngOnInit(): void {
@@ -122,11 +126,11 @@ export class ShopItemPage implements OnInit, OnDestroy {
   }
 
   private isFormValid(): boolean {
-    if (this.itemService.item() && this.bidForm.get("offer")?.value) {
-      const item = this.itemService.item();
+    if (this.item && this.bidForm.get("offer")?.value) {
+      const item = this.item;
       const bid = this.bidForm.get("offer");
 
-      if (item !== undefined && bid !== undefined) {
+      if (bid !== undefined) {
         return this.isOfferAboveTheCurrentOffers(item, bid!);
       }
 
