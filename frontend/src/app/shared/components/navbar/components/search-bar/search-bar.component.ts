@@ -27,12 +27,10 @@ export class SearchBarComponent implements OnInit {
     this.router.events
       .pipe(takeUntilDestroyed())
       .subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          if (!event.url.includes("itemName")
-            && this.searchValue !== Constant.EmptyValue
-            && this.searchForm.controls.searchValue.value !== Constant.EmptyValue) {
-
+        if (event instanceof NavigationStart && event.url.includes("itemName")) {
+          if (this.searchValue !== Constant.EmptyValue && this.searchForm.controls.searchValue.value !== Constant.EmptyValue) {
             this.searchValue = Constant.EmptyValue;
+
             this.searchForm.patchValue({
               searchValue: Constant.EmptyValue
             });
