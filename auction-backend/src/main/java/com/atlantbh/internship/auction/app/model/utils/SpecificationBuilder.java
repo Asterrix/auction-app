@@ -1,34 +1,28 @@
 package com.atlantbh.internship.auction.app.model.utils;
 
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
-import java.util.List;
+public final class SpecificationBuilder<T> {
+    private Specification<T> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
-public class SpecificationBuilder<T> {
-    private final List<Specification<T>> specifications = new ArrayList<>();
+    private SpecificationBuilder() {
+    }
 
-    public SpecificationBuilder<T> with(final Specification<T> specification) {
-        specifications.add(specification);
-        return this;
+    public static <T> SpecificationBuilder<T> of(final Class<T> tClass) {
+        return new SpecificationBuilder<>();
     }
 
     public SpecificationBuilder<T> and(final Specification<T> specification) {
-        return with(Specification.allOf(specification).and(specification));
+        this.specification = this.specification.and(specification);
+        return this;
     }
 
     public SpecificationBuilder<T> or(final Specification<T> specification) {
-        return with(Specification.allOf(specification).or(specification));
+        this.specification = this.specification.or(specification);
+        return this;
     }
 
     public Specification<T> build() {
-        return (root, query, criteriaBuilder) -> {
-            final Predicate[] predicates = specifications.stream()
-                    .map(specification -> specification.toPredicate(root, query, criteriaBuilder))
-                    .toArray(Predicate[]::new);
-
-            return criteriaBuilder.and(predicates);
-        };
+        return specification;
     }
 }
