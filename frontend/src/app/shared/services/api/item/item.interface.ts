@@ -1,12 +1,3 @@
-export {
-  FeaturedItem,
-  ItemSummary,
-  Item,
-  ItemImage,
-  BiddingInformation,
-  ItemAggregate
-};
-
 interface ItemBaseProperties {
   id: number;
   name: string;
@@ -46,3 +37,12 @@ interface ItemAggregate {
   biddingInformation: BiddingInformation;
   ownerId: number;
 }
+
+export {
+  FeaturedItem,
+  ItemSummary,
+  Item,
+  ItemImage,
+  BiddingInformation,
+  ItemAggregate
+};

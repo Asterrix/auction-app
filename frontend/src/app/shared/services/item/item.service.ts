@@ -1,22 +1,21 @@
 import {inject, Injectable} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
-import {FeaturedItem} from "../api/item/item.interface";
+import {CreateItemRequest, GetItemsParams} from "../api/item/item.type";
 import {NewApiService} from "../api/new-api.service";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({providedIn: "root"})
 export class ItemService {
-  private featuredItem$ = new BehaviorSubject<FeaturedItem | undefined>(undefined);
   private apiService = inject(NewApiService);
 
-  initFeaturedItem(): void {
-    this.apiService.itemApi.getFeaturedItem().subscribe((item: FeaturedItem): void => {
-      this.featuredItem$.next(item);
-    });
-  }
-
-  getFeaturedItem(): Observable<FeaturedItem | undefined> {
-    return this.featuredItem$.asObservable();
-  }
+  getItem = (itemId: number) => {
+    return this.apiService.itemApi.getItemById(itemId);
+  };
+  getFeaturedItem = () => {
+    return this.apiService.itemApi.getFeaturedItem();
+  };
+  getItems = (params: GetItemsParams) => {
+    return this.apiService.itemApi.getListOfItems(params);
+  };
+  createItem = (request: CreateItemRequest) => {
+    return this.apiService.itemApi.createItem(request);
+  };
 }

@@ -9,7 +9,6 @@ import {ItemOrderBy} from "../../shared/services/api/item/item.enum";
 import {FeaturedItem, ItemSummary} from "../../shared/services/api/item/item.interface";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item/item.service";
-import {NewItemService} from "../../shared/services/item/new-item.service";
 import {HomeHeaderComponent} from "./components/home-header/home-header.component";
 import {
   Section,
@@ -36,10 +35,9 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
-              private itemService: ItemService,
               private categoryService: CategoryService,
               private sectionTabService: SectionTabService,
-              private newItemService: NewItemService) {
+              private itemService: ItemService) {
   }
 
   ngOnInit(): void {
@@ -72,7 +70,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   private fetchFeaturedItem(): void {
-    this.itemService.initFeaturedItem();
     this.featuredItem$ = this.itemService.getFeaturedItem();
   }
 
@@ -85,7 +82,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   private initNewestArrivals(): void {
-    this.items$ = this.newItemService.getItems({
+    this.items$ = this.itemService.getItems({
       pageable: {
         page: this.pagination.getPagination().page,
         size: this.pagination.getPagination().size
@@ -95,7 +92,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   private initLastChance(): void {
-    this.items$ = this.newItemService.getItems({
+    this.items$ = this.itemService.getItems({
       pageable: {
         page: this.pagination.getPagination().page,
         size: this.pagination.getPagination().size
