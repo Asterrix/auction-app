@@ -36,3 +36,5 @@ firebase:
 stripe:
   key: ${stripe_key}
   publishableKey: ${stripe_publishable}
+  currency: "eur"
+  price-multiplier: 100

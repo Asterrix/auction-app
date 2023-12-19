@@ -7,10 +7,15 @@ import java.math.BigDecimal;
 
 @Component
 public class StripePriceCalculatorImpl implements StripePriceCalculator {
+    private final StripeConfig stripeConfig;
+
+    public StripePriceCalculatorImpl(final StripeConfig stripeConfig) {
+        this.stripeConfig = stripeConfig;
+    }
 
     @Override
     public Long convertPriceToStripeCents(final BigDecimal itemPrice) {
-        return itemPrice.multiply(StripeConfig.PRICE_MULTIPLICAND).longValue();
+        return itemPrice.multiply(stripeConfig.getPriceMultiplier()).longValue();
     }
 
 }
