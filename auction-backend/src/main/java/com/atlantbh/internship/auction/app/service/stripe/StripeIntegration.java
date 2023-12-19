@@ -48,15 +48,14 @@ public class StripeIntegration implements StripeService {
                         .setEmail(customerSignature)
                         .build();
 
-        Customer customer;
         try {
-            customer = Customer.create(params);
+            final Customer customer = Customer.create(params);
+            final PaymentInfo paymentInfo = new PaymentInfo(user, customer.getId());
+            savePaymentInfo(paymentInfo);
         } catch (StripeException e) {
             throw new RuntimeException("Error occurred while creating customer");
         }
 
-        final PaymentInfo paymentInfo = new PaymentInfo(user, customer.getId());
-        savePaymentInfo(paymentInfo);
     }
 
     @Override
@@ -73,17 +72,14 @@ public class StripeIntegration implements StripeService {
                 .setSetupFutureUsage(PaymentIntentCreateParams.SetupFutureUsage.OFF_SESSION)
                 .build();
 
-        final PaymentIntent paymentIntent;
-
+        // Used for setting up the Stripe form on the frontend which contains the information about the payment details
+        final HashMap<String, String> clientSecret = new HashMap<>();
         try {
-            paymentIntent = PaymentIntent.create(params);
+            final PaymentIntent paymentIntent = PaymentIntent.create(params);
+            clientSecret.put("clientSecret", paymentIntent.getClientSecret());
         } catch (final StripeException e) {
             throw new RuntimeException("Error occurred while trying to create payment intent");
         }
-
-        // Used for setting up the Stripe form on the frontend which contains the information about the payment details
-        HashMap<String, String> clientSecret = new HashMap<>();
-        clientSecret.put("clientSecret", paymentIntent.getClientSecret());
 
         return gson.toJson(clientSecret);
     }

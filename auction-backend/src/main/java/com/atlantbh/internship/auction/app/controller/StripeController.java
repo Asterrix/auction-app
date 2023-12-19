@@ -20,13 +20,16 @@ public class StripeController {
     private final StripeService stripeService;
     private final ClaimsExtractor claimsExtractor;
     private final ItemService itemService;
+    private final StripeConfig stripeConfig;
 
     public StripeController(final StripeService stripeService,
                             final ClaimsExtractor claimsExtractor,
-                            final ItemService itemService) {
+                            final ItemService itemService,
+                            final StripeConfig stripeConfig) {
         this.stripeService = stripeService;
         this.claimsExtractor = claimsExtractor;
         this.itemService = itemService;
+        this.stripeConfig = stripeConfig;
     }
 
     @GetMapping("config")
@@ -41,9 +44,6 @@ public class StripeController {
         final Integer requestUserId = claimsExtractor.getUserId();
 
         final String customerId = stripeService.findCustomerByUserId(requestUserId);
-        if (customerId.isBlank()) {
-            throw new NoSuchElementException("Customer could not be found for the user with the id of: %d".formatted(requestUserId));
-        }
 
         final Item item = itemService
                 .findItemById(itemId)
@@ -66,7 +66,7 @@ public class StripeController {
 
         final Long finalPrice = stripeService.convertPriceToStripeCents(highestBid.getAmount());
 
-        final String paymentIntent = stripeService.createPaymentIntent(finalPrice, StripeConfig.CURRENCY, customerId);
+        final String paymentIntent = stripeService.createPaymentIntent(finalPrice, stripeConfig.getCurrency(), customerId);
         return new ResponseEntity<>(paymentIntent, HttpStatus.OK);
     }
 
