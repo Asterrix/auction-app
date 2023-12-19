@@ -4,6 +4,7 @@ import com.atlantbh.internship.auction.app.dto.category.CategoryDto;
 import com.atlantbh.internship.auction.app.dto.category.SubcategoryDto;
 import com.atlantbh.internship.auction.app.entity.Category;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,17 @@ public final class CategoryMapper {
         subcategories.forEach(subcategory -> {
             final Category parentCategory = subcategory.getParentCategory();
             final CategoryDto parent = map.get(parentCategory.getId());
-            parent.subcategories().add(convertToSubcategoryDto(subcategory, subcategory.getItems().size()));
+            parent.subcategories()
+                    .add(
+                            convertToSubcategoryDto(
+                                    subcategory,
+                                    subcategory
+                                            .getItems()
+                                            .stream()
+                                            .filter(item -> item.getEndTime().isAfter(ZonedDateTime.now()))
+                                            .toList()
+                                            .size())
+                    );
         });
 
         // Find and return the top-level categories (those with no parents)
