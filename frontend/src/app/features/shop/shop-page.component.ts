@@ -1,13 +1,14 @@
 import {CommonModule} from "@angular/common";
-import {Component, OnDestroy, OnInit, signal} from "@angular/core";
+import {Component, inject, OnDestroy, OnInit, signal} from "@angular/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ActivatedRoute, Params} from "@angular/router";
 import {debounceTime, Observable, Subscription} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {LoaderComponent} from "../../shared/components/loader/loader.component";
+import {InfiniteScrollDirective} from "../../shared/directives/infinite-scroll.directive";
 import {ItemFilterBuilder} from "../../shared/models/builders/item-filter-builder";
 import {Page} from "../../shared/models/interfaces/page";
-import {Pagination} from "../../shared/models/pagination";
+import {PaginationService} from "../../shared/models/pagination.service";
 import {Api} from "../../shared/services/api.service";
 import {ItemSummary} from "../../shared/services/api/item/item.interface";
 import {CategoryService} from "../../shared/services/category.service";
@@ -22,16 +23,23 @@ import Category = Api.CategoryApi.Category;
 @Component({
   selector: "app-shop",
   standalone: true,
-  imports: [CommonModule, SidebarComponent, ContentSectionComponent, LoaderComponent, SortingTabComponent],
+  imports: [CommonModule, SidebarComponent, ContentSectionComponent, LoaderComponent, SortingTabComponent, InfiniteScrollDirective],
   templateUrl: "./shop-page.component.html",
-  styleUrls: ["./shop-page.component.scss"]
+  styleUrls: ["./shop-page.component.scss"],
+  providers: [
+    {
+      provide: PaginationService,
+      useFactory: () => new PaginationService({page: 0, size: 9}),
+    },
+  ]
 })
 export class ShopPage implements OnInit, OnDestroy {
   categories$: Observable<Array<Category> | undefined> | undefined;
-  pagination: Pagination = new Pagination({page: 0, size: 9});
   protected items = signal<ItemSummary[]>([]);
   private subscription: Set<Subscription> = new Set<Subscription>();
   private itemFilterBuilder: ItemFilterBuilder = new ItemFilterBuilder();
+  private paginationService: PaginationService = inject(PaginationService);
+  protected pagination = this.paginationService.pagination;
 
   constructor(private activatedRoute: ActivatedRoute,
               private itemService: ItemService,
@@ -44,11 +52,16 @@ export class ShopPage implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntilDestroyed(),
     ).subscribe((param: Params): void => {
-      this.pagination.resetPageNumber();
+      this.paginationService.resetPagination();
       this.handleQueryParameterChange(param);
-      this.fetchItems();
+
+      this.getItems().subscribe((items: Page<ItemSummary>) => {
+        this.items.update(() => items.content);
+        this.paginationService.updatePaginationDetails(items.last, items.totalElements);
+      });
     });
   }
+
 
   ngOnInit(): void {
     this.initialiseCategories();
@@ -59,47 +72,31 @@ export class ShopPage implements OnInit, OnDestroy {
   }
 
   loadMoreElements(): void {
-    if (!this.pagination.isLastPageValue()) {
-      this.pagination.increasePageNumber();
+    if (!this.pagination().isLastPage) {
+      this.paginationService.increasePageNumber();
 
       this.subscription.add(
-        this.itemService.getItems({
-          pageable: {
-            page: this.pagination.getPagination().page,
-            size: this.pagination.getPagination().size
-          },
-          name: this.itemFilterBuilder.build().name,
-          category: this.itemFilterBuilder.build().category,
-          subcategory: this.itemFilterBuilder.build().subcategory,
-          orderBy: this.itemFilterBuilder.build().orderBy
-        }).subscribe((items: Page<ItemSummary> | undefined) => {
-          this.items.update((item: ItemSummary[]) => item.concat(items?.content || []));
-          this.pagination.updatePaginationDetails(items?.last, items?.totalElements);
+        this.getItems().subscribe((items: Page<ItemSummary>) => {
+          this.items.update((item: ItemSummary[]) => item.concat(items.content));
+          this.paginationService.updatePaginationDetails(items.last, items.totalElements);
         })
       );
     }
   }
 
-  private fetchItems(): void {
-    this.unsubscribe();
-
+  private getItems(): Observable<Page<ItemSummary>> {
     const filter = this.itemFilterBuilder.build();
 
-    this.subscription.add(
-      this.itemService.getItems({
-        pageable: {
-          page: this.pagination.getPagination().page,
-          size: this.pagination.getPagination().size
-        },
-        name: filter.name,
-        category: filter.category,
-        subcategory: filter.subcategory,
-        orderBy: filter.orderBy
-      }).subscribe((items: Page<ItemSummary> | undefined) => {
-        this.items.set(items?.content || []);
-        this.pagination.updatePaginationDetails(items?.last, items?.totalElements);
-      })
-    );
+    return this.itemService.getItems({
+      pageable: {
+        page: this.pagination().page,
+        size: this.pagination().size
+      },
+      name: filter.name,
+      category: filter.category,
+      subcategory: filter.subcategory,
+      orderBy: filter.orderBy
+    });
   }
 
   private unsubscribe(): void {

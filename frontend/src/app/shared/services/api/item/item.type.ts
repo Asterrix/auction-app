@@ -1,9 +1,5 @@
+import {Pageable} from "src/app/shared/models/pagination.service";
 import {ItemOrderBy} from "./item.enum";
-
-type Pageable = {
-  page: number;
-  size: number;
-}
 
 type GetItemsParams = {
   name?: string;

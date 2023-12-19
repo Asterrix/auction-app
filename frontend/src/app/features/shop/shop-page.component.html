@@ -1,5 +1,8 @@
 @if ((categories$ | async) && items()) {
-  <div class="shop">
+  <div class="shop"
+       infiniteScroll
+       [endReached]="pagination().isLastPage"
+       (nearEnd)="loadMoreElements()">
     <div class="container">
       <div class="shop__layout">
         <shop-sidebar [categories$]="categories$"/>
@@ -12,7 +15,7 @@
 
           <shop-content-section
             [items]="items()"
-            [pagination]="pagination"
+            [pagination]="pagination()"
             (increasePageSize)="loadMoreElements()"/>
         </div>
 

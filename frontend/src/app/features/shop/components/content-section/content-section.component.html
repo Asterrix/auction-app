@@ -5,9 +5,12 @@
   </ng-container>
 
   <ng-template #content>
-    <p *ngIf="(pagination.totalElements$ | async) === 0">
-      No items were found.
-    </p>
+
+    @if (pagination.totalElements === 0) {
+      <p>
+        No items were found.
+      </p>
+    }
 
     <div class="items-grid">
       @for (item of items;track item.id) {
@@ -18,14 +21,8 @@
 
 
   <!-- Explore More -->
-  <ng-container *ngIf="(pagination.isLast$ | async) === false">
-    <ng-container *ngIf="(loader.getLoader('load-more').isLoading$ | async); else btn">
-      <app-loader/>
-    </ng-container>
-    <ng-template #btn>
-      <button (click)="loadMoreElements()" *ngIf="(loader.getLoader('items').isLoading$ | async) === false" class="btn">
-        Explore More
-      </button>
-    </ng-template>
-  </ng-container>
+
+  @if ((!pagination.isLastPage) && (loader.getLoader('load-more').isLoading$ | async)) {
+    <app-loader class="loader-placeholder"/>
+  }
 </div>
