@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.service.item;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
-import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
+import com.atlantbh.internship.auction.app.dto.bid.BiddingInformation;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
@@ -76,7 +76,14 @@ public final class ItemServiceImpl implements ItemService {
         final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(item.get().getId());
         if (totalNumberOfBids == 0) {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
-            final BidNumberCount bidInformation = BidsMapper.mapToUserItemBidDto(new BigDecimal("0"), 0L);
+
+            final int highestBidderId = -1;
+            final long numberOfBids = 0L;
+            final BigDecimal currentBid = new BigDecimal("0");
+            final BiddingInformation bidInformation = BidsMapper.mapToUserItemBidDto(
+                    currentBid,
+                    numberOfBids,
+                    highestBidderId);
 
             final Integer ownerId = item.get().getOwner().getId();
             return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation, ownerId));
@@ -85,7 +92,13 @@ public final class ItemServiceImpl implements ItemService {
         final Optional<Bid> highestBid = bidRepository.findOne(specification);
 
         final ItemDto mappedItem = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
-        final BidNumberCount mappedBidInformation = BidsMapper.mapToUserItemBidDto(highestBid.get().getAmount(), totalNumberOfBids);
+        final Integer highestBidderId = highestBid.get().getUser().getId();
+        final BigDecimal amount = highestBid.get().getAmount();
+
+        final BiddingInformation mappedBidInformation = BidsMapper.mapToUserItemBidDto(
+                amount,
+                totalNumberOfBids,
+                highestBidderId);
 
         final Integer ownerId = item.get().getOwner().getId();
         return Optional.of(ItemMapper.convertToAggregate(mappedItem, mappedBidInformation, ownerId));

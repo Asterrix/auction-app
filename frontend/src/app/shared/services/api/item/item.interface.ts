@@ -11,6 +11,7 @@ interface ItemBaseProperties {
   id: number;
   name: string;
   initialPrice: number;
+  currentPrice: number;
 }
 
 interface FeaturedItem extends ItemBaseProperties {
@@ -37,6 +38,7 @@ interface ItemImage {
 interface BiddingInformation {
   highestBid: number;
   totalNumberOfBids: number;
+  highestBidderId: number;
 }
 
 interface ItemAggregate {
