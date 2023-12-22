@@ -1,11 +1,11 @@
 package com.atlantbh.internship.auction.app.model.suggestion;
 
-import com.atlantbh.internship.auction.app.model.suggestion.search.SearchQuerySuggestion;
-import com.atlantbh.internship.auction.app.model.suggestion.category.CategorySuggestion;
-import com.atlantbh.internship.auction.app.model.suggestion.price.PriceSuggestion;
 import com.atlantbh.internship.auction.app.builder.SpecificationBuilder;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
+import com.atlantbh.internship.auction.app.model.suggestion.category.CategorySuggestion;
+import com.atlantbh.internship.auction.app.model.suggestion.price.PriceSuggestion;
+import com.atlantbh.internship.auction.app.model.suggestion.search.SearchQuerySuggestion;
 import com.atlantbh.internship.auction.app.service.specification.ItemSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -51,12 +51,11 @@ public final class FeaturedItemSuggestion implements FeaturedSuggestion {
     }
 
     @Override
-    public Specification<Item> getAuthenticatedQueryCriteria(final Integer userId, final ZonedDateTime currentTime) {
+    public Specification<Item> getAuthenticatedUserQueryCriteria(final Integer userId, final ZonedDateTime currentTime) {
         final ZonedDateTime searchQueryTimeSpan = currentTime.plusMonths(1);
 
         return SpecificationBuilder.of(Item.class)
                 .and(ItemSpecification.isActive())
-                .and(ItemSpecification.notFinished())
                 .and(ItemSpecification.ownerIsNot(userId))
                 .and(ItemSpecification.endTimeIsNotOlderThan(searchQueryTimeSpan))
                 .and(ItemSpecification.orderByNumberOfBidsDesc())
@@ -69,7 +68,6 @@ public final class FeaturedItemSuggestion implements FeaturedSuggestion {
 
         return SpecificationBuilder.of(Item.class)
                 .and(ItemSpecification.isActive())
-                .and(ItemSpecification.notFinished())
                 .and(ItemSpecification.endTimeIsNotOlderThan(regularUserTimeSpan))
                 .and(ItemSpecification.orderByNumberOfBidsDesc())
                 .build();
@@ -90,7 +88,6 @@ public final class FeaturedItemSuggestion implements FeaturedSuggestion {
 
         final SpecificationBuilder<Item> specificationBuilder = SpecificationBuilder.of(Item.class)
                 .and(ItemSpecification.isActive())
-                .and(ItemSpecification.notFinished())
                 .and(ItemSpecification.ownerIsNot(userId))
                 .and(ItemSpecification.hasSubcategory(mostPopularCategoryParentName, mostPopularSubcategoryName))
                 .and(ItemSpecification.priceIsBetween(startingPrice, endingPrice))
