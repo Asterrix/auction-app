@@ -30,6 +30,16 @@ public final class ItemOrderBySpecification {
         };
     }
 
+    public static Specification<Item> orderByNumberOfBidsDesc() {
+        return (root, query, builder) -> query.orderBy(
+                builder.desc(
+                        builder.size(
+                                root.get("bids")
+                        )
+                )
+        ).getRestriction();
+    }
+
     public static Specification<Item> orderByPriceAsc() {
         return createOrderByPriceSpecification(PriceOrder.ASCENDING);
     }

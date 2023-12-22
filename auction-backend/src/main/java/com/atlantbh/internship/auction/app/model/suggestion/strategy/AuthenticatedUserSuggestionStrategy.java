@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.model.suggestion.strategy;
 
-import com.atlantbh.internship.auction.app.model.suggestion.FeaturedSuggestion;
 import com.atlantbh.internship.auction.app.entity.Item;
+import com.atlantbh.internship.auction.app.model.suggestion.FeaturedSuggestion;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.specification.ItemSpecification;
 import org.apache.commons.lang3.StringUtils;
@@ -59,9 +59,13 @@ public final class AuthenticatedUserSuggestionStrategy {
 
         return searchSuggestions.stream()
                 .map(suggestion -> authenticatedQuerySpecification.and(ItemSpecification.hasName(suggestion)))
-                .flatMap(searchSpecification -> itemService.findAll(searchSpecification, Pageable.ofSize(1))
-                        .getContent()
-                        .stream())
+                .flatMap(searchSpecification -> {
+                    final int itemCount = 1;
+
+                    return itemService.findAll(searchSpecification, Pageable.ofSize(itemCount))
+                            .getContent()
+                            .stream();
+                })
                 .collect(Collectors.toList());
     }
 }

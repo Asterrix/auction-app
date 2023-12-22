@@ -8,6 +8,11 @@ import java.util.Map;
 
 public final class SearchSuggestion implements SearchQuerySuggestion {
 
+    /**
+     * @param list  List of strings to be searched
+     * @param input Input string
+     * @return List of strings from list parameter sorted by similarity to input parameter
+     */
     @Override
     public List<String> getSearchSuggestion(final List<String> list, final String input) {
         final String inputString = input.trim();
@@ -21,7 +26,7 @@ public final class SearchSuggestion implements SearchQuerySuggestion {
         for (final String s : list) {
             final String listMember = s.trim();
 
-            if (listMember.isEmpty()) {
+            if (listMember.isEmpty() || differenceTable.containsKey(listMember)) {
                 continue;
             }
 
@@ -37,16 +42,22 @@ public final class SearchSuggestion implements SearchQuerySuggestion {
                 .toList();
     }
 
-    private int calculateDifference(final String listMember, final String input) {
-        final int inputLength = input.length();
-        final int listMemberLength = listMember.length();
+    /**
+     * @param stringA Input string
+     * @param StringB Input string
+     * @return Number of differences between stringA and StringB regarding the character count and size difference
+     */
+    private int calculateDifference(final String stringA, final String StringB) {
+        final int inputLength = StringB.length();
+        final int listMemberLength = stringA.length();
         final int lengthDifference = Math.abs(inputLength - listMemberLength);
 
         int difference = 0;
+
         int l = 0;
         while (l < inputLength && l < listMemberLength) {
-            final char listMemberChar = listMember.charAt(l);
-            final char inputChar = input.charAt(l);
+            final char listMemberChar = stringA.charAt(l);
+            final char inputChar = StringB.charAt(l);
 
             if (Character.toLowerCase(listMemberChar) != Character.toLowerCase(inputChar)) {
                 difference++;

@@ -59,7 +59,7 @@ public final class FeaturedItemSuggestion implements FeaturedSuggestion {
                 .and(ItemSpecification.notFinished())
                 .and(ItemSpecification.ownerIsNot(userId))
                 .and(ItemSpecification.endTimeIsNotOlderThan(searchQueryTimeSpan))
-                .and(ItemSpecification.hasHighestNumberOfBids())
+                .and(ItemSpecification.orderByNumberOfBidsDesc())
                 .build();
     }
 
@@ -71,7 +71,7 @@ public final class FeaturedItemSuggestion implements FeaturedSuggestion {
                 .and(ItemSpecification.isActive())
                 .and(ItemSpecification.notFinished())
                 .and(ItemSpecification.endTimeIsNotOlderThan(regularUserTimeSpan))
-                .and(ItemSpecification.hasHighestNumberOfBids())
+                .and(ItemSpecification.orderByNumberOfBidsDesc())
                 .build();
     }
 
@@ -82,7 +82,7 @@ public final class FeaturedItemSuggestion implements FeaturedSuggestion {
         final BigDecimal startingPrice = priceSuggestion.calculateStartingPriceEndpoint(averagePrice);
         final BigDecimal endingPrice = priceSuggestion.calculateEndingPriceEndpoint(averagePrice);
 
-        final ZonedDateTime endTimeHours = currentTime.plusHours(1);
+        final ZonedDateTime endTimeHours = currentTime.plusMinutes(10);
         final ZonedDateTime endTimeMonths = currentTime.plusMonths(1);
 
         final String mostPopularCategoryParentName = mostPopularCategory.getParentCategory().getName();
@@ -96,7 +96,7 @@ public final class FeaturedItemSuggestion implements FeaturedSuggestion {
                 .and(ItemSpecification.priceIsBetween(startingPrice, endingPrice))
                 .and(ItemSpecification.endTimeIsNotShorterThan(endTimeHours))
                 .and(ItemSpecification.endTimeIsNotOlderThan(endTimeMonths))
-                .and(ItemSpecification.hasHighestNumberOfBids());
+                .and(ItemSpecification.orderByNumberOfBidsDesc());
 
         return specificationBuilder.build();
     }
