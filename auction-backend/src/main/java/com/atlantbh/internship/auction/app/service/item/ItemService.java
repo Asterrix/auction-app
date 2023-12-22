@@ -48,4 +48,8 @@ public interface ItemService {
     Optional<Item> findItemById(final Integer itemId);
 
     Item updateItemFinishedAttribute(final Item item);
+
+    Page<Item> findAll(final Specification<Item> specification, final Pageable pageable);
+
+    List<Item> findAll(final Specification<Item> specification);
 }

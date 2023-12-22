@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(PagePrivacyManager::publicPages)
                 .authorizeHttpRequests(PagePrivacyManager::swagger)
                 .authorizeHttpRequests(PagePrivacyManager::privatePages)
+                .anonymous(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .csrf(csrfConfig())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))

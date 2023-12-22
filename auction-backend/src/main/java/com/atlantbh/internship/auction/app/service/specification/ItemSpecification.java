@@ -1,11 +1,15 @@
 package com.atlantbh.internship.auction.app.service.specification;
 
+import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 public final class ItemSpecification {
 
@@ -62,6 +66,37 @@ public final class ItemSpecification {
 
     public static Specification<Item> isActive() {
         return (root, query, builder) -> builder.greaterThan(root.get("endTime"), builder.currentTimestamp());
+    }
+
+    public static Specification<Item> hasHighestNumberOfBids() {
+        return (root, query, builder) -> query.orderBy(builder.desc(builder.size(root.get("bids")))).getRestriction();
+    }
+
+    public static Specification<Item> endTimeIsNotShorterThan(final ZonedDateTime time) {
+        return (root, query, builder) -> builder.greaterThan(root.get("endTime"), time);
+    }
+
+    public static Specification<Item> endTimeIsNotOlderThan(final ZonedDateTime time) {
+        return (root, query, builder) -> builder.lessThan(root.get("endTime"), time);
+    }
+
+    public static Specification<Item> ownerIs(final Integer ownerId) {
+        return (root, query, builder) -> builder.equal(root.get("owner").get("id"), ownerId);
+    }
+
+    public static Specification<Item> ownerIsNot(final Integer ownerId) {
+        return (root, query, builder) -> builder.notEqual(root.get("owner").get("id"), ownerId);
+    }
+
+    public static Specification<Item> hasBidder(final Integer userId) {
+        return (root, query, builder) -> {
+            final Join<Item, Bid> bidJoin = root.join("bids", JoinType.LEFT);
+            return builder.equal(bidJoin.get("user").get("id"), userId);
+        };
+    }
+
+    public static Specification<Item> priceIsBetween(final BigDecimal startingPrice, final BigDecimal endingPrice) {
+        return (root, query, builder) -> builder.between(root.get("initialPrice"), startingPrice, endingPrice);
     }
 
     public static Specification<Item> orderByNameAsc() {

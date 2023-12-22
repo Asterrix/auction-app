@@ -19,7 +19,7 @@ public final class ItemMapper {
     }
 
     public static ItemSummaryDto convertToSummaryDto(final Item entity) {
-        final BigDecimal currentPrice = entity.getUserItemBids()
+        final BigDecimal currentPrice = entity.getBids()
                 .stream()
                 .map(Bid::getAmount)
                 .max(BigDecimal::compareTo)

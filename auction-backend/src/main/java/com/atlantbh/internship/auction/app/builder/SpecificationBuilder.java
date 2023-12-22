@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.model.utils;
+package com.atlantbh.internship.auction.app.builder;
 
 import org.springframework.data.jpa.domain.Specification;
 

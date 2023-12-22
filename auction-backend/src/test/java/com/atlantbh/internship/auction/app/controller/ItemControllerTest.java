@@ -8,9 +8,11 @@ import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
 import com.atlantbh.internship.auction.app.dto.item.requests.CreateItemRequest;
+import com.atlantbh.internship.auction.app.model.suggestion.strategy.ItemSuggestionStrategy;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.UserService;
+import com.atlantbh.internship.auction.app.service.auth.AuthenticationService;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +64,10 @@ class ItemControllerTest {
     private CategoryService categoryService;
     @MockBean
     private UserService userService;
+    @MockBean
+    private ItemSuggestionStrategy suggestionStrategy;
+    @MockBean
+    private AuthenticationService authenticationService;
     @MockBean
     private MainValidationClass<CreateItemRequest> requestMainValidationClass;
     @MockBean

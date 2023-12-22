@@ -23,9 +23,9 @@ public final class UserItemsMapper {
         final TableItemSummary itemSummary = mapToBidItemSummary(item.getId(), thumbnail, item.getName());
         final String timeRemaining = TimeRemainingCalculator.getTimeRemaining(ZonedDateTime.now(), item.getEndTime());
 
-        final int numberOfBids = item.getUserItemBids().size();
+        final int numberOfBids = item.getBids().size();
 
-        final Optional<Bid> highestBid = item.getUserItemBids()
+        final Optional<Bid> highestBid = item.getBids()
                 .stream()
                 .max(Comparator.comparing(Bid::getAmount));
 
