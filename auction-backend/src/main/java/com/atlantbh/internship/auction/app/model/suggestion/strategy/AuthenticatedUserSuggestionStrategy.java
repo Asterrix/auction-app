@@ -53,7 +53,7 @@ public final class AuthenticatedUserSuggestionStrategy {
     }
 
     private List<Item> handleSuggestionsWithQueryParams(Integer userId, String query, int count, ZonedDateTime currentTime) {
-        final Specification<Item> authenticatedQuerySpecification = featuredSuggestion.getAuthenticatedQueryCriteria(userId, currentTime);
+        final Specification<Item> authenticatedQuerySpecification = featuredSuggestion.getAuthenticatedUserQueryCriteria(userId, currentTime);
         final List<Item> items = itemService.findAll(authenticatedQuerySpecification);
         final List<String> searchSuggestions = featuredSuggestion.getSearchSuggestions(items, query, count);
 
