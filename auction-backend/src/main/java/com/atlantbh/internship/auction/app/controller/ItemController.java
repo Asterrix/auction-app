@@ -1,5 +1,6 @@
 package com.atlantbh.internship.auction.app.controller;
 
+import com.atlantbh.internship.auction.app.model.suggestion.strategy.ItemSuggestionStrategy;
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
@@ -13,9 +14,11 @@ import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
+import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.UserService;
+import com.atlantbh.internship.auction.app.service.auth.AuthenticationService;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.specification.ItemSpecificationProcessor;
@@ -25,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,19 +46,25 @@ public class ItemController {
     private final ClaimsExtractor claimsExtractor;
     private final FirebaseStorageService firebaseStorageService;
     private final MainValidationClass<CreateItemRequest> createItemInitialValidation;
+    private final ItemSuggestionStrategy suggestionStrategy;
+    private final AuthenticationService authenticationService;
 
     public ItemController(final ItemService itemService,
                           final CategoryService categoryService,
                           final UserService userService,
                           final ClaimsExtractor claimsExtractor,
                           final FirebaseStorageService firebaseStorageService,
-                          final MainValidationClass<CreateItemRequest> createItemInitialValidation) {
+                          final MainValidationClass<CreateItemRequest> createItemInitialValidation,
+                          final ItemSuggestionStrategy suggestionStrategy,
+                          final AuthenticationService authenticationService) {
         this.itemService = itemService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.claimsExtractor = claimsExtractor;
         this.firebaseStorageService = firebaseStorageService;
         this.createItemInitialValidation = createItemInitialValidation;
+        this.suggestionStrategy = suggestionStrategy;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping
@@ -84,6 +94,30 @@ public class ItemController {
     @GetMapping("featured")
     public ResponseEntity<ItemFeaturedDto> getFeaturedItem() {
         return new ResponseEntity<>(itemService.getFeaturedItem(), HttpStatus.OK);
+    }
+
+    @GetMapping("suggestions")
+    public ResponseEntity<List<ItemSummaryDto>> getSuggestions(@RequestParam("query") @Nullable final String query,
+                                                               @RequestParam("suggestionsCount") @Nullable final Integer suggestionsCount) {
+
+        final boolean authenticated = authenticationService.isAuthenticated();
+        final ZonedDateTime currentTime = ZonedDateTime.now();
+        final int maxCount = 12;
+        final int regularCount = 3;
+        final int count = (suggestionsCount != null && suggestionsCount <= maxCount) ? suggestionsCount : regularCount;
+
+
+        final List<Item> suggestions = authenticated
+                ? suggestionStrategy.getSuggestionsAuthenticatedUser(claimsExtractor.getUserId(), query, count, currentTime)
+                : suggestionStrategy.getSuggestionsRegularUser(count, query, currentTime);
+
+
+        if (suggestions.size() < count) {
+            throw new IllegalArgumentException("There are insufficient items found for the specified criteria to return a suggestion.");
+        }
+
+        final List<ItemSummaryDto> mappedItems = ItemMapper.convertToSummaryDto(suggestions);
+        return new ResponseEntity<>(mappedItems, HttpStatus.OK);
     }
 
     @PostMapping

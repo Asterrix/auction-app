@@ -2,7 +2,7 @@ package com.atlantbh.internship.auction.app.service.specification;
 
 import com.atlantbh.internship.auction.app.dto.item.requests.GetItemsRequest;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.model.utils.SpecificationBuilder;
+import com.atlantbh.internship.auction.app.builder.SpecificationBuilder;
 import com.atlantbh.internship.auction.app.model.utils.SpecificationProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;

@@ -166,6 +166,16 @@ public final class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<Item> findAll(final Specification<Item> specification) {
+        return itemRepository.findAll(specification);
+    }
+
+    @Override
+    public Page<Item> findAll(final Specification<Item> specification, final Pageable pageable) {
+        return itemRepository.findAll(specification, pageable);
+    }
+
+    @Override
     public List<Item> findAllItemsByOwnerId(final Integer ownerId) {
         return itemRepository.findByOwner_Id(ownerId);
     }

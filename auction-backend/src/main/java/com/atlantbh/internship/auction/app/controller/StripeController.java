@@ -59,7 +59,7 @@ public class StripeController {
         }
 
         final Bid highestBid = item
-                .getUserItemBids()
+                .getBids()
                 .stream()
                 .max(Comparator.comparing(Bid::getAmount))
                 .orElseThrow(() -> new ValidationException("No bids for the item of: %d could be found".formatted(itemId)));
