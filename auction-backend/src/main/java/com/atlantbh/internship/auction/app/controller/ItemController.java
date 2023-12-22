@@ -108,8 +108,8 @@ public class ItemController {
 
 
         final List<Item> suggestions = authenticated
-                ? suggestionStrategy.getSuggestionsAuthenticatedUser(claimsExtractor.getUserId(), query, count, currentTime)
-                : suggestionStrategy.getSuggestionsRegularUser(count, query, currentTime);
+                ? suggestionStrategy.getAuthenticatedUserSuggestions(claimsExtractor.getUserId(), query, count, currentTime)
+                : suggestionStrategy.getRegularUserSuggestions(count, query, currentTime);
 
 
         if (suggestions.size() < count) {

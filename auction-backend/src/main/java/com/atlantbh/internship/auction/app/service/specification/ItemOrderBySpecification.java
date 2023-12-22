@@ -8,6 +8,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 
+enum PriceOrder {
+    ASCENDING,
+    DESCENDING
+}
+
 public final class ItemOrderBySpecification {
     public static Specification<Item> orderByNameAsc() {
         return (root, query, builder) -> {
@@ -30,6 +35,16 @@ public final class ItemOrderBySpecification {
         };
     }
 
+    public static Specification<Item> orderByNumberOfBidsDesc() {
+        return (root, query, builder) -> query.orderBy(
+                builder.desc(
+                        builder.size(
+                                root.get("bids")
+                        )
+                )
+        ).getRestriction();
+    }
+
     public static Specification<Item> orderByPriceAsc() {
         return createOrderByPriceSpecification(PriceOrder.ASCENDING);
     }
@@ -49,18 +64,12 @@ public final class ItemOrderBySpecification {
                     root.get("initialPrice")
             );
 
-            if (priceOrder == PriceOrder.ASCENDING) {
-                query.orderBy(builder.asc(caseExpression));
-            } else if (priceOrder == PriceOrder.DESCENDING) {
-                query.orderBy(builder.desc(caseExpression));
+            switch (priceOrder) {
+                case ASCENDING -> query.orderBy(builder.asc(caseExpression));
+                case DESCENDING -> query.orderBy(builder.desc(caseExpression));
             }
 
             return builder.conjunction();
         };
-    }
-
-    enum PriceOrder {
-        ASCENDING,
-        DESCENDING
     }
 }

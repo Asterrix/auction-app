@@ -88,10 +88,6 @@ public final class ItemSpecification {
         return (root, query, builder) -> builder.greaterThan(root.get("endTime"), builder.currentTimestamp());
     }
 
-    public static Specification<Item> hasHighestNumberOfBids() {
-        return (root, query, builder) -> query.orderBy(builder.desc(builder.size(root.get("bids")))).getRestriction();
-    }
-
     public static Specification<Item> endTimeIsNotShorterThan(final ZonedDateTime time) {
         return (root, query, builder) -> builder.greaterThan(root.get("endTime"), time);
     }
@@ -129,6 +125,10 @@ public final class ItemSpecification {
 
     public static Specification<Item> orderByTimeLeft() {
         return ItemOrderBySpecification.orderByTimeLeft();
+    }
+
+    public static Specification<Item> orderByNumberOfBidsDesc() {
+        return ItemOrderBySpecification.orderByNumberOfBidsDesc();
     }
 
     public static Specification<Item> orderByPriceAsc() {

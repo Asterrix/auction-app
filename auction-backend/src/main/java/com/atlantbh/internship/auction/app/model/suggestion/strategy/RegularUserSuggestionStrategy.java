@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.model.suggestion.strategy;
 
-import com.atlantbh.internship.auction.app.model.suggestion.FeaturedSuggestion;
 import com.atlantbh.internship.auction.app.entity.Item;
+import com.atlantbh.internship.auction.app.model.suggestion.FeaturedSuggestion;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.specification.ItemSpecification;
 import org.apache.commons.lang3.StringUtils;
