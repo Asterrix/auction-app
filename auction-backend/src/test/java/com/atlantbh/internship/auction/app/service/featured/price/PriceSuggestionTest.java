@@ -1,8 +1,7 @@
-package com.atlantbh.internship.auction.app.suggestion.price;
+package com.atlantbh.internship.auction.app.service.featured.price;
 
-import com.atlantbh.internship.auction.app.config.FeaturedItemSuggestionConfig;
+import com.atlantbh.internship.auction.app.config.featured.FeaturedItemSuggestionConfig;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.model.suggestion.price.ItemPriceSuggestion;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PriceSuggestionTest {
 
     @Autowired
-    private ItemPriceSuggestion priceSuggestion;
+    private PriceSuggestion priceSuggestion;
 
     @Test
     @DisplayName("Average price")
