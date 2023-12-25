@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.config;
+package com.atlantbh.internship.auction.app.config.featured;
 
 import org.springframework.context.annotation.Configuration;
 

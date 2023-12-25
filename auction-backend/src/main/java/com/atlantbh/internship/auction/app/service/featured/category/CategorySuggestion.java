@@ -1,7 +1,8 @@
-package com.atlantbh.internship.auction.app.model.suggestion.category;
+package com.atlantbh.internship.auction.app.service.featured.category;
 
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
@@ -9,14 +10,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public final class ItemCategorySuggestion implements CategorySuggestion {
+@Component
+public final class CategorySuggestion {
 
     /**
      * @param items List of items
      * @return Category that has the highest count of mentions in the list of items
      * @throws IllegalArgumentException if most popular category could not be found
      */
-    @Override
     public Category findMostPopularCategory(final List<Item> items) {
         final Optional<Category> mostPopularCategory = items
                 .stream()

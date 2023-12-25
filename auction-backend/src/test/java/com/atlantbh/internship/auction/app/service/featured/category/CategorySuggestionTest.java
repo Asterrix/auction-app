@@ -1,9 +1,7 @@
-package com.atlantbh.internship.auction.app.suggestion.category;
+package com.atlantbh.internship.auction.app.service.featured.category;
 
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.model.suggestion.category.CategorySuggestion;
-import com.atlantbh.internship.auction.app.model.suggestion.category.ItemCategorySuggestion;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CategorySuggestionTest {
-    private final CategorySuggestion categorySuggestion = new ItemCategorySuggestion();
+    private static final CategorySuggestion categorySuggestion = new CategorySuggestion();
 
     @Test
     @DisplayName("There is no category in an empty list of items")

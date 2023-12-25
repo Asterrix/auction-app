@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.atlantbh.internship.auction.app.config.FeaturedItemConfig.FEATURED_ITEM_END_DATE_THRESHOLD;
+import static com.atlantbh.internship.auction.app.config.featured.FeaturedItemConfig.FEATURED_ITEM_END_DATE_THRESHOLD;
 import static com.atlantbh.internship.auction.app.mapper.ItemMapper.convertToFeaturedDto;
 
 @Service

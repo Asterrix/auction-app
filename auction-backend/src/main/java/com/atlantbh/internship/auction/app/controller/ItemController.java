@@ -1,6 +1,5 @@
 package com.atlantbh.internship.auction.app.controller;
 
-import com.atlantbh.internship.auction.app.model.suggestion.strategy.ItemSuggestionStrategy;
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
@@ -15,6 +14,7 @@ import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
+import com.atlantbh.internship.auction.app.service.featured.FeaturedItemSuggestion;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.UserService;
@@ -46,7 +46,7 @@ public class ItemController {
     private final ClaimsExtractor claimsExtractor;
     private final FirebaseStorageService firebaseStorageService;
     private final MainValidationClass<CreateItemRequest> createItemInitialValidation;
-    private final ItemSuggestionStrategy suggestionStrategy;
+    private final FeaturedItemSuggestion featuredSuggestion;
     private final AuthenticationService authenticationService;
 
     public ItemController(final ItemService itemService,
@@ -55,7 +55,7 @@ public class ItemController {
                           final ClaimsExtractor claimsExtractor,
                           final FirebaseStorageService firebaseStorageService,
                           final MainValidationClass<CreateItemRequest> createItemInitialValidation,
-                          final ItemSuggestionStrategy suggestionStrategy,
+                          final FeaturedItemSuggestion featuredSuggestion,
                           final AuthenticationService authenticationService) {
         this.itemService = itemService;
         this.categoryService = categoryService;
@@ -63,7 +63,7 @@ public class ItemController {
         this.claimsExtractor = claimsExtractor;
         this.firebaseStorageService = firebaseStorageService;
         this.createItemInitialValidation = createItemInitialValidation;
-        this.suggestionStrategy = suggestionStrategy;
+        this.featuredSuggestion = featuredSuggestion;
         this.authenticationService = authenticationService;
     }
 
@@ -101,15 +101,14 @@ public class ItemController {
                                                                @RequestParam("suggestionsCount") @Nullable final Integer suggestionsCount) {
 
         final boolean authenticated = authenticationService.isAuthenticated();
-        final ZonedDateTime currentTime = ZonedDateTime.now();
         final int maxCount = 12;
         final int regularCount = 3;
         final int count = (suggestionsCount != null && suggestionsCount <= maxCount) ? suggestionsCount : regularCount;
 
 
         final List<Item> suggestions = authenticated
-                ? suggestionStrategy.getAuthenticatedUserSuggestions(claimsExtractor.getUserId(), query, count, currentTime)
-                : suggestionStrategy.getRegularUserSuggestions(count, query, currentTime);
+                ? featuredSuggestion.suggestions(claimsExtractor.getUserId(), query, count)
+                : featuredSuggestion.suggestions(query, count);
 
 
         if (suggestions.size() < count) {
