@@ -48,7 +48,7 @@ public final class SearchSuggestion {
      * @param StringB Input string
      * @return Number of differences between stringA and StringB regarding the character count and size difference
      */
-    private static int calculateDifference(final String stringA, final String StringB) {
+    private int calculateDifference(final String stringA, final String StringB) {
         final int inputLength = StringB.length();
         final int listMemberLength = stringA.length();
         final int lengthDifference = Math.abs(inputLength - listMemberLength);

@@ -21,7 +21,7 @@ import com.atlantbh.internship.auction.app.service.UserService;
 import com.atlantbh.internship.auction.app.service.auth.AuthenticationService;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
-import com.atlantbh.internship.auction.app.service.specification.ItemSpecificationProcessor;
+import com.atlantbh.internship.auction.app.specification.ItemSpecificationProcessor;
 import com.google.cloud.storage.Blob;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -58,8 +58,14 @@ public final class AuthenticatedUserSuggestionStrategy implements AuthenticatedS
         final Specification<Item> searchSuggestionsSpecification = searchQueryCriteria.and(nameSpecification);
 
         final List<Item> suggestions = itemService.findAll(searchSuggestionsSpecification, Pageable.ofSize(itemCount)).getContent();
+        final List<Item> sortedSuggestions = suggestions.stream().sorted((o1, o2) -> {
+            final int index1 = searchSuggestions.indexOf(o1.getName());
+            final int index2 = searchSuggestions.indexOf(o2.getName());
 
-        return suggestions;
+            return Integer.compare(index1, index2);
+        }).toList();
+
+        return sortedSuggestions;
     }
 
     private List<Item> userRelatedItems(final Integer userId) {
