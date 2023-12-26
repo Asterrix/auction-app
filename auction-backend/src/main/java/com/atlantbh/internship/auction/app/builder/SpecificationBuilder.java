@@ -3,7 +3,7 @@ package com.atlantbh.internship.auction.app.builder;
 import org.springframework.data.jpa.domain.Specification;
 
 public final class SpecificationBuilder<T> {
-    private Specification<T> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+    private Specification<T> specification = Specification.where(null);
 
     private SpecificationBuilder() {
     }
