@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
  * @param <T> Entity class, used to build specifications for.
  */
 public final class SpecificationBuilder<T> {
-    private Specification<T> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+    private Specification<T> specification = Specification.where(null);
 
     private SpecificationBuilder() {
     }
