@@ -10,6 +10,7 @@ import {FeaturedItem, ItemSummary} from "../../shared/services/api/item/item.int
 import {NewApiService} from "../../shared/services/api/new-api.service";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item/item.service";
+import {SearchService} from "../../shared/services/search/search.service";
 import {FeaturedComponent} from "./components/featured/featured.component";
 import {HomeHeaderComponent} from "./components/home-header/home-header.component";
 import {
@@ -48,6 +49,7 @@ export class HomePage implements OnInit, OnDestroy {
   private categoryService = inject(CategoryService);
   private sectionTabService = inject(SectionTabService);
   private itemService = inject(ItemService);
+  private searchService = inject(SearchService);
 
   ngOnInit(): void {
     this.clearItemQueryParam();
@@ -68,7 +70,7 @@ export class HomePage implements OnInit, OnDestroy {
         this.fetchSectionItems();
       });
 
-    this.apiService.itemApi.suggestions("")
+    this.apiService.itemApi.suggestions(this.searchService.searchTerm())
       .pipe(take(1))
       .subscribe((items: ItemSummary[]): void => {
         this.featuredItems.set(items);
