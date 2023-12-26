@@ -1,0 +1,17 @@
+<div class="featured">
+  <div class="container">
+    <section class="featured__content">
+      <div class="featured__header">
+        <h2 class="featured__title">Featured Items</h2>
+      </div>
+
+      <div class="featured__layout">
+        @for (item of featuredItems; track item.id) {
+          <app-item-card
+            imageOrientation="v"
+            [item]="item"/>
+        }
+      </div>
+    </section>
+  </div>
+</div>
