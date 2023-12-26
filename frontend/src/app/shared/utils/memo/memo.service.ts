@@ -1,37 +1,20 @@
 import {Injectable} from "@angular/core";
-
-interface Memento<T> {
-  originalState(): T | undefined;
-
-  latestState(): T | undefined;
-
-  saveState(state: T): void;
-
-  clearState(): void;
-}
+import {Memoization} from "./memoization.interface";
 
 @Injectable({providedIn: "root"})
-export class MemoService<T> implements Memento<T> {
+export class MemoService<T> implements Memoization<T> {
   private memorisedState: T[] = [];
 
   public originalState(): T | undefined {
     const length: number = this.memorisedState.length;
 
-    if (length < 1) {
-      return undefined;
-    }
-
-    return this.memorisedState[0];
+    return length < 1 ? undefined : this.memorisedState[0];
   }
 
   public latestState(): T | undefined {
     const length: number = this.memorisedState.length;
 
-    if (length < 1) {
-      return undefined;
-    }
-
-    return this.memorisedState[length - 1];
+    return length < 1 ? undefined : this.memorisedState[length - 1];
   }
 
   public saveState(state: T): void {
