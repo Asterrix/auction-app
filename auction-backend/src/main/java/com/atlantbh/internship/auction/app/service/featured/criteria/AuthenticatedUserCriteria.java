@@ -5,7 +5,7 @@ import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.service.featured.category.CategorySuggestion;
 import com.atlantbh.internship.auction.app.service.featured.price.PriceSuggestion;
-import com.atlantbh.internship.auction.app.service.specification.ItemSpecification;
+import com.atlantbh.internship.auction.app.specification.ItemSpecification;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
