@@ -1,11 +1,11 @@
-@if ((categories$ | async) && items()) {
+@if (items()) {
   <div class="shop"
        infiniteScroll
        [endReached]="pagination().isLastPage"
        (nearEnd)="loadMoreElements()">
     <div class="container">
       <div class="shop__layout">
-        <shop-sidebar [categories$]="categories$"/>
+        <shop-sidebar/>
 
         <div class="main_section">
 

@@ -2,7 +2,6 @@ package com.atlantbh.internship.auction.app.service.item;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
-import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.requests.CreateItemRequest;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
@@ -18,8 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ItemService {
-    Page<ItemSummaryDto> getAllItems(final Specification<Item> specification, final Pageable pageable);
-
 
     /**
      * Retrieves full item details by their unique identifier.

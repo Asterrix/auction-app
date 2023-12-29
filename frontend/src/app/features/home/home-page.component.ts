@@ -4,11 +4,10 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Observable, Subscription, take} from "rxjs";
 import {Page} from "../../shared/models/interfaces/page";
 import {PaginationService} from "../../shared/models/pagination.service";
-import {Api} from "../../shared/services/api.service";
 import {ItemOrderBy} from "../../shared/services/api/item/item.enum";
 import {FeaturedItem, ItemSummary} from "../../shared/services/api/item/item.interface";
 import {NewApiService} from "../../shared/services/api/new-api.service";
-import {CategoryService} from "../../shared/services/category.service";
+import {CategoryService} from "../../shared/services/category/category.service";
 import {ItemService} from "../../shared/services/item/item.service";
 import {SearchService} from "../../shared/services/search/search.service";
 import {FeaturedComponent} from "./components/featured/featured.component";
@@ -19,7 +18,6 @@ import {
   SectionTabService
 } from "./components/home-items/components/section-tab/section-tab.service";
 import {HomeItemsComponent} from "./components/home-items/home-items.component";
-import Category = Api.CategoryApi.Category;
 
 
 @Component({
@@ -36,25 +34,24 @@ import Category = Api.CategoryApi.Category;
   ]
 })
 export class HomePage implements OnInit, OnDestroy {
-  categories$: Observable<Array<Category> | undefined> | undefined;
   featuredItem$: Observable<FeaturedItem | undefined> | undefined;
   items$: Observable<Page<ItemSummary> | undefined> | undefined;
   protected featuredItems = signal<ItemSummary[]>([]);
+  protected categoryService = inject(CategoryService);
   private paginationService = inject(PaginationService);
   protected pagination = this.paginationService.pagination;
   private queryParamSub: Subscription | undefined;
   private apiService = inject(NewApiService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  private categoryService = inject(CategoryService);
   private sectionTabService = inject(SectionTabService);
   private itemService = inject(ItemService);
   private searchService = inject(SearchService);
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.initializeCategories();
     this.clearItemQueryParam();
     this.fetchFeaturedItem();
-    this.fetchCategories();
 
     this.queryParamSub = this.activatedRoute.queryParams
       .subscribe((params: Params): void => {
@@ -81,10 +78,9 @@ export class HomePage implements OnInit, OnDestroy {
     this.queryParamSub?.unsubscribe();
   }
 
-  private fetchCategories(): void {
-    this.categoryService.initCategories();
-    this.categories$ = this.categoryService.getAllCategories();
-  }
+  public initializeCategories = async () => {
+    await this.categoryService.initializeCategories();
+  };
 
   private fetchFeaturedItem(): void {
     this.featuredItem$ = this.itemService.getFeaturedItem();
@@ -122,3 +118,4 @@ export class HomePage implements OnInit, OnDestroy {
     return !!params["itemName"];
   }
 }
+

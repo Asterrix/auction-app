@@ -18,24 +18,17 @@ export class ItemApi {
   private readonly httpClient: HttpClient = inject(HttpClient);
 
   public getListOfItems = (params: GetItemsParams): Observable<Page<ItemSummary>> => {
-    let httpParams: HttpParams = new HttpParams();
-    httpParams = httpParams.set("page", params.pageable.page);
-    httpParams = httpParams.set("size", params.pageable.size);
+    const httpParams: HttpParams = new HttpParams()
+      .set("page", params.pageable.page)
+      .set("size", params.pageable.size);
 
-    if (params.name) {
-      httpParams = httpParams.set("name", params.name);
-    }
-    if (params.category) {
-      httpParams = httpParams.set("category", params.category);
-    }
-    if (params.subcategory) {
-      httpParams = httpParams.set("subcategory", params.subcategory);
-    }
-    if (params.orderBy) {
-      httpParams = httpParams.set("orderBy", params.orderBy);
-    }
+    const body = {
+      name: params.name,
+      categories: params.categories,
+      orderBy: params.orderBy
+    };
 
-    return this.httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, {params: httpParams});
+    return this.httpClient.post<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, body, {params: httpParams});
   };
 
   public getFeaturedItem = (): Observable<FeaturedItem> => {
@@ -66,7 +59,7 @@ export class ItemApi {
     const itemBlob: Blob = new Blob([JSON.stringify(item)], {type: "application/json"});
     formData.append("item", itemBlob, "item.json");
 
-    return this.httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Items}`, formData, {observe: "response"});
+    return this.httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Items}/item`, formData, {observe: "response"});
   }
 
   public suggestions = (query: string): Observable<ItemSummary[]> => {

@@ -67,12 +67,13 @@ public class ItemController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping
-    public ResponseEntity<Page<ItemSummaryDto>> getItems(final GetItemsRequest request, final Pageable pageable) {
+    @PostMapping
+    public ResponseEntity<Page<ItemSummaryDto>> getItems(@RequestBody final GetItemsRequest request, final Pageable pageable) {
         final Specification<Item> specification = new ItemSpecificationProcessor().process(request);
-        final Page<ItemSummaryDto> items = itemService.getAllItems(specification, pageable);
+        final Page<Item> items = itemService.findAll(specification, pageable);
+        final Page<ItemSummaryDto> mappedItems = items.map(ItemMapper::convertToSummaryDto);
 
-        return new ResponseEntity<>(items, HttpStatus.OK);
+        return new ResponseEntity<>(mappedItems, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -118,7 +119,7 @@ public class ItemController {
         return new ResponseEntity<>(mappedItems, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("item")
     @PreAuthorize("hasRole('User')")
     public ResponseEntity<ItemDto> createItem(@RequestPart CreateItemRequest item, @RequestPart List<MultipartFile> images) {
         createItemInitialValidation.validate(item);

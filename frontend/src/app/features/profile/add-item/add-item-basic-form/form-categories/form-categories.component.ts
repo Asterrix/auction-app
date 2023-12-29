@@ -1,9 +1,8 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, effect, EventEmitter, inject, Input, Output} from "@angular/core";
-import {Api} from "../../../../../shared/services/api.service";
-import {CategoryService} from "../../../../../shared/services/category.service";
+import {Subcategory} from "../../../../../shared/services/api/category/category.type";
+import {CategoryService} from "../../../../../shared/services/category/category.service";
 import {CategoriesDropdown} from "../categories-dropdown/categories-dropdown.component";
-import Subcategory = Api.CategoryApi.Subcategory;
 
 
 export enum CategoryType {

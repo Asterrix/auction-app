@@ -1,21 +1,27 @@
+import {Injectable} from "@angular/core";
+import {CategoryFilter} from "../../../features/shop/components/sidebar/filter/category-filter.type";
 import {ItemOrderBy} from "../../services/api/item/item.enum";
-import {GetItemsParams} from "../../services/api/item/item.type";
+import {CategoryRequest, GetItemsParams} from "../../services/api/item/item.type";
 
+@Injectable({
+  providedIn: "root"
+})
 export class ItemFilterBuilder {
   private itemParams: Partial<GetItemsParams> = {};
+
 
   filterByName(itemName: string | undefined): void {
     this.itemParams.name = itemName;
   }
 
-  filterByCategory(category: string | undefined): this {
-    this.itemParams.category = category;
-    return this;
-  }
+  filterByCategories(categories: CategoryFilter): void {
+    let cat: CategoryRequest[] = [];
 
-  filterBySubcategory(subcategory: string | undefined): this {
-    this.itemParams.subcategory = subcategory;
-    return this;
+    for (const [first, second] of categories) {
+      cat.push({category: first, subcategories: second});
+    }
+
+    this.itemParams.categories = cat;
   }
 
   orderBy(orderBy: string | undefined): this {

@@ -1,10 +1,14 @@
 import {Pageable} from "src/app/shared/models/pagination.service";
 import {ItemOrderBy} from "./item.enum";
 
+type CategoryRequest = {
+  category: string;
+  subcategories: string[];
+}
+
 type GetItemsParams = {
   name?: string;
-  category?: string;
-  subcategory?: string;
+  categories?: CategoryRequest[];
   orderBy?: ItemOrderBy;
   pageable: Pageable;
 }
@@ -22,7 +26,7 @@ type CreateItemRequest = {
 };
 
 export {
-  Pageable,
+  CategoryRequest,
+  CreateItemRequest,
   GetItemsParams,
-  CreateItemRequest
 };

@@ -1,8 +1,9 @@
 package com.atlantbh.internship.auction.app.specification;
 
+import com.atlantbh.internship.auction.app.builder.SpecificationBuilder;
+import com.atlantbh.internship.auction.app.dto.item.requests.CategoryRequest;
 import com.atlantbh.internship.auction.app.dto.item.requests.GetItemsRequest;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.builder.SpecificationBuilder;
 import com.atlantbh.internship.auction.app.model.utils.SpecificationProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,11 +29,22 @@ public final class ItemSpecificationProcessor implements SpecificationProcessor<
         }
     }
 
-    private void processCategory(final GetItemsRequest request) {
-        if (StringUtils.isNotBlank(request.subcategory()) && StringUtils.isNotBlank(request.category())) {
-            specification.and(ItemSpecification.hasSubcategory(request.category(), request.subcategory()));
-        } else if (StringUtils.isNotBlank(request.category())) {
-            specification.and(ItemSpecification.hasCategory(request.category()));
+    public void processCategory(final GetItemsRequest request) {
+        Specification<Item> categorySpec = null;
+
+        if (request.categories() != null && !request.categories().isEmpty()) {
+            for (final CategoryRequest category : request.categories()) {
+                if (StringUtils.isNotBlank(category.category())) {
+                    for (final String subcategory : category.subcategories()) {
+                        final Specification<Item> currentSpec = ItemSpecification.hasSubcategory(category.category(), subcategory);
+                        categorySpec = (categorySpec == null) ? currentSpec : categorySpec.or(currentSpec);
+                    }
+                }
+            }
+        }
+
+        if (categorySpec != null) {
+            specification.and(categorySpec);
         }
     }
 

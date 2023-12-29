@@ -16,6 +16,10 @@
     height: inherit;
     width: inherit;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .checkbox-round {
