@@ -1,98 +1,103 @@
-import {animate, AnimationTriggerMetadata, style, transition, trigger} from "@angular/animations";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, Input, OnDestroy, OnInit} from "@angular/core";
-import {FormsModule} from "@angular/forms";
-import {ActivatedRoute, Params, RouterLink, RouterLinkActive} from "@angular/router";
-import {Observable, Subscription} from "rxjs";
+import {Component, inject, OnInit} from "@angular/core";
+import {ActivatedRoute, Params} from "@angular/router";
 import {CheckboxComponent, CheckboxShape} from "../../../../shared/components/checkboxes/checkbox/checkbox.component";
-import {Api} from "../../../../shared/services/api.service";
-import {CategoryService} from "../../../../shared/services/category.service";
-import {ShopPageParameter} from "../../shop-routes";
-import Category = Api.CategoryApi.Category;
+import {Category} from "../../../../shared/services/api/category/category.type";
+import {CategoryService} from "../../../../shared/services/category/category.service";
+import {Option} from "../../../../shared/types/Option.type";
+import {paramExtractor} from "../../../../shared/utils/param-extractor/param-extractor";
+import {accordionAnimation} from "./animation/accordionAnimation";
+import {CategoryFilterService} from "./filter/category-filter.service";
+import {CategoryFiltration} from "./filter/category-filtration.interface";
+import {MenuSelection, OpenMenu} from "./menu/menu";
 
-const accordionAnimation: AnimationTriggerMetadata = trigger("expandCollapse", [
-  transition(":enter", [
-    style({
-      height: "0"
-    }),
-    animate("300ms ease-in", style({height: "*"}))
-  ]),
-  transition(":leave", [
-    style({
-      height: "*"
-    }),
-    animate("300ms ease-in", style({height: "0"}))
-  ])
-]);
 
 @Component({
   selector: "shop-sidebar",
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, NgOptimizedImage, FormsModule, CheckboxComponent],
+  imports: [CommonModule, NgOptimizedImage, CheckboxComponent],
   templateUrl: "./sidebar.component.html",
-  styleUrls: ["./sidebar.component.scss"],
+  styleUrl: "./sidebar.component.scss",
   animations: [accordionAnimation]
 })
-export class SidebarComponent implements OnInit, OnDestroy {
-  @Input({required: true}) categories$: Observable<Array<Category> | undefined> | undefined;
-  accordionState: Record<number, boolean> = {};
-  activeCategory: Observable<string> | undefined;
-  activeSubcategory: Observable<string> | undefined;
-  private querySub: Subscription | undefined;
-
-  constructor(private categoryService: CategoryService, private activatedRoute: ActivatedRoute) {
-  }
-
-  ngOnInit(): void {
-    this.getActiveCategories();
-    this.categoryService.subscribeToCategories();
-    this.subscribeToQueryParamChanges();
-  }
-
-  ngOnDestroy(): void {
-    this.querySub?.unsubscribe();
-  }
-
-  toggleAccordion(index: number): void {
-    this.accordionState[index] = !this.accordionState[index];
-  }
-
-  collapseAccordion(): void {
-    this.accordionState = {};
-  }
-
-  private subscribeToQueryParamChanges(): void {
-    this.querySub = this.activatedRoute.queryParams.subscribe((params: Params): void => {
-      const paramCategory: string = this.handleCategoryChange(params);
-
-      if (!paramCategory) {
-        this.resetActiveCategories();
-      }
-
-      this.handleSubcategoryChange(params, paramCategory);
-    });
-  }
-
-  private resetActiveCategories(): void {
-    this.categoryService.resetActiveCategories();
-  }
-
-  private getActiveCategories(): void {
-    this.activeCategory = this.categoryService.getActiveCategory();
-    this.activeSubcategory = this.categoryService.getActiveSubcategory();
-  }
-
-  private handleCategoryChange(params: Params): string {
-    const paramCategory: string = params[ShopPageParameter.Parameter.Category];
-    if (paramCategory) this.categoryService.handleCategoryChange(paramCategory, this.activatedRoute);
-    return paramCategory;
-  }
-
-  private handleSubcategoryChange(params: Params, paramCategory: string): string {
-    const paramSubcategory: string = params[ShopPageParameter.Parameter.Subcategory];
-    if (paramCategory) this.categoryService.handleSubcategoryChange(paramSubcategory);
-    return paramSubcategory;
-  }
-
+export class SidebarComponent implements OnInit, CategoryFiltration {
+  protected openMenu: OpenMenu = -1;
   protected readonly CheckboxShape = CheckboxShape;
+  protected readonly categoryFilterService = inject(CategoryFilterService);
+  private readonly categoryService = inject(CategoryService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+
+  protected categories = this.categoryService.categories;
+
+  public async ngOnInit() {
+    const params: Params = this.activatedRoute.snapshot.queryParams;
+
+    const categoryParam: Option<string[]> = paramExtractor(params, "category");
+    const subcategoryParam: Option<string[]> = paramExtractor(params, "subcategory");
+
+    await this.categoryService.initializeCategories();
+    await this.initializeCategories(this.categoryService.categories());
+
+    if (categoryParam.present && subcategoryParam.present) {
+      await this.includeCategories(categoryParam.value, subcategoryParam.value);
+    } else {
+      await this.resetQueryParams();
+    }
+  };
+
+  public excludeCategory = async (category: string): Promise<void> => {
+    await this.categoryFilterService.excludeCategory(category);
+  };
+
+  public excludeSubcategory = async (category: string, subcategory: string): Promise<void> => {
+    await this.categoryFilterService.excludeSubcategory(category, subcategory);
+  };
+
+  public includeCategories = async (categories: string[], subcategories: string[]): Promise<void> => {
+    await this.categoryFilterService.includeCategories(categories, subcategories);
+  };
+
+  public includeCategory = async (category: string): Promise<void> => {
+    await this.categoryFilterService.includeCategory(category);
+  };
+
+  public includeSubcategory = async (category: string, subcategory: string): Promise<void> => {
+    await this.categoryFilterService.includeSubcategory(category, subcategory);
+  };
+
+  public initializeCategories = async (categories: Category[]): Promise<void> => {
+    this.categoryFilterService.initializeCategories(categories);
+  };
+
+  public isCategoryIncluded = (category: string): boolean => {
+    return this.categoryFilterService.isCategoryIncluded(category);
+  };
+
+  public isSubcategoryIncluded = (category: string, subcategory: string) => {
+    return this.categoryFilterService.isSubcategoryIncluded(category, subcategory);
+  };
+
+  public resetQueryParams = async (): Promise<void> => {
+    await this.categoryFilterService.resetQueryParams();
+  };
+
+  protected toggleCategory = async (categoryName: string): Promise<void> => {
+    if (this.isCategoryIncluded(categoryName)) {
+      await this.excludeCategory(categoryName);
+    } else {
+      await this.includeCategory(categoryName);
+    }
+  };
+
+  protected toggleSubcategory = async (categoryName: string, subcategoryName: string): Promise<void> => {
+    if (this.isSubcategoryIncluded(categoryName, subcategoryName)) {
+      await this.excludeSubcategory(categoryName, subcategoryName);
+    } else {
+      await this.includeSubcategory(categoryName, subcategoryName);
+    }
+  };
+
+  protected menuSelection: MenuSelection = (categoryIndex: number): void => {
+    this.openMenu = categoryIndex === this.openMenu ? -1 : categoryIndex;
+  };
 }

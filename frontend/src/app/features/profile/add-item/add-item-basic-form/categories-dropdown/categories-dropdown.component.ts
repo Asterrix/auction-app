@@ -2,9 +2,7 @@ import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {ClickOutsideDirective} from "../../../../../shared/directives/click-outside.directive";
 import {Dropdown} from "../../../../../shared/interfaces/dropdown.interface";
-import {Api} from "../../../../../shared/services/api.service";
-import Category = Api.CategoryApi.Category;
-import Subcategory = Api.CategoryApi.Subcategory;
+import {Category, Subcategory} from "../../../../../shared/services/api/category/category.type";
 
 @Component({
   selector: "categories-dropdown",

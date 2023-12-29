@@ -38,7 +38,8 @@ public class SecurityConfig {
         return csrf -> csrf
                 .ignoringRequestMatchers("api/v1/authentication")
                 .ignoringRequestMatchers("api/v1/register")
-                .ignoringRequestMatchers("api/v1/bids");
+                .ignoringRequestMatchers("api/v1/bids")
+                .ignoringRequestMatchers("api/v1/items");
     }
 
     @Bean

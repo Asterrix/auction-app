@@ -56,17 +56,6 @@ public final class ItemServiceImpl implements ItemService {
      * {@inheritDoc}
      */
     @Override
-    public Page<ItemSummaryDto> getAllItems(final Specification<Item> specification, final Pageable pageable) {
-        final Page<Item> items = itemRepository.findAll(specification, pageable);
-        final List<ItemSummaryDto> mappedItems = ItemMapper.convertToSummaryDto(items.getContent());
-
-        return PageableExecutionUtils.getPage(mappedItems, pageable, () -> itemRepository.count(specification));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Optional<ItemAggregate> getItemById(final Integer itemId, final ZonedDateTime timeOfRequest) {
         final Optional<Item> item = itemRepository.findById(itemId);
         if (item.isEmpty()) return Optional.empty();

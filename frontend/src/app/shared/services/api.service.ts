@@ -6,7 +6,6 @@ import {environment} from "../../../environments/environment";
 export namespace Api {
   import BidRequest = Api.BidApi.BidRequest;
   import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
-  import Category = Api.CategoryApi.Category;
   import Authentication = Api.UserApi.AuthenticationRequest;
   import Register = Api.UserApi.RegisterRequest;
   import UserItems = Api.UserApi.UserItem;
@@ -15,10 +14,6 @@ export namespace Api {
   @Injectable({providedIn: "root"})
   export class Service {
     constructor(private httpClient: HttpClient) {
-    }
-
-    getAllCategories(): Observable<Array<Category>> {
-      return CategoryApi.GetMethods.getAllCategories(this.httpClient);
     }
 
     authenticateUser(auth: Required<Authentication>) {
@@ -109,31 +104,6 @@ export namespace Api {
           password: userDetails.password
         };
         return httpClient.post<boolean>(`${environment.apiUrl}/${Endpoint.Register}`, body, {observe: "response"});
-      }
-    }
-  }
-
-  export namespace CategoryApi {
-
-    export interface Category {
-      id: number;
-      name: string;
-      subcategories: Array<Subcategory>;
-    }
-
-    export interface Subcategory {
-      id: number;
-      name: string;
-      numberOfItems: number;
-    }
-
-    enum Endpoint {
-      Categories = "categories"
-    }
-
-    export namespace GetMethods {
-      export function getAllCategories(httpClient: HttpClient): Observable<Array<Category>> {
-        return httpClient.get<Array<Category>>(`${environment.apiUrl}/${Endpoint.Categories}`);
       }
     }
   }

@@ -2,19 +2,19 @@
   <span class="sidebar__label">Categories</span>
   <ul class="sidebar__category__list">
 
-    <ng-container *ngFor="let category of categories$ | async">
+    @for (category of categories; track category.id) {
       <li class="sidebar__item">
-        <a [queryParams]="{category: category.name.toLowerCase()}"
+        <a [queryParams]="{category: category.name | lowercase}"
            class="category"
-           routerLink="/shop">
-          {{category.name}}
+           [routerLink]="['/', ShopRouteEndpoint.Shop]">
+          {{ category.name }}
         </a>
       </li>
-    </ng-container>
+    }
 
     <li class="sidebar__item">
       <a class="category"
-         routerLink="/shop">
+         [routerLink]="['/', ShopRouteEndpoint.Shop]">
         All Categories
       </a>
     </li>
