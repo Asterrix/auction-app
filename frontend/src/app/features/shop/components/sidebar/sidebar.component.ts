@@ -1,5 +1,5 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, inject, OnInit} from "@angular/core";
+import {Component, inject, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Params} from "@angular/router";
 import {CheckboxComponent, CheckboxShape} from "../../../../shared/components/checkboxes/checkbox/checkbox.component";
 import {Category} from "../../../../shared/services/api/category/category.type";
@@ -20,16 +20,15 @@ import {MenuSelection, OpenMenu} from "./menu/menu";
   styleUrl: "./sidebar.component.scss",
   animations: [accordionAnimation]
 })
-export class SidebarComponent implements OnInit, CategoryFiltration {
+export class SidebarComponent implements OnInit, OnDestroy, CategoryFiltration {
   protected openMenu: OpenMenu = -1;
   protected readonly CheckboxShape = CheckboxShape;
   protected readonly categoryFilterService = inject(CategoryFilterService);
   private readonly categoryService = inject(CategoryService);
+  protected categories = this.categoryService.categories;
   private readonly activatedRoute = inject(ActivatedRoute);
 
-  protected categories = this.categoryService.categories;
-
-  public async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
     const params: Params = this.activatedRoute.snapshot.queryParams;
 
     const categoryParam: Option<string[]> = paramExtractor(params, "category");
@@ -44,6 +43,10 @@ export class SidebarComponent implements OnInit, CategoryFiltration {
       await this.resetQueryParams();
     }
   };
+
+  public async ngOnDestroy(): Promise<void> {
+    await this.categoryFilterService.resetCategoryFilter();
+  }
 
   public excludeCategory = async (category: string): Promise<void> => {
     await this.categoryFilterService.excludeCategory(category);
@@ -76,6 +79,10 @@ export class SidebarComponent implements OnInit, CategoryFiltration {
   public isSubcategoryIncluded = (category: string, subcategory: string) => {
     return this.categoryFilterService.isSubcategoryIncluded(category, subcategory);
   };
+
+  public resetCategoryFilter(): Promise<void> {
+    return this.categoryFilterService.resetCategoryFilter();
+  }
 
   public resetQueryParams = async (): Promise<void> => {
     await this.categoryFilterService.resetQueryParams();

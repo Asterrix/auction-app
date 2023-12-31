@@ -9,5 +9,6 @@ export interface CategoryFiltration {
   initializeCategories: (categories: Category[]) => void;
   isCategoryIncluded: (category: string) => boolean;
   isSubcategoryIncluded: (category: string, subcategory: string) => boolean;
+  resetCategoryFilter: () => Promise<void>;
   resetQueryParams: () => Promise<void>;
 }

@@ -1,8 +1,8 @@
 import {computed, inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
 import {Router} from "@angular/router";
 import {Category, Subcategory} from "../../../../../shared/services/api/category/category.type";
-import {CategoryFiltration} from "./category-filtration.interface";
 import {CategoryFilter, CategoryInfo} from "./category-filter.type";
+import {CategoryFiltration} from "./category-filtration.interface";
 
 @Injectable({
   providedIn: "root"
@@ -13,6 +13,7 @@ export class CategoryFilterService implements CategoryFiltration {
   private categoryMap: Map<string, CategoryInfo> = new Map();
 
   private readonly router: Router = inject(Router);
+
 
   public excludeCategory = async (category: string): Promise<void> => {
     const categoryFilter: CategoryFilter = this.categoryFilterSignal();
@@ -104,6 +105,10 @@ export class CategoryFilterService implements CategoryFiltration {
     const subcategories: string[] | undefined = categoryFilter.get(category);
 
     return subcategories ? subcategories.includes(subcategory) : false;
+  };
+
+  public resetCategoryFilter = async (): Promise<void> => {
+    this.categoryFilterSignal.set(new Map());
   };
 
   public resetQueryParams = async (): Promise<void> => {

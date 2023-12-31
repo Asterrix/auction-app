@@ -3,12 +3,8 @@
   <ul class="sidebar__category__list">
 
     @for (category of categories; track category.id) {
-      <li class="sidebar__item">
-        <a [queryParams]="{category: category.name | lowercase}"
-           class="category"
-           [routerLink]="['/', ShopRouteEndpoint.Shop]">
-          {{ category.name }}
-        </a>
+      <li class="sidebar__item category" (click)="onCategoryClick(category)">
+        {{ category.name }}
       </li>
     }
 
