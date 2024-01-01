@@ -3,9 +3,7 @@ package com.atlantbh.internship.auction.app.specification;
 import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -93,6 +91,65 @@ public final class ItemSpecification {
 
     public static Specification<Item> priceIsBetween(final BigDecimal startingPrice, final BigDecimal endingPrice) {
         return (root, query, builder) -> builder.between(root.get("initialPrice"), startingPrice, endingPrice);
+    }
+
+    public static Specification<Item> priceIsBetweenIncludingBids(final BigDecimal startingPrice, final BigDecimal endingPrice) {
+        return (root, query, builder) -> {
+            final Path<BigDecimal> initialPricePath = root.get("initialPrice");
+            final Join<Item, Bid> bidJoin = root.join("bids", JoinType.LEFT);
+            final Path<BigDecimal> bidAmountPath = bidJoin.get("amount");
+
+            final Predicate initialPriceInRange = builder.between(initialPricePath, startingPrice, endingPrice);
+            final Predicate bidAmountInRange = builder.between(bidAmountPath, startingPrice, endingPrice);
+
+            final Predicate bidAmountNotNull = builder.isNotNull(bidAmountPath);
+            final Predicate bidAmountInRangeNonNull = builder.and(bidAmountNotNull, bidAmountInRange);
+
+            return builder.or(initialPriceInRange, bidAmountInRangeNonNull);
+        };
+    }
+
+
+    public static Specification<Item> hasLowestInitialPrice() {
+        return (root, query, builder) -> {
+            final Subquery<BigDecimal> maxInitialPriceSubquery = query.subquery(BigDecimal.class);
+            final Root<Item> itemRoot = maxInitialPriceSubquery.from(Item.class);
+            maxInitialPriceSubquery.select(builder.min(itemRoot.get("initialPrice")));
+
+            return builder.equal(root.get("initialPrice"), maxInitialPriceSubquery);
+        };
+    }
+
+    public static Specification<Item> hasLowestBidAmount() {
+        return (root, query, builder) -> {
+            final Subquery<BigDecimal> maxBidAmountSubquery = query.subquery(BigDecimal.class);
+            final Root<Bid> bidRoot = maxBidAmountSubquery.from(Bid.class);
+            maxBidAmountSubquery.select(builder.min(bidRoot.get("amount")));
+
+            final Join<Item, Bid> bids = root.join("bids");
+            return builder.equal(bids.get("amount"), maxBidAmountSubquery);
+        };
+    }
+
+    public static Specification<Item> hasHighestInitialPrice() {
+        return (root, query, builder) -> {
+            final Subquery<BigDecimal> maxInitialPriceSubquery = query.subquery(BigDecimal.class);
+            final Root<Item> itemRoot = maxInitialPriceSubquery.from(Item.class);
+            maxInitialPriceSubquery.select(builder.max(itemRoot.get("initialPrice")));
+
+            return builder.equal(root.get("initialPrice"), maxInitialPriceSubquery);
+        };
+    }
+
+    public static Specification<Item> hasHighestBidAmount() {
+        return (root, query, builder) -> {
+            final Subquery<BigDecimal> maxBidAmountSubquery = query.subquery(BigDecimal.class);
+            final Root<Bid> bidRoot = maxBidAmountSubquery.from(Bid.class);
+            maxBidAmountSubquery.select(builder.max(bidRoot.get("amount")));
+
+            final Join<Item, Bid> bids = root.join("bids");
+            return builder.equal(bids.get("amount"), maxBidAmountSubquery);
+        };
     }
 
     public static Specification<Item> orderByNameAsc() {

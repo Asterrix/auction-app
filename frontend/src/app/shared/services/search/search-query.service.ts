@@ -28,13 +28,4 @@ export class SearchQueryService implements SearchQuery {
       queryParamsHandling: "merge",
     });
   }
-
-  public async resetCategoryAndSubcategoryParams() {
-    await this.router.navigate([], {
-      queryParams: {
-        category: null,
-        subcategory: null
-      }, queryParamsHandling: "merge"
-    });
-  }
 }

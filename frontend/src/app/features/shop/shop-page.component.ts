@@ -10,9 +10,13 @@ import {ItemFilterBuilder} from "../../shared/models/builders/item-filter-builde
 import {Page} from "../../shared/models/interfaces/page";
 import {PaginationService} from "../../shared/models/pagination.service";
 import {ItemSummary} from "../../shared/services/api/item/item.interface";
+import {PriceRange} from "../../shared/services/api/item/item.type";
 import {ItemService} from "../../shared/services/item/item.service";
 import {SearchService} from "../../shared/services/search/search.service";
 import {ContentSectionComponent} from "./components/content-section/content-section.component";
+import {PriceRangeQueryService} from "./components/price-range/filter/price-range-query.service";
+import {PriceRangeSelectorComponent} from "./components/price-range/price-range-selector.component";
+import {PriceRangeForm} from "./components/price-range/type/price-range.type";
 import {CategoryFilterService} from "./components/sidebar/filter/category-filter.service";
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {SortingTabComponent} from "./components/sorting-tab/sorting-tab.component";
@@ -27,7 +31,9 @@ import {ShopPageParameter} from "./shop-routes";
     ContentSectionComponent,
     LoaderComponent,
     SortingTabComponent,
-    InfiniteScrollDirective],
+    InfiniteScrollDirective,
+    PriceRangeSelectorComponent
+  ],
   templateUrl: "./shop-page.component.html",
   styleUrls: ["./shop-page.component.scss"],
   providers: [
@@ -39,14 +45,14 @@ import {ShopPageParameter} from "./shop-routes";
 })
 export class ShopPage {
   protected items = signal<ItemSummary[]>([]);
-  private itemFilterBuilder: ItemFilterBuilder = inject(ItemFilterBuilder);
+  private itemFilterBuilder: ItemFilterBuilder = new ItemFilterBuilder();
   private paginationService: PaginationService = inject(PaginationService);
   protected pagination = this.paginationService.pagination;
   private readonly categoryFilterService = inject(CategoryFilterService);
+  private readonly priceRangeFilterService = inject(PriceRangeQueryService);
 
   constructor(private activatedRoute: ActivatedRoute,
-              private itemService: ItemService,
-              private searchService: SearchService) {
+              private itemService: ItemService) {
 
     this.activatedRoute.queryParams.pipe(
       debounceTime(200),
@@ -79,11 +85,6 @@ export class ShopPage {
     }
   }
 
-  handleCategoryChange() {
-    const categories = this.categoryFilterService.categoryFilter();
-    this.itemFilterBuilder.filterByCategories(categories);
-  }
-
   private getItems(): Observable<Page<ItemSummary>> {
     const filter = this.itemFilterBuilder.build();
 
@@ -94,20 +95,29 @@ export class ShopPage {
       },
       name: filter.name,
       categories: filter.categories,
+      priceRange: filter.priceRange,
       orderBy: filter.orderBy
     });
   }
 
-  private handleQueryParameterChange(param: Params): void {
+  private handleQueryParameterChange = async (param: Params) => {
     this.handleOrderByChange(param);
     this.handleCategoryChange();
+    await this.handlePriceRangeChange();
     this.handleSearch(param);
+  };
+
+  private handleCategoryChange() {
+    const categories = this.categoryFilterService.categoryFilter();
+    this.itemFilterBuilder.filterByCategories(categories);
   }
 
+  private handlePriceRangeChange = async (): Promise<void> => {
+    const priceRange: PriceRangeForm = this.priceRangeFilterService.priceRange();
+    await this.itemFilterBuilder.filterByPriceRange(priceRange);
+  };
+
   private handleSearch(param: Params): void {
-    if (param[ShopPageParameter.Parameter.ItemName]) {
-      this.searchService.resetCategoryAndSubcategoryParams();
-    }
     this.itemFilterBuilder.filterByName(param[ShopPageParameter.Parameter.ItemName]);
   }
 

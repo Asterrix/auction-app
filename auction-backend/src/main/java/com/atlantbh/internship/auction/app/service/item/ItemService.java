@@ -8,15 +8,12 @@ import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface ItemService {
+public interface ItemService extends ItemQuery, ItemPrice {
 
     /**
      * Retrieves full item details by their unique identifier.
@@ -45,8 +42,4 @@ public interface ItemService {
     Optional<Item> findItemById(final Integer itemId);
 
     Item updateItemFinishedAttribute(final Item item);
-
-    Page<Item> findAll(final Specification<Item> specification, final Pageable pageable);
-
-    List<Item> findAll(final Specification<Item> specification);
 }

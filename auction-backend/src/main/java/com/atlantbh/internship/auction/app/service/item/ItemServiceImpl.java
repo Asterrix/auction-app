@@ -4,7 +4,6 @@ import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.bid.BiddingInformation;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
-import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.requests.CreateItemRequest;
 import com.atlantbh.internship.auction.app.entity.*;
 import com.atlantbh.internship.auction.app.mapper.BidsMapper;
@@ -12,12 +11,11 @@ import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.specification.UserItemBidSpecification;
 import com.atlantbh.internship.auction.app.service.validation.item.ItemEntityValidation;
+import com.atlantbh.internship.auction.app.specification.UserItemBidSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -39,17 +37,20 @@ public final class ItemServiceImpl implements ItemService {
     private final BidRepository bidRepository;
     private final ItemEntityValidation entityValidation;
     private final ItemStateChanger itemStateChanger;
+    private final ItemPriceImpl itemPrice;
 
     public ItemServiceImpl(final ItemRepository itemRepository,
                            final ItemImageRepository itemImageRepository,
                            final BidRepository bidRepository,
                            final ItemEntityValidation entityValidation,
-                           final ItemStateChanger itemStateChanger) {
+                           final ItemStateChanger itemStateChanger,
+                           final ItemPriceImpl itemPrice) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
         this.bidRepository = bidRepository;
         this.entityValidation = entityValidation;
         this.itemStateChanger = itemStateChanger;
+        this.itemPrice = itemPrice;
     }
 
     /**
@@ -172,5 +173,20 @@ public final class ItemServiceImpl implements ItemService {
     @Override
     public Optional<Item> findItemById(final Integer itemId) {
         return itemRepository.findById(itemId);
+    }
+
+    @Override
+    public Optional<Item> findOne(final Specification<Item> specification) {
+        return itemRepository.findOne(specification);
+    }
+
+    @Override
+    public BigDecimal findHighestPriceItem(final Item highestInitialPriceItem, final Item highestBidItem) {
+        return itemPrice.findHighestPriceItem(highestInitialPriceItem, highestBidItem);
+    }
+
+    @Override
+    public BigDecimal findLowestPriceItem(final Item lowestInitialPriceItem, final Item lowestBidItem) {
+        return itemPrice.findLowestPriceItem(lowestInitialPriceItem, lowestBidItem);
     }
 }

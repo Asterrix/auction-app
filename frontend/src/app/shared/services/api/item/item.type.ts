@@ -9,6 +9,7 @@ type CategoryRequest = {
 type GetItemsParams = {
   name?: string;
   categories?: CategoryRequest[];
+  priceRange?: PriceRange;
   orderBy?: ItemOrderBy;
   pageable: Pageable;
 }
@@ -25,8 +26,14 @@ type CreateItemRequest = {
   endTime: string;
 };
 
-export {
+type PriceRange = {
+  minPrice: number,
+  maxPrice: number
+}
+
+export type {
   CategoryRequest,
   CreateItemRequest,
   GetItemsParams,
+  PriceRange
 };

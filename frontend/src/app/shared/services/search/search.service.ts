@@ -37,8 +37,4 @@ export class SearchService implements SearchCommand, SearchQuery {
   public async navigateToShopPage(searchValue: string): Promise<void> {
     return this.searchQueryService.navigateToShopPage(searchValue);
   }
-
-  public async resetCategoryAndSubcategoryParams(): Promise<void> {
-    return this.searchQueryService.resetCategoryAndSubcategoryParams();
-  }
 }

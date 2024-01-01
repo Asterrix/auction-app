@@ -1,11 +1,8 @@
-import {Injectable} from "@angular/core";
+import {PriceRangeForm} from "../../../features/shop/components/price-range/type/price-range.type";
 import {CategoryFilter} from "../../../features/shop/components/sidebar/filter/category-filter.type";
 import {ItemOrderBy} from "../../services/api/item/item.enum";
-import {CategoryRequest, GetItemsParams} from "../../services/api/item/item.type";
+import {CategoryRequest, GetItemsParams, PriceRange} from "../../services/api/item/item.type";
 
-@Injectable({
-  providedIn: "root"
-})
 export class ItemFilterBuilder {
   private itemParams: Partial<GetItemsParams> = {};
 
@@ -23,6 +20,19 @@ export class ItemFilterBuilder {
 
     this.itemParams.categories = cat;
   }
+
+  filterByPriceRange = async (priceRange: PriceRangeForm) => {
+    if (priceRange.minPrice === 0 && priceRange.maxPrice === 0) {
+      this.itemParams.priceRange = undefined;
+    } else if(priceRange.minPrice === null || priceRange.maxPrice === null) {
+      this.itemParams.priceRange = undefined;
+    } else if(priceRange.minPrice >= 0 && priceRange.maxPrice >= priceRange.minPrice){
+      this.itemParams.priceRange = {
+        minPrice: priceRange.minPrice,
+        maxPrice: priceRange.maxPrice
+      };
+    }
+  };
 
   orderBy(orderBy: string | undefined): this {
     const isOrderByValid: boolean = Object.values(ItemOrderBy).includes(orderBy as ItemOrderBy);

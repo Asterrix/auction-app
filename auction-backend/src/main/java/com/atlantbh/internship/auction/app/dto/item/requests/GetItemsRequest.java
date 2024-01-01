@@ -5,6 +5,7 @@ import java.util.List;
 public record GetItemsRequest(
         String name,
         List<CategoryRequest> categories,
+        PriceFilter priceFilter,
         String orderBy
 ) {
 }

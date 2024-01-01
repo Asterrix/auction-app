@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {environment} from "../../../../../environments/environment";
 import {Page} from "../../../models/interfaces/page";
 import {FeaturedItem, ItemAggregate, ItemSummary} from "./item.interface";
-import {CreateItemRequest, GetItemsParams} from "./item.type";
+import {CreateItemRequest, GetItemsParams, PriceRange} from "./item.type";
 
 enum Endpoint {
   Items = "items",
@@ -25,6 +25,7 @@ export class ItemApi {
     const body = {
       name: params.name,
       categories: params.categories,
+      priceFilter: params.priceRange,
       orderBy: params.orderBy
     };
 
@@ -64,5 +65,9 @@ export class ItemApi {
 
   public suggestions = (query: string): Observable<ItemSummary[]> => {
     return this.httpClient.get<ItemSummary[]>(`${environment.apiUrl}/${Endpoint.Items}/suggestions`, {params: {query}});
+  };
+
+  public priceInfo = () => {
+    return this.httpClient.get<PriceRange>(`${environment.apiUrl}/${Endpoint.Items}/prices`);
   };
 }

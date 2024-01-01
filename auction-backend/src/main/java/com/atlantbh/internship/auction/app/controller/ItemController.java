@@ -7,6 +7,7 @@ import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.requests.CreateItemRequest;
 import com.atlantbh.internship.auction.app.dto.item.requests.GetItemsRequest;
+import com.atlantbh.internship.auction.app.dto.item.requests.PriceFilter;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
@@ -32,7 +33,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -141,5 +144,42 @@ public class ItemController {
         itemService.saveItem(finalItem);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("prices")
+    public ResponseEntity<PriceFilter> itemPriceInfo() {
+        final ItemSpecificationProcessor itemSpecificationProcessor = new ItemSpecificationProcessor();
+
+        final Item highestInitialPriceItem = itemService
+                .findOne(itemSpecificationProcessor.hasHighestInitialPrice())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "No item with the highest initial price was found."));
+
+        final Item highestBidItem = itemService
+                .findOne(itemSpecificationProcessor.hasHighestBid())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "No item with the highest bid was found."));
+
+
+        final Item lowestInitialPriceItem = itemService
+                .findOne(itemSpecificationProcessor.hasLowestInitialPrice())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "No item with the lowest initial price was found."));
+
+        final Item lowestBidItem = itemService
+                .findOne(itemSpecificationProcessor.hasLowestBid())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "No item with the lowest bid was found."));
+
+        final BigDecimal lowestPrice = itemService.findLowestPriceItem(lowestInitialPriceItem, lowestBidItem);
+        final BigDecimal highestPrice = itemService.findHighestPriceItem(highestInitialPriceItem, highestBidItem);
+
+        final PriceFilter priceFilter = new PriceFilter(lowestPrice.intValue(), highestPrice.intValue());
+
+        return new ResponseEntity<>(priceFilter, HttpStatus.OK);
     }
 }

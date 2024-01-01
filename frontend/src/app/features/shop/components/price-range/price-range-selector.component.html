@@ -1,0 +1,58 @@
+<div class="price-range">
+  <h2 class="price-range__title">Price Range</h2>
+
+  <form [formGroup]="form" class="price-range__form">
+    <div class="price-range__range">
+      <div class="price-range__input-box">
+        <label for="starting"></label>
+        <input [formControl]="form.controls.minPrice"
+               class="price-range__input"
+               id="starting"
+               placeholder="$100"
+               type="number">
+      </div>
+
+      <span>-</span>
+
+      <div class="price-range__input-box">
+        <label for="ending"></label>
+        <input [formControl]="form.controls.maxPrice"
+               class="price-range__input"
+               id="ending"
+               placeholder="+$1,000"
+               type="number">
+      </div>
+
+    </div>
+
+    <div class="price-range__slider">
+      <div class="price-range__slider__controls">
+        <div class="price-range__slider__track" #sliderTrack></div>
+
+        <input #fromSlider
+               class="price-range__input"
+               [formControl]="form.controls.minPrice"
+               [fromSlider]="fromSlide"
+               [sliderTrack]="slideTrack"
+               [toSlider]="toSlide"
+               [min]="priceRangeQueryService.priceRangeLimit().minPrice"
+               [max]="priceRangeQueryService.priceRangeLimit().maxPrice"
+               id="fromSlider"
+               slider
+               type="range"/>
+
+        <input #toSlider
+               class="price-range__input"
+               [formControl]="form.controls.maxPrice"
+               [fromSlider]="fromSlide"
+               [sliderTrack]="slideTrack"
+               [toSlider]="toSlide"
+               [min]="priceRangeQueryService.priceRangeLimit().minPrice"
+               [max]="priceRangeQueryService.priceRangeLimit().maxPrice"
+               id="toSlider"
+               slider
+               type="range"/>
+      </div>
+    </div>
+  </form>
+</div>

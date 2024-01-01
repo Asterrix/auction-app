@@ -4,6 +4,4 @@ export interface SearchQuery {
   appendQueryParameter(searchValue: string): Promise<void>;
 
   clearSearchParameter(): Promise<void>;
-
-  resetCategoryAndSubcategoryParams(): Promise<void>;
 }
