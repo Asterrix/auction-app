@@ -1,28 +1,22 @@
-<div class="content_section">
+@defer (when items) {
+  <div class="content_section">
+    <div itemLayout [layout]="itemLayout()">
 
-  <ng-container *ngIf="loader.getLoader('items').isLoading$ | async; else content">
-    <app-loader class="loader-placeholder"/>
-  </ng-container>
-
-  <ng-template #content>
-
-    @if (pagination.totalElements === 0) {
-      <p>
-        No items were found.
-      </p>
-    }
-
-    <div class="items-grid">
-      @for (item of items;track item.id) {
-        <app-item-card (click)="navigateToItem(item.id)" [imageOrientation]="'v'" [item]="item"/>
+      @for (item of items; track item.id) {
+        <app-item-card
+          (click)="navigateToItem(item.id)"
+          [item]="item"
+          [layout]="itemLayout()"/>
+      } @empty {
+        <p>
+          No items were found.
+        </p>
       }
+
     </div>
-  </ng-template>
-
-
-  <!-- Explore More -->
-
-  @if ((!pagination.isLastPage) && (loader.getLoader('load-more').isLoading$ | async)) {
-    <app-loader class="loader-placeholder"/>
-  }
-</div>
+  </div>
+} @loading (minimum 500) {
+  <div class="loader-placeholder">
+    <app-loader/>
+  </div>
+}

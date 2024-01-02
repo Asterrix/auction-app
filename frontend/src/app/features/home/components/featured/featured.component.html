@@ -8,8 +8,8 @@
       <div class="featured__layout">
         @for (item of featuredItems; track item.id) {
           <app-item-card
-            imageOrientation="v"
-            [item]="item"/>
+            [item]="item"
+            [layout]="'grid'"/>
         }
       </div>
     </section>

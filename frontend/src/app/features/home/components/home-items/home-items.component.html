@@ -10,7 +10,10 @@
 
         <div *ngIf="!(loader.getLoader('home-item').isLoading$ | async)" class="items-grid">
           <ng-container *ngFor="let item of items.content">
-            <app-item-card [imageOrientation]="'h'" (click)="navigateToItem(item.id)" [id]="item.id" [item]="item"/>
+            <app-item-card
+              [layout]="itemLayout"
+              (click)="navigateToItem(item.id)"
+              [id]="item.id" [item]="item"/>
           </ng-container>
         </div>
 
