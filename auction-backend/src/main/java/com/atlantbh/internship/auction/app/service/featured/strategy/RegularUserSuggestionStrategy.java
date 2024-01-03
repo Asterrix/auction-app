@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class RegularUserSuggestionStrategy implements RegularSuggestionStrategy {
@@ -33,7 +35,7 @@ public class RegularUserSuggestionStrategy implements RegularSuggestionStrategy 
     }
 
     @Override
-    public List<Item> suggestions(final String searchQuery, final int itemCount) {
+    public Optional<List<Item>> suggestions(final String searchQuery, final int itemCount) {
         final Specification<Item> specification = regularUserCriteria.criteria();
 
         if (StringUtils.isBlank(searchQuery)) {
@@ -49,20 +51,27 @@ public class RegularUserSuggestionStrategy implements RegularSuggestionStrategy 
      * @param specification specification to filter items
      * @return list of items that most closely match the search query and the specification
      */
-    private List<Item> createSuggestionQueryParams(final String searchQuery, final int itemCount, final Specification<Item> specification) {
+    private Optional<List<Item>> createSuggestionQueryParams(final String searchQuery, final int itemCount, final Specification<Item> specification) {
         final List<Item> items = itemService.findAll(specification);
 
         if (items.isEmpty()) {
-            return List.of();
+            return Optional.empty();
         }
 
         final List<String> itemNames = items.stream().map(Item::getName).toList();
         final List<String> searchSuggestions = searchSuggestion.searchSuggestion(itemNames, searchQuery);
         final Specification<Item> searchSpecification = searchCriteria.criteria(itemCount, searchSuggestions);
 
-        final List<Item> result = itemService.findAll(searchSpecification);
+        final List<Item> result = itemService.findAll(searchSpecification).stream().sorted(
+                (item1, item2) -> {
+                    final String firstName = item1.getName();
+                    final String secondName = item2.getName();
 
-        return result;
+                    return StringUtils.compare(firstName, secondName);
+                }
+        ).toList();
+
+        return Optional.of(result);
     }
 
     /**
@@ -70,16 +79,16 @@ public class RegularUserSuggestionStrategy implements RegularSuggestionStrategy 
      * @param specification specification to filter items
      * @return list of items
      */
-    private List<Item> createSuggestion(final int itemCount, final Specification<Item> specification) {
+    private Optional<List<Item>> createSuggestion(final int itemCount, final Specification<Item> specification) {
         final List<Item> items = itemService.findAll(specification, Pageable.ofSize(ITEM_COUNT_TO_SHUFFLE)).getContent();
 
         if (items.isEmpty()) {
-            return List.of();
+            return Optional.empty();
         }
 
         final List<Item> shuffledItems = performShuffle(items);
 
-        return shuffledItems.subList(0, Math.min(itemCount, shuffledItems.size()));
+        return Optional.of(shuffledItems.stream().limit(itemCount).collect(Collectors.toList()));
     }
 
     /**

@@ -8,6 +8,7 @@ import com.atlantbh.internship.auction.app.service.featured.strategy.RegularUser
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public final class FeaturedItemSuggestion implements RegularSuggestionStrategy, AuthenticatedSuggestionStrategy {
@@ -21,12 +22,12 @@ public final class FeaturedItemSuggestion implements RegularSuggestionStrategy, 
     }
 
     @Override
-    public List<Item> suggestions(final Integer userId, final String searchQuery, final int itemCount) {
+    public Optional<List<Item>> suggestions(final Integer userId, final String searchQuery, final int itemCount) {
         return authenticatedUserStrategy.suggestions(userId, searchQuery, itemCount);
     }
 
     @Override
-    public List<Item> suggestions(final String searchQuery, final int itemCount) {
+    public Optional<List<Item>> suggestions(final String searchQuery, final int itemCount) {
         return regularUserStrategy.suggestions(searchQuery, itemCount);
     }
 }

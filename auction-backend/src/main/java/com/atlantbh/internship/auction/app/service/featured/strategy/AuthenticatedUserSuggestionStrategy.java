@@ -6,11 +6,14 @@ import com.atlantbh.internship.auction.app.service.featured.criteria.SearchCrite
 import com.atlantbh.internship.auction.app.service.featured.search.SearchSuggestion;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -32,7 +35,7 @@ public final class AuthenticatedUserSuggestionStrategy implements AuthenticatedS
     }
 
     @Override
-    public List<Item> suggestions(final Integer userId, final String searchQuery, final int itemCount) {
+    public Optional<List<Item>> suggestions(final Integer userId, final String searchQuery, final int itemCount) {
         if (StringUtils.isBlank(searchQuery)) {
             return createSuggestion(userId, itemCount);
         }
@@ -40,32 +43,43 @@ public final class AuthenticatedUserSuggestionStrategy implements AuthenticatedS
         return createSuggestionQueryParams(userId, searchQuery, itemCount);
     }
 
-    private List<Item> createSuggestion(final Integer userId, final int itemCount) {
+    private Optional<List<Item>> createSuggestion(final Integer userId, final int itemCount) {
         final List<Item> userRelatedItems = userRelatedItems(userId);
-        final Specification<Item> userPreference = authenticatedUserCriteria.criteria(userId, userRelatedItems);
-        final List<Item> suggestions = itemService.findAll(userPreference, Pageable.ofSize(itemCount)).getContent();
+        if (userRelatedItems.isEmpty()) {
+            return Optional.empty();
+        }
 
-        return suggestions;
+        final Specification<Item> userPreference = authenticatedUserCriteria.criteria(userId, userRelatedItems);
+        final Page<Item> page = itemService.findAll(userPreference, PageRequest.of(0, itemCount));
+
+        return Optional.of(page.getContent());
     }
 
-    private List<Item> createSuggestionQueryParams(final Integer userId, final String searchQuery, final int itemCount) {
+    private Optional<List<Item>> createSuggestionQueryParams(final Integer userId, final String searchQuery, final int itemCount) {
         final Specification<Item> searchQueryCriteria = authenticatedUserCriteria.searchQueryCriteria(userId);
         final List<Item> items = itemService.findAll(searchQueryCriteria);
+
+        if (items.isEmpty()) {
+            return Optional.empty();
+        }
+
         final List<String> itemNames = items.stream().map(Item::getName).toList();
         final List<String> searchSuggestions = searchSuggestion.searchSuggestion(itemNames, searchQuery);
 
         final Specification<Item> nameSpecification = searchCriteria.criteria(itemCount, searchSuggestions);
         final Specification<Item> searchSuggestionsSpecification = searchQueryCriteria.and(nameSpecification);
 
-        final List<Item> suggestions = itemService.findAll(searchSuggestionsSpecification, Pageable.ofSize(itemCount)).getContent();
-        final List<Item> sortedSuggestions = suggestions.stream().sorted((o1, o2) -> {
-            final int index1 = searchSuggestions.indexOf(o1.getName());
-            final int index2 = searchSuggestions.indexOf(o2.getName());
+        final Page<Item> page = itemService.findAll(searchSuggestionsSpecification, PageRequest.of(0, itemCount));
 
-            return Integer.compare(index1, index2);
-        }).toList();
+        if (!page.hasContent()) {
+            return Optional.empty();
+        }
 
-        return sortedSuggestions;
+        final List<Item> sortedSuggestions = page.getContent().stream()
+                .sorted(Comparator.comparingInt(item -> searchSuggestions.indexOf(item.getName())))
+                .toList();
+
+        return Optional.of(sortedSuggestions);
     }
 
     private List<Item> userRelatedItems(final Integer userId) {

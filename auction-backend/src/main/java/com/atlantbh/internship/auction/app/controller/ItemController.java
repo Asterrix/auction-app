@@ -14,11 +14,11 @@ import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
-import com.atlantbh.internship.auction.app.service.featured.FeaturedItemSuggestion;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.UserService;
 import com.atlantbh.internship.auction.app.service.auth.AuthenticationService;
+import com.atlantbh.internship.auction.app.service.featured.FeaturedItemSuggestion;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.specification.ItemSpecificationProcessor;
@@ -106,16 +106,15 @@ public class ItemController {
         final int count = (suggestionsCount != null && suggestionsCount <= maxCount) ? suggestionsCount : regularCount;
 
 
-        final List<Item> suggestions = authenticated
+        final Optional<List<Item>> suggestions = authenticated
                 ? featuredSuggestion.suggestions(claimsExtractor.getUserId(), query, count)
                 : featuredSuggestion.suggestions(query, count);
 
-
-        if (suggestions.size() < count) {
+        if (suggestions.isEmpty()) {
             throw new IllegalArgumentException("There are insufficient items found for the specified criteria to return a suggestion.");
         }
 
-        final List<ItemSummaryDto> mappedItems = ItemMapper.convertToSummaryDto(suggestions);
+        final List<ItemSummaryDto> mappedItems = ItemMapper.convertToSummaryDto(suggestions.get());
         return new ResponseEntity<>(mappedItems, HttpStatus.OK);
     }
 
