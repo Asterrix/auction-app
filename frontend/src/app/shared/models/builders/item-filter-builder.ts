@@ -19,17 +19,10 @@ export class ItemFilterBuilder {
   }
 
   orderBy(orderBy: string | undefined): this {
-    if (orderBy) {
-      const ItemOrderByValues = Object.values(ItemOrderBy);
+    const isOrderByValid: boolean = Object.values(ItemOrderBy).includes(orderBy as ItemOrderBy);
+    const findOrderBy = Object.values(ItemOrderBy).find((value) => value === orderBy);
 
-      for (const enumValue of ItemOrderByValues) {
-        if (enumValue === orderBy) {
-          this.itemParams.orderBy = orderBy;
-        }
-      }
-    } else {
-      this.itemParams.orderBy = undefined;
-    }
+    this.itemParams.orderBy = isOrderByValid ? findOrderBy : undefined;
 
     return this;
   }
