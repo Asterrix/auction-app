@@ -33,7 +33,7 @@ import {PriceRangeForm} from "./type/price-range.type";
     PriceRangeSliderDirective,
   ],
   templateUrl: "./price-range-selector.component.html",
-  styleUrl: "./price-range.component.scss"
+  styleUrl: "./price-range-selector.component.scss"
 })
 export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterContentInit, PriceRangeSelector {
   // Directives
