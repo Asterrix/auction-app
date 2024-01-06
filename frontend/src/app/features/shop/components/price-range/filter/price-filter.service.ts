@@ -1,33 +1,38 @@
 import {computed, Injectable, Signal, signal, WritableSignal} from "@angular/core";
 import {Router} from "@angular/router";
 import {updateQueryParams} from "src/app/shared/utils/query-param.helper";
+import {Filter} from "../../../../../shared/interfaces/filters/filter.interface";
 import {PriceRange} from "../../../../../shared/services/api/item/item.type";
-import {PriceRangeForm} from "../type/price-range.type";
-import {PriceFilterMinMaxSetter, PriceRangeFilter} from "./price-range.filter.interface";
+import {PriceRangeFilter} from "./price-filter.interface";
+import {PriceFilter} from "./price-filter.type";
 
 
 @Injectable({
   providedIn: "root"
 })
-export class PriceRangeFilterService implements PriceRangeFilter, PriceFilterMinMaxSetter {
+export class PriceRangeFilterService implements PriceRangeFilter, Filter {
+  // Default values
+  private readonly defaultPriceFilter: PriceFilter = {minPrice: null, maxPrice: null};
+  private readonly defaultPriceRangeLimit: PriceRange = {minPrice: 0, maxPrice: 0};
+
   // Filter
-  private priceRangeSignal: WritableSignal<PriceRangeForm> = signal<PriceRangeForm>({minPrice: null, maxPrice: null});
-  public readonly priceRange: Signal<PriceRangeForm> = computed(() => this.priceRangeSignal());
+  private priceFilterSignal: WritableSignal<PriceFilter> = signal<PriceFilter>(this.defaultPriceFilter);
+  public readonly priceFilter: Signal<PriceFilter> = computed(() => this.priceFilterSignal());
 
   // Limiter
-  private priceRangeLimitSignal: WritableSignal<PriceRange> = signal<PriceRange>({minPrice: 0, maxPrice: 0});
-  public readonly priceRangeLimit: Signal<PriceRange> = computed(() => this.priceRangeLimitSignal());
+  private priceFilterLimitSignal: WritableSignal<PriceRange> = signal<PriceRange>(this.defaultPriceRangeLimit);
+  public readonly priceFilterLimit: Signal<PriceRange> = computed(() => this.priceFilterLimitSignal());
 
   constructor(private readonly router: Router) {
   }
 
   public setPriceRangeLimit = (priceRange: PriceRange): void => {
-    this.priceRangeLimitSignal.set(priceRange);
+    this.priceFilterLimitSignal.set(priceRange);
   };
 
   public setMinimalPrice = async (min: number | null): Promise<void> => {
-    const currentPriceRange: PriceRangeForm = this.priceRangeSignal();
-    const priceRangeLimit: PriceRange = this.priceRangeLimitSignal();
+    const currentPriceRange: PriceFilter = this.priceFilterSignal();
+    const priceRangeLimit: PriceRange = this.priceFilterLimitSignal();
 
     if (!currentPriceRange || !priceRangeLimit) {
       return;
@@ -56,8 +61,8 @@ export class PriceRangeFilterService implements PriceRangeFilter, PriceFilterMin
 
 
   public setMaxPrice = async (max: number | null): Promise<void> => {
-    const currentPriceRange: PriceRangeForm = this.priceRangeSignal();
-    const priceRangeLimit: PriceRange = this.priceRangeLimitSignal();
+    const currentPriceRange: PriceFilter = this.priceFilterSignal();
+    const priceRangeLimit: PriceRange = this.priceFilterLimitSignal();
 
     if (!currentPriceRange || !priceRangeLimit) {
       return;
@@ -74,6 +79,7 @@ export class PriceRangeFilterService implements PriceRangeFilter, PriceFilterMin
       if (newMinPrice && newMaxPrice < newMinPrice) {
         newMinPrice = newMaxPrice;
       }
+
       if (newMinPrice === null) {
         newMinPrice = priceRangeLimit.minPrice;
       }
@@ -83,28 +89,41 @@ export class PriceRangeFilterService implements PriceRangeFilter, PriceFilterMin
     await this.updateQueryParams();
   };
 
-
-  public async resetFilter(): Promise<void> {
-    this.priceRangeSignal.set({minPrice: null, maxPrice: null});
-    this.priceRangeLimitSignal.set({minPrice: 0, maxPrice: 0});
+  public isFilterApplied(): boolean {
+    return this.priceFilterSignal().minPrice !== null && this.priceFilterSignal().maxPrice !== null;
   }
 
+  public resetFilter = async (): Promise<void> => {
+    this.priceFilterSignal.set(this.defaultPriceFilter);
+
+    await this.router.navigate([], {
+      queryParams: {
+        minPrice: null,
+        maxPrice: null
+      }, queryParamsHandling: "merge"
+    });
+  };
+
   private async setNewPriceRange(minPrice: number | null, maxPrice: number | null): Promise<void> {
-    this.priceRangeSignal.set({minPrice, maxPrice});
+    this.priceFilterSignal.set({minPrice, maxPrice});
     await this.updateQueryParams();
   }
 
   private updateQueryParams = async (): Promise<void> => {
-    const currentPriceRange: PriceRangeForm = this.priceRangeSignal();
+    const currentPriceRange: PriceFilter = this.priceFilterSignal();
+
+    if (!currentPriceRange.maxPrice || !currentPriceRange.minPrice) {
+      return;
+    }
 
     await updateQueryParams(this.router, [
       {
         key: "minPrice",
-        value: currentPriceRange.minPrice!
+        value: currentPriceRange.minPrice
       },
       {
         key: "maxPrice",
-        value: currentPriceRange.maxPrice!
+        value: currentPriceRange.maxPrice
       }
     ]);
   };

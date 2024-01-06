@@ -1,15 +1,15 @@
 import {inject, Injectable} from "@angular/core";
 import {FormBuilder} from "@angular/forms";
-import {PriceRangeForm} from "../../type/price-range.type";
-import {PriceRangeFormGroup} from "./price-range-form-group.type";
-import {PriceRangeFormManager} from "./price-range-form-manager.interface";
+import {PriceFilter} from "../filter/price-filter.type";
+import {PriceRangeFormGroup} from "./price-filter-form-group.type";
+import {PriceFilterForm} from "./price-filter-form.interface";
 
 @Injectable({
   providedIn: "root"
 })
-export class PriceRangeSettingsManager implements PriceRangeFormManager {
+export class PriceFilterFormService implements PriceFilterForm {
   private readonly formBuilder = inject(FormBuilder);
-  private priceRangeForm = this.formBuilder.nonNullable.group<PriceRangeForm>({
+  private priceRangeForm = this.formBuilder.group<PriceFilter>({
     minPrice: null,
     maxPrice: null
   });
@@ -18,7 +18,7 @@ export class PriceRangeSettingsManager implements PriceRangeFormManager {
     return this.priceRangeForm;
   }
 
-  public updateFormValues = async (priceRange: PriceRangeForm): Promise<void> => {
+  public updateFormValues = async (priceRange: PriceFilter): Promise<void> => {
     this.priceRangeForm.patchValue({
       minPrice: priceRange.minPrice,
       maxPrice: priceRange.maxPrice

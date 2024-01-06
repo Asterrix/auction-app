@@ -1,20 +1,28 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRoute, Params} from "@angular/router";
-import {PriceRange} from "../../../../../../shared/services/api/item/item.type";
-import {Option} from "../../../../../../shared/types/Option.type";
-import {paramExtractor} from "../../../../../../shared/utils/param-extractor/param-extractor";
-import {PriceRangeFilterService} from "../../filter/price-range-query.service";
-import {PriceRangeForm} from "../../type/price-range.type";
+import {PriceRange} from "../../../../../shared/services/api/item/item.type";
+import {Option} from "../../../../../shared/types/Option.type";
+import {paramExtractor} from "../../../../../shared/utils/param-extractor/param-extractor";
+import {PriceRangeFilterService} from "../filter/price-filter.service";
+import {PriceFilter} from "../filter/price-filter.type";
 import {PriceRangeValueHandler} from "./price-range-value-handler.interface";
 
 @Injectable({
   providedIn: "root"
 })
-export class PriceRangeValueManager implements PriceRangeValueHandler {
+export class PriceRangeValueService implements PriceRangeValueHandler {
   constructor(private readonly priceRangeFilterService: PriceRangeFilterService) {
   }
 
-  public handlePriceChange = async (priceRangeForm: PriceRangeForm, priceFilterValues: PriceRangeForm): Promise<boolean> => {
+  /*
+  * Handles the use case when the user makes changes to the price range filter.
+  * If the price range filter values are different from the values that are currently applied to the price range filter,
+  * the price range filter is updated with the new values.
+  * @param priceRangeForm - the form that contains the price range filter values
+  * @param priceFilterValues - the values that are currently applied to the price range filter
+  * @returns true if the price range filter values are different from the values that are currently applied to the price range filter, false otherwise
+  * */
+  public handlePriceChange = async (priceRangeForm: PriceFilter, priceFilterValues: PriceFilter): Promise<boolean> => {
     const minPrice: number | null = priceRangeForm.minPrice;
     const maxPrice: number | null = priceRangeForm.maxPrice;
 
@@ -35,6 +43,12 @@ export class PriceRangeValueManager implements PriceRangeValueHandler {
     return priceChanged;
   };
 
+  /*
+  * Handles the use case when the user navigates or refreshes the page with the price range filter applied.
+  * If the price range filter is applied, the price range filter is initialized with the values from the query params.
+  * @param activatedRoute - the route that is currently active
+  * @returns true if the price range filter is applied, false otherwise
+  * */
   public async initializePriceRange(activatedRoute: ActivatedRoute): Promise<boolean> {
     const queryParams: Params = activatedRoute.snapshot.queryParams;
     const minPrice: Option<string[]> = paramExtractor(queryParams, "minPrice");

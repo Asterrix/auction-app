@@ -40,12 +40,12 @@ export class SidebarComponent implements OnInit, OnDestroy, CategoryFiltration {
     if (categoryParam.present && subcategoryParam.present) {
       await this.includeCategories(categoryParam.value, subcategoryParam.value);
     } else {
-      await this.resetQueryParams();
+      await this.resetFilter();
     }
   };
 
   public async ngOnDestroy(): Promise<void> {
-    await this.categoryFilterService.resetCategoryFilter();
+    await this.categoryFilterService.resetFilter();
   }
 
   public excludeCategory = async (category: string): Promise<void> => {
@@ -80,13 +80,9 @@ export class SidebarComponent implements OnInit, OnDestroy, CategoryFiltration {
     return this.categoryFilterService.isSubcategoryIncluded(category, subcategory);
   };
 
-  public resetCategoryFilter(): Promise<void> {
-    return this.categoryFilterService.resetCategoryFilter();
+  public resetFilter(): Promise<void> {
+    return this.categoryFilterService.resetFilter();
   }
-
-  public resetQueryParams = async (): Promise<void> => {
-    await this.categoryFilterService.resetQueryParams();
-  };
 
   protected toggleCategory = async (categoryName: string): Promise<void> => {
     if (this.isCategoryIncluded(categoryName)) {

@@ -1,23 +1,21 @@
 import {CommonModule} from "@angular/common";
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from "@angular/core";
+import {Component, OnDestroy, OnInit, Signal, ViewEncapsulation} from "@angular/core";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSliderModule} from "@angular/material/slider";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {debounceTime, firstValueFrom, Observable, Subject, take, takeUntil} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
 import {PriceRange} from "../../../../shared/services/api/item/item.type";
 import {NewApiService} from "../../../../shared/services/api/new-api.service";
-import {clearQueryParams} from "../../../../shared/utils/query-param.helper";
+import {ItemFilterService} from "../../../../shared/services/item/item-filter.service";
 import {
   FormFieldWrapperComponent
 } from "../../../profile/add-item/shared/form-field-wrapper/form-field-wrapper.component";
-import {PriceRangeFilterService} from "./filter/price-range-query.service";
-import {PriceRangeFormGroup} from "./functionality/form/price-range-form-group.type";
-import {PriceRangeSettingsManager} from "./functionality/form/price-range-settings-manager";
-import {PriceRangeValueManager} from "./functionality/price/price-range-value-manager";
-import {PriceRangeSelector} from "./price-range-selector.interface";
-import {PriceRangeForm} from "./type/price-range.type";
+import {PriceFilter} from "./filter/price-filter.type";
+import {PriceRangeFormGroup} from "./form/price-filter-form-group.type";
+import {PriceFilterFormService} from "./form/price-filter-form.service";
+import {PriceRangeValueService} from "./price/price-range-value.service";
 
 
 @Component({
@@ -35,25 +33,25 @@ import {PriceRangeForm} from "./type/price-range.type";
   styleUrl: "./price-range-selector.component.scss",
   encapsulation: ViewEncapsulation.None
 })
-export class PriceRangeSelectorComponent implements OnInit, OnDestroy, PriceRangeSelector {
+export class PriceRangeSelectorComponent implements OnInit, OnDestroy {
   // Form
   public readonly form: PriceRangeFormGroup;
 
-  // Limit
-  protected priceRangeLimit = this.priceRangeQueryService.priceRangeLimit;
+  // Limiter
+  protected priceRangeLimit: Signal<PriceFilter>;
 
   // Memory management
   private destroy$ = new Subject<void>();
 
   constructor(
-    private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly apiService: NewApiService,
-    protected readonly priceRangeQueryService: PriceRangeFilterService,
-    private readonly priceRangeSettingsManager: PriceRangeSettingsManager,
-    private readonly priceRangeValueManager: PriceRangeValueManager
+    protected readonly itemFilterService: ItemFilterService,
+    private readonly priceRangeForm: PriceFilterFormService,
+    private readonly priceRangeValueService: PriceRangeValueService
   ) {
-    this.form = this.priceRangeSettingsManager.form;
+    this.form = this.priceRangeForm.form;
+    this.priceRangeLimit = this.itemFilterService.priceRangeLimit;
   }
 
   public async ngOnInit(): Promise<void> {
@@ -63,46 +61,47 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, PriceRang
   }
 
   public async ngOnDestroy(): Promise<void> {
+    // Unsubscribe from all subscriptions
     this.destroy$.next();
     this.destroy$.complete();
+
+    // Reset form values
     await this.resetFormValues();
-    await this.resetFilter();
-    await clearQueryParams(this.router);
   };
 
+  /*
+  * Fetches the price range limit from the API and sets it in the price range query service.
+  * This is necessary because the price range limit is not known at compile time.
+  * */
   public setPriceRangeLimit = async (): Promise<void> => {
     const source: Observable<PriceRange> = this.apiService.itemApi.priceInfo().pipe(take(1));
     const priceInfo: PriceRange = await firstValueFrom(source);
-    this.priceRangeQueryService.setPriceRangeLimit(priceInfo);
-  };
-
-  public resetFilter = async (): Promise<void> => {
-    await this.priceRangeQueryService.resetFilter();
+    this.itemFilterService.setPriceRangeLimit(priceInfo);
   };
 
   public resetFormValues = async (): Promise<void> => {
-    await this.priceRangeSettingsManager.resetFormValues();
+    await this.priceRangeForm.resetFormValues();
   };
 
-  public updateFormValues = async (priceRange: PriceRangeForm): Promise<void> => {
-    await this.priceRangeSettingsManager.updateFormValues(priceRange);
+  public updateFormValues = async (priceRange: PriceFilter): Promise<void> => {
+    await this.priceRangeForm.updateFormValues(priceRange);
   };
 
   public handlePriceChange = async (): Promise<boolean> => {
-    const priceRangeForm: PriceRangeForm = {
+    const priceRangeForm: PriceFilter = {
       minPrice: this.form.value.minPrice!,
       maxPrice: this.form.value.maxPrice!
     };
 
-    const priceFilterValues: PriceRangeForm = this.priceRangeQueryService.priceRange();
-    const priceChanged: boolean = await this.priceRangeValueManager.handlePriceChange(priceRangeForm, priceFilterValues);
+    const priceFilterValues: PriceFilter = this.itemFilterService.priceFilter();
+    const priceChanged: boolean = await this.priceRangeValueService.handlePriceChange(priceRangeForm, priceFilterValues);
 
     if (priceChanged) {
-      const newPriceRange: PriceRangeForm = this.priceRangeQueryService.priceRange();
+      const newPriceRange: PriceFilter = this.itemFilterService.priceFilter();
       await this.updateFormValues(newPriceRange);
 
       if (newPriceRange.minPrice === null && newPriceRange.maxPrice === null) {
-        await clearQueryParams(this.router);
+        await this.itemFilterService.resetPriceFilter();
       }
     }
 
@@ -110,10 +109,10 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, PriceRang
   };
 
   public initializePriceRange = async (): Promise<boolean> => {
-    const priceRangeInitialized: boolean = await this.priceRangeValueManager.initializePriceRange(this.activatedRoute);
+    const priceRangeInitialized: boolean = await this.priceRangeValueService.initializePriceRange(this.activatedRoute);
 
     if (priceRangeInitialized) {
-      await this.updateFormValues(this.priceRangeQueryService.priceRange());
+      await this.updateFormValues(this.itemFilterService.priceFilter());
     }
 
     return priceRangeInitialized;
