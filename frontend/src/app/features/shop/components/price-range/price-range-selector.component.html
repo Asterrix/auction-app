@@ -25,34 +25,13 @@
 
     </div>
 
-    <div class="price-range__slider">
-      <div class="price-range__slider__controls">
-        <div class="price-range__slider__track" #sliderTrack></div>
-
-        <input #fromSlider
-               class="price-range__input"
-               [formControl]="form.controls.minPrice"
-               [fromSlider]="fromSlide"
-               [sliderTrack]="slideTrack"
-               [toSlider]="toSlide"
-               [min]="priceRangeQueryService.priceRangeLimit().minPrice"
-               [max]="priceRangeQueryService.priceRangeLimit().maxPrice"
-               id="fromSlider"
-               slider
-               type="range"/>
-
-        <input #toSlider
-               class="price-range__input"
-               [formControl]="form.controls.maxPrice"
-               [fromSlider]="fromSlide"
-               [sliderTrack]="slideTrack"
-               [toSlider]="toSlide"
-               [min]="priceRangeQueryService.priceRangeLimit().minPrice"
-               [max]="priceRangeQueryService.priceRangeLimit().maxPrice"
-               id="toSlider"
-               slider
-               type="range"/>
-      </div>
-    </div>
+    @defer (on idle) {
+      <mat-slider
+        [min]="priceRangeLimit().minPrice"
+        [max]="priceRangeLimit().maxPrice">
+        <input matSliderStartThumb [formControl]="form.controls.minPrice">
+        <input matSliderEndThumb [formControl]="form.controls.maxPrice">
+      </mat-slider>
+    }
   </form>
 </div>

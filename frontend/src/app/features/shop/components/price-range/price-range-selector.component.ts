@@ -1,6 +1,7 @@
 import {CommonModule} from "@angular/common";
-import {AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from "@angular/core";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSliderModule} from "@angular/material/slider";
 import {ActivatedRoute, Router} from "@angular/router";
 import {debounceTime, firstValueFrom, Observable, Subject, take, takeUntil} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
@@ -11,12 +12,10 @@ import {clearQueryParams} from "../../../../shared/utils/query-param.helper";
 import {
   FormFieldWrapperComponent
 } from "../../../profile/add-item/shared/form-field-wrapper/form-field-wrapper.component";
-import {PriceRangeSliderDirective} from "./directive/price-range-slider.directive";
 import {PriceRangeFilterService} from "./filter/price-range-query.service";
 import {PriceRangeFormGroup} from "./functionality/form/price-range-form-group.type";
 import {PriceRangeSettingsManager} from "./functionality/form/price-range-settings-manager";
 import {PriceRangeValueManager} from "./functionality/price/price-range-value-manager";
-import {SliderPositionManager} from "./functionality/slider/slider-position-manager";
 import {PriceRangeSelector} from "./price-range-selector.interface";
 import {PriceRangeForm} from "./type/price-range.type";
 
@@ -30,20 +29,18 @@ import {PriceRangeForm} from "./type/price-range.type";
     InputFieldComponent,
     ReactiveFormsModule,
     FormsModule,
-    PriceRangeSliderDirective,
+    MatSliderModule,
   ],
   templateUrl: "./price-range-selector.component.html",
-  styleUrl: "./price-range-selector.component.scss"
+  styleUrl: "./price-range-selector.component.scss",
+  encapsulation: ViewEncapsulation.None
 })
-export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterContentInit, PriceRangeSelector {
-  // Directives
-  @ViewChild("fromSlider", {static: true}) fromSlide!: ElementRef;
-  @ViewChild("toSlider", {static: true}) toSlide!: ElementRef;
-  @ViewChild("sliderTrack", {static: true}) slideTrack!: ElementRef;
-  @ViewChild(PriceRangeSliderDirective, {static: true}) sliderDirective!: PriceRangeSliderDirective;
-
+export class PriceRangeSelectorComponent implements OnInit, OnDestroy, PriceRangeSelector {
   // Form
   public readonly form: PriceRangeFormGroup;
+
+  // Limit
+  protected priceRangeLimit = this.priceRangeQueryService.priceRangeLimit;
 
   // Memory management
   private destroy$ = new Subject<void>();
@@ -53,7 +50,6 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterCont
     private readonly activatedRoute: ActivatedRoute,
     private readonly apiService: NewApiService,
     protected readonly priceRangeQueryService: PriceRangeFilterService,
-    private readonly sliderPositionManager: SliderPositionManager,
     private readonly priceRangeSettingsManager: PriceRangeSettingsManager,
     private readonly priceRangeValueManager: PriceRangeValueManager
   ) {
@@ -62,12 +58,8 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterCont
 
   public async ngOnInit(): Promise<void> {
     await this.setPriceRangeLimit();
-    this.subscribeToFormValueChanges();
-  }
-
-  public async ngAfterContentInit(): Promise<void> {
-    await this.setPriceRangeLimit();
     await this.initializePriceRange();
+    this.subscribeToFormValueChanges();
   }
 
   public async ngOnDestroy(): Promise<void> {
@@ -86,15 +78,6 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterCont
 
   public resetFilter = async (): Promise<void> => {
     await this.priceRangeQueryService.resetFilter();
-  };
-
-  public initializeSliderPositions = async (): Promise<void> => {
-    await this.sliderPositionManager.initializeSliderPositions(
-      this.fromSlide,
-      this.toSlide,
-      this.sliderDirective,
-      this.priceRangeQueryService.priceRangeLimit()
-    );
   };
 
   public resetFormValues = async (): Promise<void> => {
@@ -117,10 +100,8 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterCont
     if (priceChanged) {
       const newPriceRange: PriceRangeForm = this.priceRangeQueryService.priceRange();
       await this.updateFormValues(newPriceRange);
-      this.sliderDirective.fillSliderTrack();
 
       if (newPriceRange.minPrice === null && newPriceRange.maxPrice === null) {
-        await this.initializeSliderPositions();
         await clearQueryParams(this.router);
       }
     }
@@ -133,20 +114,9 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterCont
 
     if (priceRangeInitialized) {
       await this.updateFormValues(this.priceRangeQueryService.priceRange());
-
-      await this.setSliderValue(this.fromSlide, this.priceRangeQueryService.priceRange().minPrice!);
-      await this.setSliderValue(this.toSlide, this.priceRangeQueryService.priceRange().maxPrice!);
-      this.sliderDirective.fillSliderTrack();
-
-    } else {
-      await this.initializeSliderPositions();
     }
 
     return priceRangeInitialized;
-  };
-
-  public setSliderValue = async (slider: ElementRef, value: number): Promise<void> => {
-    await this.sliderPositionManager.setSliderValue(slider, value);
   };
 
   private subscribeToFormValueChanges(): void {
