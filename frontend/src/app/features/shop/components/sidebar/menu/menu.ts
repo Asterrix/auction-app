@@ -2,4 +2,10 @@ type MenuSelection = (c: number) => void;
 
 type OpenMenu = number;
 
-export type {MenuSelection, OpenMenu};
+type Menu = "opened" | "closed";
+
+export type {
+  MenuSelection,
+  OpenMenu,
+  Menu
+};

@@ -3,7 +3,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {PriceRange} from "../../../../../../shared/services/api/item/item.type";
 import {Option} from "../../../../../../shared/types/Option.type";
 import {paramExtractor} from "../../../../../../shared/utils/param-extractor/param-extractor";
-import {PriceRangeQueryService} from "../../filter/price-range-query.service";
+import {PriceRangeFilterService} from "../../filter/price-range-query.service";
 import {PriceRangeForm} from "../../type/price-range.type";
 import {PriceRangeValueHandler} from "./price-range-value-handler.interface";
 
@@ -11,7 +11,7 @@ import {PriceRangeValueHandler} from "./price-range-value-handler.interface";
   providedIn: "root"
 })
 export class PriceRangeValueManager implements PriceRangeValueHandler {
-  constructor(private readonly priceRangeFilterService: PriceRangeQueryService) {
+  constructor(private readonly priceRangeFilterService: PriceRangeFilterService) {
   }
 
   public handlePriceChange = async (priceRangeForm: PriceRangeForm, priceFilterValues: PriceRangeForm): Promise<boolean> => {

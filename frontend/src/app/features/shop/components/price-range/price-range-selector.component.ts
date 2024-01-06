@@ -12,7 +12,7 @@ import {
   FormFieldWrapperComponent
 } from "../../../profile/add-item/shared/form-field-wrapper/form-field-wrapper.component";
 import {PriceRangeSliderDirective} from "./directive/price-range-slider.directive";
-import {PriceRangeQueryService} from "./filter/price-range-query.service";
+import {PriceRangeFilterService} from "./filter/price-range-query.service";
 import {PriceRangeFormGroup} from "./functionality/form/price-range-form-group.type";
 import {PriceRangeSettingsManager} from "./functionality/form/price-range-settings-manager";
 import {PriceRangeValueManager} from "./functionality/price/price-range-value-manager";
@@ -52,7 +52,7 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy, AfterCont
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly apiService: NewApiService,
-    protected readonly priceRangeQueryService: PriceRangeQueryService,
+    protected readonly priceRangeQueryService: PriceRangeFilterService,
     private readonly sliderPositionManager: SliderPositionManager,
     private readonly priceRangeSettingsManager: PriceRangeSettingsManager,
     private readonly priceRangeValueManager: PriceRangeValueManager

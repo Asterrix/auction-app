@@ -1,5 +1,5 @@
 import {CommonModule} from "@angular/common";
-import {Component, inject, signal} from "@angular/core";
+import {Component, computed, inject, signal} from "@angular/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ActivatedRoute, Params} from "@angular/router";
 import {debounceTime, Observable, take} from "rxjs";
@@ -10,11 +10,10 @@ import {ItemFilterBuilder} from "../../shared/models/builders/item-filter-builde
 import {Page} from "../../shared/models/interfaces/page";
 import {PaginationService} from "../../shared/models/pagination.service";
 import {ItemSummary} from "../../shared/services/api/item/item.interface";
-import {PriceRange} from "../../shared/services/api/item/item.type";
 import {ItemService} from "../../shared/services/item/item.service";
-import {SearchService} from "../../shared/services/search/search.service";
 import {ContentSectionComponent} from "./components/content-section/content-section.component";
-import {PriceRangeQueryService} from "./components/price-range/filter/price-range-query.service";
+import {FilterTabComponent} from "./components/filter-tab/filter-tab.component";
+import {PriceRangeFilterService} from "./components/price-range/filter/price-range-query.service";
 import {PriceRangeSelectorComponent} from "./components/price-range/price-range-selector.component";
 import {PriceRangeForm} from "./components/price-range/type/price-range.type";
 import {CategoryFilterService} from "./components/sidebar/filter/category-filter.service";
@@ -32,7 +31,8 @@ import {ShopPageParameter} from "./shop-routes";
     LoaderComponent,
     SortingTabComponent,
     InfiniteScrollDirective,
-    PriceRangeSelectorComponent
+    PriceRangeSelectorComponent,
+    FilterTabComponent
   ],
   templateUrl: "./shop-page.component.html",
   styleUrls: ["./shop-page.component.scss"],
@@ -49,7 +49,7 @@ export class ShopPage {
   private paginationService: PaginationService = inject(PaginationService);
   protected pagination = this.paginationService.pagination;
   private readonly categoryFilterService = inject(CategoryFilterService);
-  private readonly priceRangeFilterService = inject(PriceRangeQueryService);
+  private readonly priceRangeFilterService = inject(PriceRangeFilterService);
 
   constructor(private activatedRoute: ActivatedRoute,
               private itemService: ItemService) {

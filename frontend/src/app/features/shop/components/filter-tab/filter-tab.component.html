@@ -1,0 +1,57 @@
+<div class="filter-tab">
+
+  <!-- Filter Header -->
+  <div class="filter-tab__header">
+    <button class="btn--filter" (click)="toggleMenu()">Filters</button>
+    <button class="btn--clear">Clear All</button>
+  </div>
+
+  <!-- Filter Menu -->
+  @if (menu === 'opened') {
+    <div class="filter-tab__table">
+
+      <!-- Categories -->
+      @if (categoryFilter().size > 0) {
+        <div class="filter-tab__table-row">
+          <span class="filter-tab__table-row-title">Categories</span>
+
+          <!-- Category -->
+          @for (category of categoryFilter().keys(); track $index) {
+
+            <div class="filter-tab__table-row-item">
+              <span class="filter-tab__table-row-header">{{ category }}</span>
+
+              <!-- Subcategory -->
+              <div class="filter-tab__categories">
+                @for (subcategory of categoryFilter().get(category); track $index) {
+                  <div class="filter-tab__table-row-member">
+                    <p>{{ subcategory }}</p>
+                    <button class="btn--remove">
+                      <img ngSrc="assets/icons/cancel.svg" alt="Remove filter" height="16" width="16"/>
+                    </button>
+                  </div>
+                }
+              </div>
+
+            </div>
+          }
+
+        </div>
+      }
+
+      <!-- Price -->
+      @if (priceFilter().minPrice !== null && priceFilter().maxPrice !== null) {
+        <div class="filter-tab__table-row">
+          <span class="filter-tab__table-row-title">Price</span>
+          <div class="filter-tab__table-row-member">
+            <p>${{ priceFilter().minPrice }} - ${{ priceFilter().maxPrice }}</p>
+            <button class="btn--remove">
+              <img ngSrc="assets/icons/cancel.svg" alt="Remove filter" height="16" width="16"/>
+            </button>
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+</div>

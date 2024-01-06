@@ -9,7 +9,7 @@ import {PriceFilterMinMaxSetter, PriceRangeFilter} from "./price-range.filter.in
 @Injectable({
   providedIn: "root"
 })
-export class PriceRangeQueryService implements PriceRangeFilter, PriceFilterMinMaxSetter {
+export class PriceRangeFilterService implements PriceRangeFilter, PriceFilterMinMaxSetter {
   // Filter
   private priceRangeSignal: WritableSignal<PriceRangeForm> = signal<PriceRangeForm>({minPrice: null, maxPrice: null});
   public readonly priceRange: Signal<PriceRangeForm> = computed(() => this.priceRangeSignal());

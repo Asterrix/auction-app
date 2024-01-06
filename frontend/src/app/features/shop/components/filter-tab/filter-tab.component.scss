@@ -1,0 +1,87 @@
+@use "colors";
+@use "buttons";
+
+.filter-tab {
+  border: 1px solid colors.$neutral-light-grey;
+  display: flex;
+  justify-content: space-between;
+  padding: 1.2rem;
+  position: relative;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__table {
+    background-color: colors.$white;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    left: 0;
+    outline: 1px solid colors.$neutral-light-grey;
+    padding: 1.2rem;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+  }
+
+  &__table-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  &__table-row-title {
+    color: colors.$primary;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  &__table-row-header {
+    font-size: 1.7rem;
+    font-weight: 600;
+  }
+
+  &__table-row-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  &__table-row-member {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+}
+
+.btn {
+  &--filter {
+    @include buttons.primary-btn;
+  }
+
+  &--clear {
+    @include buttons.tertiary-btn;
+  }
+
+  &--remove {
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    justify-content: center;
+    transition: all 100ms ease-out;
+
+    &:hover {
+      cursor: pointer;
+      filter: invert(17%) sepia(63%) saturate(3836%) hue-rotate(350deg) brightness(93%) contrast(129%);
+    }
+  }
+}
