@@ -29,6 +29,6 @@ public final class CategorySuggestion {
                 .max(Comparator.comparingInt(Map.Entry::getValue))
                 .map(Map.Entry::getKey);
 
-        return mostPopularCategory.orElseThrow(() -> new IllegalArgumentException("Most popular category could not be found."));
+        return mostPopularCategory.orElseThrow(() -> new IllegalStateException("Most popular category could not be found."));
     }
 }

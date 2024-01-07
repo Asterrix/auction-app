@@ -110,8 +110,8 @@ public class ItemController {
                 ? featuredSuggestion.suggestions(claimsExtractor.getUserId(), query, count)
                 : featuredSuggestion.suggestions(query, count);
 
-        if (suggestions.isEmpty()) {
-            throw new IllegalArgumentException("There are insufficient items found for the specified criteria to return a suggestion.");
+        if (suggestions.isEmpty() || suggestions.get().size() < count) {
+            throw new IllegalStateException("There are insufficient items found for the specified criteria to return a suggestion.");
         }
 
         final List<ItemSummaryDto> mappedItems = ItemMapper.convertToSummaryDto(suggestions.get());

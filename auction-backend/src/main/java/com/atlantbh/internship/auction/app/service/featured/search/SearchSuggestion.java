@@ -44,27 +44,22 @@ public final class SearchSuggestion {
     }
 
     /**
-     * @param stringA Input string
-     * @param StringB Input string
-     * @return Number of differences between stringA and StringB regarding the character count and size difference
+     * @param strA Input string
+     * @param strB Input string
+     * @return Number of differences between strA and strB regarding the character count and size difference
      */
-    private int calculateDifference(final String stringA, final String StringB) {
-        final int inputLength = StringB.length();
-        final int listMemberLength = stringA.length();
+    private int calculateDifference(final String strA, final String strB) {
+        final int inputLength = strB.length();
+        final int listMemberLength = strA.length();
+
         final int lengthDifference = Math.abs(inputLength - listMemberLength);
+        final int minLength = Math.min(strA.length(), strB.length());
 
         int difference = 0;
-
-        int l = 0;
-        while (l < inputLength && l < listMemberLength) {
-            final char listMemberChar = stringA.charAt(l);
-            final char inputChar = StringB.charAt(l);
-
-            if (Character.toLowerCase(listMemberChar) != Character.toLowerCase(inputChar)) {
+        for (int i = 0; i < minLength; i++) {
+            if (strA.charAt(i) != strB.charAt(i)) {
                 difference++;
             }
-
-            l++;
         }
 
         return difference + lengthDifference;
