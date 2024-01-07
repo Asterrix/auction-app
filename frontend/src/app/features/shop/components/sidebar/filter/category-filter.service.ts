@@ -114,6 +114,10 @@ export class CategoryFilterService implements CategoryFiltration, Filter {
 
   public resetFilter = async (): Promise<void> => {
     this.categoryFilterSignal.set(new Map());
+  };
+
+  public resetFilterWithQueryParams = async (): Promise<void> => {
+    await this.resetFilter();
 
     await this.router.navigate([], {
       queryParams: {

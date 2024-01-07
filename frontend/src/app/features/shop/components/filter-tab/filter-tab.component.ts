@@ -33,7 +33,7 @@ export class FilterTabComponent {
   };
 
   protected clearFilters = async (): Promise<void> => {
-    await this.itemFilterService.resetFilters();
+    await this.itemFilterService.resetFiltersWithQueryParams();
     await this.resetPriceRangeFormValues();
   };
 
@@ -42,12 +42,12 @@ export class FilterTabComponent {
   };
 
   protected excludePriceRange = async (): Promise<void> => {
-    await this.itemFilterService.resetPriceFilter();
+    await this.itemFilterService.resetPriceFilterWithQueryParams();
     await this.resetPriceRangeFormValues();
   };
 
   protected excludeName = async (): Promise<void> => {
-    await this.itemFilterService.resetNameFilter();
+    await this.itemFilterService.resetNameFilterWithQueryParams();
   }
 
   /*

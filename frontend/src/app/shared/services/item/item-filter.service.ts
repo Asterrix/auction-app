@@ -97,18 +97,36 @@ export class ItemFilterService implements CategoryFiltration, PriceRangeFilter {
     await this.categoryFilterService.resetFilter();
   };
 
+  public resetCategoryFilterWithQueryParams = async (): Promise<void> => {
+    await this.categoryFilterService.resetFilterWithQueryParams();
+  }
+
   public resetPriceFilter = async (): Promise<void> => {
     await this.priceRangeFilterService.resetFilter();
   };
 
+  public resetPriceFilterWithQueryParams = async (): Promise<void> => {
+    await this.priceRangeFilterService.resetFilterWithQueryParams();
+  }
+
   public resetNameFilter = async (): Promise<void> => {
     await this.searchService.resetFilter();
   };
+
+  public resetNameFilterWithQueryParams = async (): Promise<void> => {
+    await this.searchService.resetFilterWithQueryParams();
+  }
 
   public resetFilters = async (): Promise<void> => {
     await this.resetCategoryFilter();
     await this.resetPriceFilter();
     await this.resetNameFilter();
   };
+
+  public resetFiltersWithQueryParams = async (): Promise<void> => {
+    await this.resetCategoryFilterWithQueryParams();
+    await this.resetPriceFilterWithQueryParams();
+    await this.resetNameFilterWithQueryParams();
+  }
 }
 

@@ -57,6 +57,10 @@ export class SearchService implements SearchCommand, SearchQuery, Filter {
 
   public resetFilter = async (): Promise<void> => {
     await this.updateSearchTerm("");
+  };
+
+  public resetFilterWithQueryParams = async (): Promise<void> => {
+    await this.resetFilter();
     await this.clearSearchParameter();
   };
 }

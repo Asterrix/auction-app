@@ -95,6 +95,10 @@ export class PriceRangeFilterService implements PriceRangeFilter, Filter {
 
   public resetFilter = async (): Promise<void> => {
     this.priceFilterSignal.set(this.defaultPriceFilter);
+  };
+
+  public resetFilterWithQueryParams = async (): Promise<void> => {
+    await this.resetFilter();
 
     await this.router.navigate([], {
       queryParams: {
