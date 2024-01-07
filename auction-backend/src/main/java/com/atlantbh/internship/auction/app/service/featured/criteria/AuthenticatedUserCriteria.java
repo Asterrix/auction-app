@@ -7,40 +7,30 @@ import com.atlantbh.internship.auction.app.service.featured.category.CategorySug
 import com.atlantbh.internship.auction.app.service.featured.price.PriceSuggestion;
 import com.atlantbh.internship.auction.app.specification.ItemSpecification;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.List;
 
+@Component
 public final class AuthenticatedUserCriteria {
-    private final ZonedDateTime userHistoryTimeLimit;
-    private final ZonedDateTime endTimeStartLimit;
-    private final ZonedDateTime endTimeEndLimit;
     private final PriceSuggestion priceSuggestion;
     private final CategorySuggestion categorySuggestion;
 
-    public AuthenticatedUserCriteria(final ZonedDateTime userRelatedItemsTimeSpan,
-                                     final ZonedDateTime endTimeStartLimit,
-                                     final ZonedDateTime endTimeEndLimit,
-                                     final PriceSuggestion priceSuggestion,
+    public AuthenticatedUserCriteria(final PriceSuggestion priceSuggestion,
                                      final CategorySuggestion categorySuggestion) {
-        this.userHistoryTimeLimit = userRelatedItemsTimeSpan;
-        this.endTimeStartLimit = endTimeStartLimit;
-        this.endTimeEndLimit = endTimeEndLimit;
         this.priceSuggestion = priceSuggestion;
         this.categorySuggestion = categorySuggestion;
     }
 
     public Specification<Item> userItems(final Integer userId) {
         return SpecificationBuilder.of(Item.class)
-                .and(ItemSpecification.endTimeIsNotOlderThan(userHistoryTimeLimit))
                 .and(ItemSpecification.ownerIs(userId))
                 .build();
     }
 
     public Specification<Item> userBidItems(final Integer userId) {
         return SpecificationBuilder.of(Item.class)
-                .and(ItemSpecification.endTimeIsNotOlderThan(userHistoryTimeLimit))
                 .and(ItemSpecification.hasBidder(userId))
                 .build();
     }
@@ -59,8 +49,6 @@ public final class AuthenticatedUserCriteria {
                 .and(ItemSpecification.ownerIsNot(userId))
                 .and(ItemSpecification.hasCategory(mostPopularCategoryParentName, mostPopularSubcategoryName))
                 .and(ItemSpecification.priceIsBetween(startingPrice, endingPrice))
-                .and(ItemSpecification.endTimeIsNotShorterThan(endTimeStartLimit))
-                .and(ItemSpecification.endTimeIsNotOlderThan(endTimeEndLimit))
                 .and(ItemSpecification.orderByNumberOfBidsDesc());
 
         return specificationBuilder.build();
@@ -70,8 +58,6 @@ public final class AuthenticatedUserCriteria {
         return SpecificationBuilder.of(Item.class)
                 .and(ItemSpecification.isActive())
                 .and(ItemSpecification.ownerIsNot(userId))
-                .and(ItemSpecification.endTimeIsNotShorterThan(endTimeStartLimit))
-                .and(ItemSpecification.endTimeIsNotOlderThan(endTimeEndLimit))
                 .and(ItemSpecification.orderByNumberOfBidsDesc())
                 .build();
     }

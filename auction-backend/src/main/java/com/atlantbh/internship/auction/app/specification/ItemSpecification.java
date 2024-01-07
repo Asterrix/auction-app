@@ -9,7 +9,6 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 
 public final class ItemSpecification {
 
@@ -66,14 +65,6 @@ public final class ItemSpecification {
 
     public static Specification<Item> isActive() {
         return (root, query, builder) -> builder.greaterThan(root.get("endTime"), builder.currentTimestamp());
-    }
-
-    public static Specification<Item> endTimeIsNotShorterThan(final ZonedDateTime time) {
-        return (root, query, builder) -> builder.greaterThan(root.get("endTime"), time);
-    }
-
-    public static Specification<Item> endTimeIsNotOlderThan(final ZonedDateTime time) {
-        return (root, query, builder) -> builder.lessThan(root.get("endTime"), time);
     }
 
     public static Specification<Item> ownerIs(final Integer ownerId) {
