@@ -1,5 +1,6 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, Signal} from "@angular/core";
+import {Observable} from "rxjs";
 import {ItemFilterService} from "../../../../shared/services/item/item-filter.service";
 import {PriceFilter} from "../price-range/filter/price-filter.type";
 import {PriceFilterFormService} from "../price-range/form/price-filter-form.service";
@@ -17,12 +18,14 @@ export class FilterTabComponent {
   protected menu: Menu = "closed";
   protected readonly categoryFilter: Signal<CategoryFilter>;
   protected readonly priceFilter: Signal<PriceFilter>;
+  protected readonly nameFilter: Observable<string>;
 
   constructor(
     private readonly itemFilterService: ItemFilterService,
     private readonly priceFilterFormService: PriceFilterFormService) {
     this.categoryFilter = this.itemFilterService.categoryFilter;
     this.priceFilter = this.itemFilterService.priceFilter;
+    this.nameFilter = this.itemFilterService.nameFilter;
   }
 
   protected toggleMenu = (): void => {
@@ -42,6 +45,10 @@ export class FilterTabComponent {
     await this.itemFilterService.resetPriceFilter();
     await this.resetPriceRangeFormValues();
   };
+
+  protected excludeName = async (): Promise<void> => {
+    await this.itemFilterService.resetNameFilter();
+  }
 
   /*
   * Because of the way the component responsible for price filtration is implemented,

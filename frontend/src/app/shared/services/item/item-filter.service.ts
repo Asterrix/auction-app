@@ -1,4 +1,5 @@
 import {Injectable, Signal} from "@angular/core";
+import {Observable} from "rxjs";
 import {PriceRangeFilter} from "../../../features/shop/components/price-range/filter/price-filter.interface";
 import {PriceRangeFilterService} from "../../../features/shop/components/price-range/filter/price-filter.service";
 import {PriceFilter} from "../../../features/shop/components/price-range/filter/price-filter.type";
@@ -7,24 +8,35 @@ import {CategoryFilter} from "../../../features/shop/components/sidebar/filter/c
 import {CategoryFiltration} from "../../../features/shop/components/sidebar/filter/category-filtration.interface";
 import {Category} from "../api/category/category.type";
 import {PriceRange} from "../api/item/item.type";
+import {SearchService} from "../search/search.service";
 import {ItemFilterBuilder} from "./item-filter.builder";
 
 @Injectable({
   providedIn: "root"
 })
 export class ItemFilterService implements CategoryFiltration, PriceRangeFilter {
+  // Builder
   public readonly builder: ItemFilterBuilder = new ItemFilterBuilder();
+
+  // Category Filter
   public readonly categoryFilter: Signal<CategoryFilter>;
+
+  // Price Filter
   public readonly priceFilter: Signal<PriceFilter>;
   public readonly priceRangeLimit: Signal<PriceFilter>;
 
+  // Name Filter
+  public readonly nameFilter: Observable<string>;
+
   constructor(
     private readonly categoryFilterService: CategoryFilterService,
-    private readonly priceRangeFilterService: PriceRangeFilterService
+    private readonly priceRangeFilterService: PriceRangeFilterService,
+    private readonly searchService: SearchService
   ) {
     this.categoryFilter = this.categoryFilterService.categoryFilter;
     this.priceFilter = this.priceRangeFilterService.priceFilter;
     this.priceRangeLimit = this.priceRangeFilterService.priceFilterLimit;
+    this.nameFilter = this.searchService.searchTerm;
   }
 
   public excludeCategory = async (category: string): Promise<void> => {
@@ -71,9 +83,14 @@ export class ItemFilterService implements CategoryFiltration, PriceRangeFilter {
     this.priceRangeFilterService.setPriceRangeLimit(priceRange);
   };
 
+  public setName = async (name: string): Promise<void> => {
+    await this.searchService.updateSearchTerm(name);
+  }
+
   public isFilterApplied = async (): Promise<boolean> => {
     return this.categoryFilterService.isFilterApplied()
-      || this.priceRangeFilterService.isFilterApplied();
+      || this.priceRangeFilterService.isFilterApplied()
+      || this.searchService.isFilterApplied();
   };
 
   public resetCategoryFilter = async (): Promise<void> => {
@@ -84,9 +101,14 @@ export class ItemFilterService implements CategoryFiltration, PriceRangeFilter {
     await this.priceRangeFilterService.resetFilter();
   };
 
+  public resetNameFilter = async (): Promise<void> => {
+    await this.searchService.resetFilter();
+  };
+
   public resetFilters = async (): Promise<void> => {
     await this.resetCategoryFilter();
     await this.resetPriceFilter();
+    await this.resetNameFilter();
   };
 }
 

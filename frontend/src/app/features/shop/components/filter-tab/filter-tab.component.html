@@ -52,6 +52,19 @@
         </div>
       }
 
+      <!-- Search Query -->
+      @if (nameFilter | async; as nameFilter) {
+        <div class="filter-tab__table-row">
+          <span class="filter-tab__table-row-title">Name</span>
+          <div class="filter-tab__table-row-member">
+            <p>{{nameFilter}}</p>
+            <button class="btn--remove" (click)="excludeName()">
+              <img ngSrc="assets/icons/cancel.svg" alt="Remove filter" height="16" width="16"/>
+            </button>
+          </div>
+        </div>
+      }
+
     </div>
   }
 </div>

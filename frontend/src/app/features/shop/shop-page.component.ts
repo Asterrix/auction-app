@@ -58,6 +58,7 @@ export class ShopPage implements OnInit, OnDestroy {
   public async ngOnInit(): Promise<void> {
     this.subscribeToQueryParamChanges();
     await this.filtersAreApplied();
+    await this.handleSearchQueryParam();
   }
 
   public async ngOnDestroy(): Promise<void> {
@@ -79,6 +80,14 @@ export class ShopPage implements OnInit, OnDestroy {
         );
     }
   }
+
+  private handleSearchQueryParam = async (): Promise<void> => {
+    const searchValue = this.activatedRoute.snapshot.queryParams[ShopPageParameter.Parameter.ItemName];
+
+    if (searchValue) {
+      await this.itemFilterService.setName(searchValue);
+    }
+  };
 
   private async filtersAreApplied(): Promise<void> {
     const filterApplied: boolean = await this.itemFilterService.isFilterApplied();

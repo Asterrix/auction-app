@@ -67,7 +67,7 @@ export class HomePage implements OnInit, OnDestroy {
         this.fetchSectionItems();
       });
 
-    this.apiService.itemApi.suggestions(this.searchService.searchTerm())
+    this.apiService.itemApi.suggestions(this.searchService.searchSuggestion())
       .pipe(take(1))
       .subscribe((items: ItemSummary[]): void => {
         this.featuredItems.set(items);
