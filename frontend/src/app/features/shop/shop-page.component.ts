@@ -155,6 +155,6 @@ export class ShopPage implements OnInit, OnDestroy {
   };
 
   private resetFilters = async (): Promise<void> => {
-    await this.itemFilterService.resetFilters();
+    await this.itemFilterService.resetFilters(false);
   };
 }

@@ -105,7 +105,7 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy {
       await this.updateFormValues(newPriceRange);
 
       if (newPriceRange.minPrice === null && newPriceRange.maxPrice === null) {
-        await this.itemFilterService.resetPriceFilter();
+        await this.itemFilterService.resetPriceFilter(true);
       }
     }
 

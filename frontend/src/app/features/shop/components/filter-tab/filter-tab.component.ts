@@ -32,8 +32,8 @@ export class FilterTabComponent {
     this.menu = this.menu === "closed" ? "opened" : "closed";
   };
 
-  protected clearFilters = async (): Promise<void> => {
-    await this.itemFilterService.resetFiltersWithQueryParams();
+  protected clearFilters = async (clearQueryParams: boolean): Promise<void> => {
+    await this.itemFilterService.resetFilters(clearQueryParams);
     await this.resetPriceRangeFormValues();
   };
 
@@ -41,13 +41,13 @@ export class FilterTabComponent {
     await this.itemFilterService.excludeSubcategory(category, subcategory);
   };
 
-  protected excludePriceRange = async (): Promise<void> => {
-    await this.itemFilterService.resetPriceFilterWithQueryParams();
+  protected excludePriceRange = async (clearQueryParams: boolean): Promise<void> => {
+    await this.itemFilterService.resetPriceFilter(clearQueryParams);
     await this.resetPriceRangeFormValues();
   };
 
-  protected excludeName = async (): Promise<void> => {
-    await this.itemFilterService.resetNameFilterWithQueryParams();
+  protected excludeName = async (clearQueryParams: boolean): Promise<void> => {
+    await this.itemFilterService.resetNameFilter(clearQueryParams);
   }
 
   /*

@@ -1,7 +1,7 @@
 import {computed, inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
 import {Router} from "@angular/router";
-import {Category, Subcategory} from "../../../../../shared/services/api/category/category.type";
 import {Filter} from "../../../../../shared/interfaces/filters/filter.interface";
+import {Category, Subcategory} from "../../../../../shared/services/api/category/category.type";
 import {CategoryFilter, CategoryInfo} from "./category-filter.type";
 import {CategoryFiltration} from "./category-filtration.interface";
 
@@ -108,23 +108,21 @@ export class CategoryFilterService implements CategoryFiltration, Filter {
     return subcategories ? subcategories.includes(subcategory) : false;
   };
 
-  public isFilterApplied(): boolean {
+  public isFilterApplied  =async (): Promise<boolean> => {
     return this.categoryFilterSignal().size > 0;
-  }
-
-  public resetFilter = async (): Promise<void> => {
-    this.categoryFilterSignal.set(new Map());
   };
 
-  public resetFilterWithQueryParams = async (): Promise<void> => {
-    await this.resetFilter();
+  public excludeFilter = async (clearQueryParams: boolean): Promise<void> => {
+    this.categoryFilterSignal.set(new Map());
 
-    await this.router.navigate([], {
-      queryParams: {
-        category: null,
-        subcategory: null
-      }, queryParamsHandling: "merge"
-    });
+    if (clearQueryParams) {
+      await this.router.navigate([], {
+        queryParams: {
+          category: null,
+          subcategory: null
+        }, queryParamsHandling: "merge"
+      });
+    }
   };
 
   private updateQueryParams = async (categoryFilter: CategoryFilter): Promise<void> => {

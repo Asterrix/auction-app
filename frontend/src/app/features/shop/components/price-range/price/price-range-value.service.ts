@@ -78,8 +78,4 @@ export class PriceRangeValueService implements PriceRangeValueHandler {
   public setPriceRangeLimit = async (priceRange: PriceRange): Promise<void> => {
     this.priceRangeFilterService.setPriceRangeLimit(priceRange);
   };
-
-  public resetFilter = async (): Promise<void> => {
-    await this.priceRangeFilterService.resetFilter();
-  };
 }

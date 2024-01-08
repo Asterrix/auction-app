@@ -20,7 +20,7 @@ import {MenuSelection, OpenMenu} from "./menu/menu";
   styleUrl: "./sidebar.component.scss",
   animations: [accordionAnimation]
 })
-export class SidebarComponent implements OnInit, OnDestroy, CategoryFiltration {
+export class SidebarComponent implements OnInit, CategoryFiltration {
   protected openMenu: OpenMenu = -1;
   protected readonly CheckboxShape = CheckboxShape;
   protected readonly categoryFilterService = inject(CategoryFilterService);
@@ -40,13 +40,9 @@ export class SidebarComponent implements OnInit, OnDestroy, CategoryFiltration {
     if (categoryParam.present && subcategoryParam.present) {
       await this.includeCategories(categoryParam.value, subcategoryParam.value);
     } else {
-      await this.resetFilter();
+      await this.clearFilter();
     }
   };
-
-  public async ngOnDestroy(): Promise<void> {
-    await this.categoryFilterService.resetFilter();
-  }
 
   public excludeCategory = async (category: string): Promise<void> => {
     await this.categoryFilterService.excludeCategory(category);
@@ -80,8 +76,8 @@ export class SidebarComponent implements OnInit, OnDestroy, CategoryFiltration {
     return this.categoryFilterService.isSubcategoryIncluded(category, subcategory);
   };
 
-  public resetFilter(): Promise<void> {
-    return this.categoryFilterService.resetFilter();
+  public clearFilter(): Promise<void> {
+    return this.categoryFilterService.excludeFilter(true);
   }
 
   protected toggleCategory = async (categoryName: string): Promise<void> => {

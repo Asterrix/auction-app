@@ -88,45 +88,28 @@ export class ItemFilterService implements CategoryFiltration, PriceRangeFilter {
   }
 
   public isFilterApplied = async (): Promise<boolean> => {
-    return this.categoryFilterService.isFilterApplied()
-      || this.priceRangeFilterService.isFilterApplied()
-      || this.searchService.isFilterApplied();
+    return await this.categoryFilterService.isFilterApplied()
+      || await this.priceRangeFilterService.isFilterApplied()
+      || await this.searchService.isFilterApplied();
   };
 
-  public resetCategoryFilter = async (): Promise<void> => {
-    await this.categoryFilterService.resetFilter();
+  public resetCategoryFilter = async (clearQueryParams: boolean): Promise<void> => {
+    await this.categoryFilterService.excludeFilter(clearQueryParams);
   };
 
-  public resetCategoryFilterWithQueryParams = async (): Promise<void> => {
-    await this.categoryFilterService.resetFilterWithQueryParams();
-  }
-
-  public resetPriceFilter = async (): Promise<void> => {
-    await this.priceRangeFilterService.resetFilter();
+  public resetPriceFilter = async (clearQueryParams: boolean): Promise<void> => {
+    await this.priceRangeFilterService.excludeFilter(clearQueryParams);
   };
 
-  public resetPriceFilterWithQueryParams = async (): Promise<void> => {
-    await this.priceRangeFilterService.resetFilterWithQueryParams();
-  }
-
-  public resetNameFilter = async (): Promise<void> => {
-    await this.searchService.resetFilter();
+  public resetNameFilter = async (clearQueryParams: boolean): Promise<void> => {
+    await this.searchService.excludeFilter(clearQueryParams);
   };
 
-  public resetNameFilterWithQueryParams = async (): Promise<void> => {
-    await this.searchService.resetFilterWithQueryParams();
-  }
-
-  public resetFilters = async (): Promise<void> => {
-    await this.resetCategoryFilter();
-    await this.resetPriceFilter();
-    await this.resetNameFilter();
+  public resetFilters = async (clearQueryParams: boolean): Promise<void> => {
+    await this.resetCategoryFilter(clearQueryParams);
+    await this.resetPriceFilter(clearQueryParams);
+    await this.resetNameFilter(clearQueryParams);
+    await this.builder.resetFilter();
   };
-
-  public resetFiltersWithQueryParams = async (): Promise<void> => {
-    await this.resetCategoryFilterWithQueryParams();
-    await this.resetPriceFilterWithQueryParams();
-    await this.resetNameFilterWithQueryParams();
-  }
 }
 

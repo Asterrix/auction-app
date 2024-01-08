@@ -1,5 +1,4 @@
 export interface Filter {
-  isFilterApplied: () => boolean;
-  resetFilter: () => Promise<void>;
-  resetFilterWithQueryParams: () => Promise<void>;
+  isFilterApplied: () => Promise<boolean>;
+  excludeFilter: (clearQueryParams: boolean) => Promise<void>;
 }

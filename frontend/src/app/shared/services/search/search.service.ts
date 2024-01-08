@@ -1,4 +1,4 @@
-import {computed, inject, Injectable, signal} from "@angular/core";
+import {computed, inject, Injectable} from "@angular/core";
 import {BehaviorSubject} from "rxjs";
 import {Filter} from "../../interfaces/filters/filter.interface";
 import {SearchCommandService} from "./search-command.service";
@@ -51,16 +51,15 @@ export class SearchService implements SearchCommand, SearchQuery, Filter {
     return this.searchQueryService.navigateToShopPage(searchValue);
   }
 
-  public isFilterApplied = (): boolean => {
+  public isFilterApplied = async (): Promise<boolean> => {
     return this.searchTermSubject.getValue() !== "";
   };
 
-  public resetFilter = async (): Promise<void> => {
+  public excludeFilter = async (resetQueryParams: boolean): Promise<void> => {
     await this.updateSearchTerm("");
-  };
 
-  public resetFilterWithQueryParams = async (): Promise<void> => {
-    await this.resetFilter();
-    await this.clearSearchParameter();
+    if (resetQueryParams) {
+      await this.clearSearchParameter();
+    }
   };
 }

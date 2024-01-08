@@ -89,23 +89,22 @@ export class PriceRangeFilterService implements PriceRangeFilter, Filter {
     await this.updateQueryParams();
   };
 
-  public isFilterApplied(): boolean {
+  public isFilterApplied = async (): Promise<boolean> => {
     return this.priceFilterSignal().minPrice !== null && this.priceFilterSignal().maxPrice !== null;
-  }
-
-  public resetFilter = async (): Promise<void> => {
-    this.priceFilterSignal.set(this.defaultPriceFilter);
   };
 
-  public resetFilterWithQueryParams = async (): Promise<void> => {
-    await this.resetFilter();
+  public excludeFilter = async (clearQueryParams: boolean): Promise<void> => {
+    this.priceFilterSignal.set(this.defaultPriceFilter);
 
-    await this.router.navigate([], {
-      queryParams: {
-        minPrice: null,
-        maxPrice: null
-      }, queryParamsHandling: "merge"
-    });
+    if (clearQueryParams) {
+      await this.router.navigate([], {
+        queryParams: {
+          minPrice: null,
+          maxPrice: null
+        },
+        queryParamsHandling: "merge"
+      });
+    }
   };
 
   private async setNewPriceRange(minPrice: number | null, maxPrice: number | null): Promise<void> {
