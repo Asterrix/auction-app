@@ -43,6 +43,9 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy {
   // Memory management
   private destroy$ = new Subject<void>();
 
+  // To avoid slider not being properly presented visually, the slider is hidden until the price range limit is set.
+  protected priceRangeInitialized: boolean = false;
+
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly apiService: NewApiService,
@@ -57,6 +60,7 @@ export class PriceRangeSelectorComponent implements OnInit, OnDestroy {
   public async ngOnInit(): Promise<void> {
     await this.setPriceRangeLimit();
     await this.initializePriceRange();
+    this.priceRangeInitialized = true;
     this.subscribeToFormValueChanges();
   }
 

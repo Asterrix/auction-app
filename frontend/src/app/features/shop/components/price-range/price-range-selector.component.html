@@ -25,7 +25,7 @@
 
     </div>
 
-    @defer (on idle) {
+    @defer (when priceRangeInitialized) {
       <mat-slider
         [min]="priceRangeLimit().minPrice"
         [max]="priceRangeLimit().maxPrice">
