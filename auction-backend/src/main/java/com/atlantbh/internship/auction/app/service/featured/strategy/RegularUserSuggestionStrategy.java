@@ -59,7 +59,7 @@ public class RegularUserSuggestionStrategy implements RegularSuggestionStrategy 
         }
 
         final List<String> itemNames = items.stream().map(Item::getName).toList();
-        final List<String> searchSuggestions = searchSuggestion.searchSuggestion(itemNames, searchQuery);
+        final List<String> searchSuggestions = searchSuggestion.createSearchSuggestion(itemNames, searchQuery);
         final Specification<Item> searchSpecification = searchCriteria.criteria(itemCount, searchSuggestions);
 
         final List<Item> result = itemService.findAll(searchSpecification).stream().sorted(

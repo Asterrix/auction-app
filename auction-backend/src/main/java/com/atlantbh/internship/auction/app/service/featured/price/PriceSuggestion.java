@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+
 public final class PriceSuggestion {
     private final BigDecimal startingPriceMultiplicand;
     private final BigDecimal endingPriceMultiplicand;
