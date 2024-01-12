@@ -32,6 +32,14 @@
           </ul>
         </div>
 
+        @if (searchSuggestion$ | async; as suggestion) {
+          <div class="main-navbar__suggestion__container">
+            <p>
+              Did you mean?
+              <span class="main-navbar__suggestion" (click)="querySuggestion(suggestion)">{{ suggestion }}</span>
+            </p>
+          </div>
+        }
       </div>
     </div>
   </div>

@@ -14,6 +14,7 @@ import {ItemSummary} from "../../shared/services/api/item/item.interface";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item/item.service";
 import {SearchService} from "../../shared/services/search/search.service";
+import {SearchSuggestionService} from "../../shared/services/suggestion/search-suggestion.service";
 import {ContentSectionComponent} from "./components/content-section/content-section.component";
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {SortingTabComponent} from "./components/sorting-tab/sorting-tab.component";
@@ -43,7 +44,8 @@ export class ShopPage implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private itemService: ItemService,
               private categoryService: CategoryService,
-              private searchService: SearchService) {
+              private searchService: SearchService,
+              private readonly searchSuggestionService: SearchSuggestionService) {
 
 
     this.activatedRoute.queryParams.pipe(
@@ -59,10 +61,10 @@ export class ShopPage implements OnInit {
         .subscribe((items: Page<ItemSummary>) => {
           this.items.update(() => items.content);
           this.paginationService.updatePaginationDetails(items.last, items.totalElements);
+          this.handleSearchSuggestion(items, param);
         });
     });
   }
-
 
   ngOnInit(): void {
     this.initialiseCategories();
@@ -79,6 +81,14 @@ export class ShopPage implements OnInit {
             this.paginationService.updatePaginationDetails(items.last, items.totalElements);
           }
         );
+    }
+  }
+
+  private handleSearchSuggestion(items: Page<ItemSummary>, param: Params): void {
+    if (items.content.length === 0) {
+      this.searchSuggestionService.createSuggestion((param[ShopPageParameter.Parameter.ItemName]));
+    } else {
+      this.searchSuggestionService.clearSuggestion();
     }
   }
 
