@@ -1,10 +1,9 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, inject, OnInit} from "@angular/core";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {NavigationStart, Router} from "@angular/router";
-import {debounceTime} from "rxjs";
-import {distinctUntilChanged} from "rxjs/operators";
+import {NavigationEnd, Router} from "@angular/router";
+import {debounceTime, filter, pairwise, Subject, takeUntil} from "rxjs";
+import {distinctUntilChanged, map} from "rxjs/operators";
 import {Constant} from "../../../../models/enums/constant";
 import {SearchService} from "../../../../services/search.service";
 
@@ -16,34 +15,30 @@ import {SearchService} from "../../../../services/search.service";
   styleUrls: ["./search-bar.component.scss"]
 })
 export class SearchBarComponent implements OnInit {
+  @ViewChild("searchInput") searchFormElementRef!: ElementRef;
+
   searchValue: string = Constant.EmptyValue;
   searchForm = this.formBuilder.nonNullable.group({
     searchValue: Constant.EmptyValue
   });
-  private router = inject(Router);
+  private destroy$ = new Subject<void>();
 
-  constructor(private formBuilder: FormBuilder, private searchService: SearchService) {
-
-    this.router.events
-      .pipe(takeUntilDestroyed())
-      .subscribe((event) => {
-        if (event instanceof NavigationStart && event.url.includes("itemName")) {
-          if (this.searchValue !== Constant.EmptyValue && this.searchForm.controls.searchValue.value !== Constant.EmptyValue) {
-            this.searchValue = Constant.EmptyValue;
-
-            this.searchForm.patchValue({
-              searchValue: Constant.EmptyValue
-            });
-          }
-        }
-      });
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly searchService: SearchService,
+    private readonly router: Router,
+  ) {
   }
 
   ngOnInit(): void {
     this.searchForm.get("searchValue")?.valueChanges.pipe(
       debounceTime(300),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
     ).subscribe();
+
+    // Clear search value when navigating from home to shop
+    this.handleNavigationForSearchClearing();
   }
 
   onChange(): void {
@@ -53,6 +48,36 @@ export class SearchBarComponent implements OnInit {
 
   handleSearchNavigation(): void {
     this.searchService.handleSearchNavigation(this.searchValue);
+  }
+
+  private handleNavigationForSearchClearing(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(event => event as NavigationEnd),
+      pairwise(),
+      takeUntil(this.destroy$))
+      .subscribe(([previousUrl, currentUrl]) => {
+        if ((this.isNavigatingToShop(currentUrl) && this.isInputNotInFocus()) ||
+          this.isNavigatingAwayFromShop(previousUrl, currentUrl)) {
+          this.clearSearchForm();
+        }
+      });
+  }
+
+  private isNavigatingToShop(currentUrl: NavigationEnd): boolean {
+    return currentUrl.url.includes("/shop");
+  }
+
+  private isInputNotInFocus(): boolean {
+    return document.activeElement !== this.searchFormElementRef?.nativeElement;
+  }
+
+  private isNavigatingAwayFromShop(previousUrl: NavigationEnd, currentUrl: NavigationEnd): boolean {
+    return previousUrl.url.includes("/shop") && !this.isNavigatingToShop(currentUrl);
+  }
+
+  private clearSearchForm(): void {
+    this.searchForm.patchValue({searchValue: Constant.EmptyValue});
   }
 
   private search(): void {

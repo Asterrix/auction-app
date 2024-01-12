@@ -1,5 +1,6 @@
 <form class="search-bar" [formGroup]="searchForm">
-  <input type="text"
+  <input #searchInput
+         type="text"
          placeholder="Try entering: Shoes"
          formControlName="searchValue"
          (input)="onChange()"
