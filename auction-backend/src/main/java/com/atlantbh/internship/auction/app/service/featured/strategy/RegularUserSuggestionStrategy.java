@@ -69,7 +69,7 @@ public class RegularUserSuggestionStrategy implements RegularSuggestionStrategy 
 
                     return StringUtils.compare(firstName, secondName);
                 }
-        ).toList();
+        ).limit(itemCount).toList();
 
         return Optional.of(result);
     }

@@ -21,7 +21,7 @@ class SearchSuggestionTest {
                 "Banana",
                 "Raspberry"
         );
-        final String inputStr = "pn apple";
+        final String inputStr = "pne apple";
 
         final List<String> searchSuggestions = searchSuggestion.createSearchSuggestion(searchList, inputStr);
 

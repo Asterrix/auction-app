@@ -3,10 +3,7 @@ package com.atlantbh.internship.auction.app.service.featured.search;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public final class SearchSuggestion {
@@ -42,42 +39,49 @@ public final class SearchSuggestion {
                 });
 
         return similarityScoreTable.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .sorted(Map.Entry.<String, Integer>comparingByValue())
                 .map(Map.Entry::getKey)
                 .toList();
     }
 
 
     /**
+     * Use Myers' algorithm to calculate the similarity coefficient of two strings.
      * @param inputStr      The input string
      * @param comparisonStr String to compare to the input string
      * @return The similarity coefficient of the two strings
      */
-    // Imagine a chess board with input string on the left and comparison string on the top.
-    // If the characters are the same, add 1 to the diagonal value.
-    // If the characters are different, get the maximum value from the left and top cell.
     private int calculateSimilarity(final String inputStr, final String comparisonStr) {
-        final int n = inputStr.length();
-        final int m = comparisonStr.length();
-        final int[][] matrix = new int[n + 1][m + 1];
+        final int sourceLength = inputStr.length();
+        final int targetLength = comparisonStr.length();
+        final int maxEditDistance = sourceLength + targetLength;
+        int[] matrix = new int[2 * maxEditDistance + 1];
+        Arrays.fill(matrix, -1);
+        matrix[maxEditDistance + 1] = 0;
 
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < m; col++) {
-                final char inputChar = inputStr.charAt(row);
-                final char comparisonChar = comparisonStr.charAt(col);
-
-                if (inputChar == comparisonChar) {
-                    // Add 1 to the diagonal value
-                    matrix[row + 1][col + 1] = matrix[row][col] + 1;
+        for (int editDistance = 0; editDistance <= maxEditDistance; editDistance++) {
+            for (int diagonal = -editDistance; diagonal <= editDistance; diagonal += 2) {
+                int diagonalIndex = diagonal + maxEditDistance;
+                int sourceIndex;
+                if (diagonal == -editDistance || (diagonal != editDistance && matrix[diagonalIndex - 1] < matrix[diagonalIndex + 1])) {
+                    sourceIndex = matrix[diagonalIndex + 1]; // down
                 } else {
-                    // Get the maximum value from the left and top cell
-                    matrix[row + 1][col + 1] = Math.max(matrix[row][col + 1], matrix[row + 1][col]);
+                    sourceIndex = matrix[diagonalIndex - 1] + 1; // right
+                }
+                int targetIndex = sourceIndex - diagonal;
+
+                while (sourceIndex < sourceLength && targetIndex < targetLength && inputStr.charAt(sourceIndex) == comparisonStr.charAt(targetIndex)) {
+                    sourceIndex++;
+                    targetIndex++;
+                }
+
+                matrix[diagonalIndex] = sourceIndex;
+
+                if (sourceIndex >= sourceLength && targetIndex >= targetLength) {
+                    return editDistance;
                 }
             }
         }
-
-        // Take size difference into account
-        final int sizeDifference = Math.abs(n - m);
-        return matrix[n][m] - sizeDifference;
+        return maxEditDistance;
     }
 }
