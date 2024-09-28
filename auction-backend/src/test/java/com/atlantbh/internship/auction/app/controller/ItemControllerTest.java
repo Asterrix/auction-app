@@ -80,7 +80,7 @@ class ItemControllerTest {
                 1,
                 "Item",
                 new BigDecimal("80.00"),
-                new ItemImageDto(1, "Name", "ImageUrl")
+                new ItemImageDto(1, "ImageUrl")
         );
         final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 
@@ -176,7 +176,7 @@ class ItemControllerTest {
                 "Item",
                 "Desc",
                 new BigDecimal("9.0"),
-                new ItemImageDto(1, "Name", "ImageUrl")
+                new ItemImageDto(1, "ImageUrl")
         );
 
         given(itemService.getFeaturedItem()).willReturn(itemFeaturedDto);

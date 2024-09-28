@@ -9,8 +9,7 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 
 /**
@@ -84,7 +83,7 @@ public final class ItemSpecification {
      *
      * @return {@link Specification} for filtering items by their auction end date.
      */
-    public static Specification<Item> isActive(final LocalDateTime dateTime) {
+    public static Specification<Item> isActive(final ZonedDateTime dateTime) {
         return (root, query, builder) -> builder.greaterThan(root.get("endTime"), dateTime);
     }
 
