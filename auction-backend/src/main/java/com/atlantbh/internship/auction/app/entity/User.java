@@ -1,11 +1,17 @@
 package com.atlantbh.internship.auction.app.entity;
 
+import com.atlantbh.internship.auction.app.service.validator.order.FirstOrder;
+import com.atlantbh.internship.auction.app.service.validator.order.SecondOrder;
+import com.atlantbh.internship.auction.app.service.validator.order.ThirdOrder;
 import jakarta.persistence.*;
+import jakarta.validation.GroupSequence;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
+@GroupSequence({User.class, FirstOrder.class, SecondOrder.class, ThirdOrder.class})
 public class User {
 
     @Id
@@ -13,15 +19,25 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @NotBlank(message = "{firstName.blank", groups = FirstOrder.class)
+    @Size(message = "{firstName.size}", min = 3, max = 20, groups = SecondOrder.class)
+    @Pattern(message = "{firstName.pattern}", regexp = "^[a-zA-Z]+$", groups = ThirdOrder.class)
     @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
 
+    @NotBlank(message = "{lastName.blank}", groups = FirstOrder.class)
+    @Size(message = "{lastName.size}", min = 3, max = 30, groups = SecondOrder.class)
+    @Pattern(message = "{lastName.pattern}", regexp = "^[a-zA-Z]+$", groups = ThirdOrder.class)
     @Column(name = "last_name", nullable = false, length = 30)
     private String lastName;
 
+    @NotBlank(message = "{email.blank}", groups = FirstOrder.class)
+    @Size(message = "{email.size}", min = 7, max = 40, groups = SecondOrder.class)
     @Column(name = "email", nullable = false, unique = true, length = 40)
     private String email;
 
+    @NotBlank(message = "{password.blank}", groups = FirstOrder.class)
+    @Size(message = "{password.size}", min = 8, max = 100, groups = SecondOrder.class)
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 

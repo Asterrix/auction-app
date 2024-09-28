@@ -1,50 +1,49 @@
 package com.atlantbh.internship.auction.app.service.validator.user;
 
-import com.atlantbh.internship.auction.app.exception.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class PasswordValidatorTest {
 
     @Test
-    void validatePassword_ShouldThrow_WhenThereAreInvalidSpecialCharacters() {
+    void isValid_ShouldReturnFalse_WhenThereAreInvalidSpecialCharacters() {
         final String input = "‡passworD123";
 
-        Assertions.assertThrows(ValidationException.class, () -> PasswordValidator.validatePassword(input));
+        Assertions.assertFalse(PasswordValidator.isValid(input));
     }
 
     @Test
-    void validatePassword_ShouldThrow_WhenThereAreWhiteSpaces() {
+    void isValid_ShouldReturnFalse_WhenThereAreWhiteSpaces() {
         final String input = "pass worD123";
 
-        Assertions.assertThrows(ValidationException.class, () -> PasswordValidator.validatePassword(input));
+        Assertions.assertFalse(PasswordValidator.isValid(input));
     }
 
     @Test
-    void validatePassword_ShouldThrow_WhenThereAreNoSpecialCharacters() {
+    void isValid_ShouldReturnFalse_WhenThereAreNoSpecialCharacters() {
         final String input = "password";
 
-        Assertions.assertThrows(ValidationException.class, () -> PasswordValidator.validatePassword(input));
+        Assertions.assertFalse(PasswordValidator.isValid(input));
     }
 
     @Test
-    void validatePassword_ShouldThrow_WhenThereAreNoNumbers() {
+    void isValid_ShouldReturnFalse_WhenThereAreNoNumbers() {
         final String input = "~password";
 
-        Assertions.assertThrows(ValidationException.class, () -> PasswordValidator.validatePassword(input));
+        Assertions.assertFalse(PasswordValidator.isValid(input));
     }
 
     @Test
-    void validatePassword_ShouldThrow_WhenThereAreNoUppercaseLetters() {
+    void isValid_ShouldReturnFalse_WhenThereAreNoUppercaseLetters() {
         final String input = "~passwo12rd";
 
-        Assertions.assertThrows(ValidationException.class, () -> PasswordValidator.validatePassword(input));
+        Assertions.assertFalse(PasswordValidator.isValid(input));
     }
 
     @Test
-    void validatePassword_ShouldThrow_WhenThereAreNoLowercaseLetters() {
+    void isValid_ShouldReturnFalse_WhenThereAreNoLowercaseLetters() {
         final String input = "~PASS12178";
 
-        Assertions.assertThrows(ValidationException.class, () -> PasswordValidator.validatePassword(input));
+        Assertions.assertFalse(PasswordValidator.isValid(input));
     }
 }
