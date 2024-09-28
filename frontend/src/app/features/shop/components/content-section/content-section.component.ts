@@ -3,7 +3,7 @@ import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Router, RouterLink} from "@angular/router";
 import {ItemCardComponent} from "../../../../shared/components/item-card/item-card.component";
 import {LoaderComponent} from "../../../../shared/components/loader/loader.component";
-import {Pagination} from "../../../../shared/models/pagination";
+import {Page} from "../../../../shared/models/pagination.service";
 import {ItemSummary} from "../../../../shared/services/api/item/item.interface";
 import {LoaderService} from "../../../../shared/services/loader.service";
 
@@ -16,7 +16,7 @@ import {LoaderService} from "../../../../shared/services/loader.service";
 })
 export class ContentSectionComponent {
   @Input({required: true}) items!: ItemSummary[];
-  @Input({required: true}) pagination!: Pagination;
+  @Input({required: true}) pagination!: Page;
   @Output() increasePageSize: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private router: Router, public loader: LoaderService) {

@@ -1,9 +1,9 @@
 import {CommonModule} from "@angular/common";
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, inject, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
 import {Page} from "../../shared/models/interfaces/page";
-import {Pagination} from "../../shared/models/pagination";
+import {PaginationService} from "../../shared/models/pagination.service";
 import {Api} from "../../shared/services/api.service";
 import {ItemOrderBy} from "../../shared/services/api/item/item.enum";
 import {FeaturedItem, ItemSummary} from "../../shared/services/api/item/item.interface";
@@ -24,13 +24,20 @@ import Category = Api.CategoryApi.Category;
   standalone: true,
   imports: [CommonModule, HomeHeaderComponent, HomeItemsComponent],
   templateUrl: "./home-page.component.html",
-  styleUrls: ["./home-page.component.scss"]
+  styleUrls: ["./home-page.component.scss"],
+  providers: [
+    {
+      provide: PaginationService,
+      useFactory: (): PaginationService => new PaginationService({page: 0, size: 8})
+    }
+  ]
 })
 export class HomePage implements OnInit, OnDestroy {
   categories$: Observable<Array<Category> | undefined> | undefined;
   featuredItem$: Observable<FeaturedItem | undefined> | undefined;
   items$: Observable<Page<ItemSummary> | undefined> | undefined;
-  private pagination: Pagination = new Pagination({page: 0, size: 8});
+  private paginationService = inject(PaginationService);
+  protected pagination = this.paginationService.pagination;
   private queryParamSub: Subscription | undefined;
 
   constructor(private router: Router,
@@ -84,8 +91,8 @@ export class HomePage implements OnInit, OnDestroy {
   private initNewestArrivals(): void {
     this.items$ = this.itemService.getItems({
       pageable: {
-        page: this.pagination.getPagination().page,
-        size: this.pagination.getPagination().size
+        page: this.pagination().page,
+        size: this.pagination().size
       },
       orderBy: ItemOrderBy.Newest
     });
@@ -94,8 +101,8 @@ export class HomePage implements OnInit, OnDestroy {
   private initLastChance(): void {
     this.items$ = this.itemService.getItems({
       pageable: {
-        page: this.pagination.getPagination().page,
-        size: this.pagination.getPagination().size
+        page: this.pagination().page,
+        size: this.pagination().size
       },
       orderBy: ItemOrderBy.TimeLeft
     });
