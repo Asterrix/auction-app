@@ -1,6 +1,8 @@
 <div class="dropdown" (clickOutside)="hideDropdownMenu()">
+
+
   <a class="dropdown__active-section" (click)="toggleDropdownMenu()">
-    Default sorting
+    {{ activeOrder.label }}
     <img ngSrc="assets/icons/chevron_down.svg"
          alt="Dropdown menu icon"
          height="24"
@@ -9,10 +11,17 @@
 
   @if (isActive) {
     <div class="dropdown__list">
-      <a class="dropdown__item">Sort by newness</a>
-      <a class="dropdown__item">Sort by time left</a>
-      <a class="dropdown__item">Sort by price: low to high</a>
-      <a class="dropdown__item">Sort by price: high to low</a>
+      @for (sort of sortingOptions;track sort.label) {
+        @if (sort.value !== activeOrder.value) {
+          <a class="dropdown__item"
+             (click)="changeActiveOrder(sort.value)"
+             [routerLink]="['/', ShopRouteEndpoint.Shop]"
+             [queryParams]="{orderBy: sort.value}"
+             queryParamsHandling="merge">
+            {{ sort.label }}
+          </a>
+        }
+      }
     </div>
   }
 </div>

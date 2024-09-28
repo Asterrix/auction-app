@@ -1,21 +1,30 @@
 package com.atlantbh.internship.auction.app.service.specification;
 
-
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
-import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.ZonedDateTime;
-
-
-/**
- * Creates custom Item specifications to be passed to the JPA findAll() method
- */
 public final class ItemSpecification {
+
+    /**
+     * Creates a Specification for filtering items based on the specified item name.
+     *
+     * @param itemName Name used to filter items by.
+     * @return {@link Specification} for filtering items based on the provided item name.
+     */
+    public static Specification<Item> hasName(final String itemName) {
+        final String name = itemName.trim().toLowerCase();
+
+        return (root, query, builder) -> builder.like(
+                builder.trim(
+                        builder.lower(
+                                root.get("name")
+                        )
+                ), "%" + name + "%");
+    }
 
     /**
      * Creates a Specification for filtering items based on the specified category name.
@@ -23,18 +32,15 @@ public final class ItemSpecification {
      * @param categoryName Name of the category to filter items by.
      * @return {@link Specification} for filtering items based on the provided category name.
      */
-    public static Specification<Item> isPartOfCategory(final String categoryName) {
+    public static Specification<Item> hasCategory(final String categoryName) {
+        final String category = categoryName.trim().toLowerCase();
+
         return (root, query, builder) -> {
-            query.distinct(true);
+            final Join<Item, Category> categoryJoin = root.join("category");
+            final Join<Item, Category> parentCategoryJoin = root.join("category").join("parentCategory", JoinType.LEFT);
 
-            // Join the Item entity with the Category and its Subcategory
-            Join<Item, Category> categoryJoin = root.join("category");
-            Join<Item, Category> parentCategoryJoin = root.join("category").join("parentCategory", JoinType.LEFT);
-
-            final String normalisedInput = normaliseInput(categoryName);
-
-            Predicate categoryPredicate = builder.equal(builder.lower(categoryJoin.get("name")), normalisedInput);
-            Predicate parentCategoryPredicate = builder.equal(builder.lower(parentCategoryJoin.get("name")), normalisedInput);
+            final Predicate categoryPredicate = builder.equal(builder.lower(categoryJoin.get("name")), category);
+            final Predicate parentCategoryPredicate = builder.equal(builder.lower(parentCategoryJoin.get("name")), category);
 
             return builder.or(categoryPredicate, parentCategoryPredicate);
         };
@@ -50,44 +56,47 @@ public final class ItemSpecification {
      * @param subcategoryName Name of the subcategory to filter items by.
      * @return {@link Specification} for filtering items based on the provided category names.
      */
-    public static Specification<Item> isPartOfSubcategory(final String categoryName, final String subcategoryName) {
+    public static Specification<Item> hasSubcategory(final String categoryName, final String subcategoryName) {
+        final String category = categoryName.trim().toLowerCase();
+        final String subcategory = subcategoryName.trim().toLowerCase();
+
         return (root, query, builder) -> {
-            query.distinct(true);
+            final Join<Item, Category> categoryJoin = root.join("category");
+            final Join<Category, Category> parentCategoryJoin = categoryJoin.join("parentCategory", JoinType.LEFT);
 
-            Join<Item, Category> categoryJoin = root.join("category");
-            Join<Category, Category> parentCategoryJoin = categoryJoin.join("parentCategory", JoinType.LEFT);
-
-            Predicate subcategoryParentPredicate = builder.equal(builder.lower(parentCategoryJoin.get("name")), normaliseInput(categoryName));
-            Predicate subcategoryPredicate = builder.equal(builder.lower(categoryJoin.get("name")), normaliseInput(subcategoryName));
+            final Predicate subcategoryParentPredicate = builder.equal(builder.lower(parentCategoryJoin.get("name")), category);
+            final Predicate subcategoryPredicate = builder.equal(builder.lower(categoryJoin.get("name")), subcategory);
 
             return builder.and(subcategoryParentPredicate, subcategoryPredicate);
         };
     }
 
     /**
-     * Creates a Specification for filtering items based on the specified item name.
-     *
-     * @param itemName Name used to filter items by.
-     * @return {@link Specification} for filtering items based on the provided item name.
-     */
-    public static Specification<Item> isNameOf(final String itemName) {
-        return (root, query, builder) -> {
-            Expression<String> nameExpression = builder.lower(root.get("name"));
-            final String normalisedInput = normaliseInput(itemName);
-            return builder.and(builder.like(nameExpression, "%" + normalisedInput + "%"));
-        };
-    }
-
-    /**
-     * Creates a Specification for filtering items that are still up for auction.
+     * Creates a Specification for filtering items that are still up for auction and which have not yet been completed by purchase.
      *
      * @return {@link Specification} for filtering items by their auction end date.
      */
-    public static Specification<Item> isActive(final ZonedDateTime dateTime) {
-        return (root, query, builder) -> builder.greaterThan(root.get("endTime"), dateTime);
+    public static Specification<Item> notFinished() {
+        return (root, query, builder) -> builder.equal(root.get("finished"), false);
     }
 
-    private static String normaliseInput(final String input) {
-        return input.trim().toLowerCase();
+    public static Specification<Item> orderByNameAsc() {
+        return ItemOrderBySpecification.orderByNameAsc();
+    }
+
+    public static Specification<Item> orderByNewest() {
+        return ItemOrderBySpecification.orderByNewest();
+    }
+
+    public static Specification<Item> orderByTimeLeft() {
+        return ItemOrderBySpecification.orderByTimeLeft();
+    }
+
+    public static Specification<Item> orderByPriceAsc() {
+        return ItemOrderBySpecification.orderByPriceAsc();
+    }
+
+    public static Specification<Item> orderByPriceDesc() {
+        return ItemOrderBySpecification.orderByPriceDesc();
     }
 }

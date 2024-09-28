@@ -1,7 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {Api} from "../../../../../shared/services/api.service";
-import {ItemService} from "../../../../../shared/services/item/item.service";
+import {CreateItemRequest} from "../../../../../shared/services/api/item/item.type";
+import {NewItemService} from "../../../../../shared/services/item/new-item.service";
 import {AddItemBasicFormService, Basic} from "../../add-item-basic-form/services/add-item-basic-form.service";
 import {
   AddItemLocationShippingService,
@@ -12,7 +12,7 @@ import {
   PriceDateTime
 } from "../../add-item-set-price-form/services/add-item-price-form.service";
 import {ResetForm} from "../interfaces/reset-form";
-import CreateItemRequest = Api.ItemApi.PostMethods.CreateItemRequest;
+
 
 type AddItemGroup = {
   basicInfo: FormGroup<Basic>,
@@ -33,7 +33,7 @@ export class AddItemFormService implements ResetForm {
     priceDate: this.priceDateForm.form,
     locationShipping: this.locationShipping.form
   });
-  private itemService = inject(ItemService);
+  private itemService = inject(NewItemService);
 
   public submitForm() {
     const basicFormControls = this.basicForm.form.controls;

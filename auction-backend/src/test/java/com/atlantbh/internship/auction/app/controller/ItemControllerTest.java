@@ -2,24 +2,23 @@ package com.atlantbh.internship.auction.app.controller;
 
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
-import com.atlantbh.internship.auction.app.dto.bid.BiddingInformation;
-import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
+import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
+import com.atlantbh.internship.auction.app.dto.item.requests.CreateItemRequest;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.service.CategoryService;
-import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.UserService;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
+import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,8 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -44,7 +43,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -94,16 +92,15 @@ class ItemControllerTest {
                 1,
                 "Item",
                 new BigDecimal("80.00"),
-                new BigDecimal("20.00"),
                 new ItemImageDto(1, "ImageUrl")
         );
         final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 
+
         given(itemService.getAllItems(
-                eq(null),
-                eq(null),
-                eq(null),
-                Mockito.any(PageRequest.class))).willReturn(mockPage);
+                any(Specification.class),
+                any(Pageable.class)))
+                .willReturn(mockPage);
 
         final MockHttpServletResponse response = mockMvc
                 .perform(get(path).accept(MediaType.APPLICATION_JSON))
@@ -115,25 +112,22 @@ class ItemControllerTest {
         JSONAssert.assertEquals(json, responseContentAsString, false);
     }
 
-    @Disabled("TODO FAILING TEST")
     @Test
     void getAllItems_ShouldTake_PageableParameters() throws Exception {
         final String path = "/api/v1/items";
 
-        given(itemService.getAllItems(
-                any(String.class),
-                any(String.class),
-                any(String.class),
-                any(Pageable.class)))
-                .willReturn(Mockito.any());
+        final MockHttpServletResponse response = mockMvc
+                .perform(get(path)
+                        .param("page", "0")
+                        .param("size", "3")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse();
 
-        mockMvc.perform(get(path).accept(MediaType.APPLICATION_JSON)
-                        .queryParam("page", "0")
-                        .queryParam("size", "3"))
-                .andReturn().getResponse();
 
-        final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
-        verify(itemService).getAllItems(any(String.class), any(String.class), any(String.class), pageableCaptor.capture());
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        verify(itemService).getAllItems(any(Specification.class), pageableCaptor.capture());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertEquals(0, pageableCaptor.getValue().getPageNumber());
         assertEquals(3, pageableCaptor.getValue().getPageSize());
     }
@@ -156,10 +150,7 @@ class ItemControllerTest {
                 false
         );
 
-        final BiddingInformation itemBidDto = new BiddingInformation(
-                new BigDecimal("20"),
-                1L,
-                1);
+        final BidNumberCount itemBidDto = new BidNumberCount(new BigDecimal("20"), 1L);
         final ItemAggregate itemAggregate = new ItemAggregate(itemDto, itemBidDto, 1);
         final ZonedDateTime timeOfRequest = ZonedDateTime.now();
 

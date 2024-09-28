@@ -1,6 +1,6 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {takeUntilDestroyed, toObservable} from "@angular/core/rxjs-interop";
+import {toObservable} from "@angular/core/rxjs-interop";
 import {AbstractControl, FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
@@ -18,9 +18,10 @@ import {
   NavigationTrailService
 } from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
 import {Alert, AlertService, AlertType} from "../../../shared/services/alert.service";
-import {Api} from "../../../shared/services/api.service";
+import {ItemAggregate} from "../../../shared/services/api/item/item.interface";
 import {ErrorService} from "../../../shared/services/error.service";
 import {ItemService} from "../../../shared/services/item/item.service";
+import {NewItemService} from "../../../shared/services/item/new-item.service";
 import {AuthenticationService} from "../../../shared/services/user/authentication.service";
 import {BidService} from "../../../shared/services/user/bid.service";
 import {ItemPageParameter} from "../shop-routes";
@@ -28,7 +29,6 @@ import {BidNotificationComponent} from "./components/bid-notification/bid-notifi
 import {ItemDescriptionComponent} from "./components/item-description/item-description.component";
 import {ItemShowcaseComponent} from "./components/item-showcase/item-showcase.component";
 import {ItemSummaryComponent} from "./components/item-summary/item-summary.component";
-import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 @Component({
   selector: "shop-item",
@@ -57,9 +57,10 @@ export class ShopItemPage implements OnInit, OnDestroy {
     offer: ["", [Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
   alert$: Observable<Alert> = toObservable(this.alertService.alert);
-  item: ItemAggregate | undefined;
+  item$: Observable<ItemAggregate>;
 
   constructor(protected itemService: ItemService,
+              private newItemService: NewItemService,
               private activeRoute: ActivatedRoute,
               private trailService: NavigationTrailService,
               private fb: FormBuilder,
@@ -71,11 +72,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
 
     const param = this.activeRoute.snapshot.params[ItemPageParameter.Id];
 
-    this.itemService.getItemById(param)
-      .pipe(takeUntilDestroyed())
-      .subscribe((itemAggregate: ItemAggregate) => {
-        this.item = itemAggregate;
-      });
+    this.item$ = this.newItemService.getItem(param);
   }
 
   ngOnInit(): void {
@@ -126,11 +123,11 @@ export class ShopItemPage implements OnInit, OnDestroy {
   }
 
   private isFormValid(): boolean {
-    if (this.item && this.bidForm.get("offer")?.value) {
-      const item = this.item;
+    if (this.itemService.item() && this.bidForm.get("offer")?.value) {
+      const item = this.itemService.item();
       const bid = this.bidForm.get("offer");
 
-      if (bid !== undefined) {
+      if (item !== undefined && bid !== undefined) {
         return this.isOfferAboveTheCurrentOffers(item, bid!);
       }
 

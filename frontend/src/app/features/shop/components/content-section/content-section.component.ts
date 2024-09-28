@@ -1,14 +1,11 @@
 import {CommonModule} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Router, RouterLink} from "@angular/router";
-import {Observable} from "rxjs";
 import {ItemCardComponent} from "../../../../shared/components/item-card/item-card.component";
 import {LoaderComponent} from "../../../../shared/components/loader/loader.component";
-import {Page} from "../../../../shared/models/interfaces/page";
 import {Pagination} from "../../../../shared/models/pagination";
-import {Api} from "../../../../shared/services/api.service";
+import {ItemSummary} from "../../../../shared/services/api/item/item.interface";
 import {LoaderService} from "../../../../shared/services/loader.service";
-import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
 @Component({
   selector: "shop-content-section",
@@ -18,7 +15,7 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
   styleUrls: ["./content-section.component.scss"]
 })
 export class ContentSectionComponent {
-  @Input({required: true}) items$: Observable<Page<ItemSummary> | undefined> | undefined;
+  @Input({required: true}) items!: ItemSummary[];
   @Input({required: true}) pagination!: Pagination;
   @Output() increasePageSize: EventEmitter<void> = new EventEmitter<void>();
 

@@ -9,10 +9,10 @@
       No items were found.
     </p>
 
-    <div *ngIf="items$ | async as items" class="items-grid">
-      <ng-container *ngFor="let item of items.content">
+    <div class="items-grid">
+      @for (item of items;track item.id) {
         <app-item-card (click)="navigateToItem(item.id)" [imageOrientation]="'v'" [item]="item"/>
-      </ng-container>
+      }
     </div>
   </ng-template>
 

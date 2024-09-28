@@ -42,7 +42,7 @@
 }
 
 .main_section {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 3.2rem;
 }

@@ -1,11 +1,11 @@
 package com.atlantbh.internship.auction.app.service.item;
 
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
-import com.atlantbh.internship.auction.app.dto.bid.BiddingInformation;
-import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
+import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.item.requests.CreateItemRequest;
 import com.atlantbh.internship.auction.app.entity.*;
 import com.atlantbh.internship.auction.app.mapper.BidsMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
@@ -14,11 +14,10 @@ import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
 import com.atlantbh.internship.auction.app.service.validation.item.ItemEntityValidation;
-import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,8 +31,6 @@ import java.util.Optional;
 
 import static com.atlantbh.internship.auction.app.config.FeaturedItemConfig.FEATURED_ITEM_END_DATE_THRESHOLD;
 import static com.atlantbh.internship.auction.app.mapper.ItemMapper.convertToFeaturedDto;
-import static com.atlantbh.internship.auction.app.mapper.ItemMapper.convertToSummaryDto;
-import static com.atlantbh.internship.auction.app.service.specification.ItemSpecification.*;
 
 @Service
 public final class ItemServiceImpl implements ItemService {
@@ -59,27 +56,11 @@ public final class ItemServiceImpl implements ItemService {
      * {@inheritDoc}
      */
     @Override
-    public Page<ItemSummaryDto> getAllItems(@Nullable final String category,
-                                            @Nullable final String subcategory,
-                                            @Nullable final String itemName,
-                                            final Pageable pageable) {
-
-        Specification<Item> specification = Specification.allOf(isActive(ZonedDateTime.now()));
-
-        if (subcategory != null) {
-            specification = specification.and(isPartOfSubcategory(category, subcategory));
-        } else if (category != null) {
-            specification = specification.and(isPartOfCategory(category));
-        }
-
-        if (itemName != null) specification = specification.and(isNameOf(itemName));
-
+    public Page<ItemSummaryDto> getAllItems(final Specification<Item> specification, final Pageable pageable) {
         final Page<Item> items = itemRepository.findAll(specification, pageable);
+        final List<ItemSummaryDto> mappedItems = ItemMapper.convertToSummaryDto(items.getContent());
 
-        final List<ItemSummaryDto> mappedItems = convertToSummaryDto(items.getContent());
-        final long totalElements = items.getTotalElements();
-
-        return new PageImpl<>(mappedItems, pageable, totalElements);
+        return PageableExecutionUtils.getPage(mappedItems, pageable, () -> itemRepository.count(specification));
     }
 
     /**
@@ -95,14 +76,7 @@ public final class ItemServiceImpl implements ItemService {
         final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(item.get().getId());
         if (totalNumberOfBids == 0) {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
-
-            final int highestBidderId = -1;
-            final long numberOfBids = 0L;
-            final BigDecimal currentBid = new BigDecimal("0");
-            final BiddingInformation bidInformation = BidsMapper.mapToUserItemBidDto(
-                    currentBid,
-                    numberOfBids,
-                    highestBidderId);
+            final BidNumberCount bidInformation = BidsMapper.mapToUserItemBidDto(new BigDecimal("0"), 0L);
 
             final Integer ownerId = item.get().getOwner().getId();
             return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation, ownerId));
@@ -111,13 +85,7 @@ public final class ItemServiceImpl implements ItemService {
         final Optional<Bid> highestBid = bidRepository.findOne(specification);
 
         final ItemDto mappedItem = ItemMapper.convertToItemDto(item.get(), timeOfRequest);
-        final Integer highestBidderId = highestBid.get().getUser().getId();
-        final BigDecimal amount = highestBid.get().getAmount();
-
-        final BiddingInformation mappedBidInformation = BidsMapper.mapToUserItemBidDto(
-                amount,
-                totalNumberOfBids,
-                highestBidderId);
+        final BidNumberCount mappedBidInformation = BidsMapper.mapToUserItemBidDto(highestBid.get().getAmount(), totalNumberOfBids);
 
         final Integer ownerId = item.get().getOwner().getId();
         return Optional.of(ItemMapper.convertToAggregate(mappedItem, mappedBidInformation, ownerId));
@@ -179,7 +147,7 @@ public final class ItemServiceImpl implements ItemService {
     @Override
     public Item updateItemFinishedAttribute(final Item item) {
         final Item updatedItem = itemStateChanger.updateFinishedAttribute(item);
-        itemRepository.save(updatedItem);
+        itemRepository.save(item);
 
         return updatedItem;
     }

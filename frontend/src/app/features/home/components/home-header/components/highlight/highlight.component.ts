@@ -2,8 +2,7 @@ import {CommonModule} from "@angular/common";
 import {Component, Input} from "@angular/core";
 import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
-import {Api} from "../../../../../../shared/services/api.service";
-import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
+import {FeaturedItem} from "../../../../../../shared/services/api/item/item.interface";
 
 @Component({
   selector: "home-header-highlight",
@@ -13,5 +12,5 @@ import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   styleUrls: ["./highlight.component.scss"]
 })
 export class HighlightComponent {
-  @Input({required:true}) featuredItem$: Observable<FeaturedItem | undefined> | undefined;
+  @Input({required: true}) featuredItem$: Observable<FeaturedItem | undefined> | undefined;
 }

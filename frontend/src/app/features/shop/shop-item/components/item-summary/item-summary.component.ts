@@ -1,8 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component, Input} from "@angular/core";
-import {Api} from "../../../../../shared/services/api.service";
-import BiddingInformation = Api.ItemApi.Interfaces.BiddingInformation;
-import Item = Api.ItemApi.Interfaces.Item;
+import {BiddingInformation, Item} from "../../../../../shared/services/api/item/item.interface";
 
 @Component({
   selector: "shop-item-summary",
