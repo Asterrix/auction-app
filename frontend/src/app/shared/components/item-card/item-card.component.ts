@@ -1,6 +1,6 @@
 import {Component, Input} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {ItemSummary} from "../../../features/home/services/item.service";
+import {ItemSummary} from "../../services/item.service";
 
 @Component({
   selector: "app-item-card",

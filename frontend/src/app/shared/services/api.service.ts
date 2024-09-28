@@ -4,12 +4,7 @@ import {Observable} from "rxjs";
 import {Page} from "../models/interfaces/page";
 import {environment} from "../../../environments/environment";
 import {ApiRoute} from "../../../environments/api-route";
-import {
-  FeaturedItem,
-  ItemSummary,
-  SortItemAttribute,
-  SortItemDirection
-} from "../../features/home/services/item.service";
+import {FeaturedItem, Item, ItemSummary, SortItemAttribute, SortItemDirection} from "./item.service";
 
 @Injectable({
   providedIn: "root"
@@ -40,6 +35,10 @@ export class ApiService {
     };
 
     return this.httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${ApiRoute.ItemRoute.Items}`, {params: getListOfItemsParams});
+  }
+
+  getItem(itemId: number): Observable<Item> {
+    return this.httpClient.get<Item>(`${environment.apiUrl}/${ApiRoute.ItemRoute.Items}/${itemId}`);
   }
 
   /* <-- Item */

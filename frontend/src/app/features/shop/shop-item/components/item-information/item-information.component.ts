@@ -1,8 +1,9 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {TabComponent} from "../../../../../shared/components/tab/tab.component";
-import {Item, ItemService} from "../../services/item.service";
+import {Item, ItemService} from "../../../../../shared/services/item.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: "app-item-information",
@@ -11,19 +12,13 @@ import {Item, ItemService} from "../../services/item.service";
   templateUrl: "./item-information.component.html",
   styleUrls: ["./item-information.component.scss"]
 })
-export class ItemInformationComponent implements OnInit, OnDestroy {
-  description: string | undefined;
+export class ItemInformationComponent implements OnInit {
+  public item$: Observable<Item> = {} as Observable<Item>;
 
   constructor(private itemService: ItemService) {
   }
 
   ngOnInit(): void {
-    this.itemService.item$.data$.subscribe((item: Item | undefined) => {
-      this.description = item?.description;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.itemService.item$.unsubscribe();
+    this.item$ = this.itemService.getItem();
   }
 }
