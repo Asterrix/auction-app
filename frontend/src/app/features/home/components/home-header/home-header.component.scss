@@ -1,4 +1,5 @@
 @import "container";
+@import "container";
 
 .home-header {
   background-color: #FCFCFC;
@@ -14,5 +15,13 @@
     @media (min-width: $large) {
       grid-template-columns: 1fr 3fr;
     }
+  }
+}
+
+.loader-placeholder {
+  height: 950px;
+
+  @media (min-width: $large) {
+    height: 658px;
   }
 }

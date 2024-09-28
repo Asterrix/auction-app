@@ -31,15 +31,29 @@ export class ItemService {
   }
 
   initItemsNewestArrivals(): void {
-    this.apiService.getListOfNewestArrivals().subscribe((page: Page<ItemSummary>): void => {
-      this.items$.next(page);
-    });
+    this.loader.showLoader();
+
+    this.apiService.getListOfNewestArrivals().pipe(catchError((error: any) => {
+      console.error(error);
+      throw error;
+    }))
+      .subscribe((items): void => this.items$.next(items))
+      .add(() => {
+        this.loader.hideLoader();
+      });
   }
 
   initItemsLastChance(): void {
-    this.apiService.getListOfLastChanceItems().subscribe((page: Page<ItemSummary>): void => {
-      this.items$.next(page);
-    });
+    this.loader.showLoader();
+
+    this.apiService.getListOfLastChanceItems().pipe(catchError((error: any) => {
+      console.error(error);
+      throw error;
+    }))
+      .subscribe((items): void => this.items$.next(items))
+      .add(() => {
+        this.loader.hideLoader();
+      });
   }
 
   getItems(): Observable<Page<ItemSummary> | undefined> {
