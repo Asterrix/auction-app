@@ -2,7 +2,9 @@ import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {FormGroup} from "@angular/forms";
 import {Observable} from "rxjs";
-import {MainNavbarService} from "../../shared/components/navbar/components/main-navbar/services/main-navbar.service";
+import {
+  MainNavbarHandler
+} from "../../shared/components/navbar/components/main-navbar/services/main-navbar-handler.service";
 import {Constant} from "../../shared/models/enums/constant";
 import {ErrorModel} from "../../shared/models/errorModel";
 import {AlertService} from "../../shared/services/alert.service";
@@ -23,7 +25,7 @@ export class LoginPage implements OnInit, OnDestroy {
   error$?: Observable<ErrorModel | null>;
 
   constructor(private authService: AuthenticationService,
-              private navbarService: MainNavbarService,
+              private mainNavbarHandler: MainNavbarHandler,
               private errorService: ErrorService,
               private alertService: AlertService) {
 
@@ -31,11 +33,11 @@ export class LoginPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.error$ = this.errorService.getError();
-    this.navbarService.displayMinimalNavbar(true);
+    this.mainNavbarHandler.hideMainNavbar();
   }
 
   ngOnDestroy(): void {
-    this.navbarService.displayMinimalNavbar(false);
+    this.mainNavbarHandler.showMainNavbar();
     this.errorService.clearErrors();
     this.alertService.clearAlert();
   }

@@ -1,7 +1,7 @@
 <div class="navbar">
   <app-top-bar/>
 
-  <ng-container *ngIf="!(displayMinimalNavbar$ | async) else minimalNavbar">
+  <ng-container *ngIf="mainNavbarHandler.mainNavbar() else minimalNavbar">
     <navbar-main/>
   </ng-container>
 
