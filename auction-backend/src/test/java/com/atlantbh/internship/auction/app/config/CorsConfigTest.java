@@ -64,4 +64,13 @@ class CorsConfigTest {
                         .header("Access-Control-Request-Method", HttpMethod.POST.name()))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void CorsConfig_AllowAccessTo_ItemFeatured_SpecifiedPort() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.options("/api/v1/items/featured")
+                        .header("Origin", appProperties.getClientRoute())
+                        .header("Access-Control-Request-Method", HttpMethod.GET.name()))
+                .andExpect(header().string("Access-Control-Allow-Origin", appProperties.getClientRoute()))
+                .andExpect(header().string("Access-Control-Allow-Methods", HttpMethod.GET.name()));
+    }
 }
