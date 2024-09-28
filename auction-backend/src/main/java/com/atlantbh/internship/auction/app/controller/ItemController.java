@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.controller;
 
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
-import com.atlantbh.internship.auction.app.entity.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
