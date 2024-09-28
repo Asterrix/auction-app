@@ -6,6 +6,7 @@ import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.requests.CreateItemRequest;
+import com.atlantbh.internship.auction.app.dto.item.requests.GetItemsRequest;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
@@ -13,18 +14,17 @@ import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
-import com.atlantbh.internship.auction.app.model.utils.SpecificationBuilder;
 import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.UserService;
 import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
 import com.atlantbh.internship.auction.app.service.item.ItemService;
-import com.atlantbh.internship.auction.app.service.specification.ItemSpecification;
+import com.atlantbh.internship.auction.app.service.specification.ItemSpecificationProcessor;
 import com.google.cloud.storage.Blob;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,38 +58,10 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ItemSummaryDto>> getItems(@RequestParam @Nullable String name,
-                                                         @RequestParam @Nullable String category,
-                                                         @RequestParam @Nullable String subcategory,
-                                                         @RequestParam @Nullable String orderBy,
-                                                         final Pageable pageable) {
+    public ResponseEntity<Page<ItemSummaryDto>> getItems(final GetItemsRequest request, final Pageable pageable) {
+        final Specification<Item> specification = new ItemSpecificationProcessor().process(request);
+        final Page<ItemSummaryDto> items = itemService.getAllItems(specification, pageable);
 
-        final SpecificationBuilder<Item> specification = new SpecificationBuilder<Item>()
-                .with(ItemSpecification.notFinished())
-                .and(ItemSpecification.orderByNameAsc())
-                .and(ItemSpecification.isActive());
-
-        if (name != null && !name.isBlank()) {
-            specification.and(ItemSpecification.hasName(name));
-        }
-
-        if (subcategory != null && !subcategory.isBlank() && category != null && !category.isBlank()) {
-            specification.and(ItemSpecification.hasSubcategory(category, subcategory));
-        } else if (category != null && !category.isBlank()) {
-            specification.and(ItemSpecification.hasCategory(category));
-        }
-
-        if (orderBy != null && !orderBy.isBlank()) {
-            switch (orderBy) {
-                case "newest" -> specification.and(ItemSpecification.orderByNewest());
-                case "timeLeft" -> specification.and(ItemSpecification.orderByTimeLeft());
-                case "priceAsc" -> specification.and(ItemSpecification.orderByPriceAsc());
-                case "priceDesc" -> specification.and(ItemSpecification.orderByPriceDesc());
-                default -> specification.and(ItemSpecification.orderByNameAsc());
-            }
-        }
-
-        final Page<ItemSummaryDto> items = itemService.getAllItems(specification.build(), pageable);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
