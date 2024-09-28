@@ -2,8 +2,10 @@ package com.atlantbh.internship.auction.app.service.featured.category;
 
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -11,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CategorySuggestionTest {
-    private static final CategorySuggestion categorySuggestion = new CategorySuggestion();
+    private final CategorySuggestion categorySuggestion = new CategorySuggestion();
 
     @Test
     @DisplayName("There is no category in an empty list of items")
     void testFindMostPopularCategory_WhenThereIsNoCategory_ThrowIllegalArgumentException() {
         final List<Item> items = List.of();
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(IllegalStateException.class,
                 () -> categorySuggestion.findMostPopularCategory(items),
                 "There is no category in an empty list of items.");
 

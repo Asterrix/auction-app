@@ -21,11 +21,24 @@ public final class FeaturedItemSuggestion implements RegularSuggestionStrategy, 
         this.authenticatedUserStrategy = authenticatedUserStrategy;
     }
 
+    /**
+     * Check {@link AuthenticatedUserSuggestionStrategy#suggestions(Integer, String, int)} for more details.
+     * @param userId      User id of the authenticated user
+     * @param searchQuery Search query
+     * @param itemCount   Number of suggestion items to return
+     * @return {@link Optional} of {@link List} of {@link Item}
+     */
     @Override
     public Optional<List<Item>> suggestions(final Integer userId, final String searchQuery, final int itemCount) {
         return authenticatedUserStrategy.suggestions(userId, searchQuery, itemCount);
     }
 
+    /**
+     * Check {@link RegularUserSuggestionStrategy#suggestions(String, int)} for more details.
+     * @param searchQuery Search query
+     * @param itemCount  Number of suggestion items to return
+     * @return {@link Optional} of {@link List} of {@link Item}
+     */
     @Override
     public Optional<List<Item>> suggestions(final String searchQuery, final int itemCount) {
         return regularUserStrategy.suggestions(searchQuery, itemCount);

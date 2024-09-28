@@ -64,7 +64,7 @@ public final class AuthenticatedUserSuggestionStrategy implements AuthenticatedS
         }
 
         final List<String> itemNames = items.stream().map(Item::getName).toList();
-        final List<String> searchSuggestions = searchSuggestion.searchSuggestion(itemNames, searchQuery);
+        final List<String> searchSuggestions = searchSuggestion.createSearchSuggestion(itemNames, searchQuery);
 
         final Specification<Item> nameSpecification = searchCriteria.criteria(itemCount, searchSuggestions);
         final Specification<Item> searchSuggestionsSpecification = searchQueryCriteria.and(nameSpecification);

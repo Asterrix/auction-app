@@ -16,7 +16,7 @@ public final class CategorySuggestion {
     /**
      * @param items List of items
      * @return Category that has the highest count of mentions in the list of items
-     * @throws IllegalArgumentException if most popular category could not be found
+     * @throws IllegalStateException if the most popular category could not be found
      */
     public Category findMostPopularCategory(final List<Item> items) {
         final Optional<Category> mostPopularCategory = items
