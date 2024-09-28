@@ -6,9 +6,9 @@ import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.mapper.UserItemsMapper;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
-import com.atlantbh.internship.auction.app.service.ItemService;
+import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.UserService;
-import com.atlantbh.internship.auction.app.service.item.ItemStateChecker;
+import com.atlantbh.internship.auction.app.service.item.ItemStateChanger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +20,16 @@ public class UserServiceImpl implements UserService {
     private final ClaimsExtractor claimsExtractor;
     private final ItemService itemService;
     private final UserRepository userRepository;
-    private final ItemStateChecker itemStateChecker;
+    private final ItemStateChanger itemStateChanger;
 
     public UserServiceImpl(final ClaimsExtractor claimsExtractor,
                            @Lazy final ItemService itemService,
                            final UserRepository userRepository,
-                           final ItemStateChecker itemStateChecker) {
+                           final ItemStateChanger itemStateChanger) {
         this.claimsExtractor = claimsExtractor;
         this.itemService = itemService;
         this.userRepository = userRepository;
-        this.itemStateChecker = itemStateChecker;
+        this.itemStateChanger = itemStateChanger;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public List<UserItemDto> findAllItemsOwnedByUser() {
         final Integer userId = claimsExtractor.getUserId();
         final List<Item> items = itemService.findAllItemsByOwnerId(userId);
-        final List<Item> updatedItems = itemStateChecker.updateFinishedAttribute(items);
+        final List<Item> updatedItems = itemStateChanger.updateFinishedAttribute(items);
 
         return UserItemsMapper.mapToUserItemDto(updatedItems);
     }

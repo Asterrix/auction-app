@@ -4,7 +4,7 @@ import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
-import com.atlantbh.internship.auction.app.service.ItemService;
+import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.stripe.StripeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +39,23 @@ public class StripeController {
 
     @PostMapping("create-payment-intent")
     public ResponseEntity<String> createPaymentIntent(@RequestParam final Integer itemId) {
-        final Integer userId = claimsExtractor.getUserId();
+        final Integer requestUser = claimsExtractor.getUserId();
 
-        final String customerId = stripeService.findCustomerByUserId(userId);
+        final String customerId = stripeService.findCustomerByUserId(requestUser);
         if (customerId.isBlank()) {
-            throw new NoSuchElementException("Customer could not be found for userId: %d".formatted(userId));
+            throw new NoSuchElementException("Customer could not be found for the user with the id of: %d".formatted(requestUser));
         }
 
-        final BigDecimal itemPrice = itemService.findItemById(itemId)
-                .orElseThrow(() -> new NoSuchElementException("Item with the id of: %d could not be found".formatted(itemId)))
+        final Item item = itemService
+                .findItemById(itemId)
+                .orElseThrow(() -> new NoSuchElementException("Item with the id of: %d could not be found".formatted(itemId)));
+
+        final Integer ownerId = item.getOwner().getId();
+        if (requestUser.equals(ownerId)) {
+            throw new ValidationException("User cannot purchase his own items");
+        }
+
+        final BigDecimal itemPrice = item
                 .getUserItemBids()
                 .stream()
                 .max(Comparator.comparing(Bid::getAmount))

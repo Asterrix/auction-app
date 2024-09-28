@@ -91,6 +91,7 @@ public class BiddingServiceImpl implements BiddingService {
 
         return bidRepository.findAllUserRelatedBids(userId)
                 .stream()
+                .filter(bid -> !bid.getItem().getFinished())
                 .map((final Bid bid) -> {
                     final BigDecimal highestBid = findHighestBid(bid.getItem());
                     return BidsMapper.mapToUserBidsAggregate(bid, highestBid);

@@ -8,8 +8,8 @@ import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.repository.CategoryRepository;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.service.impl.ItemServiceImpl;
-import com.atlantbh.internship.auction.app.service.item.ItemStateChecker;
+import com.atlantbh.internship.auction.app.service.item.ItemServiceImpl;
+import com.atlantbh.internship.auction.app.service.item.ItemStateChanger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class ItemServiceTest {
     private BidRepository itemBidRepository;
 
     @Mock
-    private ItemStateChecker itemStateChecker;
+    private ItemStateChanger itemStateChanger;
 
     @InjectMocks
     private ItemServiceImpl service;
