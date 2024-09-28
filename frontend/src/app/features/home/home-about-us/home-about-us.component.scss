@@ -1,12 +1,6 @@
 @import "colors.styles";
 @import "container.styles";
 
-@mixin image-properties {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
 .about-us {
   display: grid;
   padding: 9.6rem 0;
@@ -23,8 +17,8 @@
 
   &__section {
     display: flex;
-    flex-direction: column;
     gap: 3.2rem;
+    flex-direction: column;
   }
 
   &__image__section {
@@ -41,27 +35,24 @@
 
   &__image-item {
     &:nth-child(1) {
+      background: url("/assets/images/Rectangle-63.svg") no-repeat;
+      background-size: cover;
       grid-area: X;
-
-      img {
-        @include image-properties;
-      }
+      height: 381px;
     }
 
     &:nth-child(2) {
+      background: url("/assets/images/Rectangle-64.svg") no-repeat;
+      background-size: cover;
       grid-area: Y;
-
-      img {
-        @include image-properties;
-      }
+      height: 199px;
     }
 
     &:nth-child(3) {
+      background: url("/assets/images/Rectangle-65.svg") no-repeat;
+      background-size: cover;
       grid-area: Z;
-
-      img {
-        @include image-properties;
-      }
+      height: 199px;
     }
   }
 }
