@@ -1,5 +1,9 @@
 <form-wrapper formSubject="Location & Shipping">
 
+  @if (error().type !== AlertType.None) {
+    <form-alert [alert]="error"/>
+  }
+
   <app-form-member
     [controlGroup]="locationShippingForm.form"
     [valid]="true"
