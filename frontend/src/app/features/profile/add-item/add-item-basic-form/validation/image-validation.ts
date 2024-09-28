@@ -1,17 +1,16 @@
 import {Constant} from "../../../../../shared/models/enums/constant";
-import {Validate, ValidationResult} from "../../shared/validation/formFieldValidator";
-import {AbstractValidationMessage} from "./abstract-validation-message";
+import {Validate, ValidationMessage, ValidationResult} from "../../shared/validation/validation";
 
 enum ValidationError {
   MinNumberOfImages,
   MaxNumberOfImages
 }
 
-export class ImageValidation extends AbstractValidationMessage implements Validate<string[]> {
+export class ImageValidation implements Validate<string[]> {
   private readonly minLength: number = 3;
   private readonly maxLength: number = 20;
 
-  protected override errorMessages: Record<ValidationError, string> = {
+  private errorMessages: ValidationMessage = {
     [ValidationError.MinNumberOfImages]: `You must upload at least ${this.minLength} photos of an item.`,
     [ValidationError.MaxNumberOfImages]: `You cannot upload more than ${this.maxLength} photos of an item.`
   };

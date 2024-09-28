@@ -2,13 +2,13 @@
 
   <form-field-wrapper>
     <app-form-start-price
-      [isValid]="validation.getStatus(formControl.price).valid"
-      [formFieldGroup]="setPriceForm"
+      [formFieldGroup]="setPriceForm.form"
+      [isValid]="setPriceForm.getValidationStatus(PriceValidation.Price).valid"
       formField="price"/>
 
     <app-validation-message
-      *ngIf="!validation.getStatus(formControl.price).valid"
-      [message]="validation.getStatus(formControl.price).message"/>
+      *ngIf="!setPriceForm.getValidationStatus(PriceValidation.Price).valid"
+      [message]="setPriceForm.getValidationStatus(PriceValidation.Price).message"/>
   </form-field-wrapper>
 
   <div class="form__dates">
@@ -24,11 +24,11 @@
   </div>
 
   <div class="form__navigation">
-    <button class="btn--cancel">Cancel</button>
+    <button (click)="cancelFormEvent()" class="btn--cancel">Cancel</button>
 
     <div class="form__navigation__forward">
-      <button class="btn--back">Back</button>
-      <button (click)="submitForm()" class="btn--next">Next</button>
+      <button (click)="goBackEvent()" class="btn--back">Back</button>
+      <button (click)="submitFormEvent()" class="btn--next">Next</button>
     </div>
   </div>
 

@@ -1,7 +1,7 @@
 <form-wrapper formSubject="Location & Shipping">
 
   <app-form-member
-    [controlGroup]="locationShippingForm"
+    [controlGroup]="locationShippingForm.form"
     [valid]="true"
     controlName="address"
     inputType="text"
@@ -12,7 +12,7 @@
 
 
   <app-form-member
-    [controlGroup]="locationShippingForm"
+    [controlGroup]="locationShippingForm.form"
     [valid]="true"
     controlName="email"
     inputType="email"
@@ -23,7 +23,7 @@
 
   <div class="form__city">
     <app-form-member
-      [controlGroup]="formControl.location"
+      [controlGroup]="locationShippingForm.form.controls.location"
       [valid]="true"
       controlName="city"
       inputType="text"
@@ -33,7 +33,7 @@
     />
 
     <app-form-member
-      [controlGroup]="formControl.location"
+      [controlGroup]="locationShippingForm.form.controls.location"
       [valid]="true"
       controlName="zip"
       inputType="text"
@@ -46,26 +46,33 @@
   <div class="form__member">
     <label class="form__member__label">Country</label>
     <form-dropdown
-      (onSelect)="changeCountry($event)"
       [isActive]="false"
       [isValid]="true"
       buttonText="ex.Spain"/>
   </div>
 
   <app-form-phone-number
-    [controlGroup]="locationShippingForm"
+    [controlGroup]="locationShippingForm.form"
     controlName="contact"/>
 
-  <app-add-item-credit-card-form
-    [creditCardGroup]="formControl.creditCard"
-    [credCardExpirationGroup]="formControl.creditCard.controls.expiration"/>
+  <ng-container *ngIf="showCreditCardForm">
+    <app-add-item-credit-card-form
+      [credCardExpirationGroup]="locationShippingForm.form.controls.creditCard.controls.expiration"
+      [creditCardGroup]="locationShippingForm.form.controls.creditCard"/>
+  </ng-container>
 
   <div class="form__navigation">
-    <button class="btn--cancel">Cancel</button>
+    <button class="btn--cancel" (click)="cancelFormEvent()">Cancel</button>
 
     <div class="form__navigation__forward">
-      <button class="btn--back">Back</button>
-      <button class="btn--next">Next</button>
+      <button class="btn--back" (click)="goBackEvent()">Back</button>
+      <ng-container *ngIf="!showCreditCardForm">
+        <button class="btn--next" (click)="submitFormEvent()">Next</button>
+      </ng-container>
+
+      <ng-container *ngIf="showCreditCardForm">
+        <button class="btn--next">Finish</button>
+      </ng-container>
     </div>
   </div>
 </form-wrapper>
