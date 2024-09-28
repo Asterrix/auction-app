@@ -1,12 +1,16 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
+import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.bid.BidRequest;
+import com.atlantbh.internship.auction.app.dto.bid.BiddingItem;
+import com.atlantbh.internship.auction.app.dto.bid.UserBiddingInfo;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.entity.UserItemBid;
 import com.atlantbh.internship.auction.app.exception.AllowedDecimalScaleException;
 import com.atlantbh.internship.auction.app.exception.FractionalDivisionIsNotZero;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
+import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,13 +28,16 @@ public class BiddingServiceImpl implements BiddingService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final UserItemBidRepository userItemBidRepository;
+    private final ClaimsExtractor claimsExtractor;
 
     public BiddingServiceImpl(final ItemRepository itemRepository,
                               final UserRepository userRepository,
-                              final UserItemBidRepository userItemBidRepository) {
+                              final UserItemBidRepository userItemBidRepository,
+                              final ClaimsExtractor claimsExtractor) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.userItemBidRepository = userItemBidRepository;
+        this.claimsExtractor = claimsExtractor;
     }
 
     private static void validateOwner(final Item item, final User bidder) {
@@ -90,11 +98,34 @@ public class BiddingServiceImpl implements BiddingService {
         validateOffer(bidRequest, item);
 
         final UserItemBid bid = createBid(bidRequest, bidder, item);
-        saveBidToDb(bid);
+        userItemBidRepository.save(bid);
     }
 
-    private void saveBidToDb(final UserItemBid bid) {
-        userItemBidRepository.save(bid);
+    @Override
+    public List<UserBiddingInfo> getUsersBiddingInformation() {
+        final Integer userId = claimsExtractor.getUserId();
+        final List<UserItemBid> allBidsRelatedToUser = userItemBidRepository.findByUser_Id(userId);
+
+        if (allBidsRelatedToUser.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<UserBiddingInfo> biddingInformation = new ArrayList<>();
+        allBidsRelatedToUser.forEach(bid -> {
+            final Item item = bid.getItem();
+
+            biddingInformation.add(
+                    new UserBiddingInfo(
+                            new BiddingItem(item.getId(), item.getItemImages().getFirst().getImageUrl(), item.getName()),
+                            TimeRemainingCalculator.getTimeRemaining(LocalDateTime.now(), bid.getItem().getEndTime()),
+                            bid.getAmount().toString(),
+                            item.getUserItemBids().size(),
+                            userItemBidRepository.listOfHighestBids(item.getId()).getFirst().getAmount().toString()
+                    )
+            );
+        });
+
+        return biddingInformation;
     }
 
     private void validateOffer(final BidRequest bidRequest, final Item item) {

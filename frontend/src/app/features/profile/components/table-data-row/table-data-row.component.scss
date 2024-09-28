@@ -43,14 +43,12 @@ $cube-shape: 8rem;
   }
 }
 
-.view-btn {
-  border: 2px solid $neutral-light-grey;
-  padding: 0.8rem 2.4rem;
-  text-transform: uppercase;
-  transition: all 200ms ease-out;
+.highest-bidder {
+  @extend .font-bold;
+  color: #69B207;
+}
 
-  &:hover {
-    border: 2px solid $primary;
-    color: $primary;
-  }
+.outbid {
+  @extend .font-bold;
+  color: #0066CC;
 }

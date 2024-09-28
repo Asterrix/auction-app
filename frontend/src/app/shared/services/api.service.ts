@@ -14,6 +14,7 @@ export namespace Api {
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
   import Authentication = Api.UserApi.AuthenticationRequest;
   import Register = Api.UserApi.RegisterRequest;
+  import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
 
 
   @Injectable({providedIn: "root"})
@@ -57,8 +58,12 @@ export namespace Api {
       return UserApi.PostMethods.register(this.httpClient, auth);
     }
 
-    bidOnItem(req: Required<BidRequest>) {
+    bidOnItem(req: Required<BidRequest>): Observable<HttpResponse<void>> {
       return BidApi.PostMethod.makeAnOffer(this.httpClient, req);
+    }
+
+    getAllUserBiddingInformation(): Observable<Array<UserBiddingInfo>> {
+      return BidApi.GetMethod.getAllUserBidInformation(this.httpClient);
     }
   }
 
@@ -270,8 +275,27 @@ export namespace Api {
       amount: number
     }
 
+    export interface UserBiddingInfo {
+      item: {
+        id: number;
+        portrait: string;
+        name: string;
+      };
+      timeLeft: string;
+      price: string;
+      numberOfBids: number;
+      highestBid: string;
+    }
+
     export enum Endpoint {
       Bids = "bids"
+    }
+
+    export namespace GetMethod {
+      export function getAllUserBidInformation(httpClient: HttpClient): Observable<Array<UserBiddingInfo>> {
+
+        return httpClient.get<Array<UserBiddingInfo>>(`${environment.apiUrl}/${Endpoint.Bids}`);
+      }
     }
 
     export namespace PostMethod {

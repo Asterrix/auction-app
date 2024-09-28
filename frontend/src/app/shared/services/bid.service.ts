@@ -1,9 +1,10 @@
 import {Injectable} from "@angular/core";
-import {catchError} from "rxjs";
+import {catchError, Observable} from "rxjs";
 import {AlertService, AlertType} from "./alert.service";
 import {Api} from "./api.service";
 import {ItemService} from "./item.service";
 import BidRequest = Api.BidApi.BidRequest;
+import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
 
 @Injectable({providedIn: "root"})
 export class BidService {
@@ -29,5 +30,9 @@ export class BidService {
         this.alertService.setAlert({message: "Congrats! You are the highest bidder!", type: AlertType.Info});
         this.itemService.initItem(offer.itemId);
       });
+  }
+
+  getAllUserBiddingInfo(): Observable<Array<UserBiddingInfo>> {
+    return  this.apiService.getAllUserBiddingInformation();
   }
 }

@@ -1,10 +1,18 @@
 <profile-shared-nav-tab>
-  <profile-table>
+  <ng-container *ngIf="(bids | async)?.length; else empty">
+    <profile-table>
+      <profile-table-data-row
+        *ngFor="let bid of bids | async"
+        [bid]="bid"/>
+    </profile-table>
+  </ng-container>
+
+  <ng-template #empty>
     <profile-table-empty
       btnLabel="Start Bidding"
       iconName="gavel"
       iconPath="assets/icons/gavel.svg"
       message="You don't have any bids and there are so many cool items for sale."
     />
-  </profile-table>
+  </ng-template>
 </profile-shared-nav-tab>

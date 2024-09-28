@@ -20,34 +20,33 @@ export interface UserDetails extends JwtPayload {
   providedIn: "root"
 })
 export class AuthenticationService {
-  private authUser = new BehaviorSubject<Constant | UserDetails>(AuthenticationService.getCurrentUser());
+  private authUser = new BehaviorSubject<UserDetails | undefined>(AuthenticationService.getCurrentUser());
 
   constructor(private router: Router, private apiService: Api.Service, private errorService: ErrorService) {
   }
 
   static retrieveUserToken(): string {
-    const token: string = TokenManager.retrieveTokenFromLocalStorage();
-
-    return token !== Constant.EmptyValue ? token : Constant.EmptyValue;
+    return TokenManager.retrieveTokenFromLocalStorage();
   }
 
   static isAuthenticated(): boolean {
-    const user: Constant | UserDetails = this.getCurrentUser();
-    return user !== Constant.EmptyValue;
+    const user: UserDetails | undefined = this.getCurrentUser();
+    return user !== undefined;
   }
 
-  public static getCurrentUser(): Constant | UserDetails {
+  public static getCurrentUser(): UserDetails | undefined {
     const localToken: string = TokenManager.retrieveTokenFromLocalStorage();
-    const userDetails: Constant | UserDetails = this.getUserDetailsFromToken(localToken);
-
-    return userDetails !== Constant.EmptyValue ? userDetails : Constant.EmptyValue;
+    return this.getUserDetailsFromToken(localToken);
   }
 
-  private static getUserDetailsFromToken(token: string): Constant | UserDetails {
-    return token !== Constant.EmptyValue ? TokenManager.decodeToken(token) : Constant.EmptyValue;
+  private static getUserDetailsFromToken(token: string): UserDetails | undefined {
+    if (token) {
+      return TokenManager.decodeToken(token);
+    }
+    return undefined;
   }
 
-  userObservable(): Observable<Constant | UserDetails> {
+  userObservable(): Observable<UserDetails | undefined> {
     return this.authUser.asObservable();
   }
 

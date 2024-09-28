@@ -138,7 +138,7 @@ class ItemControllerTest {
                 List.of()
         );
 
-        final UserItemBidDto itemBidDto = new UserItemBidDto("20", 1L);
+        final UserItemBidDto itemBidDto = new UserItemBidDto(new BigDecimal("20"), 1L);
         final ItemAggregate itemAggregate = new ItemAggregate(itemDto, itemBidDto);
 
         given(itemService.getItemById(itemId)).willReturn(Optional.of(itemAggregate));

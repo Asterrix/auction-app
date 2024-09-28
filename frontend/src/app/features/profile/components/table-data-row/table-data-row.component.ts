@@ -1,6 +1,9 @@
 import {CommonModule} from "@angular/common";
 import {Component, Input} from "@angular/core";
 import {RouterLink} from "@angular/router";
+import {Api} from "../../../../shared/services/api.service";
+import {ShopRouteEndpoint} from "../../../shop/shop-routes";
+import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
 
 @Component({
   selector: "profile-table-data-row",
@@ -10,21 +13,6 @@ import {RouterLink} from "@angular/router";
   styleUrls: ["./table-data-row.component.scss"]
 })
 export class TableDataRow {
-  @Input({required: true})
-  imagePath!: string;
-
-  @Input({required: true})
-  itemName!: string;
-
-  @Input({required: true})
-  timeLeft!: string;
-
-  @Input({required: true})
-  userPrice!: string;
-
-  @Input({required: true})
-  numberOfBids!: string;
-
-  @Input({required: true})
-  highestBid!: string;
+  @Input({required: true}) bid!: UserBiddingInfo;
+  protected readonly ShopRouteEndpoint = ShopRouteEndpoint;
 }
