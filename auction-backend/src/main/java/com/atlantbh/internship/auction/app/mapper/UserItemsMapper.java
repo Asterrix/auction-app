@@ -34,7 +34,9 @@ public final class UserItemsMapper {
                 itemSummary,
                 timeRemaining,
                 numberOfBids,
-                highestBid.isEmpty() ? new BigDecimal("0") : highestBid.get().getAmount());
+                highestBid.isEmpty() ? new BigDecimal("0") : highestBid.get().getAmount(),
+                item.getFinished()
+        );
     }
 
     public static List<UserItemDto> mapToUserItemDto(final List<Item> items) {

@@ -36,7 +36,9 @@ public final class ItemMapper {
                 entity.getDescription(),
                 entity.getInitialPrice(),
                 TimeRemainingCalculator.getTimeRemaining(currentTime, entity.getEndTime()),
-                ItemImageMapper.convertToDto(entity.getItemImages()));
+                ItemImageMapper.convertToDto(entity.getItemImages()),
+                entity.getFinished()
+        );
     }
 
     public static ItemFeaturedDto convertToFeaturedDto(final Item item, final ItemImage itemImage) {

@@ -4,6 +4,7 @@ import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
@@ -45,4 +46,6 @@ public interface ItemService {
     ItemFeaturedDto getFeaturedItem();
 
     void createItem(final CreateItemRequest createItemRequest, final List<MultipartFile> file) throws IOException;
+
+    List<Item> findAllItemsByOwnerId(final Integer ownerId);
 }

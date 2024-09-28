@@ -108,6 +108,7 @@ export namespace Api {
       timeRemaining: string;
       numberOfBids: number;
       highestBid: number;
+      finished: boolean;
     }
 
     export namespace GetMethod {
@@ -190,6 +191,7 @@ export namespace Api {
         description: string;
         timeLeft: string;
         images: Array<ItemImage>;
+        finished: boolean;
       }
 
       export interface ItemImage {

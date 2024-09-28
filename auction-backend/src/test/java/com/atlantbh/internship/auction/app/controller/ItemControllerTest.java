@@ -137,7 +137,8 @@ class ItemControllerTest {
                 "Desc",
                 new BigDecimal("20.00"),
                 "1 Day",
-                List.of()
+                List.of(),
+                false
         );
 
         final BidNumberCount itemBidDto = new BidNumberCount(new BigDecimal("20"), 1L);
