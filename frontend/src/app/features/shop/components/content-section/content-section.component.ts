@@ -6,11 +6,10 @@ import {distinctUntilChanged} from "rxjs/operators";
 import {ItemCardComponent} from "../../../../shared/components/item-card/item-card.component";
 import {LoaderComponent} from "../../../../shared/components/loader/loader.component";
 import {Page} from "../../../../shared/models/interfaces/page";
+import {Pagination} from "../../../../shared/models/pagination";
 import {Api} from "../../../../shared/services/api.service";
 import {ItemService} from "../../../../shared/services/item.service";
-import {LoaderService} from "../../../../shared/services/loader.service";
 import {ShopPageParameter} from "../../shop-routes";
-import Pagination = Api.Interfaces.Pagination;
 import ItemParams = Api.ItemApi.GetMethods.ItemParams;
 import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
@@ -24,12 +23,10 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 export class ContentSectionComponent implements OnInit, OnDestroy {
   subscription: Record<string, Subscription> = {};
   items$: Observable<Page<ItemSummary> | undefined> | undefined;
-  paginationDetails: Required<{ last: boolean, totalElements: number }> = {last: true, totalElements: 0};
   itemParams: Partial<ItemParams> = {};
-  pagination: Required<Pagination> = {page: 0, size: 8};
-  loader$: Observable<boolean> = this.loader.loading$;
+  pagination = new Pagination({page: 0, size: 8});
 
-  constructor(private itemService: ItemService, private router: Router, private activatedRoute: ActivatedRoute, private loader: LoaderService) {
+  constructor(private itemService: ItemService, private router: Router, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -37,7 +34,7 @@ export class ContentSectionComponent implements OnInit, OnDestroy {
       debounceTime(200),
       distinctUntilChanged()
     ).subscribe((param: Params): void => {
-      this.resetPageNumber();
+      this.pagination.resetPageNumber();
       this.handleQueryParameterChange(param);
       this.initialiseItems();
       this.updatePaginationState();
@@ -48,23 +45,23 @@ export class ContentSectionComponent implements OnInit, OnDestroy {
     this.unsubscribe();
   }
 
+  loadMoreElements(): void {
+    if (!this.pagination.isLastPageValue()) {
+      this.pagination.increasePageNumber();
+      this.itemService.loadMoreData(this.itemParams, this.pagination.getPagination());
+    }
+  }
+
+  navigateToItem(itemId: number): void {
+    this.router.navigate(["/shop/item", itemId]).then(null);
+  }
+
   private unsubscribe(): void {
     for (const key in this.subscription) {
       if (this.subscription[key]) {
         this.subscription[key].unsubscribe();
       }
     }
-  }
-
-  loadMoreElements(): void {
-    if (!this.paginationDetails.last) {
-      this.pagination.page += 1;
-      this.itemService.loadMoreData(this.itemParams, this.pagination);
-    }
-  }
-
-  navigateToItem(itemId: number): void {
-    this.router.navigate(["/shop/item", itemId]).then(null);
   }
 
   private handleQueryParameterChange(param: Params): void {
@@ -92,14 +89,12 @@ export class ContentSectionComponent implements OnInit, OnDestroy {
   }
 
   private initialiseItemsWithParameters(): void {
-    this.itemService.initItems(this.itemParams, this.pagination);
+    this.itemService.initItems(this.itemParams, this.pagination.getPagination());
   }
 
   private updatePaginationState(): void {
     this.subscription["pagination"] = this.itemService.getItems().subscribe((page: Page<ItemSummary> | undefined): void => {
-      const last: boolean = page?.last ?? true;
-      const totalElements: number = page?.totalElements ?? 0;
-      this.paginationDetails = {last: last, totalElements: totalElements};
+      this.pagination.updatePaginationDetails(page?.last, page?.totalElements);
     });
   }
 
@@ -109,10 +104,6 @@ export class ContentSectionComponent implements OnInit, OnDestroy {
 
   private handleSubcategoryChange(param: Params): void {
     this.itemParams.subcategory = param[ShopPageParameter.Parameter.Subcategory] || undefined;
-  }
-
-  private resetPageNumber(): void {
-    this.pagination.page = 0;
   }
 
   private resetCategoryAndSubcategoryParams() {

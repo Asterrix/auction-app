@@ -3,21 +3,15 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Page} from "../models/interfaces/page";
+import {IPagination} from "../models/pagination";
 
 export namespace Api {
   import Category = Api.CategoryApi.Category;
-  import Pagination = Api.Interfaces.Pagination;
   import ItemParams = Api.ItemApi.GetMethods.ItemParams;
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   import Item = Api.ItemApi.Interfaces.Item;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
-  export namespace Interfaces {
-    export interface Pagination {
-      page: number;
-      size: number;
-    }
-  }
 
   @Injectable({providedIn: "root"})
   export class Service {
@@ -44,7 +38,7 @@ export namespace Api {
       return ItemApi.GetMethods.getItemById(this.httpClient, itemId);
     }
 
-    getListOfAllItems(filter: Partial<ItemParams>, pagination: Required<Pagination>): Observable<Page<ItemSummary>> {
+    getListOfAllItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
       return ItemApi.GetMethods.getListOfItems(this.httpClient, filter, pagination);
     }
   }
@@ -120,7 +114,7 @@ export namespace Api {
         return param;
       }
 
-      export function extractPagination(pagination: Required<Pagination>, param: HttpParams): HttpParams {
+      export function extractPagination(pagination: Required<IPagination>, param: HttpParams): HttpParams {
         for (const [key, value] of Object.entries(pagination)) {
           param = param.set(key, value);
         }
@@ -152,7 +146,7 @@ export namespace Api {
         DESC = "DESC"
       }
 
-      function getParams(params: Partial<ItemParams>, pagination: Required<Pagination>): HttpParams {
+      function getParams(params: Partial<ItemParams>, pagination: Required<IPagination>): HttpParams {
         let param: HttpParams = new HttpParams();
 
         param = extractParameters(params, param);
@@ -167,7 +161,7 @@ export namespace Api {
           sort: `${SortBy.StartDate},${SortByDirection.DESC}`
         };
 
-        const pagination: Required<Pagination> = {
+        const pagination: Required<IPagination> = {
           page: 0,
           size: 8
         };
@@ -181,7 +175,7 @@ export namespace Api {
           sort: `${SortBy.EndDate},${SortByDirection.DESC}`
         };
 
-        const pagination: Required<Pagination> = {
+        const pagination: Required<IPagination> = {
           page: 0,
           size: 8
         };
@@ -197,7 +191,7 @@ export namespace Api {
         return httpClient.get<Item>(`${environment.apiUrl}/${Endpoint.Items}/${itemId}`);
       }
 
-      export function getListOfItems(httpClient: HttpClient, params: Partial<ItemParams>, pagination: Required<Pagination>): Observable<Page<ItemSummary>> {
+      export function getListOfItems(httpClient: HttpClient, params: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
         return httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, {params: getParams(params, pagination)});
       }
     }

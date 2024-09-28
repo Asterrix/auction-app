@@ -1,6 +1,6 @@
 <div class="content_section">
 
-  <p *ngIf="paginationDetails.totalElements === 0">
+  <p *ngIf="(pagination.totalElements$ | async) === 0">
     No items were found.
   </p>
 
@@ -11,7 +11,7 @@
   </div>
 
 
-  <ng-container *ngIf="!paginationDetails.last">
+  <ng-container *ngIf="(pagination.isLast$ | async) === false">
     <button (click)="loadMoreElements()" class="btn">Explore More</button>
   </ng-container>
 </div>
