@@ -1,0 +1,38 @@
+<form-general (submitForm)="onSubmit()" [error$]="error$" [formFieldGroup]="registerForm" label="Register">
+
+  <form-input-field
+    [formFieldGroup]="registerForm"
+    formField="firstName"
+    label="First Name"
+    placeholder="John"
+    type="text"/>
+
+  <form-input-field
+    [formFieldGroup]="registerForm"
+    formField="lastName"
+    label="Last Name"
+    placeholder="Doe"
+    type="text"/>
+
+  <form-input-field
+    [formFieldGroup]="registerForm"
+    formField="email"
+    label="Enter Email"
+    placeholder="user@domain.com"
+    type="email"/>
+
+  <form-input-field
+    [formFieldGroup]="registerForm"
+    formField="password"
+    label="Password"
+    placeholder="********"
+    type="password"/>
+
+  <button-primary label="Register"/>
+
+  <div class="notice">
+    <span>Already have an account?</span>
+    <a routerLink="/login">Login</a>
+  </div>
+
+</form-general>
