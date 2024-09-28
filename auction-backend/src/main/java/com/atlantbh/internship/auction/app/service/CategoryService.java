@@ -5,5 +5,5 @@ import com.atlantbh.internship.auction.app.dto.CategoryDto;
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryDto> getAll();
+    List<CategoryDto> getAllCategories();
 }

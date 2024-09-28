@@ -32,7 +32,7 @@ class CategoryServiceTest {
         );
 
         when(repository.findAll()).thenReturn(categories);
-        List<CategoryDto> result = service.getAll();
+        List<CategoryDto> result = service.getAllCategories();
 
         assertEquals(categories.size(), result.size());
         verify(repository, times(1)).findAll();
