@@ -36,12 +36,12 @@ class CategoryServiceTest {
                 new Category(3, "Category3", categories.getLast())
         );
 
-        when(repository.findAllCategories()).thenReturn(categories);
-        when(repository.findAllSubcategories()).thenReturn(subcategories);
+        when(repository.findByParentCategoryNull()).thenReturn(categories);
+        when(repository.findByParentCategoryNotNull()).thenReturn(subcategories);
         List<CategoryDto> result = service.getAllCategories();
 
         assertEquals(categories.size(), result.size());
-        verify(repository, times(1)).findAllCategories();
-        verify(repository, times(1)).findAllSubcategories();
+        verify(repository, times(1)).findByParentCategoryNull();
+        verify(repository, times(1)).findByParentCategoryNotNull();
     }
 }

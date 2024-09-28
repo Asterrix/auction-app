@@ -19,8 +19,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        final List<Category> categories = repository.findAllCategories();
-        final List<Category> subcategories = repository.findAllSubcategories();
+        final List<Category> categories = repository.findByParentCategoryNull();
+        final List<Category> subcategories = repository.findByParentCategoryNotNull();
 
         return CategoryMapper.convertToCategoryDto(categories, subcategories);
     }
