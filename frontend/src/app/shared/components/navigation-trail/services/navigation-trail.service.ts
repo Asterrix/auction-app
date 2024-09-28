@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {distinctUntilChanged, map} from "rxjs/operators";
 import {EmptyValue} from "../../../models/enums/EmptyValue";
-import {NavigationTrail} from "../../../models/enums/NavigationTrail";
+import {NavigationTrail} from "../navigation-trail.component";
 
 export interface NavigationTrailStructure {
   label: string;
