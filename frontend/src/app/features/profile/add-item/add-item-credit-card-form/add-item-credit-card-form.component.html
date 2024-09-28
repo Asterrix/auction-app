@@ -1,0 +1,68 @@
+<div class="form">
+  <div class="form__header">
+    <span class="form__name">Featured products</span>
+
+    <div class="form__cards">
+      <p>We accept the following credit cards</p>
+      <div class="form__cards__list">
+        <img
+          alt="Visa card"
+          height="24"
+          ngSrc="assets/credit-cards/visa.png"
+          width="34"/>
+
+        <img
+          alt="MasterCard"
+          height="24"
+          ngSrc="assets/credit-cards/master_card.png"
+          width="34"/>
+
+        <img
+          alt="American Express"
+          height="24"
+          ngSrc="assets/credit-cards/american_express.png"
+          width="34"/>
+
+        <img
+          alt="Maestro"
+          height="24"
+          ngSrc="assets/credit-cards/maestro.png"
+          width="34"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="form">
+    <app-form-member
+      inputType="text"
+      memberId="card-name"
+      memberLabel="Name on Card"
+      placeholder="JOHN DOE"/>
+
+    <app-form-member
+      inputType="text"
+      memberId="card-number"
+      memberLabel="Card Number"
+      placeholder="XXXX-XXXX-XXXX-XXXX"/>
+
+    <div class="form__dates">
+
+      <div class="form__dates--expiration">
+        <label>Expiration date</label>
+        <form-categories-dropdown
+          [isActive]="false"
+          buttonText="MM"/>
+      </div>
+
+      <form-categories-dropdown
+        [isActive]="false"
+        buttonText="YY"/>
+
+      <app-form-member
+        inputType="text"
+        memberId="card-cvc-cvv"
+        memberLabel="CVC/CVV"
+        placeholder="***"/>
+    </div>
+  </div>
+</div>
