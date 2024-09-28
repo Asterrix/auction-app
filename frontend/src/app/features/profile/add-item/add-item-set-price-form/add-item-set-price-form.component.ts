@@ -14,8 +14,8 @@ import {FormDateTimeSelectorComponent} from "./form-date-time-selector/form-date
 import {FormStartPriceComponent} from "./form-start-price/form-start-price.component";
 
 export enum DateTimeForm {
-  StartDate,
-  EndDate
+  StartTime,
+  EndTime
 }
 
 @Component({
@@ -39,21 +39,22 @@ export class AddItemSetPriceFormComponent extends FormNavigationHandler implemen
   @Output() override submitForm: EventEmitter<void> = new EventEmitter<void>();
   @Output() override goBack: EventEmitter<void> = new EventEmitter<void>();
   @Output() override cancelForm: EventEmitter<void> = new EventEmitter<void>();
-  protected setPriceForm = inject(AddItemPriceFormService);
+  protected setPriceDateFormService = inject(AddItemPriceFormService);
   protected readonly PriceValidation = PriceValidation;
-  protected readonly DateTimeForm = DateTimeForm;
 
   public override submitFormEvent(): void {
-    if (this.setPriceForm.validateForm()) {
+    if (this.setPriceDateFormService.validateForm()) {
       super.submitFormEvent();
     }
   }
 
-  protected submitDateTimeEvent(date: Date, formField: DateTimeForm): void {
-    if (formField === DateTimeForm.StartDate) {
-      this.setPriceForm.patchStartTime(date);
-    } else if (formField === DateTimeForm.EndDate) {
-      this.setPriceForm.patchEndTime(date);
+  protected submitDateTimeEvent(date: Date, dateTimeType: DateTimeForm): void {
+    if (dateTimeType === DateTimeForm.StartTime) {
+      this.setPriceDateFormService.patchStartTime(date);
+    } else if (dateTimeType === DateTimeForm.EndTime) {
+      this.setPriceDateFormService.patchEndTime(date);
     }
   }
+
+  protected readonly DateTimeForm = DateTimeForm;
 }

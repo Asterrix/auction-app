@@ -1,6 +1,6 @@
 <div class="date-picker">
 
-  @if (dateTimeService.currentDate();as date) {
+  @if (dateTimeService.dateTime();as date) {
     <div class="date-picker__container">
       <div class="date-picker__header">
         <p class="date-picker__title">Select date</p>
@@ -14,7 +14,7 @@
 
     <div class="date-picker__calendar">
       <div class="date-picker__calendar__navigation">
-        <p>{{ date.dateList[0] | date: 'MMMM' }} {{ date.dateList[0].getFullYear() }}</p>
+        <p>{{ date.selectedMonthDateList[0] | date: 'MMMM' }} {{ date.selectedMonthDateList[0].getFullYear() }}</p>
 
         <div class="date-picker__nav">
           <button
@@ -57,12 +57,12 @@
       <tr class="date-picker__content-row">
         <td *ngFor="let empty of firstDayOfMonthSpacing"></td>
 
-        <td *ngFor="let member of date.dateList">
+        <td *ngFor="let member of date.selectedMonthDateList">
           <input
             (click)="changeDate(member)"
-            [disabled]="member < dateTimeService.currentDateVal"
             [value]="member.getDate()"
-            [ngClass]="{'active': dateTimeService.isSameDateIgnoreTime(member)}"
+            [disabled]="dateTimeService.isLess(member)"
+            [ngClass]="{'active': dateTimeService.isSameSelectedDateIgnoreTime(member)}"
             class="date-picker__day-button"
             type="button"/>
         </td>

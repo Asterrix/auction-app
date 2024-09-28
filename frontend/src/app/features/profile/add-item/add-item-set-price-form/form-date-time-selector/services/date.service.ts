@@ -1,111 +1,87 @@
-import {computed, Injectable, Signal, signal} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {
   addDays,
   addMonths,
   eachDayOfInterval,
   endOfMonth,
-  isAfter,
   isSameDay,
   isSameMonth,
   isSameYear,
+  setHours, startOfDay,
   startOfMonth,
   subMonths
 } from "date-fns";
 
-export interface DateChanger {
-  changeSelectedDate(date: Date): void;
+interface DateMethod {
+  addDays(currentDate: Date, daysCount: number): Date;
 
-  goToNextMonth(): void;
+  changeSelectedDate(currentDate: Date, nextDate: Date): Date;
 
-  goToPreviousMonth(): void;
+  nextMonth(currentMonth: Date): Date[];
 
-  firstDayOfMonthNumber(): number;
+  previousMonth(currentDate: Date, currentMonth: Date): Date[];
 
-  isSameDateIgnoreTime(date: Date): boolean;
+  isSameSelectedDateIgnoreTime(firstDate: Date, secondDate: Date): boolean;
 
-  setListOfMonthsToSelectedDate(): void;
-}
+  getListOfMonthDays(date: Date): Date[];
 
-export type DateType = {
-  selected: Date;
-  dateList: Date[];
+  isLess(firstDate: Date, secondDate: Date): boolean;
 }
 
 @Injectable({providedIn: "root"})
-export class DateService implements DateChanger {
-  public readonly currentDate: Date = new Date();
-  private dateSignal = signal<DateType>({
-    selected: addDays(this.currentDate, 1),
-    dateList: eachDayOfInterval({
-      start: startOfMonth(this.currentDate),
-      end: endOfMonth(this.currentDate)
-    })
-  });
-  public date: Signal<DateType> = computed(() => this.dateSignal());
-
-  public changeSelectedDate(date: Date): void {
-    if (isAfter(date, this.currentDate)) {
-      this.dateSignal.set({
-        selected: date,
-        dateList: this.dateSignal().dateList
-      });
-    }
+export class DateService implements DateMethod {
+  public changeSelectedDate(currentDate: Date, nextDate: Date): Date {
+    return setHours(nextDate, currentDate.getHours());
   }
 
-  public firstDayOfMonthNumber(): number {
-    return this.getFirstListDate().getDay();
+  public addDays(currentDate: Date, daysCount: number): Date {
+    return addDays(currentDate, daysCount);
   }
 
-  public goToNextMonth(): void {
-    const nextMonth: Date = addMonths(this.getFirstListDate(), 1);
+  public nextMonth(currentMonth: Date): Date[] {
+    const nextMonth: Date = addMonths(currentMonth, 1);
     const beginningOfNextMonth: Date = startOfMonth(nextMonth);
     const endOfNextMonth: Date = endOfMonth(nextMonth);
 
-    this.dateSignal.set({
-      selected: this.dateSignal().selected,
-      dateList: eachDayOfInterval({
-        start: beginningOfNextMonth,
-        end: endOfNextMonth
-      })
+    return eachDayOfInterval({
+      start: beginningOfNextMonth,
+      end: endOfNextMonth
     });
   }
 
-  public goToPreviousMonth(): void {
-    const previousMonth: Date = subMonths(this.getFirstListDate(), 1);
+  public previousMonth(currentDate: Date, currentMonth: Date): Date[] {
+    const previousMonth: Date = subMonths(currentMonth, 1);
 
-    if (previousMonth >= startOfMonth(this.currentDate)) {
+    if (previousMonth >= startOfMonth(currentDate)) {
       const beginningOfPreviousMonth: Date = startOfMonth(previousMonth);
       const endOfPreviousMonth: Date = endOfMonth(previousMonth);
 
-      this.dateSignal.set({
-        selected: this.dateSignal().selected,
-        dateList: eachDayOfInterval({
-          start: beginningOfPreviousMonth,
-          end: endOfPreviousMonth
-        })
+      return eachDayOfInterval({
+        start: beginningOfPreviousMonth,
+        end: endOfPreviousMonth
       });
     }
+
+    return new Array<Date>();
   }
 
-  public isSameDateIgnoreTime(date: Date): boolean {
+  public isSameSelectedDateIgnoreTime(firstDate: Date, secondDate: Date): boolean {
     return (
-      isSameYear(this.dateSignal().selected, date) &&
-      isSameMonth(this.dateSignal().selected, date) &&
-      isSameDay(this.dateSignal().selected, date)
+      isSameYear(firstDate, secondDate) &&
+      isSameMonth(firstDate, secondDate) &&
+      isSameDay(firstDate, secondDate)
     );
   }
 
-  public setListOfMonthsToSelectedDate(): void {
-    this.dateSignal.set({
-      selected: this.dateSignal().selected,
-      dateList: eachDayOfInterval({
-        start: startOfMonth(this.dateSignal().selected),
-        end: endOfMonth(this.dateSignal().selected)
-      })
+  public getListOfMonthDays(date: Date): Date[] {
+    return eachDayOfInterval({
+      start: startOfMonth(date),
+      end: endOfMonth(date)
     });
   }
 
-  private getFirstListDate(): Date {
-    return this.dateSignal().dateList[0];
+  public isLess(firstDate: Date, secondDate: Date): boolean {
+    const day: Date = startOfDay(firstDate);
+    return secondDate < day;
   }
 }

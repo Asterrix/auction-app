@@ -1,4 +1,4 @@
-@use "colors" as *;
+@use "colors";
 @use "typography";
 
 .form {
@@ -8,16 +8,16 @@
   &__label {
     border: 1px solid transparent;
     @extend .font-semi-bold;
-    color: $neutral-dark;
+    color: colors.$neutral-dark;
 
     &:focus {
-      border: 1px solid $primary;
+      border: 1px solid colors.$primary;
     }
   }
 
   &__input {
-    background-color: $input-gray;
-    border: 1px solid $neutral-light-grey;
+    background-color: colors.$input-gray;
+    border: 1px solid colors.$neutral-light-grey;
     padding: 1.4rem;
   }
 }
@@ -31,4 +31,8 @@ img {
   &:hover {
     cursor: pointer;
   }
+}
+
+.invalid {
+  border: 1px solid colors.$error;
 }

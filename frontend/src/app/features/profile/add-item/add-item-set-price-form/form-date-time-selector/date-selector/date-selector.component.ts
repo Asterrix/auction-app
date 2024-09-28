@@ -10,19 +10,19 @@ import {DateTimeService} from "../services/date-time.service";
   templateUrl: "./date-selector.component.html",
   styleUrl: "./date-selector.component.scss"
 })
-export class DateSelectorComponent implements DateTimeSelection {
+export class DateSelectorComponent  {
   @Output() closeEvent = new EventEmitter<void>();
   @Output() submitEvent = new EventEmitter<void>();
   protected dateTimeService: DateTimeService = inject(DateTimeService);
-  protected firstDayOfMonthSpacing: number[] = new Array(this.dateTimeService.firstDayOfMonthNumber());
+  protected firstDayOfMonthSpacing: number[] = new Array(this.dateTimeService.dateTime().selectedMonthDateList[0].getDay());
 
   public goToNextMonth(): void {
-    this.dateTimeService.goToNextMonth();
+    this.dateTimeService.nextMonth();
     this.updateFirstDaySpacing();
   }
 
   public goToThePreviousMonth(): void {
-    this.dateTimeService.goToNextMonth();
+    this.dateTimeService.previousMonth();
     this.updateFirstDaySpacing();
   }
 
@@ -39,6 +39,6 @@ export class DateSelectorComponent implements DateTimeSelection {
   }
 
   private updateFirstDaySpacing(): void {
-    this.firstDayOfMonthSpacing = new Array(this.dateTimeService.firstDayOfMonthNumber());
+    this.firstDayOfMonthSpacing = new Array(this.dateTimeService.dateTime().selectedMonthDateList[0].getDay());
   }
 }

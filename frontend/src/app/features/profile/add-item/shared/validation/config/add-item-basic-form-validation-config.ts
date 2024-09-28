@@ -1,10 +1,10 @@
 import {FormGroup} from "@angular/forms";
+import {Basic} from "../../../add-item-basic-form/add-item-basic-form.service";
 import {CategoryType} from "../../../add-item-basic-form/form-categories/form-categories.component";
 import {CategoryValidation} from "../../../add-item-basic-form/validation/category-validation";
 import {DescriptionValidation} from "../../../add-item-basic-form/validation/description-validation";
 import {ImageValidation} from "../../../add-item-basic-form/validation/image-validation";
 import {ItemNameValidation} from "../../../add-item-basic-form/validation/item-name.validation";
-import {Basic} from "../../../add-item-basic-form/add-item-basic-form.service";
 import {ValidationField} from "../validation";
 
 export enum BasicFormValidation {
