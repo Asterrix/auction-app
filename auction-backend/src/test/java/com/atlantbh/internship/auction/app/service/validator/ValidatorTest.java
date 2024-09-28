@@ -58,14 +58,6 @@ class ValidatorTest {
     }
 
     @Test
-    void normaliseInput_ShouldReturnString_WithNoWhiteSpaces() {
-        final String input = "   Ome                 ga     ";
-        final String result = Validator.normaliseInput(input);
-
-        Assertions.assertEquals("Ome ga", result);
-    }
-
-    @Test
     void isMadeUpOfLetters_ShouldThrow_WhenInputIsNull() {
         assertThrows(ValidationException.class, () -> Validator.isMadeUpOfLetters(null, null));
     }

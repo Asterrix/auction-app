@@ -7,9 +7,7 @@ public class PasswordValidator extends Validator {
     private static final Integer MIN_PASSWORD_LENGTH = 8;
     private static final Integer MAX_PASSWORD_LENGTH = 100;
 
-    public static void validatePassword(final String input) {
-        final String password = normaliseInput(input);
-
+    public static void validatePassword(final String password) {
         isEmptyOrNull(password, "Password field cannot be null");
         minimumLength(password, MIN_PASSWORD_LENGTH, String.format("Password cannot contain less than %d characters.", MIN_PASSWORD_LENGTH));
         maximumLength(password, MAX_PASSWORD_LENGTH, String.format("Password cannot contain more than %d characters.", MAX_PASSWORD_LENGTH));
