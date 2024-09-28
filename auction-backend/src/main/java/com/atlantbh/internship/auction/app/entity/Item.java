@@ -3,7 +3,7 @@ package com.atlantbh.internship.auction.app.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +25,11 @@ public class Item {
     @Column(name = "initial_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal initialPrice;
 
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    @Column(name = "start_time", nullable = false)
+    private LocalDateTime startTime;
 
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    @Column(name = "end_time", nullable = false)
+    private LocalDateTime endTime;
 
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<ItemImage> itemImages = new ArrayList<>();
@@ -45,23 +45,22 @@ public class Item {
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<UserItemBid> userItemBids = new ArrayList<>();
 
-
     public Item() {
     }
 
     public Item(final String name,
                 final String description,
                 final BigDecimal initialPrice,
-                final LocalDate startDate,
-                final LocalDate endDate,
+                final LocalDateTime startTime,
+                final LocalDateTime endTime,
                 final List<ItemImage> itemImages,
                 final Category category,
                 final User owner) {
         this.name = name;
         this.description = description;
         this.initialPrice = initialPrice;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.itemImages = itemImages;
         this.category = category;
         this.owner = owner;
@@ -99,20 +98,20 @@ public class Item {
         this.initialPrice = initialPrice;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setStartDate(final LocalDate startDate) {
-        this.startDate = startDate;
+    public void setStartTime(final LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setEndDate(final LocalDate endDate) {
-        this.endDate = endDate;
+    public void setEndTime(final LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public List<ItemImage> getItemImages() {
@@ -139,16 +138,11 @@ public class Item {
         this.owner = owner;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "name = " + name + ", " +
-                "description = " + description + ", " +
-                "initialPrice = " + initialPrice + ", " +
-                "startDate = " + startDate + ", " +
-                "endDate = " + endDate + ", " +
-                "category = " + category + ", " +
-                "owner = " + owner + ")";
+    public List<UserItemBid> getUserItemBids() {
+        return userItemBids;
+    }
+
+    public void setUserItemBids(final List<UserItemBid> userItemBids) {
+        this.userItemBids = userItemBids;
     }
 }

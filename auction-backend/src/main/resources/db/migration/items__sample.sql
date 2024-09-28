@@ -1,113 +1,151 @@
-INSERT INTO public.items (id, name, description, initial_price, start_date, end_date, category_id, owner_id)
+INSERT INTO public.items (id, name, description, initial_price, start_time, end_time, category_id, owner_id)
 VALUES (1, 'Brown Leather Handbag',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pretium fusce id velit ut tortor. Ultricies mi eget mauris pharetra. Aliquet risus feugiat in ante metus dictum at. Proin fermentum leo vel orci. Non blandit massa enim nec dui nunc mattis enim ut. Quis lectus nulla at volutpat diam ut venenatis tellus. Ornare arcu odio ut sem nulla pharetra diam sit.',
-        139.99, '2023-11-10', '2023-11-17', 10, 1),
+        139.99, '2023-11-10 00:00:00', '2023-11-17 00:00:00', 10, 1),
+
        (2, 'Red Leather Handbag',
         'Rhoncus mattis rhoncus urna neque viverra justo. Consequat semper viverra nam libero justo laoreet sit amet. Urna et pharetra pharetra massa massa ultricies mi quis. Duis ultricies lacus sed turpis tincidunt. Maecenas sed enim ut sem viverra aliquet eget sit. Urna id volutpat lacus laoreet non curabitur gravida. Nam aliquam sem et tortor consequat. Mi sit amet mauris commodo quis.',
-        199.99, '2023-11-10', '2023-11-24', 10, 1),
+        199.99, '2023-11-10 00:00:00', '2023-11-24 00:00:00', 10, 1),
+
        (3, 'Ferragamo BOXYZ',
         'Sit amet dictum sit amet justo. Quam id leo in vitae turpis massa sed elementum tempus. Et malesuada fames ac turpis egestas sed tempus urna et. Turpis egestas sed tempus urna. Sit amet luctus venenatis lectus magna fringilla urna porttitor.',
-        90.00, '2023-11-10', '2023-11-30', 10, 1),
+        90.00, '2023-11-10 00:00:00', '2023-11-30 00:00:00', 10, 1),
+
        (4, 'Blue and white floral handbag',
         'Blandit aliquam etiam erat velit. Nunc pulvinar sapien et ligula ullamcorper malesuada. At volutpat diam ut venenatis. Et tortor at risus viverra adipiscing. Duis at tellus at urna condimentum mattis pellentesque.',
-        110.00, '2023-11-10', '2023-12-01', 10, 1),
+        110.00, '2023-11-10 00:00:00', '2023-12-01 00:00:00', 10, 1),
+
        (5, 'Red Michael Kors leather sling bag',
         'Mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Facilisis sed odio morbi quis commodo odio aenean sed adipiscing. Lorem donec massa sapien faucibus. Mollis nunc sed id semper risus in. Velit ut tortor pretium viverra suspendisse. Neque vitae tempus quam pellentesque. Convallis tellus id interdum velit laoreet id.',
-        70, '2023-11-03', '2023-12-05', 10, 1),
+        70, '2023-11-03 00:00:00', '2023-12-05 00:00:00', 10, 1),
+
        (6, 'Blue Michael Kors leather sling bag',
         'Aenean sed adipiscing diam donec adipiscing tristique risus nec feugiat. Morbi tristique senectus et netus. Imperdiet dui accumsan sit amet. Enim lobortis scelerisque fermentum dui faucibus. Massa massa ultricies mi quis hendrerit dolor magna eget est. Urna nec tincidunt praesent semper feugiat.',
-        70, '2023-11-03', '2023-12-05', 10, 1),
+        70, '2023-11-03 00:00:00', '2023-12-05 00:00:00', 10, 1),
+
        (7, 'Bonchon',
         'Nulla malesuada pellentesque elit eget. Leo urna molestie at elementum eu facilisis. Massa eget egestas purus viverra accumsan in. Nunc sed augue lacus viverra. Dolor sit amet consectetur adipiscing.',
-        60, '2023-11-09', '2023-12-03', 11, 1),
+        60, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 11, 1),
+
        (8, 'Brown-lens sunglasses',
         'Urna duis convallis convallis tellus. Eget mauris pharetra et ultrices neque ornare aenean euismod. Viverra orci sagittis eu volutpat odio.',
-        29.99, '2023-11-09', '2023-12-03', 11, 1),
+        29.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 11, 1),
+
        (9, 'Black and brown sunglasses',
         'Sit amet consectetur adipiscing elit. Integer eget aliquet nibh praesent tristique magna sit. Viverra ipsum nunc aliquet bibendum enim facilisis gravida. Eget mi proin sed libero enim sed. Mattis pellentesque id nibh tortor id aliquet lectus proin nibh.',
-        30, '2023-11-09', '2023-12-03', 11, 1),
+        30, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 11, 1),
+
        (10, 'Blue sunglasses',
         'Aliquet porttitor lacus luctus accumsan tortor posuere. Rhoncus dolor purus non enim praesent elementum facilisis leo. Orci eu lobortis elementum nibh tellus molestie nunc. Tristique magna sit amet purus. Odio euismod lacinia at quis risus sed vulputate odio.',
-        89.99, '2023-11-09', '2023-12-03', 11, 1),
+        89.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 11, 1),
+
        (11, 'Red sunglasses',
         'Iam maecenas ultricies mi eget mauris pharetra et ultrices neque. Amet facilisis magna etiam tempor orci eu. Vitae semper quis lectus nulla at. Duis at consectetur lorem donec massa sapien faucibus et. Lobortis scelerisque fermentum dui faucibus. Viverra adipiscing at in tellus integer. Integer vitae justo eget magna fermentum iaculis. Sed augue lacus viverra vitae.',
-        75, '2023-11-09', '2023-12-03', 11, 1),
+        75, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 11, 1),
+
        (12, 'Engagement rings',
         'Quisque sagittis purus sit amet volutpat. Donec et odio pellentesque diam volutpat commodo sed egestas. Enim nunc faucibus a pellentesque sit amet porttitor eget dolor. Vulputate mi sit amet mauris commodo quis.',
-        260, '2023-11-09', '2023-12-03', 14, 1),
+        260, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 14, 1),
+
        (13, 'Silver diamond ring',
         'Pretium vulputate sapien nec sagittis aliquam. Sagittis orci a scelerisque purus semper eget duis. Mattis enim ut tellus elementum sagittis vitae et leo duis. Et pharetra pharetra massa massa ultricies mi quis hendrerit dolor. Tortor aliquam nulla facilisi cras.',
-        80, '2023-11-09', '2023-12-03', 14, 1),
+        80, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 14, 1),
+
        (14, 'Diamond engagement rings',
         'Arcu felis bibendum ut tristique et egestas quis ipsum suspendisse. Malesuada fames ac turpis egestas sed tempus urna et. Cras tincidunt lobortis feugiat vivamus at. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa.',
-        299.99, '2023-11-09', '2023-12-03', 14, 1),
+        299.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 14, 1),
+
        (15, 'Silver chain necklace with blue gemstone pendant',
         ' Id leo in vitae turpis. Sem fringilla ut morbi tincidunt augue interdum velit euismod in. Mauris pharetra et ultrices neque. Ante metus dictum at tempor commodo ullamcorper a lacus. Ut sem viverra aliquet eget sit amet tellus cras. Netus et malesuada fames ac.',
-        82, '2023-11-09', '2023-12-03', 17, 1),
+        82, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 17, 1),
+
        (16, 'Golden angel necklace',
         'Massa sapien faucibus et molestie. Imperdiet massa tincidunt nunc pulvinar sapien et. Sed enim ut sem viverra aliquet eget sit amet tellus. Etiam non quam lacus suspendisse faucibus. Ornare arcu odio ut sem nulla pharetra diam sit amet. Enim nec dui nunc mattis enim.',
-        50, '2023-11-09', '2023-12-03', 17, 1),
+        50, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 17, 1),
+
        (17, 'Ring necklace',
         'Egestas pretium aenean pharetra magna ac placerat. Ipsum nunc aliquet bibendum enim facilisis. Adipiscing elit duis tristique sollicitudin nibh sit.',
-        69.99, '2023-11-09', '2023-12-03', 17, 1),
+        69.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 17, 1),
+
        (18, 'Red shoes',
         'Dolor morbi non arcu risus. Leo a diam sollicitudin tempor id eu. Orci sagittis eu volutpat odio. Lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit amet. Purus in massa tempor nec feugiat.',
-        49.99, '2023-11-09', '2023-12-03', 18, 1),
+        49.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 18, 1),
+
        (19, 'Red sneakers',
         'Eget nullam non nisi est. Sed viverra ipsum nunc aliquet bibendum enim facilisis gravida. Risus at ultrices mi tempus. Ornare arcu dui vivamus arcu felis bibendum ut tristique. Diam phasellus vestibulum lorem sed risus.',
-        20, '2023-11-09', '2023-12-03', 18, 1),
+        20, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 18, 1),
+
        (20, 'Air Force',
         'Pellentesque dignissim enim sit amet venenatis urna cursus eget nunc. Eget egestas purus viverra accumsan in nisl nisi scelerisque. Tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada. Cras ornare arcu dui vivamus arcu felis bibendum ut.',
-        30, '2023-11-09', '2023-12-03', 18, 1),
-       (21, 'Grey sneakers', 'Et odio pellentesque diam volutpat. A erat nam at lectus urna duis convallis convallis.',
-        38, '2023-11-09', '2023-12-03', 18, 1),
+        30, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 18, 1),
+
+       (21, 'Grey sneakers',
+        'Et odio pellentesque diam volutpat. A erat nam at lectus urna duis convallis convallis.',
+        38, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 18, 1),
+
        (22, 'Brown leather dress shoes',
-        'Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend mi in nulla posuere. Ut ornare lectus sit amet est placerat in egestas. Dui ut ornare lectus sit amet. ',
-        32, '2023-11-09', '2023-12-03', 19, 1),
+        'Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend mi in nulla posuere. Ut ornare lectus sit amet est placerat in egestas. Dui ut ornare lectus sit amet.',
+        32, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 19, 1),
+
        (23, 'Blue shoes',
         'Gravida quis blandit turpis cursus. Ipsum nunc aliquet bibendum enim facilisis gravida. Egestas maecenas pharetra convallis posuere morbi leo urna molestie.',
-        85, '2023-11-09', '2023-12-03', 19, 1),
+        85, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 19, 1),
+
        (24, 'Red sneakers',
         'Lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit amet. In egestas erat imperdiet sed euismod nisi porta lorem. Condimentum mattis pellentesque id nibh.',
-        80, '2023-11-09', '2023-12-03', 19, 1),
+        80, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 19, 1),
+
        (25, 'Brown loafers',
         'Sit amet commodo nulla facilisi nullam vehicula ipsum a arcu. Quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus urna.',
-        79.99, '2023-11-09', '2023-12-03', 19, 1),
+        79.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 19, 1),
+
        (26, 'Helvetica alphabet poster',
         'Vel pretium lectus quam id. At consectetur lorem donec massa sapien faucibus et molestie ac. Mauris ultrices eros in cursus turpis massa tincidunt. Pharetra convallis posuere morbi leo urna molestie at elementum eu.',
-        34.99, '2023-11-09', '2023-12-03', 20, 1),
+        34.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 20, 1),
+
        (27, 'Painting of pink flower',
         'Consectetur libero id faucibus nisl tincidunt eget nullam. Vitae aliquet nec ullamcorper sit.', 30,
-        '2023-11-09', '2023-12-03', 20, 1),
+        '2023-11-09 00:00:00', '2023-12-03 00:00:00', 20, 1),
+
        (28, 'Multicolored painting',
         'Enatibus et magnis dis parturient montes nascetur ridiculus mus mauris. Leo urna molestie at elementum eu facilisis. Vestibulum lorem sed risus ultricies tristique nulla.',
-        50, '2023-11-09', '2023-12-03', 20, 1),
+        50, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 20, 1),
+
        (29, 'Tufted white leather sofa chair',
         'Interdum velit laoreet id donec ultrices tincidunt arcu non. Nullam vehicula ipsum a arcu cursus vitae. Elementum integer enim neque volutpat ac tincidunt vitae semper.',
-        72, '2023-11-09', '2023-12-03', 21, 1),
+        72, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 21, 1),
+
        (30, 'Black and brown wooden chair',
         'Convallis posuere morbi leo urna molestie at. Quam viverra orci sagittis eu volutpat. Praesent semper feugiat nibh sed pulvinar proin gravida hendrerit lectus. Neque ornare aenean euismod elementum.',
-        69.99, '2023-11-09', '2023-12-03', 21, 1),
+        69.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 21, 1),
+
        (31, 'Ribbed mid century modern chair',
         'Ultrices tincidunt arcu non sodales neque. Iaculis urna id volutpat lacus laoreet non curabitur gravida. Arcu felis bibendum ut tristique et egestas quis ipsum. Lobortis elementum nibh tellus molestie.',
-        80, '2023-11-09', '2023-12-03', 21, 1),
+        80, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 21, 1),
+
        (32, 'Black DSLR camera',
         'Fermentum et sollicitudin ac orci phasellus. Venenatis cras sed felis eget velit aliquet sagittis id. Cursus turpis massa tincidunt dui ut ornare lectus sit amet. Ut venenatis tellus in metus vulputate eu.',
-        460, '2023-11-09', '2023-12-03', 22, 1),
+        460, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 22, 1),
+
        (34, 'Purple smartphone case',
         'Tristique sollicitudin nibh sit amet commodo nulla facilisi nullam. Amet purus gravida quis blandit turpis. Erat pellentesque adipiscing commodo elit. Parturient montes nascetur ridiculus mus mauris vitae ultricies leo.',
-        29.99, '2023-11-09', '2023-12-03', 25, 1),
+        29.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 25, 1),
+
        (35, 'Orange case',
         'Lectus urna duis convallis convallis tellus id. Suspendisse sed nisi lacus sed viverra. Turpis in eu mi bibendum neque egestas. Purus sit amet volutpat consequat mauris nunc congue nisi.',
-        19.99, '2023-11-09', '2023-12-03', 25, 1),
-       (36, 'Black smartphone case', 'Ut pharetra sit amet aliquam id. Elit sed vulputate mi sit amet mauris commodo.',
-        9.99, '2023-11-09', '2023-12-03', 25, 1),
+        19.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 25, 1),
+
+       (36, 'Black smartphone case',
+        'Ut pharetra sit amet aliquam id. Elit sed vulputate mi sit amet mauris commodo.',
+        9.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 25, 1),
+
        (37, 'Black laptop',
         'Malesuada fames ac turpis egestas. Mauris sit amet massa vitae tortor condimentum lacinia. Morbi leo urna molestie at elementum eu. Faucibus ornare suspendisse sed nisi lacus sed.',
-        999.99, '2023-11-09', '2023-12-03', 26, 1),
+        999.99, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 26, 1),
+
        (38, 'Grey laptop',
         'Bibendum est ultricies integer quis auctor elit sed vulputate mi. Tristique senectus et netus et. Velit sed ullamcorper morbi tincidunt. Libero justo laoreet sit amet. Tristique magna sit amet purus gravida quis blandit.',
-        1024.00, '2023-11-09', '2023-12-03', 26, 1);
+        1024.00, '2023-11-09 00:00:00', '2023-12-03 00:00:00', 26, 1);
 
 
 INSERT INTO public.items_images (id, name, image_url, item_id)
