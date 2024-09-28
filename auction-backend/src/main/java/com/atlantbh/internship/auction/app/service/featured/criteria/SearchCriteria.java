@@ -15,11 +15,9 @@ public final class SearchCriteria {
         final SpecificationBuilder<Item> specificationBuilder = SpecificationBuilder.of(Item.class);
         final int size = Math.min(itemCount, searchSuggestions.size());
 
-        int i = 0;
-        while (i < size) {
+        for (int i = 0; i < size; i++) {
             final String itemNameSuggestion = searchSuggestions.get(i);
             specificationBuilder.or(ItemSpecification.hasName(itemNameSuggestion));
-            i++;
         }
 
         return specificationBuilder.build();
