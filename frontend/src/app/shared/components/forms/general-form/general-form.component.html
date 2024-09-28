@@ -1,13 +1,8 @@
 <div class="general-form">
   <h1 class="general-form__title">{{label}}</h1>
 
-  <ng-container *ngIf="error$ | async as error">
-    <app-alert [message]="error.message" [severity]="error.severity" [type]="AlertType.Warning" class="general-form__form-wrapper"/>
-  </ng-container>
-
-  <ng-container *ngIf="alert$ | async as alert">
-    <app-alert [message]="alert" [type]="AlertType.SuccessInfo" class="general-form__form-wrapper"/>
-  </ng-container>
+  <form-alert *ngIf="alertService.alert" [alert]="alertService.alert" class="general-form__form-wrapper"/>
+  <form-alert *ngIf="errorService.error" [alert]="errorService.error" class="general-form__form-wrapper"/>
 
   <form (ngSubmit)="onSubmit()" [formGroup]="formFieldGroup" class="general-form__form-wrapper">
     <ng-content></ng-content>

@@ -1,17 +1,17 @@
 import {CommonModule} from "@angular/common";
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal} from "@angular/core";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {RouterLink} from "@angular/router";
-import {debounceTime, Observable, Subscription} from "rxjs";
+import {debounceTime, Subscription} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {PrimaryButtonComponent} from "../../../../shared/components/buttons/primary-button/primary-button.component";
 import {GeneralFormComponent} from "../../../../shared/components/forms/general-form/general-form.component";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
 import {
   ValidationMessageComponent
-} from "../../../../shared/components/forms/validation/validation-message/validation-message.component";
+} from "../../../../shared/components/forms/validation-message/validation-message.component";
 import {Constant} from "../../../../shared/models/enums/constant";
-import {ErrorModel, Severity} from "../../../../shared/models/errorModel";
+import {Alert, AlertType} from "../../../../shared/services/alert.service";
 import {ErrorService} from "../../../../shared/services/error.service";
 import {EmailValidator} from "./validators/email.validator";
 import {FirstNameValidator} from "./validators/first-name.validator";
@@ -47,7 +47,6 @@ export interface RegisterFormNameFieldChange {
   styleUrls: ["./register-form.component.scss"]
 })
 export class RegisterFormComponent implements OnInit, OnDestroy {
-  @Input({required: true}) error$: Observable<ErrorModel | null> | undefined;
   @Output() submitForm = new EventEmitter<FormGroup>();
   // Set to true initially so that the invalid CSS class is not invoked
   validationStatus: Record<RegisterForm, ValidationPair> = {
@@ -93,7 +92,7 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
     });
 
     if (this.errorService.isPresent()) {
-      this.errorService.clearErrors();
+      this.errorService.clearError();
     }
   }
 
@@ -109,7 +108,7 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
     if (this.registerForm.valid) {
       this.submitForm.emit(this.registerForm);
     } else {
-      this.errorService.initialiseError(Severity.NORMAL, "Please fill in the form.");
+      this.errorService.setError({message: "Please fill in the form.", type: AlertType.WarningLevelOne});
     }
   }
 

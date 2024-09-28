@@ -1,8 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
 import {catchError} from "rxjs";
-import {Severity} from "../../models/errorModel";
-import {AlertService} from "../alert.service";
+import {AlertService, AlertType} from "../alert.service";
 import {Api} from "../api.service";
 import {ErrorService} from "../error.service";
 import RegisterRequest = Api.UserApi.RegisterRequest;
@@ -21,12 +20,15 @@ export class RegisterService {
     this.apiService.registerUser(form)
       .pipe(
         catchError((e) => {
-          this.errorService.initialiseError(Severity.NORMAL, e.error.error.message);
+          this.errorService.setError({message: e.error.error.message, type: AlertType.WarningLevelOne});
           throw e;
         })
       )
       .subscribe(() => {
-        this.alertService.setAlert("Your account has been successfully registered. You can login now.");
+        this.alertService.setAlert({
+          message: "Your account has been successfully registered. You can login now.",
+          type: AlertType.Info
+        });
         this.navigateToLoginPage();
       });
   }
