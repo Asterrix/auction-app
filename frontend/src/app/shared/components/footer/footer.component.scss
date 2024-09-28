@@ -7,7 +7,7 @@
 }
 
 .footer {
-  background-color: $neutral-00;
+  background-color: $neutral-dark;
   color: $white;
   display: flex;
   flex: 1;
@@ -26,7 +26,7 @@
     padding: 2.4rem 0;
 
     &__title {
-      color: $neutral-05;
+      color: $neutral-grey;
       @extend .font-size-regular;
       text-transform: uppercase;
     }
@@ -40,16 +40,16 @@
     }
 
     &__item {
-      color: $neutral-09;
+      color: $neutral-light-grey;
       transition: all 300ms ease-out;
 
       &:hover {
-        color: $neutral-05;
+        color: $neutral-grey;
       }
 
       &--disabled {
         &:hover {
-          color: $neutral-09;
+          color: $neutral-light-grey;
         }
       }
     }

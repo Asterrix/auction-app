@@ -56,11 +56,10 @@
 
 /* --> Body Typography */
 body {
-  @include apply-font-size(1.6rem);
   @include default-font-family;
   @include standard-line-height;
   @include apply-font-size(1.4rem);
-  color: $neutral-00;
+  color: $neutral-dark;
 
   @media (min-width: $small) {
     @include apply-font-size(1.6rem);
