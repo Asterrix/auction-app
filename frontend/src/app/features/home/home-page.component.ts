@@ -6,7 +6,7 @@ import {Page} from "../../shared/models/interfaces/page";
 import {Pagination} from "../../shared/models/pagination";
 import {Api} from "../../shared/services/api.service";
 import {CategoryService} from "../../shared/services/category.service";
-import {ItemService} from "../../shared/services/item.service";
+import {ItemService} from "../../shared/services/item/item.service";
 import {HomeHeaderComponent} from "./components/home-header/home-header.component";
 import {
   Section,

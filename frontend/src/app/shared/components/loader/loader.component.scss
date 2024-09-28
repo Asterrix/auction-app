@@ -3,6 +3,8 @@
 .loader {
   align-items: center;
   display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
   height: inherit;
   justify-content: center;
   max-height: inherit;
