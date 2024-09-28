@@ -1,9 +1,9 @@
 package com.atlantbh.internship.auction.app.controller;
 
-import com.atlantbh.internship.auction.app.dto.ItemDto;
-import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
-import com.atlantbh.internship.auction.app.dto.ItemImageDto;
-import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +73,7 @@ class ItemControllerTest {
                 1,
                 "Item",
                 new BigDecimal("80.00"),
-                List.of()
+                new ItemImageDto(1,"Name", "ImageUrl")
         );
         final Page<ItemSummaryDto> mockPage = new PageImpl<>(List.of(itemSummaryDto));
 

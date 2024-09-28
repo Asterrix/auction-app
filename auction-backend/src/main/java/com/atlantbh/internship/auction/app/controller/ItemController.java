@@ -1,8 +1,8 @@
 package com.atlantbh.internship.auction.app.controller;
 
-import com.atlantbh.internship.auction.app.dto.ItemDto;
-import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
-import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
