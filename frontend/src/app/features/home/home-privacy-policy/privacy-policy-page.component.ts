@@ -1,18 +1,14 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
-import {
-  NavigationTrailComponent
-} from "../../../shared/components/navbar/components/navigation-trail/navigation-trail.component";
-import {
-  NavigationTrailService
-} from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
-import {ContentCardComponent} from "../components/content-card/content-card.component";
+import {NavigationTrailComponent} from "../../../shared/components/navbar/components/navigation-trail/navigation-trail.component";
+import {NavigationTrailService} from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
+import {ArticleCardComponent} from "../components/article-card/article-card.component";
 
 @Component({
   selector: "home-privacy-policy",
   standalone: true,
-  imports: [CommonModule, NavigationTrailComponent, ContentCardComponent],
+  imports: [CommonModule, NavigationTrailComponent, ArticleCardComponent],
   templateUrl: "privacy-policy-page.component.html",
   styleUrls: ["./privacy-policy-page.component.scss"]
 })

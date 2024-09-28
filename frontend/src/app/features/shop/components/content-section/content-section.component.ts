@@ -20,7 +20,7 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 export class ContentSectionComponent {
   @Input({required: true}) items$: Observable<Page<ItemSummary> | undefined> | undefined;
   @Input({required: true}) pagination!: Pagination;
-  @Output() increasePageSize = new EventEmitter<void>();
+  @Output() increasePageSize: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private router: Router, public loader: LoaderService) {
   }
