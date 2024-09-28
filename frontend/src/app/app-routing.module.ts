@@ -12,7 +12,7 @@ const routes: Routes = [
     path: "home",
     title: `${applicationName} - Home`,
     data: {
-      breadcrumb: "Home"
+      trail: "Home"
     },
     children: [
       {
@@ -20,7 +20,7 @@ const routes: Routes = [
         title: `${applicationName} - About Us`,
         component: HomeAboutUsComponent,
         data: {
-          breadcrumb: "About Us"
+          trail: "About Us"
         }
       },
       {
@@ -28,7 +28,7 @@ const routes: Routes = [
         title: `${applicationName} - Privacy Policy`,
         component: HomePrivacyPolicyComponent,
         data: {
-          breadcrumb: "Privacy Policy"
+          trail: "Privacy Policy"
         }
       },
       {
@@ -36,7 +36,7 @@ const routes: Routes = [
         title: `${applicationName} - Terms And Conditions`,
         component: HomeTermsConditionsComponent,
         data: {
-          breadcrumb: "Terms And Conditions"
+          trail: "Terms And Conditions"
         }
       },
     ]
