@@ -1,0 +1,54 @@
+<div class="date-picker">
+  <div class="date-picker__container">
+    <div class="date-picker__header">
+      <p class="date-picker__title">Select date</p>
+      <span class="date-picker__selected-date">Mon, Jan 1</span>
+    </div>
+  </div>
+
+  <div class="date-picker__calendar">
+    <div class="date-picker__calendar__navigation">
+      <p>{{month}} {{year}}</p>
+
+      <div class="date-picker__nav">
+        <button (click)="goToThePreviousMonth()" class="date-picker__nav-btn">
+          <span>&lt;</span>
+        </button>
+        <button (click)="goToNextMonth()" class="date-picker__nav-btn">
+          <span>&gt;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+    <tr class="date-picker__calendar__days">
+      <th>S</th>
+      <th>M</th>
+      <th>T</th>
+      <th>W</th>
+      <th>T</th>
+      <th>F</th>
+      <th>S</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr class="date-picker__content-row">
+      <td *ngFor="let empty of firstDayOfTheMonthSpacing"></td>
+
+      <td *ngFor="let date of datePickerService.date()">
+        <button class="date-picker__day-button">
+          <span>{{date.getDate()}}</span>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+
+    <div class="date-picker__buttons">
+      <button class="date-picker__buttons--cancel">Cancel</button>
+      <button class="date-picker__buttons--time">Set time</button>
+    </div>
+  </table>
+</div>
