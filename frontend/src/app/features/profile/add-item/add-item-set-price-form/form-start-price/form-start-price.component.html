@@ -1,7 +1,7 @@
-<div class="form">
+<div class="form" [formGroup]="formFieldGroup">
   <label class="form__label" for="price">Your start price</label>
-  <div class="form__field">
+  <div class="form__field" [ngClass]="{'invalid': !isValid}">
     <p>$</p>
-    <input class="form__input" id="price" type="text">
+    <input class="form__input" id="price" type="text" [formControlName]="formField">
   </div>
 </div>
