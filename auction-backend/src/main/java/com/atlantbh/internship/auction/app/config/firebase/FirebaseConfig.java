@@ -16,13 +16,16 @@ public class FirebaseConfig {
     @Value("${firebase.credentials}")
     private String firebaseCredentials;
 
+    @Value("${firebase.bucket}")
+    private String firebaseBucket;
+
 
     @Bean
     public void initialise() throws IOException {
         final InputStream serviceAccount = new ByteArrayInputStream(firebaseCredentials.getBytes());
         final FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("auctionapp-4dbe4.appspot.com")
+                .setStorageBucket(firebaseBucket)
                 .build();
 
         if (FirebaseApp.getApps().isEmpty()) {

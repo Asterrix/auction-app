@@ -1,6 +1,5 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
-import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.dto.item.CreateItemRequest;
@@ -8,31 +7,21 @@ import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.*;
-import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.mapper.BidsMapper;
-import com.atlantbh.internship.auction.app.mapper.ItemImageMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
-import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
-import com.atlantbh.internship.auction.app.model.utils.Validator;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.service.CategoryService;
 import com.atlantbh.internship.auction.app.service.ItemService;
-import com.atlantbh.internship.auction.app.service.UserService;
-import com.atlantbh.internship.auction.app.service.firebase.FirebaseStorageService;
-import com.atlantbh.internship.auction.app.service.item.ItemStateService;
+import com.atlantbh.internship.auction.app.service.item.ItemStateChecker;
 import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
 import com.atlantbh.internship.auction.app.service.validation.item.ItemEntityValidation;
-import com.google.cloud.storage.Blob;
 import jakarta.annotation.Nullable;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -53,37 +42,19 @@ public final class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemImageRepository itemImageRepository;
     private final BidRepository bidRepository;
-    private final CategoryService categoryService;
-    private final UserService userService;
-    private final MainValidationClass<CreateItemRequest> createItemInitialValidation;
-    private final ClaimsExtractor claimsExtractor;
     private final ItemEntityValidation entityValidation;
-    private final FirebaseStorageService firebaseStorageService;
-    private final Validator<List<MultipartFile>> imageValidation;
-    private final ItemStateService itemStateService;
+    private final ItemStateChecker itemStateChecker;
 
     public ItemServiceImpl(final ItemRepository itemRepository,
                            final ItemImageRepository itemImageRepository,
                            final BidRepository bidRepository,
-                           final CategoryService categoryService,
-                           @Lazy final UserService userService,
-                           final MainValidationClass<CreateItemRequest> createItemInitialValidation,
-                           final ClaimsExtractor claimsExtractor,
-                           final FirebaseStorageService firebaseStorageService,
                            final ItemEntityValidation entityValidation,
-                           final Validator<List<MultipartFile>> imageValidation,
-                           final ItemStateService itemStateService) {
+                           final ItemStateChecker itemStateChecker) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
         this.bidRepository = bidRepository;
-        this.categoryService = categoryService;
-        this.userService = userService;
-        this.createItemInitialValidation = createItemInitialValidation;
-        this.claimsExtractor = claimsExtractor;
         this.entityValidation = entityValidation;
-        this.firebaseStorageService = firebaseStorageService;
-        this.imageValidation = imageValidation;
-        this.itemStateService = itemStateService;
+        this.itemStateChecker = itemStateChecker;
     }
 
     /**
@@ -166,18 +137,11 @@ public final class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void createItem(final CreateItemRequest createItemRequest, final List<MultipartFile> images) {
-        createItemInitialValidation.validate(createItemRequest);
+    public Item createItem(final CreateItemRequest createItemRequest,
+                           final Category category,
+                           final User owner) {
 
-        final Category category = categoryService
-                .findCategoryByName(createItemRequest.subcategory())
-                .orElseThrow(() -> new ValidationException("Category could not be found."));;
-
-        final User user = userService
-                .findUserById(claimsExtractor.getUserId())
-                .orElseThrow(() -> new ValidationException("User could not be found."));
-
-        Item item = new Item(
+        final Item item = new Item(
                 createItemRequest.name(),
                 createItemRequest.description(),
                 createItemRequest.initialPrice(),
@@ -185,28 +149,34 @@ public final class ItemServiceImpl implements ItemService {
                 createItemRequest.endTime(),
                 List.of(),
                 category,
-                user
+                owner
         );
 
         entityValidation.validate(item);
-        imageValidation.validate(images);
 
-        final List<Blob> blobList = firebaseStorageService.uploadFiles(images);
-        final List<ItemImage> itemImages = ItemImageMapper.convertFromBlob(blobList, item);
+        return item;
+    }
 
-        item.setItemImages(itemImages);
+    @Override
+    public void saveItem(final Item item) {
         itemRepository.save(item);
     }
 
+    @Override
+    public Item setItemImages(final Item item, final List<ItemImage> itemImages) {
+        item.setItemImages(itemImages);
+        return item;
+    }
+
     private List<Item> updateItemFinishedAttribute(final List<Item> items) {
-        final List<Item> listOfUpdatedItems = itemStateService.updateFinishedAttribute(items);
+        final List<Item> listOfUpdatedItems = itemStateChecker.updateFinishedAttribute(items);
         itemRepository.saveAll(items);
 
         return listOfUpdatedItems;
     }
 
     private Item updateItemFinishedAttribute(final Item item) {
-        final Item updatedItem = itemStateService.updateFinishedAttribute(item);
+        final Item updatedItem = itemStateChecker.updateFinishedAttribute(item);
         itemRepository.save(item);
 
         return updatedItem;

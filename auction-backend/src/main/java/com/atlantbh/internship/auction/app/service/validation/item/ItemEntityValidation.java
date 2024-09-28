@@ -16,7 +16,7 @@ public class ItemEntityValidation implements Validator<Item> {
     @Override
     public void validate(final Item item) {
         try (final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
-            var validator = validatorFactory.getValidator();
+            final jakarta.validation.Validator validator = validatorFactory.getValidator();
             final Set<ConstraintViolation<Item>> violations = validator.validate(item);
 
             if (!violations.isEmpty()) {
