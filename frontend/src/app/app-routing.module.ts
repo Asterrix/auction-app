@@ -14,6 +14,10 @@ const routes: Routes = [
     path: ShopRouteEndpoint.Shop,
     loadChildren: () => import("./features/shop/shop-routes").then(mod => mod.SHOP_ROUTES)
   },
+  {
+    path: "login",
+    loadChildren: () => import("./features/login/login-routes").then(mod => mod.LOGIN_ROUTES)
+  },
   {path: "**", redirectTo: `/${HomeRouteEndpoint.Home}`}
 ];
 

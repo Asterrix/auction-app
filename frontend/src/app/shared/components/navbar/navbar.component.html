@@ -1,6 +1,14 @@
 <div class="navbar">
   <app-top-bar/>
-  <app-main-navbar/>
+
+  <ng-container *ngIf="!(displayMinimalNavbar$ | async) else minimalNavbar">
+    <navbar-main/>
+  </ng-container>
+
+  <ng-template #minimalNavbar>
+    <navbar-main-minimal/>
+  </ng-template>
+
   <ng-container *ngIf="displayTrail$ | async">
     <app-navigation-trail/>
   </ng-container>

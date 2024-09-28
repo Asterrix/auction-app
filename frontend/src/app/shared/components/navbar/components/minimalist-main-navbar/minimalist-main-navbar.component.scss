@@ -1,0 +1,20 @@
+@import "colors";
+@import "typography";
+@import "container";
+
+.minimal-main-navbar {
+  display: flex;
+  border-bottom: 1px solid $neutral-light-grey;
+  padding-bottom: 1.6rem;
+
+  &__layout {
+    display: grid;
+    width: 100%;
+  }
+
+  &__logo {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
