@@ -18,7 +18,7 @@ export class ErrorService {
     this.errorSubject.next(ErrorModel.initialiseError(severity, message));
   }
 
-  clearErrorSubject(): void {
+  clearErrors(): void {
     this.errorSubject.next(null);
   }
 }
