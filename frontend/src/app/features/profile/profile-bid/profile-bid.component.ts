@@ -9,12 +9,13 @@ import {LoaderService} from "../../../shared/services/loader.service";
 import {TableDataRow} from "../components/table-data-row/table-data-row.component";
 import {TableEmptyComponent} from "../components/table-empty/table-empty.component";
 import {TableComponent} from "../components/table/table.component";
+import {ProfileSharedNavTabComponent} from "../shared-nav/profile-shared-nav-tab.component";
 import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
 
 @Component({
   selector: "profile-bid",
   standalone: true,
-  imports: [CommonModule, TableComponent, TableEmptyComponent, TableDataRow, RouterLink, LoaderComponent],
+  imports: [CommonModule, TableComponent, TableEmptyComponent, TableDataRow, RouterLink, LoaderComponent, ProfileSharedNavTabComponent],
   templateUrl: "./profile-bid.component.html",
   styleUrls: ["./profile-bid.component.scss"]
 })

@@ -1,18 +1,18 @@
 package com.atlantbh.internship.auction.app.dto.bid;
 
-import com.atlantbh.internship.auction.app.entity.UserItemBid;
+import com.atlantbh.internship.auction.app.entity.Bid;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * DTO for {@link UserItemBid}
+ * DTO for {@link Bid}
  */
 public record UserBidsAggregate(
         BidItemSummary item,
-        String timeLeft,
+        String timeRemaining,
         BigDecimal biddingOffer,
-        int numberOfBids,
+        Integer numberOfBids,
         BigDecimal highestBid
 ) implements Serializable {
 }

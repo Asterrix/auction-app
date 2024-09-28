@@ -4,15 +4,15 @@ import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
-import com.atlantbh.internship.auction.app.dto.user.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
+import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
-import com.atlantbh.internship.auction.app.entity.UserItemBid;
+import com.atlantbh.internship.auction.app.mapper.BidsMapper;
 import com.atlantbh.internship.auction.app.mapper.ItemMapper;
-import com.atlantbh.internship.auction.app.mapper.UserItemBidMapper;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
+import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
 import jakarta.annotation.Nullable;
@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,14 +39,14 @@ import static com.atlantbh.internship.auction.app.service.specification.ItemSpec
 public final class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemImageRepository itemImageRepository;
-    private final UserItemBidRepository userItemBidRepository;
+    private final BidRepository bidRepository;
 
     public ItemServiceImpl(final ItemRepository itemRepository,
                            final ItemImageRepository itemImageRepository,
-                           final UserItemBidRepository userItemBidRepository) {
+                           final BidRepository bidRepository) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
-        this.userItemBidRepository = userItemBidRepository;
+        this.bidRepository = bidRepository;
     }
 
     /**
@@ -84,20 +85,20 @@ public final class ItemServiceImpl implements ItemService {
         if (item.isEmpty()) return Optional.empty();
 
         final LocalDateTime dateTime = LocalDateTime.now();
-        final Specification<UserItemBid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
+        final Specification<Bid> specification = UserItemBidSpecification.isHighestBid(item.get().getId());
 
-        final long totalNumberOfBids = userItemBidRepository.countDistinctByItem_Id(item.get().getId());
+        final long totalNumberOfBids = bidRepository.countDistinctByItem_Id(item.get().getId());
         if (totalNumberOfBids == 0) {
             final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
-            final UserItemBidDto bidInformation = UserItemBidMapper.convertToValuesOfZeroDto();
+            final BidNumberCount bidInformation = BidsMapper.mapToUserItemBidDto(new BigDecimal("0"), 0L);
 
             return Optional.of(ItemMapper.convertToAggregate(mappedItems, bidInformation));
         }
 
-        final Optional<UserItemBid> highestBid = userItemBidRepository.findOne(specification);
+        final Optional<Bid> highestBid = bidRepository.findOne(specification);
 
         final ItemDto mappedItems = ItemMapper.convertToItemDto(item.get(), dateTime);
-        final UserItemBidDto mappedBidInformation = UserItemBidMapper.convertToDto(highestBid.get(), totalNumberOfBids);
+        final BidNumberCount mappedBidInformation = BidsMapper.mapToUserItemBidDto(highestBid.get().getAmount(), totalNumberOfBids);
 
         return Optional.of(ItemMapper.convertToAggregate(mappedItems, mappedBidInformation));
     }

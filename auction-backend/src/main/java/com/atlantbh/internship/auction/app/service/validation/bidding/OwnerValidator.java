@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class OwnerValidator implements OwnerValidation {
     @Override
     public void validate(final User owner, final User bidder) {
-        if (owner.equals(bidder)) {
+        if (owner.getId().equals(bidder.getId())) {
             throw new ValidationException("Users are not permitted to make offers on their own items.");
         }
     }

@@ -1,17 +1,16 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
-import com.atlantbh.internship.auction.app.dto.bid.BidItemSummary;
 import com.atlantbh.internship.auction.app.dto.bid.BidRequest;
 import com.atlantbh.internship.auction.app.dto.bid.UserBidsAggregate;
+import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
-import com.atlantbh.internship.auction.app.entity.UserItemBid;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
-import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
+import com.atlantbh.internship.auction.app.mapper.BidsMapper;
 import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
+import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
 import com.atlantbh.internship.auction.app.service.BiddingService;
 import com.atlantbh.internship.auction.app.service.validation.bidding.BidComparer;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 public class BiddingServiceImpl implements BiddingService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final UserItemBidRepository userItemBidRepository;
+    private final BidRepository bidRepository;
     private final ClaimsExtractor claimsExtractor;
     private final MainValidationClass<BidRequest> requestValidator;
     private final OwnerValidation ownerValidation;
@@ -36,14 +35,14 @@ public class BiddingServiceImpl implements BiddingService {
 
     public BiddingServiceImpl(final ItemRepository itemRepository,
                               final UserRepository userRepository,
-                              final UserItemBidRepository userItemBidRepository,
+                              final BidRepository bidRepository,
                               final ClaimsExtractor claimsExtractor,
                               final MainValidationClass<BidRequest> requestValidator,
                               final OwnerValidation ownerValidation,
                               final BidComparer bidComparer) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
-        this.userItemBidRepository = userItemBidRepository;
+        this.bidRepository = bidRepository;
         this.claimsExtractor = claimsExtractor;
         this.requestValidator = requestValidator;
         this.ownerValidation = ownerValidation;
@@ -58,37 +57,39 @@ public class BiddingServiceImpl implements BiddingService {
         final User bidder = getBidder(claimsExtractor.getUserId());
         ownerValidation.validate(item.getOwner(), bidder);
 
-        if (!item.getUserItemBids().isEmpty()) {
-            final BigDecimal highestBid = findHighestBid(item);
-            bidComparer.compareOfferToHighestBid(bidRequest.amount(), highestBid);
-        } else {
-            final BigDecimal initialBid = item.getInitialPrice();
-            bidComparer.compareOfferToInitialPrice(bidRequest.amount(), initialBid);
-        }
+        final BigDecimal offer = bidRequest.amount();
+        final Enum<OfferType> offerType = determineTypeOfOffer(item.getUserItemBids());
+        compareOfferToCurrentOffers(offerType, item, offer);
 
-        final UserItemBid bid = new UserItemBid(bidder, item, bidRequest.amount());
-        userItemBidRepository.save(bid);
+        final Bid bid = new Bid(bidder, item, offer);
+        bidRepository.save(bid);
+    }
+
+    private void compareOfferToCurrentOffers(final Enum<OfferType> offerType, final Item item, final BigDecimal offer) {
+        if (offerType.equals(OfferType.INITIAL_BID)) {
+            final BigDecimal initialBid = item.getInitialPrice();
+            bidComparer.compareOfferToInitialPrice(offer, initialBid);
+        } else if (offerType.equals(OfferType.NEW_BID)) {
+            final BigDecimal highestBid = findHighestBid(item);
+            bidComparer.compareOfferToHighestBid(offer, highestBid);
+        }
+    }
+
+    private Enum<OfferType> determineTypeOfOffer(final List<Bid> bids) {
+        return bids.isEmpty() ? OfferType.INITIAL_BID : OfferType.NEW_BID;
     }
 
     @Override
-    public List<UserBidsAggregate> getUsersBiddingInformation() {
+    public List<UserBidsAggregate> getUserBiddingHistory() {
         final Integer userId = claimsExtractor.getUserId();
 
-        return userItemBidRepository.findAllUserRelatedBids(userId)
+        return bidRepository.findAllUserRelatedBids(userId)
                 .stream()
-                .map(this::mapUserBids)
+                .map((final Bid bid) -> {
+                    final BigDecimal highestBid = findHighestBid(bid.getItem());
+                    return BidsMapper.mapToUserBidsAggregate(bid, highestBid);
+                })
                 .collect(Collectors.toList());
-    }
-
-    private UserBidsAggregate mapUserBids(UserItemBid bid) {
-        final Item item = bid.getItem();
-        final BidItemSummary itemInfo = new BidItemSummary(item.getId(), item.getItemImages().getFirst().getImageUrl(), item.getName());
-        final String timeRemaining = TimeRemainingCalculator.getTimeRemaining(LocalDateTime.now(), bid.getItem().getEndTime());
-        final BigDecimal currentBid = bid.getAmount();
-        final int numberOfBids = item.getUserItemBids().size();
-        final BigDecimal highestBid = findHighestBid(item);
-
-        return new UserBidsAggregate(itemInfo, timeRemaining, currentBid, numberOfBids, highestBid);
     }
 
     private User getBidder(final Integer bidderId) {
@@ -107,8 +108,13 @@ public class BiddingServiceImpl implements BiddingService {
         return item
                 .getUserItemBids()
                 .stream()
-                .max(Comparator.comparing(UserItemBid::getAmount))
+                .max(Comparator.comparing(Bid::getAmount))
                 .orElseThrow(() -> new ValidationException("Highest bid could not be found."))
                 .getAmount();
+    }
+
+    private enum OfferType {
+        INITIAL_BID,
+        NEW_BID
     }
 }

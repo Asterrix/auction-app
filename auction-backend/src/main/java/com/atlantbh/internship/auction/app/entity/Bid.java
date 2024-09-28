@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "user_item_bid")
-public class UserItemBid {
+@Table(name = "bids")
+public class Bid {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +24,10 @@ public class UserItemBid {
     @Column(name = "amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    public UserItemBid() {
+    public Bid() {
     }
 
-    public UserItemBid(final User user, final Item item, final BigDecimal amount) {
+    public Bid(final User user, final Item item, final BigDecimal amount) {
         this.user = user;
         this.item = item;
         this.amount = amount;
