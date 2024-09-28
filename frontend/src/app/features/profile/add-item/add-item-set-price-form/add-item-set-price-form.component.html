@@ -13,8 +13,14 @@
 
   <div class="form__dates">
     <div class="form__dates--layout">
-      <app-form-date-picker fieldLabel="Start date"/>
-      <app-form-date-picker fieldLabel="End date"/>
+      <app-form-date-picker
+        fieldLabel="Start date"
+        (submitEvent)="submitDateTimeEvent($event, DateTimeForm.StartDate)"
+      />
+      <app-form-date-picker
+        (submitEvent)="submitDateTimeEvent($event, DateTimeForm.EndDate)"
+        fieldLabel="End date"
+      />
     </div>
 
     <p class="form__dates__notice">
