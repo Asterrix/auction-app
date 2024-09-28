@@ -47,8 +47,8 @@
     </tbody>
 
     <div class="date-picker__buttons">
-      <button class="date-picker__buttons--cancel">Cancel</button>
-      <button class="date-picker__buttons--time">Set time</button>
+      <button class="date-picker__buttons--cancel" (click)="closeForm()">Cancel</button>
+      <button class="date-picker__buttons--time" (click)="submitForm()">Set time</button>
     </div>
   </table>
 </div>

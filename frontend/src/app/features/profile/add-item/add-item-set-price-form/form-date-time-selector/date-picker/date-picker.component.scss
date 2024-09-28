@@ -21,11 +21,10 @@
 }
 
 .date-picker {
-  border: 1px solid colors.$neutral-light-grey;
+  background-color: colors.$white;
   display: flex;
   flex-direction: column;
-  margin-top: 4.8rem;
-  width: 320px;
+  min-width: 380px;
 
   &__container {
     background-color: colors.$primary;

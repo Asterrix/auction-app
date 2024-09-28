@@ -1,0 +1,5 @@
+<div class="modal" (click)="closeModal()">
+  <div (click)="eventService.preventDefaultBehaviour($event)">
+    <ng-content></ng-content>
+  </div>
+</div>

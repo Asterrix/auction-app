@@ -1,7 +1,8 @@
 import {CommonModule} from "@angular/common";
-import {ChangeDetectionStrategy, Component, inject, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, EventEmitter, inject, OnInit, Output} from "@angular/core";
 import {format} from "date-fns";
-import {DatePickerService} from "../date-picker.service";
+import {DateTimeForm} from "../form-date-time-selector.component";
+import {DatePickerService} from "../services/date-picker.service";
 
 @Component({
   selector: "app-date-picker",
@@ -11,7 +12,9 @@ import {DatePickerService} from "../date-picker.service";
   styleUrl: "./date-picker.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DatePickerComponent implements OnInit {
+export class DatePickerComponent implements OnInit, DateTimeForm {
+  @Output() closeEvent = new EventEmitter<void>();
+  @Output() submitEvent = new EventEmitter<void>();
   protected datePickerService = inject(DatePickerService);
   protected firstDayOfTheMonthSpacing: number[] = new Array(this.datePickerService.firstDayOfTheCurrentMonth());
   protected month = format(this.datePickerService.date()[0], "MMMM");
@@ -32,5 +35,13 @@ export class DatePickerComponent implements OnInit {
     this.firstDayOfTheMonthSpacing = new Array(this.datePickerService.firstDayOfTheCurrentMonth());
     this.month = format(this.datePickerService.date()[0], "MMMM");
     this.year = format(this.datePickerService.date()[0], "yyyy");
+  }
+
+  public closeForm(): void {
+    this.closeEvent.emit();
+  }
+
+  public submitForm(): void {
+    this.submitEvent.emit();
   }
 }

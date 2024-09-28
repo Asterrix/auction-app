@@ -1,0 +1,143 @@
+@use "colors";
+@use "typography" as t;
+
+@mixin btn {
+  background-color: transparent;
+  border: none;
+  text-transform: uppercase;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.time-selector {
+  background-color: colors.$white;
+  display: flex;
+  flex-direction: column;
+  max-width: 380px;
+  min-width: 380px;
+
+  &__container {
+    background-color: colors.$primary;
+    padding: 1.2rem;
+  }
+
+  &__header {
+    color: colors.$white;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+  }
+
+  &__title {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+  }
+
+  &__timer {
+    align-items: center;
+    display: grid;
+    gap: 2.4rem;
+    grid-template-columns: 2fr 2fr 1fr;
+    padding: 1.2rem;
+  }
+
+  &__time {
+    align-items: center;
+    display: grid;
+    gap: 1.2rem;
+    justify-items: center;
+    text-align: center;
+
+    &-btn {
+      @include btn;
+      border-radius: 50%;
+      display: flex;
+      transition: all 300ms ease-out;
+      width: 2.4rem;
+
+      &:hover {
+        background-color: colors.$primary;
+        color: colors.$white;
+      }
+
+      img {
+        &:hover {
+          filter: invert(1) brightness(100);
+        }
+      }
+    }
+  }
+
+  &__period {
+    align-content: center;
+    display: grid;
+    gap: 0.8rem;
+    height: fit-content;
+
+    &__label {
+      display: flex;
+      width: 100%;
+    }
+
+    &__input {
+      align-items: center;
+      display: flex;
+      font-size: 2.4rem;
+      justify-content: center;
+      text-align: center;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+
+  &__buttons {
+    display: flex;
+    gap: 2.4rem;
+    justify-content: flex-end;
+    padding: 1.2rem;
+
+    &--cancel {
+      @include btn;
+    }
+
+    &--time {
+      @include btn;
+      color: colors.$primary;
+      font-weight: bold;
+    }
+  }
+}
+
+input {
+  background-color: colors.$gray-100;
+  display: flex;
+  font-size: 4.8rem;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.active {
+  color: colors.$primary;
+}
+
+.focus {
+  @extend .active;
+  background-color: rgba(131, 103, 216, 0.3);
+}

@@ -5,12 +5,12 @@ import {FormWrapperComponent} from "../../../../shared/components/forms/form-wra
 import {
   ValidationMessageComponent
 } from "../../../../shared/components/forms/validation-message/validation-message.component";
-import {DatePickerComponent} from "../shared/date-picker/date-picker.component";
+import {DatePickerComponent} from "./form-date-time-selector/date-picker/date-picker.component";
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
 import {FormNavigation, FormNavigationHandler} from "../shared/form-navigation-handler";
 import {PriceValidation} from "../shared/validation/config/add-item-price-validation.config";
 import {AddItemPriceFormService} from "./add-item-price-form.service";
-import {FormDatepicker} from "./form-date-picker/form-datepicker.component";
+import {FormDateTimeSelectorComponent} from "./form-date-time-selector/form-date-time-selector.component";
 import {FormStartPriceComponent} from "./form-start-price/form-start-price.component";
 
 @Component({
@@ -22,7 +22,7 @@ import {FormStartPriceComponent} from "./form-start-price/form-start-price.compo
     ReactiveFormsModule,
     FormsModule,
     FormStartPriceComponent,
-    FormDatepicker,
+    FormDateTimeSelectorComponent,
     FormFieldWrapperComponent,
     ValidationMessageComponent,
     DatePickerComponent

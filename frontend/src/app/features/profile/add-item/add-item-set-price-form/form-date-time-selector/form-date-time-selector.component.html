@@ -1,0 +1,24 @@
+<div class="form">
+  <label [for]="fieldLabel" class="form__label">{{fieldLabel}}</label>
+  <input
+    (click)="currentForm = DatePickerForm.DateForm"
+    [id]="fieldLabel"
+    class="form__input"
+    type="text">
+
+  <app-modal
+    (closeModalEvent)="closeForm()"
+    *ngIf="currentForm === DatePickerForm.DateForm">
+    <app-date-picker
+      (closeEvent)="closeForm()"
+      (submitEvent)="submitForm()"/>
+  </app-modal>
+
+  <app-modal
+    (closeModalEvent)="closeForm()"
+    *ngIf="currentForm === DatePickerForm.TimeForm">
+    <add-item-form-time-selector
+      (closeEvent)="closeForm()"
+      (submitEvent)="submitForm()"/>
+  </app-modal>
+</div>
