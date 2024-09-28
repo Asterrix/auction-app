@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.impl;
+package com.atlantbh.internship.auction.app.service.auth;
 
 import com.atlantbh.internship.auction.app.dto.user.RegistrationRequest;
 import com.atlantbh.internship.auction.app.entity.Role;
@@ -7,7 +7,7 @@ import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.repository.RoleRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
 import com.atlantbh.internship.auction.app.service.RegistrationService;
-import com.atlantbh.internship.auction.app.service.validator.MainValidationClass;
+import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

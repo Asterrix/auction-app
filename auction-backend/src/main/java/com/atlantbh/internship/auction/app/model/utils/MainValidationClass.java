@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.validator;
+package com.atlantbh.internship.auction.app.model.utils;
 
 import java.util.List;
 

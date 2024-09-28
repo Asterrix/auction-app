@@ -1,7 +1,7 @@
-package com.atlantbh.internship.auction.app.service.validator.user;
+package com.atlantbh.internship.auction.app.service.validation;
 
 import com.atlantbh.internship.auction.app.exception.ValidationException;
-import com.atlantbh.internship.auction.app.service.validator.Validator;
+import com.atlantbh.internship.auction.app.model.utils.Validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

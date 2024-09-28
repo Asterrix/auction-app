@@ -2,7 +2,7 @@ package com.atlantbh.internship.auction.app.controller;
 
 import com.atlantbh.internship.auction.app.dto.user.AuthenticationRequest;
 import com.atlantbh.internship.auction.app.service.TokenService;
-import com.atlantbh.internship.auction.app.service.provider.UserAuthentication;
+import com.atlantbh.internship.auction.app.service.auth.UserAuthentication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

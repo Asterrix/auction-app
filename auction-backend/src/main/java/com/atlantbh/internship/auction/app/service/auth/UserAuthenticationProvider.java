@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.provider;
+package com.atlantbh.internship.auction.app.service.auth;
 
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
