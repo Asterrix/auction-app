@@ -40,3 +40,9 @@
 .loader-placeholder {
   height: 80vh;
 }
+
+.main_section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.2rem;
+}
