@@ -25,15 +25,13 @@ export class HomeItemsComponent implements OnInit, OnDestroy {
     this._queryParamSub = this.activatedRoute.queryParams.subscribe((params: Params): void => {
       this._queryParam = params[SectionQueryParam.Section] || Section.Default;
 
-      switch (this._queryParam) {
-        case Section.LastChance:
-          this.items$ = this.itemService.getItems();
-          this.itemService.initItemsLastChance();
-          break;
-        default:
-          this.items$ = this.itemService.getItems();
-          this.itemService.initItemsNewArrivals();
+      if (this._queryParam === Section.LastChance) {
+        this.itemService.initItemsLastChance();
+      } else {
+        this.itemService.initItemsNewArrivals();
       }
+
+      this.items$ = this.itemService.getItems();
     });
   }
 

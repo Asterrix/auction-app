@@ -12,9 +12,9 @@ class CategoryMapperTest {
 
     @Test
     void CategoryMapper_TakeEntityAndMapItToCategoryDto() {
-        Category category = new Category(100, "Category");
+        final Category category = new Category(100, "Category");
 
-        CategoryDto categoryDto = CategoryMapper.convertToDto(category);
+        final CategoryDto categoryDto = CategoryMapper.convertToDto(category);
 
         assertEquals(category.getId(), categoryDto.id());
         assertEquals(category.getName(), categoryDto.name());
@@ -22,9 +22,9 @@ class CategoryMapperTest {
 
     @Test
     void CategoryMapper_TakeListOfEntities_MapThemTo_ListOfCategoryDto() {
-        List<Category> categories = List.of(new Category(), new Category());
+        final List<Category> categories = List.of(new Category(), new Category());
 
-        List<CategoryDto> result = CategoryMapper.convertToDto(categories);
+        final List<CategoryDto> result = CategoryMapper.convertToDto(categories);
 
         assertEquals(categories.size(), result.size());
     }

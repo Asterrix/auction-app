@@ -1,19 +1,20 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {Constant} from "./shared/models/enums/constant";
-import {ApiRoute} from "../environments/api-route";
+import {HomeRouteEndpoint} from "./features/home/home-routes";
+import {ShopRouteEndpoint} from "./features/shop/shop-routes";
 
 const routes: Routes = [
-  {path: Constant.EmptyValue, redirectTo: `/${ApiRoute.HomeRoute.Home}`, pathMatch: "full"},
+  {path: Constant.EmptyValue, redirectTo: `/${HomeRouteEndpoint.Home}`, pathMatch: "full"},
   {
-    path: ApiRoute.HomeRoute.Home,
+    path: HomeRouteEndpoint.Home,
     loadChildren: () => import("./features/home/home-routes").then(mod => mod.HOME_ROUTES)
   },
   {
-    path: ApiRoute.ShopRoute.Shop,
+    path: ShopRouteEndpoint.Shop,
     loadChildren: () => import("./features/shop/shop-routes").then(mod => mod.SHOP_ROUTES)
   },
-  {path: "**", redirectTo: `/${ApiRoute.HomeRoute.Home}`}
+  {path: "**", redirectTo: `/${HomeRouteEndpoint.Home}`}
 ];
 
 @NgModule({
