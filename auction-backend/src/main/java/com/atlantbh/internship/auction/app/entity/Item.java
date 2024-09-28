@@ -1,6 +1,7 @@
 package com.atlantbh.internship.auction.app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.hibernate.annotations.TimeZoneStorage;
 import org.hibernate.annotations.TimeZoneStorageType;
 
@@ -18,12 +19,21 @@ public class Item {
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @NotBlank(message = "Please provide item name.")
+    @Size(message = "Ensure that item name is between {min} and {max} characters in length.", min = 3, max = 50)
+    @Pattern(message = "Name can contain letters (both uppercase and lowercase), numbers, " +
+            "and the following special characters: ',', '.', '\\\"', '\\'', ' ', ':', ';', '*'.\"",
+            regexp = "^[a-zA-Z0-9.,\" ':;*]*$")
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
+    @NotBlank(message = "Please provide item description.")
+    @Size(message = "Ensure that item description is between {min} and {max} characters in length.", min = 20, max = 700)
     @Column(name = "description", nullable = false, length = 700)
     private String description;
 
+    @Min(message = "Initial price must be greater than or equal {value}.", value = 1)
+    @Digits(message = "Invalid number format. Maximum {integer} digits in total with up to {fraction} decimal places.", integer = 10, fraction = 2)
     @Column(name = "initial_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal initialPrice;
 
@@ -35,7 +45,8 @@ public class Item {
     @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
     private ZonedDateTime endTime;
 
-    @OneToMany(mappedBy = "item", orphanRemoval = true)
+    @Size(message = "Item must have a minimum of {min} images and a maximum of {max} images.", min = 3, max = 30)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<ItemImage> itemImages = new ArrayList<>();
 
     @ManyToOne(optional = false)
