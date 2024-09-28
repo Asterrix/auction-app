@@ -13,5 +13,7 @@ public interface TokenService {
 
     boolean hasExpired(final Instant currentTime, final Token token);
 
-    void deleteTokenUponLogout(final String bearerToken);
+    void deleteUserTokens(final String principal);
+
+    void deleteToken(final String token);
 }

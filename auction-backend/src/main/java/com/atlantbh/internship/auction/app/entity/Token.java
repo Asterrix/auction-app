@@ -18,17 +18,26 @@ public class Token {
     @Column(name = "token", nullable = false, unique = true, length = 3000)
     private String token;
 
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
     @Column(name = "persistent", nullable = false)
     private Boolean persistent;
 
     @Column(name = "expiration_time", nullable = false)
     private Instant expirationTime;
 
+    public User getUser() {
+        return user;
+    }
+
     public Token() {
     }
 
-    public Token(final String token, final Boolean persistent, final Instant expirationTime) {
+    public Token(final String token, final User user, final Boolean persistent, final Instant expirationTime) {
         this.token = token;
+        this.user = user;
         this.persistent = persistent;
         this.expirationTime = expirationTime;
     }
@@ -39,10 +48,6 @@ public class Token {
 
     public Instant getExpirationTime() {
         return expirationTime;
-    }
-
-    public Boolean getPersistent() {
-        return persistent;
     }
 
 }

@@ -19,7 +19,8 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> registerUser(@RequestBody final RegistrationRequest user) {
-        return new ResponseEntity<>(registrationService.registerUser(user), HttpStatus.CREATED);
+    public ResponseEntity<Void> registerUser(@RequestBody final RegistrationRequest user) {
+        registrationService.registerUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
