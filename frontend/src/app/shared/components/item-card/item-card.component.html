@@ -4,6 +4,20 @@
          alt="Image of an item"
          src="{{item.thumbnail.imageUrl}}"/>
   </a>
-  <span class="item-card__name">{{item.name}}</span>
-  <p class="item-card__text">Start from <span class="item-card--price">${{item.initialPrice}}</span></p>
+  <span class="item-card__name">{{ item.name }}</span>
+
+  <div class="item-card__price-section">
+    <p class="item-card__text">
+      Start from
+      <span class="item-card--price">${{ item.initialPrice }}</span>
+    </p>
+
+    @if (item.currentPrice !== item.initialPrice) {
+      <p class="item-card__text">
+        Current price
+        <span class="item-card--price">${{ item.currentPrice }}
+      </span>
+      </p>
+    }
+  </div>
 </div>

@@ -5,10 +5,12 @@ import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
+import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -17,10 +19,17 @@ public final class ItemMapper {
     }
 
     public static ItemSummaryDto convertToSummaryDto(final Item entity) {
+        final BigDecimal currentPrice = entity.getUserItemBids()
+                .stream()
+                .map(Bid::getAmount)
+                .max(BigDecimal::compareTo)
+                .orElse(entity.getInitialPrice());
+
         return new ItemSummaryDto(
                 entity.getId(),
                 entity.getName(),
                 entity.getInitialPrice(),
+                currentPrice,
                 ItemImageMapper.convertToDto(entity.getItemImages().getFirst())
         );
     }

@@ -176,6 +176,7 @@ export namespace Api {
         id: number;
         name: string;
         initialPrice: number;
+        currentPrice: number;
       }
 
       export interface FeaturedItem extends ItemBaseProperties {

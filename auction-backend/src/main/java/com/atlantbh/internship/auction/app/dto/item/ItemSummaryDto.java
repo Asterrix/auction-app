@@ -13,6 +13,7 @@ public record ItemSummaryDto(
         Integer id,
         String name,
         BigDecimal initialPrice,
+        BigDecimal currentPrice,
         ItemImageDto thumbnail
 ) implements Serializable {
 }

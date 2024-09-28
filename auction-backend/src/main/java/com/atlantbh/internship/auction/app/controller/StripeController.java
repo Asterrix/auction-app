@@ -39,11 +39,11 @@ public class StripeController {
 
     @PostMapping("create-payment-intent")
     public ResponseEntity<String> createPaymentIntent(@RequestParam final Integer itemId) {
-        final Integer requestUser = claimsExtractor.getUserId();
+        final Integer requestUserId = claimsExtractor.getUserId();
 
-        final String customerId = stripeService.findCustomerByUserId(requestUser);
+        final String customerId = stripeService.findCustomerByUserId(requestUserId);
         if (customerId.isBlank()) {
-            throw new NoSuchElementException("Customer could not be found for the user with the id of: %d".formatted(requestUser));
+            throw new NoSuchElementException("Customer could not be found for the user with the id of: %d".formatted(requestUserId));
         }
 
         final Item item = itemService
@@ -51,7 +51,7 @@ public class StripeController {
                 .orElseThrow(() -> new NoSuchElementException("Item with the id of: %d could not be found".formatted(itemId)));
 
         final Integer ownerId = item.getOwner().getId();
-        if (requestUser.equals(ownerId)) {
+        if (requestUserId.equals(ownerId)) {
             throw new ValidationException("User cannot purchase his own items");
         }
 
