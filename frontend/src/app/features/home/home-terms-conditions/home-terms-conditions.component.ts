@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {ContentCardComponent} from "./components/content-card/content-card.component";
+import {ContentCardComponent} from "../components/content-card/content-card.component";
 import {NavigationTrailComponent} from "../../../shared/components/navigation-trail/navigation-trail.component";
 
 @Component({

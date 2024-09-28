@@ -25,13 +25,5 @@
       display: grid;
       gap: 3.2rem;
     }
-
-    &__title {
-      @extend .font-semibold;
-    }
-
-    &__paragraph {
-      color: $neutral-05;
-    }
   }
 }
