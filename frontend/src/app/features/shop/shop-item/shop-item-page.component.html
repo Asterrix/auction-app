@@ -6,10 +6,10 @@
   <div class="shop-item">
     <div class="container">
       <div class="shop-item__page__layout">
-        <shop-item-showcase/>
+        <shop-item-showcase [item$]="item$" [activeImage]="activeImage"/>
         <div class="shop-item__description__layout">
-          <shop-item-summary/>
-          <shop-item-information/>
+          <shop-item-summary [item$]="item$"/>
+          <shop-item-information [item$]="item$"/>
         </div>
       </div>
     </div>
