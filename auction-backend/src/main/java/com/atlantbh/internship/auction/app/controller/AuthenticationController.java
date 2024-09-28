@@ -26,7 +26,7 @@ public class AuthenticationController {
     ResponseEntity<Void> authenticateUser(@RequestBody AuthenticationRequest loginRequest) {
         final Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.email(), loginRequest.password());
         final UserAuthentication authenticationResponse = (UserAuthentication) authenticationProvider.authenticate(authentication);
-        final String token = tokenService.generateToken(authenticationResponse);
+        final String token = tokenService.generateToken(authenticationResponse, loginRequest.rememberMe());
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, token);
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);

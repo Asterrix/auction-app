@@ -33,22 +33,24 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public String generateToken(final UserAuthentication user) {
+    public String generateToken(final UserAuthentication user, final Boolean rememberMe) {
+        final String userPrincipal = user.getPrincipal().toString();
+
         final HashMap<String, Object> userClaims = user.getClaims();
         final Instant issuedAt = TokenConfig.issuedAt();
-        final Instant expirationDate = TokenConfig.expirationDate(issuedAt);
+        final Instant expirationDate = TokenConfig.expirationDate(issuedAt, rememberMe);
 
         final JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(TokenConfig.ISSUER)
                 .issuedAt(issuedAt)
                 .expiresAt(expirationDate)
-                .subject(user.getPrincipal().toString())
+                .subject(userPrincipal)
                 .claims(claim -> claim.putAll(userClaims))
                 .build();
 
         final String tokenValue = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        saveTokenToDb(tokenValue, expirationDate);
+        saveTokenToDb(tokenValue, rememberMe, expirationDate);
 
         return tokenValue;
     }
@@ -56,17 +58,15 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public boolean isValid(final Instant currentTime, final String clientToken) {
         final Optional<Token> token = tokenRepository.findByToken(extractTokenFromBearer(clientToken));
-        if (token.isEmpty() || isExpired(currentTime, token.get())) return false;
-
-        return true;
+        return token.isPresent() && !isExpired(currentTime, token.get());
     }
 
-    private void saveTokenToDb(final String token, final Instant expirationDate) {
-        tokenRepository.save(new Token(token, expirationDate));
+    private void saveTokenToDb(final String token, final Boolean persistent, final Instant expirationDate) {
+        tokenRepository.save(new Token(token, persistent, expirationDate));
     }
 
     @Override
-    public void deleteToken(final String bearerToken) {
+    public void deleteTokenUponLogout(final String bearerToken) {
         tokenRepository.findByToken(extractTokenFromBearer(bearerToken)).ifPresent(tokenRepository::delete);
     }
 }
