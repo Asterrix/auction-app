@@ -10,14 +10,13 @@ import {LogoutService} from "../services/user/logout.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
-  constructor(private logoutService: LogoutService, private errorService: ErrorService) {
+  constructor(private logoutService: LogoutService, private errorService: ErrorService, private userService: AuthenticationService) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const isAuthenticated: boolean = AuthenticationService.isAuthenticated();
     const isCorrectServer: boolean = request.url.startsWith(environment.apiUrl);
 
-    if (isAuthenticated && isCorrectServer) {
+    if (this.userService.user() && isCorrectServer) {
       const token: string = AuthenticationService.retrieveUserToken();
       const normalisedToken: string = TokenManager.createHeaderToken(token);
 

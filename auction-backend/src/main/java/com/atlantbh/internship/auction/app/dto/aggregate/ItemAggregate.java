@@ -9,5 +9,5 @@ import java.io.Serializable;
 /**
  * DTO for {@link Item}
  */
-public record ItemAggregate(ItemDto item, BidNumberCount biddingInformation) implements Serializable {
+public record ItemAggregate(ItemDto item, BidNumberCount biddingInformation, Integer ownerId) implements Serializable {
 }

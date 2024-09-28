@@ -178,6 +178,7 @@ export namespace Api {
       export interface ItemAggregate {
         item: Item;
         biddingInformation: BiddingInformation;
+        ownerId: number;
       }
     }
 

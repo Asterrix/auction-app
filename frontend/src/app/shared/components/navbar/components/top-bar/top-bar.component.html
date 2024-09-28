@@ -23,7 +23,7 @@
       </div>
 
       <div>
-        <ng-container *ngIf="user$ | async as user; else actionMenu">
+        <ng-container *ngIf="userService.user() as user; else actionMenu">
           <div class="member">
             <span (click)="logoutUser()">Hi, {{user.firstName + " " + user.lastName}}</span>
           </div>
