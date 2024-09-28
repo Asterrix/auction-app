@@ -11,7 +11,8 @@
                [ngClass]="{'active': category.name.toLowerCase() === (activeCategory | async)}"
                [queryParams]="{category: category.name.toLowerCase()}"
                class="sidebar__category__name"
-               routerLink="/shop">
+               routerLink="/shop"
+               routerLinkActive="active">
               {{category.name}}
             </a>
 
