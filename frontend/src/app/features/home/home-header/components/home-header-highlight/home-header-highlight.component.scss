@@ -34,8 +34,8 @@
     width: 100%;
 
     img {
-      height: 90%;
-      max-height: 200rem;
+      max-height: 640px;
+      max-width: 320px;
 
       @media (min-width: $large) {
         justify-self: flex-end;
