@@ -30,10 +30,17 @@
 
   <form-input-field
     [formFieldGroup]="registerForm"
-    formField="email"
+    [formField]="RegisterForm.Email"
+    [isInputValid]="validateEmail.valid"
     label="Enter Email"
     placeholder="user@domain.com"
-    type="email"/>
+    type="email">
+
+    <ng-container *ngIf="!validateEmail.valid">
+      <app-validation-message [message]="validateEmail.message!"/>
+    </ng-container>
+
+  </form-input-field>
 
   <form-input-field
     [formFieldGroup]="registerForm"
