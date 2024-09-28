@@ -20,7 +20,7 @@ import {
 import {Alert, AlertType} from "../../../shared/services/alert.service";
 import {ItemAggregate} from "../../../shared/services/api/item/item.interface";
 import {ErrorService} from "../../../shared/services/error.service";
-import {NewItemService} from "../../../shared/services/item/new-item.service";
+import {ItemService} from "../../../shared/services/item/item.service";
 import {AuthenticationService} from "../../../shared/services/user/authentication.service";
 import {BidService} from "../../../shared/services/user/bid.service";
 import {ItemPageParameter} from "../shop-routes";
@@ -59,7 +59,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
   protected alert = signal<Alert | undefined>(undefined);
   private bidSubscription: Subscription | undefined;
 
-  constructor(private newItemService: NewItemService,
+  constructor(private itemService: ItemService,
               private activeRoute: ActivatedRoute,
               private trailService: NavigationTrailService,
               private fb: FormBuilder,
@@ -70,7 +70,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
 
     const param = this.activeRoute.snapshot.params[ItemPageParameter.Id];
 
-    this.newItemService.getItem(param)
+    this.itemService.getItem(param)
       .pipe(takeUntilDestroyed())
       .subscribe((item: ItemAggregate) => {
         this.item.set(item);

@@ -5,5 +5,5 @@ import {ItemApi} from "./item/item.api";
   providedIn: "root"
 })
 export class NewApiService {
-  public itemApi = inject(ItemApi);
+  public readonly itemApi: ItemApi = inject(ItemApi);
 }

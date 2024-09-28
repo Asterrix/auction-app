@@ -11,7 +11,7 @@ import {Pagination} from "../../shared/models/pagination";
 import {Api} from "../../shared/services/api.service";
 import {ItemSummary} from "../../shared/services/api/item/item.interface";
 import {CategoryService} from "../../shared/services/category.service";
-import {NewItemService} from "../../shared/services/item/new-item.service";
+import {ItemService} from "../../shared/services/item/item.service";
 import {SearchService} from "../../shared/services/search.service";
 import {ContentSectionComponent} from "./components/content-section/content-section.component";
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
@@ -34,7 +34,7 @@ export class ShopPage implements OnInit, OnDestroy {
   private itemFilterBuilder: ItemFilterBuilder = new ItemFilterBuilder();
 
   constructor(private activatedRoute: ActivatedRoute,
-              private itemService: NewItemService,
+              private itemService: ItemService,
               private categoryService: CategoryService,
               private searchService: SearchService) {
 

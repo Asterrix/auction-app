@@ -1,5 +1,5 @@
 import {HttpClient, HttpParams, HttpResponse} from "@angular/common/http";
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {environment} from "../../../../../environments/environment";
 import {Page} from "../../../models/interfaces/page";
@@ -13,13 +13,9 @@ enum Endpoint {
 
 @Injectable({
   providedIn: "root",
-  deps: [HttpClient],
-  useFactory: (httpClient: HttpClient) => new ItemApi(httpClient),
 })
 export class ItemApi {
-
-  constructor(private httpClient: HttpClient) {
-  }
+  private readonly httpClient: HttpClient = inject(HttpClient);
 
   public getListOfItems = (params: GetItemsParams): Observable<Page<ItemSummary>> => {
     let httpParams: HttpParams = new HttpParams();

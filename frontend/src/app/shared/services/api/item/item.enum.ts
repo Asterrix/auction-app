@@ -1,7 +1,3 @@
-export {
-  ItemOrderBy
-};
-
 enum ItemOrderBy {
   NameAsc = "nameAsc",
   Newest = "newest",
@@ -9,3 +5,7 @@ enum ItemOrderBy {
   PriceAsc = "priceAsc",
   PriceDesc = "priceDesc"
 }
+
+export {
+  ItemOrderBy
+};

@@ -1,11 +1,5 @@
 import {ItemOrderBy} from "./item.enum";
 
-export {
-  Pageable,
-  GetItemsParams,
-  CreateItemRequest
-};
-
 type Pageable = {
   page: number;
   size: number;
@@ -29,4 +23,10 @@ type CreateItemRequest = {
   initialPrice: string;
   startTime: string;
   endTime: string;
+};
+
+export {
+  Pageable,
+  GetItemsParams,
+  CreateItemRequest
 };
