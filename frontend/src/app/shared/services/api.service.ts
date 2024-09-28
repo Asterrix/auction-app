@@ -1,47 +1,46 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-
-/* Standard Api parameters */
-interface IPath {
-  path: string;
-}
-
-interface IOptions {
-  options: {
-    headers?: HttpHeaders | {
-      [header: string]: string | string[];
-    };
-    params?: HttpParams | {
-      [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
-    };
-  };
-}
-
-/* Method related parameters */
-interface IGetMethod extends IPath, IOptions {}
-
-
-interface IPostMethod extends IPath, IOptions {
-  body: object;
-}
-
-/* CRUD method interface */
-export interface IApiService {
-  get<T>(params: IGetMethod): Observable<T>;
-
-  post<T>(params: IPostMethod): Observable<T>;
-}
+import {Page} from "../models/interfaces/page";
+import {environment} from "../../../environments/environment";
+import {ApiRoute} from "../../../environments/api-route";
+import {
+  FeaturedItem,
+  ItemSummary,
+  SortItemAttribute,
+  SortItemDirection
+} from "../../features/home/services/item.service";
 
 @Injectable({
   providedIn: "root"
 })
-export class ApiService implements IApiService {
+export class ApiService {
 
   constructor(private httpClient: HttpClient) {
   }
 
-  get = <T>(params: IGetMethod): Observable<T> => this.httpClient.get<T>(params.path, params.options);
+  /* Item --> */
+  getListOfNewestItems(): Observable<Page<ItemSummary>> {
+    return this.getListOfItems(SortItemAttribute.StartDate, SortItemDirection.DESC);
+  }
 
-  post = <T>(params: IPostMethod): Observable<T> => this.httpClient.post<T>(params.path, params.body, params.options);
+  getListOfLastChanceItems(): Observable<Page<ItemSummary>> {
+    return this.getListOfItems(SortItemAttribute.EndDate, SortItemDirection.DESC);
+  }
+
+  getFeaturedItem(): Observable<FeaturedItem> {
+    return this.httpClient.get<FeaturedItem>(`${environment.apiUrl}/${ApiRoute.ItemRoute.Items}/${ApiRoute.ItemRoute.Featured}`);
+  }
+
+  private getListOfItems(sortAttribute: string, sortDirection: string): Observable<Page<ItemSummary>> {
+    const getListOfItemsParams = {
+      page: 0,
+      size: 8,
+      sort: sortAttribute, sortDirection
+    };
+
+    return this.httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${ApiRoute.ItemRoute.Items}`, {params: getListOfItemsParams});
+  }
+
+  /* <-- Item */
 }
