@@ -7,10 +7,9 @@ import com.atlantbh.internship.auction.app.dto.bid.UserBiddingInfo;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.entity.UserItemBid;
-import com.atlantbh.internship.auction.app.exception.AllowedDecimalScaleException;
-import com.atlantbh.internship.auction.app.exception.FractionalDivisionIsNotZero;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
+import com.atlantbh.internship.auction.app.model.utils.MainValidationClass;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
@@ -24,80 +23,60 @@ import java.util.List;
 
 @Service
 public class BiddingServiceImpl implements BiddingService {
-    private static final byte ALLOWED_DECIMAL_SCALE = 2;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final UserItemBidRepository userItemBidRepository;
     private final ClaimsExtractor claimsExtractor;
+    private final MainValidationClass<BidRequest> validationClass;
 
     public BiddingServiceImpl(final ItemRepository itemRepository,
                               final UserRepository userRepository,
                               final UserItemBidRepository userItemBidRepository,
-                              final ClaimsExtractor claimsExtractor) {
+                              final ClaimsExtractor claimsExtractor,
+                              final MainValidationClass<BidRequest> validationClass) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.userItemBidRepository = userItemBidRepository;
         this.claimsExtractor = claimsExtractor;
+        this.validationClass = validationClass;
     }
 
-    private static void validateOwner(final Item item, final User bidder) {
-        final User itemOwner = item.getOwner();
-        if (itemOwner.equals(bidder)) {
+    private void validateOwner(final User seller, final User bidder) {
+        if (seller.equals(bidder)) {
             throw new ValidationException("The user is not permitted to make offers on his own items.");
         }
     }
 
-    private static UserItemBid createBid(final BidRequest bidRequest, final User bidder, final Item item) {
-        return new UserItemBid(bidder, item, bidRequest.amount());
-    }
+    private void validateOffer(final BigDecimal offer, final Item item, final List<UserItemBid> biddingList) {
+        if (biddingList.isEmpty()) {
+            final BigDecimal initialPrice = item.getInitialPrice();
 
-    private static void validateDecimalScale(final BigDecimal offer) {
-        final int offerDecimalScale = offer.scale();
+            if (offer.compareTo(initialPrice) < 0) {
+                throw new ValidationException("Initial bid must match or exceed the starting price.");
+            }
+        } else {
+            final BigDecimal highestBid = biddingList.getFirst().getAmount();
 
-        if (offerDecimalScale > ALLOWED_DECIMAL_SCALE) {
-            throw new AllowedDecimalScaleException("Decimal precision must be limited to no more than two decimal places.");
-        }
-    }
-
-    // Ensures that the fractional part of the offer is a multiple of 5 or multiple of 10, preventing offers like $50.01 on an item priced at $50.00.
-    // Offers with decimal places that can be rounded to a multiple of 5 or 10, like $50.10 or $50.15, will be considered valid.
-    // Fractional / Mantissa (the numbers that come after decimal separator)
-    public static void validateFractionalPart(final BigDecimal number) {
-        final int trailingZeros = number.stripTrailingZeros().scale();
-        if (trailingZeros == 0) {
-            return;
-        }
-
-        String numberString = String.valueOf(number);
-        int decimalIndex = numberString.indexOf(".");
-        String decimalPart = numberString.substring(decimalIndex + 1);
-
-        int fractionalPart = Integer.parseInt(decimalPart);
-        final int remainderOfFive = (fractionalPart * 2) % 5;
-        final int remainderOfTen = fractionalPart % 10;
-
-        if (remainderOfFive != 0 && remainderOfTen != 0) {
-            throw new FractionalDivisionIsNotZero("Offer must be a multiple of 5 or 10.");
+            if (offer.compareTo(highestBid) <= 0) {
+                throw new ValidationException("Your bid must be greater than the current one.");
+            }
         }
     }
 
     @Override
     public void makeAnOfferOnItem(final BidRequest bidRequest) {
-        if (bidRequest.amount() == null || bidRequest.itemId() == null || bidRequest.bidderId() == null) {
-            throw new ValidationException("Bid request cannot be processed because the request doesnt contain valid information.");
-        }
-
-        validateDecimalScale(bidRequest.amount());
-        validateFractionalPart(bidRequest.amount());
+        validationClass.validate(bidRequest);
 
         final LocalDateTime currentDateTime = LocalDateTime.now();
         final Item item = getItem(bidRequest.itemId(), currentDateTime);
         final User bidder = getBidder(bidRequest.bidderId());
 
-        validateOwner(item, bidder);
-        validateOffer(bidRequest, item);
+        validateOwner(item.getOwner(), bidder);
 
-        final UserItemBid bid = createBid(bidRequest, bidder, item);
+        final List<UserItemBid> listOfItemBids = userItemBidRepository.findDistinctByItem_IdOrderByAmountDesc(item.getId());
+        validateOffer(bidRequest.amount(), item, listOfItemBids);
+
+        final UserItemBid bid = new UserItemBid(bidder, item, bidRequest.amount());
         userItemBidRepository.save(bid);
     }
 
@@ -126,25 +105,6 @@ public class BiddingServiceImpl implements BiddingService {
         });
 
         return biddingInformation;
-    }
-
-    private void validateOffer(final BidRequest bidRequest, final Item item) {
-        final List<UserItemBid> itemBidList = userItemBidRepository.findDistinctByItem_IdOrderByAmountDesc(item.getId());
-        final BigDecimal currentOffer = bidRequest.amount();
-
-        if (itemBidList.isEmpty()) {
-            final BigDecimal initialPrice = item.getInitialPrice();
-
-            if (currentOffer.compareTo(initialPrice) < 0) {
-                throw new ValidationException("Initial bid must match or exceed the starting price.");
-            }
-        } else {
-            final BigDecimal highestBid = itemBidList.getFirst().getAmount();
-
-            if (currentOffer.compareTo(highestBid) <= 0) {
-                throw new ValidationException("Your bid must be greater than the current one.");
-            }
-        }
     }
 
     private User getBidder(final Integer bidderId) {
