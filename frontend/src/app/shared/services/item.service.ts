@@ -10,9 +10,9 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
   providedIn: "root"
 })
 export class ItemService {
-  featuredItem$: BehaviorSubject<FeaturedItem | undefined> = new BehaviorSubject<FeaturedItem | undefined>(undefined);
-  item$: BehaviorSubject<Item | undefined> = new BehaviorSubject<Item | undefined>(undefined);
-  items$: BehaviorSubject<Array<ItemSummary> | undefined> = new BehaviorSubject<Array<ItemSummary> | undefined>(undefined);
+  private featuredItem$ = new BehaviorSubject<FeaturedItem | undefined>(undefined);
+  private item$ = new BehaviorSubject<Item | undefined>(undefined);
+  private items$ = new BehaviorSubject<Array<ItemSummary> | undefined>(undefined);
 
   constructor(private apiService: Api.Service) {
   }
