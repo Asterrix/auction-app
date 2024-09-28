@@ -35,9 +35,8 @@
                  id="{{subcategory.id}}"
                  routerLink="/shop">
 
-                <div
-                  [ngClass]="{'sidebar__checkbox--active' : subcategory.name.toLowerCase() === (activeSubcategory | async)}"
-                  class="sidebar__checkbox"></div>
+                <app-checkbox [isActive]="subcategory.name.toLowerCase() === (activeSubcategory | async)"
+                              [shape]="CheckboxShape.Round"/>
 
                 <span class="sidebar__subcategory">
                   {{subcategory.name}} ({{subcategory.numberOfItems}})
