@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -55,14 +54,17 @@ public class StripeController {
             throw new ValidationException("User is not allowed to purchase his own items.");
         }
 
-        final BigDecimal itemPrice = item
+        final Bid highestBid = item
                 .getUserItemBids()
                 .stream()
                 .max(Comparator.comparing(Bid::getAmount))
-                .orElseThrow(() -> new ValidationException("No bids for the item of: %d could be found".formatted(itemId)))
-                .getAmount();
+                .orElseThrow(() -> new ValidationException("No bids for the item of: %d could be found".formatted(itemId)));
 
-        final Long finalPrice = stripeService.convertPriceToStripeCents(itemPrice);
+        if (!requestUserId.equals(highestBid.getUser().getId())) {
+            throw new ValidationException("User is not the highest bidder and therefore is not allowed to purchase the item.");
+        }
+
+        final Long finalPrice = stripeService.convertPriceToStripeCents(highestBid.getAmount());
 
         final String paymentIntent = stripeService.createPaymentIntent(finalPrice, StripeConfig.CURRENCY, customerId);
         return new ResponseEntity<>(paymentIntent, HttpStatus.OK);

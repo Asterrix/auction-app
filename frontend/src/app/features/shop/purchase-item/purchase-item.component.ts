@@ -92,6 +92,11 @@ export class PurchaseItemComponent implements OnDestroy {
       }
     });
 
+    if (response?.error) {
+      this.handleError(response.error);
+      return;
+    }
+
     this.confirmPurchase();
   }
 

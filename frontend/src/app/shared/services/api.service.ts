@@ -203,6 +203,7 @@ export namespace Api {
       export interface BiddingInformation {
         highestBid: number;
         totalNumberOfBids: number;
+        highestBidderId: number;
       }
 
       export interface ItemAggregate {

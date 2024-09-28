@@ -1,4 +1,4 @@
-@if (item$ | async;as item) {
+@if (item) {
   <div class="shop-item">
 
     <app-bid-notification [alert]="alertService.alert"/>
@@ -14,7 +14,7 @@
             [item]="item.item"/>
 
 
-          @if (authService.getCurrentUser()?.id !== item.ownerId) {
+          @if (authService.user()?.id !== item.ownerId) {
 
             @if (item.item.timeLeft !== 'Finished') {
               <form (ngSubmit)="onSubmit()" class="form">
@@ -36,7 +36,7 @@
                   message="Make an offer in the following format: 100.00"/>
 
               </form>
-            } @else {
+            } @else if (!item.item.finished && authService.user()?.id === item.biddingInformation.highestBidderId) {
               <a routerLink="purchase" class="btn--pay">Pay</a>
             }
           }
