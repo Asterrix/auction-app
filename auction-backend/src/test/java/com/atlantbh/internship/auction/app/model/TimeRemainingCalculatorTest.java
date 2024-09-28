@@ -11,37 +11,33 @@ import static org.junit.jupiter.api.Assertions.*;
 class TimeRemainingCalculatorTest {
 
     @Test
-    void CalculateItemRemainingTime_ValidateDate_ThrowException_EndDateComesBeforeStartDate() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            final LocalDate startDate = LocalDate.of(2023, 8, 28);
-            final LocalDate endDate = LocalDate.of(2023, 8, 29);
+    void validateDate_ShouldThrow_StartDateAheadOfEndDateException() {
+        final LocalDate startDate = LocalDate.of(2023, 8, 28);
+        final LocalDate endDate = LocalDate.of(2023, 8, 29);
 
-            TimeRemainingCalculator.getTimeRemaining(endDate, startDate);
-        });
+        assertThrows(IllegalArgumentException.class, () -> TimeRemainingCalculator.getTimeRemaining(endDate, startDate));
     }
 
     @Test
-    void CalculateItemRemainingTime_ValidateDate_ThrowException_NotALeapYear() {
-        assertThrows(DateTimeException.class, () -> {
-            final LocalDate startDate = LocalDate.of(1800, 2, 31);
-            final LocalDate endDate = LocalDate.of(1802, 3, 1);
+    void validateDate_ShouldThrow_NotALeapYearException() {
+        final LocalDate startDate = LocalDate.of(1800, 2, 31);
+        final LocalDate endDate = LocalDate.of(1802, 3, 1);
 
-            TimeRemainingCalculator.getTimeRemaining(endDate, startDate);
-        });
+        assertThrows(DateTimeException.class, () -> TimeRemainingCalculator.getTimeRemaining(endDate, startDate));
     }
 
     @Test
-    void CalculateItemRemainingTime_ValidateDate_ValidInput_DontThrowException() {
+    void validateDate_ValidInput_ShouldNotThrowException() {
+        final LocalDate startDate = LocalDate.of(1999, 2, 28);
+        final LocalDate endDate = LocalDate.of(1999, 3, 17);
+
         assertDoesNotThrow(() -> {
-            final LocalDate startDate = LocalDate.of(1999, 2, 28);
-            final LocalDate endDate = LocalDate.of(1999, 3, 17);
-
             TimeRemainingCalculator.getTimeRemaining(startDate, endDate);
         });
     }
 
     @Test
-    void CalculateItemRemainingTime_ConvertToString_ReturnSingularDate() {
+    void convertToString_ShouldReturnSingularDateDay() {
         final LocalDate startDate = LocalDate.of(2023, 8, 28);
         final LocalDate endDate = LocalDate.of(2023, 8, 29);
 
@@ -51,7 +47,7 @@ class TimeRemainingCalculatorTest {
     }
 
     @Test
-    void CalculateItemRemainingTime_ConvertToString_ReturnPluralNumberOfDays() {
+    void convertToString_ShouldReturnPluralDateDays() {
         final LocalDate startDate = LocalDate.of(2023, 10, 1);
         final LocalDate endDate = LocalDate.of(2023, 10, 5);
 
@@ -61,7 +57,7 @@ class TimeRemainingCalculatorTest {
     }
 
     @Test
-    void CalculateItemRemainingTime_ConvertToString_ReturnSingularWeek() {
+    void convertToString_ShouldReturnSingularWeekDay() {
         final LocalDate startDate = LocalDate.of(2023, 5, 1);
         final LocalDate endDate = LocalDate.of(2023, 5, 9);
 
@@ -71,7 +67,7 @@ class TimeRemainingCalculatorTest {
     }
 
     @Test
-    void CalculateItemRemainingTime_ConvertToString_ReturnPluralWeeksDays() {
+    void convertToString_ShouldReturnPluralWeekDays() {
         final LocalDate startDate = LocalDate.of(2023, 2, 28);
         final LocalDate endDate = LocalDate.of(2023, 3, 20);
 
