@@ -53,6 +53,8 @@ public final class ItemOrderBySpecification {
                 query.orderBy(builder.asc(caseExpression));
             } else if (priceOrder == PriceOrder.DESCENDING) {
                 query.orderBy(builder.desc(caseExpression));
+            } else {
+                throw new IllegalArgumentException("Invalid price order.");
             }
 
             return builder.conjunction();

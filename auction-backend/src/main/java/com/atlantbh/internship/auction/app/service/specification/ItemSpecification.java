@@ -27,26 +27,6 @@ public final class ItemSpecification {
     }
 
     /**
-     * Creates a Specification for filtering items based on the specified category name.
-     *
-     * @param categoryName Name of the category to filter items by.
-     * @return {@link Specification} for filtering items based on the provided category name.
-     */
-    public static Specification<Item> hasCategory(final String categoryName) {
-        final String category = categoryName.trim().toLowerCase();
-
-        return (root, query, builder) -> {
-            final Join<Item, Category> categoryJoin = root.join("category");
-            final Join<Item, Category> parentCategoryJoin = root.join("category").join("parentCategory", JoinType.LEFT);
-
-            final Predicate categoryPredicate = builder.equal(builder.lower(categoryJoin.get("name")), category);
-            final Predicate parentCategoryPredicate = builder.equal(builder.lower(parentCategoryJoin.get("name")), category);
-
-            return builder.or(categoryPredicate, parentCategoryPredicate);
-        };
-    }
-
-    /**
      * Creates a Specification for filtering items based on the specified subcategory name.
      * Method will validate that subcategory is part of the specified category.
      * This constraint is implemented
@@ -56,7 +36,7 @@ public final class ItemSpecification {
      * @param subcategoryName Name of the subcategory to filter items by.
      * @return {@link Specification} for filtering items based on the provided category names.
      */
-    public static Specification<Item> hasSubcategory(final String categoryName, final String subcategoryName) {
+    public static Specification<Item> hasCategory(final String categoryName, final String subcategoryName) {
         final String category = categoryName.trim().toLowerCase();
         final String subcategory = subcategoryName.trim().toLowerCase();
 
