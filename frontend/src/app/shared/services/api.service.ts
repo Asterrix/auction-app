@@ -6,6 +6,7 @@ import {Page} from "../models/interfaces/page";
 import {IPagination} from "../models/pagination";
 
 export namespace Api {
+  import BidRequest = Api.BidApi.BidRequest;
   import Category = Api.CategoryApi.Category;
   import ItemParams = Api.ItemApi.GetMethods.ItemParams;
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
@@ -54,6 +55,10 @@ export namespace Api {
 
     registerUser(auth: Required<Register>): Observable<HttpResponse<boolean>> {
       return UserApi.PostMethods.register(this.httpClient, auth);
+    }
+
+    bidOnItem(req: Required<BidRequest>) {
+      return BidApi.PostMethod.makeAnOffer(this.httpClient, req);
     }
   }
 
@@ -254,6 +259,30 @@ export namespace Api {
 
       export function getListOfItems(httpClient: HttpClient, params: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
         return httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, {params: getParams(params, pagination)});
+      }
+    }
+  }
+
+  export namespace BidApi {
+    export interface BidRequest {
+      itemId: number,
+      bidderId: number,
+      amount: number
+    }
+
+    export enum Endpoint {
+      Bids = "bids"
+    }
+
+    export namespace PostMethod {
+      export function makeAnOffer(httpClient: HttpClient, req: Required<BidRequest>): Observable<HttpResponse<void>> {
+        const body = {
+          itemId: req.itemId,
+          bidderId: req.bidderId,
+          amount: req.amount
+        };
+
+        return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Bids}`, body, {observe: "response"});
       }
     }
   }

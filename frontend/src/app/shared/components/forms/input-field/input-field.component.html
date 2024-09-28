@@ -1,5 +1,5 @@
 <div [formGroup]="formFieldGroup" class="input-field">
-  <label class="input-field__label">{{label}}</label>
+  <label class="input-field__label" *ngIf="label !== undefined">{{label}}</label>
 
   <input
     [formControlName]="formField"

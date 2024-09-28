@@ -36,7 +36,7 @@ export class AuthenticationService {
     return user !== Constant.EmptyValue;
   }
 
-  private static getCurrentUser(): Constant | UserDetails {
+  public static getCurrentUser(): Constant | UserDetails {
     const localToken: string = TokenManager.retrieveTokenFromLocalStorage();
     const userDetails: Constant | UserDetails = this.getUserDetailsFromToken(localToken);
 
