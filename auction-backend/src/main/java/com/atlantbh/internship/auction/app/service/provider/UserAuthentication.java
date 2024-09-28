@@ -35,12 +35,12 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return "";
     }
 
     @Override
     public Object getDetails() {
-        return null;
+        throw new IllegalStateException("This method should not be used. Instead, use the getClaims method.");
     }
 
     @Override
@@ -55,7 +55,7 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public void setAuthenticated(final boolean isAuthenticated) throws IllegalArgumentException {
-        throw new IllegalArgumentException("This method should never be invoked!");
+        throw new IllegalStateException("This method should never be invoked!");
     }
 
     @Override
