@@ -10,6 +10,7 @@ import {GeneralFormComponent} from "../../../../shared/components/forms/general-
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
 import {Constant} from "../../../../shared/models/enums/constant";
 import {ErrorModel, Severity} from "../../../../shared/models/errorModel";
+import {AlertService} from "../../../../shared/services/alert.service";
 import {ErrorService} from "../../../../shared/services/error.service";
 
 
@@ -31,6 +32,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   @Input({required: true})
   error$?: Observable<ErrorModel | null>;
+  alert$?: Observable<string>;
   formSub?: Subscription;
   protected readonly CheckboxShape = CheckboxShape;
   protected loginForm = this.formBuilder.group({
@@ -39,10 +41,15 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     rememberMe: false
   });
 
-  constructor(private formBuilder: FormBuilder, private errorService: ErrorService) {
+  constructor(private formBuilder: FormBuilder, private errorService: ErrorService, private alertService: AlertService) {
   }
 
   public ngOnInit(): void {
+    this.subscribeToAlerts();
+    this.subscribeToFormValueChanges();
+  }
+
+  private subscribeToFormValueChanges(): void {
     this.formSub = this.loginForm.valueChanges.pipe(
       distinctUntilChanged((prev, curr) => prev === curr),
       debounceTime(300)
@@ -51,6 +58,10 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         this.errorService.clearErrors();
       }
     });
+  }
+
+  private subscribeToAlerts(): void {
+    this.alert$ = this.alertService.getAlert();
   }
 
   public ngOnDestroy(): void {
