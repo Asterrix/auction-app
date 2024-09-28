@@ -1,8 +1,8 @@
-import {Component} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {SearchBarComponent} from "../search-bar/search-bar.component";
+import {Component} from "@angular/core";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {AnchorImageComponent} from "../../../anchor-image/anchor-image.component";
+import {SearchBarComponent} from "../search-bar/search-bar.component";
 
 @Component({
   selector: "app-main-navbar",

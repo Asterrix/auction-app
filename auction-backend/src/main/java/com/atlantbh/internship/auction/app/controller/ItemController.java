@@ -4,14 +4,12 @@ import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
+import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -25,8 +23,11 @@ public final class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ItemSummaryDto>> getAllItems(final Pageable pageable) {
-        return new ResponseEntity<>(itemService.getAllItems(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<ItemSummaryDto>> getAllItems(@RequestParam @Nullable final String category,
+                                                            @RequestParam @Nullable final String subcategory,
+                                                            @RequestParam @Nullable final String itemName,
+                                                            final Pageable pageable) {
+        return new ResponseEntity<>(itemService.getAllItems(category, subcategory, itemName, pageable), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

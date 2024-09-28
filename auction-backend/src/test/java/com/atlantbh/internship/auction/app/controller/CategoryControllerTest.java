@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,7 +56,7 @@ class CategoryControllerTest {
     @Test
     void getAllCategories_ShouldReturn_Content() throws Exception {
         final String path = "/api/v1/categories";
-        final CategoryDto category = new CategoryDto(1, "Cat");
+        final CategoryDto category = new CategoryDto(1, "Cat", new ArrayList<>());
         List<CategoryDto> list = List.of(category);
 
         given(categoryService.getAllCategories()).willReturn(list);

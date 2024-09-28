@@ -7,7 +7,7 @@ import Category = Api.CategoryApi.Category;
   providedIn: "root"
 })
 export class CategoryService {
-  private categories$ = new BehaviorSubject<Array<Category> | undefined>(undefined);
+  private categories$: BehaviorSubject<Array<Category> | undefined> = new BehaviorSubject<Array<Category> | undefined>(undefined);
 
   constructor(private apiService: Api.Service) {
   }

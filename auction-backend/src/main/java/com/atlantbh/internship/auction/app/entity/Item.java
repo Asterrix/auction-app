@@ -34,6 +34,10 @@ public class Item {
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<ItemImage> itemImages = new ArrayList<>();
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     public Item() {
     }
 
@@ -43,7 +47,8 @@ public class Item {
                 final BigDecimal initialPrice,
                 final LocalDate startDate,
                 final LocalDate endDate,
-                final List<ItemImage> itemImages) {
+                final List<ItemImage> itemImages,
+                final Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -51,6 +56,7 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.itemImages = itemImages;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -107,6 +113,14 @@ public class Item {
 
     public void setItemImages(final List<ItemImage> itemImages) {
         this.itemImages = itemImages;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
 }

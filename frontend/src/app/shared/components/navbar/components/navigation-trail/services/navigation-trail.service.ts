@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRoute, Router, UrlSegment} from "@angular/router";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {distinctUntilChanged, map} from "rxjs/operators";
-import {Constant} from "../../../models/enums/constant";
+import {Constant} from "../../../../../models/enums/constant";
 import {NavigationTrail} from "../navigation-trail.component";
 
 export interface NavigationTrailStructure {
@@ -16,6 +16,7 @@ export interface NavigationTrailStructure {
 export class NavigationTrailService {
   private readonly paths$: Observable<Array<NavigationTrailStructure>>;
   private readonly lastPathLabel$: Observable<string>;
+  private display = new BehaviorSubject<boolean>(false);
 
   constructor(private router: Router, private route: ActivatedRoute) {
     this.paths$ = this.router.events.pipe(
@@ -28,6 +29,18 @@ export class NavigationTrailService {
         return items.length > 0 ? items[items.length - 1].label : Constant.EmptyValue;
       })
     );
+  }
+
+  public getDisplayTrail(): Observable<boolean> {
+    return this.display.asObservable();
+  }
+
+  public displayNavigationTrail(): void {
+    this.display.next(true);
+  }
+
+  public closeNavigationTrail(): void {
+    this.display.next(false);
   }
 
   public getPathsAsObservable(): Observable<Array<NavigationTrailStructure>> {

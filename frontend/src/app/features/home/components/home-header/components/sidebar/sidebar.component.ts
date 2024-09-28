@@ -1,5 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnInit} from "@angular/core";
+import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
 import {Api} from "../../../../../../shared/services/api.service";
 import {CategoryService} from "../../../../../../shared/services/category.service";
@@ -8,7 +9,7 @@ import Category = Api.CategoryApi.Category;
 @Component({
   selector: "home-header-sidebar",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: "./sidebar.component.html",
   styleUrls: ["./sidebar.component.scss"]
 })

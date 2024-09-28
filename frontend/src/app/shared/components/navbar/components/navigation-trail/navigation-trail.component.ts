@@ -21,14 +21,9 @@ export enum NavigationTrail {
   styleUrls: ["./navigation-trail.component.scss"]
 })
 export class NavigationTrailComponent {
+  label$: Observable<string> = this.navigationTrailService.getLastPathLabelAsObservable();
+  path$: Observable<Array<NavigationTrailStructure>> = this.navigationTrailService.getPathsAsObservable();
+
   constructor(private navigationTrailService: NavigationTrailService) {
-  }
-
-  public getLabel(): Observable<string> {
-    return this.navigationTrailService.getLastPathLabelAsObservable();
-  }
-
-  public getPaths(): Observable<Array<NavigationTrailStructure>> {
-    return this.navigationTrailService.getPathsAsObservable();
   }
 }

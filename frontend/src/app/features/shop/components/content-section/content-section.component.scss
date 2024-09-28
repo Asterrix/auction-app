@@ -1,0 +1,22 @@
+@import "colors";
+@import "typography";
+
+.content_section {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.btn {
+  background-color: $primary;
+  border: none;
+  color: $white;
+  padding: 1.8rem 5.7rem;
+  width: fit-content;
+  @extend .font-medium;
+  align-self: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -20,11 +20,17 @@
   &__item {
     background-color: $white;
     border-bottom: 1px solid $neutral-light-grey;
-    padding: 1.6rem;
+    display: flex;
     transition: all 300ms ease-out;
 
     &:hover {
       border-bottom: 1px solid $primary;
+      color: $primary;
     }
   }
+}
+
+.category {
+  padding: 1.6rem;
+  width: 100%;
 }

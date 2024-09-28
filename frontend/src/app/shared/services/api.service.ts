@@ -1,15 +1,23 @@
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Page} from "../models/interfaces/page";
 
-
 export namespace Api {
   import Category = Api.CategoryApi.Category;
+  import Pagination = Api.Interfaces.Pagination;
+  import ItemParams = Api.ItemApi.GetMethods.ItemParams;
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   import Item = Api.ItemApi.Interfaces.Item;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
+
+  export namespace Interfaces {
+    export interface Pagination {
+      page: number;
+      size: number;
+    }
+  }
 
   @Injectable({providedIn: "root"})
   export class Service {
@@ -35,6 +43,10 @@ export namespace Api {
     getItemById(itemId: number): Observable<Item> {
       return ItemApi.GetMethods.getItemById(this.httpClient, itemId);
     }
+
+    getListOfAllItems(filter: Partial<ItemParams>, pagination: Required<Pagination>): Observable<Page<ItemSummary>> {
+      return ItemApi.GetMethods.getListOfItems(this.httpClient, filter, pagination);
+    }
   }
 
   export namespace CategoryApi {
@@ -42,6 +54,13 @@ export namespace Api {
     export interface Category {
       id: number;
       name: string;
+      subcategories: Array<Subcategory>;
+    }
+
+    export interface Subcategory {
+      id: number;
+      name: string;
+      numberOfItems: number;
     }
 
     enum Endpoint {
@@ -91,31 +110,83 @@ export namespace Api {
       Featured = "featured"
     }
 
-    enum SortBy {
-      StartDate = "startDate",
-      EndDate = "endDate"
-    }
+    export namespace HelperMethods {
+      export function extractItemParameters(params: Partial<ItemParams>, param: HttpParams): HttpParams {
+        for (const [key, value] of Object.entries(params)) {
+          if (value !== undefined) {
+            param = param.set(key, value);
+          }
+        }
+        return param;
+      }
 
-    enum SortByDirection {
-      ASC = "ASC",
-      DESC = "DESC"
+      export function extractPagination(pagination: Required<Pagination>, param: HttpParams): HttpParams {
+        for (const [key, value] of Object.entries(pagination)) {
+          param = param.set(key, value);
+        }
+        return param;
+      }
     }
 
     export namespace GetMethods {
+      import extractParameters = Api.ItemApi.HelperMethods.extractItemParameters;
+      import extractPagination = Api.ItemApi.HelperMethods.extractPagination;
       import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
       import Item = Api.ItemApi.Interfaces.Item;
       import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
-      export function getListOfNewestItems(httpClient: HttpClient): Observable<Page<ItemSummary>> {
-        const pageSize: number = 8;
+      export interface ItemParams {
+        sort: string;
+        category: string;
+        subcategory: string;
+        itemName: string;
+      }
 
-        return getListOfItems(httpClient, SortBy.StartDate, SortByDirection.DESC, pageSize);
+      enum SortBy {
+        StartDate = "startDate",
+        EndDate = "endDate"
+      }
+
+      enum SortByDirection {
+        ASC = "ASC",
+        DESC = "DESC"
+      }
+
+      function getParams(params: Partial<ItemParams>, pagination: Required<Pagination>): HttpParams {
+        let param: HttpParams = new HttpParams();
+
+        param = extractParameters(params, param);
+        param = extractPagination(pagination, param);
+
+        return param;
+      }
+
+      export function getListOfNewestItems(httpClient: HttpClient): Observable<Page<ItemSummary>> {
+
+        const params: Partial<ItemParams> = {
+          sort: `${SortBy.StartDate},${SortByDirection.DESC}`
+        };
+
+        const pagination: Required<Pagination> = {
+          page: 0,
+          size: 8
+        };
+
+        return getListOfItems(httpClient, params, pagination);
       }
 
       export function getListOfLastChanceItems(httpClient: HttpClient): Observable<Page<ItemSummary>> {
-        const pageSize: number = 8;
 
-        return getListOfItems(httpClient, SortBy.EndDate, SortByDirection.DESC, pageSize);
+        const params: Partial<ItemParams> = {
+          sort: `${SortBy.EndDate},${SortByDirection.DESC}`
+        };
+
+        const pagination: Required<Pagination> = {
+          page: 0,
+          size: 8
+        };
+
+        return getListOfItems(httpClient, params, pagination);
       }
 
       export function getFeaturedItem(httpClient: HttpClient): Observable<FeaturedItem> {
@@ -126,18 +197,8 @@ export namespace Api {
         return httpClient.get<Item>(`${environment.apiUrl}/${Endpoint.Items}/${itemId}`);
       }
 
-      function getListOfItems(httpClient: HttpClient,
-                              sortAttribute: string,
-                              sortDirection: string,
-                              pageSize: number = 9,
-                              pageNumber: number = 0): Observable<Page<ItemSummary>> {
-        const getListOfItemsParams: { size: number; page: number; sort: string } = {
-          size: pageSize,
-          page: pageNumber,
-          sort: `${sortAttribute},${sortDirection}`
-        };
-
-        return httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, {params: getListOfItemsParams});
+      export function getListOfItems(httpClient: HttpClient, params: Partial<ItemParams>, pagination: Required<Pagination>): Observable<Page<ItemSummary>> {
+        return httpClient.get<Page<ItemSummary>>(`${environment.apiUrl}/${Endpoint.Items}`, {params: getParams(params, pagination)});
       }
     }
   }

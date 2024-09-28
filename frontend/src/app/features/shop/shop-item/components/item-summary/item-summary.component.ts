@@ -13,7 +13,7 @@ import Item = Api.ItemApi.Interfaces.Item;
   styleUrls: ["./item-summary.component.scss"]
 })
 export class ItemSummaryComponent implements OnInit {
-  public item$: Observable<Item | undefined> | undefined
+  public item$: Observable<Item | undefined> | undefined;
 
   constructor(private itemService: ItemService) {
   }
