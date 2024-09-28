@@ -1,0 +1,41 @@
+<div (dragenter)="highlightInputField($event, true)"
+     (dragover)="eventService.preventDefaultBehaviour($event)"
+     (drop)="addImage($event); highlightInputField($event, false)"
+     [ngClass]="{'highlight': highlighted}"
+     class="form">
+
+  <label [ngClass]="{'img-container': itemImages.length > 0}"
+         class="form__label"
+         for="image">
+
+    <ng-container *ngIf="itemImages.length > 0; else empty">
+      <div class="form__img-row">
+        <div
+          (click)="eventService.preventDefaultBehaviour($event)"
+          *ngFor="let image of itemImages"
+          class="img-card">
+
+          <img [alt]="image" [src]="image"/>
+
+          <button (click)="removeImage($event, image)" class="remove-btn">
+            <img alt="Remove image" src="../../../../../../../assets/icons/cancel.svg"/>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #empty>
+      <span class="form__message--span">Upload Photos</span>
+      <p>or just drag and drop</p>
+      <p class="form__message--drag">(Add at least 3 photos)</p>
+    </ng-template>
+
+  </label>
+
+  <input #fileInput
+         (change)="addImage($event)"
+         class="form__input"
+         id="image"
+         multiple
+         type="file">
+</div>

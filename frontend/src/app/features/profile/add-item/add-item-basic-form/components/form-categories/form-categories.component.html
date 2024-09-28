@@ -1,0 +1,13 @@
+<div class="form-categories">
+  <form-categories-dropdown
+    (hideDropdown)="hideDropdownMenu(type.Category)"
+    (showDropdown)="showDropdownMenu(type.Category)"
+    [isActive]="dropdown[type.Category]"
+    buttonText="Select Category"/>
+
+  <form-categories-dropdown
+    (hideDropdown)="hideDropdownMenu(type.Subcategory)"
+    (showDropdown)="showDropdownMenu(type.Subcategory)"
+    [isActive]="dropdown[type.Subcategory]"
+    buttonText="Select Subcategory"/>
+</div>
