@@ -4,6 +4,7 @@ import com.atlantbh.internship.auction.app.config.constant.AuctionAppProperties;
 import com.atlantbh.internship.auction.app.config.constant.RSAKeyProperties;
 import com.atlantbh.internship.auction.app.service.TokenService;
 import com.atlantbh.internship.auction.app.service.filter.TokenFilter;
+import com.atlantbh.internship.auction.app.service.impl.LogoutService;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -17,6 +18,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -55,6 +57,11 @@ public class SecurityConfig {
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new TokenFilter(tokenService), BasicAuthenticationFilter.class)
+                .logout(logout -> {
+                    logout.logoutUrl("/api/v1/authentication/logout");
+                    logout.addLogoutHandler(new LogoutService(tokenService));
+                    logout.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+                })
                 .build();
     }
 
