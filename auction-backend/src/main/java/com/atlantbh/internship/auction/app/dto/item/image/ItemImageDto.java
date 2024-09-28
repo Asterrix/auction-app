@@ -9,7 +9,6 @@ import java.io.Serializable;
  */
 public record ItemImageDto(
         Integer id,
-        String name,
         String imageUrl
 ) implements Serializable {
 }

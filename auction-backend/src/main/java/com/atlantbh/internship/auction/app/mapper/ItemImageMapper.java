@@ -12,7 +12,6 @@ public final class ItemImageMapper {
     public static ItemImageDto convertToDto(final ItemImage entity) {
         return new ItemImageDto(
                 entity.getId(),
-                entity.getName(),
                 entity.getImageUrl()
         );
     }
