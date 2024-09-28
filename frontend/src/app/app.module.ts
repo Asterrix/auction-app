@@ -8,6 +8,7 @@ import {FooterComponent} from "./shared/components/footer/footer.component";
 import {HomeAboutUsComponent} from "./features/home/home-about-us/home-about-us.component";
 import {HomePrivacyPolicyComponent} from "./features/home/home-privacy-policy/home-privacy-policy.component";
 import {HomeTermsConditionsComponent} from "./features/home/home-terms-conditions/home-terms-conditions.component";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import {HomeTermsConditionsComponent} from "./features/home/home-terms-condition
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     NavbarComponent,
     FooterComponent,
     HomeAboutUsComponent,

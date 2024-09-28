@@ -1,7 +1,7 @@
 <div class="item-card">
-  <a class="item-card__link" href="#">
-    <img alt="Image of an item" src="assets/images/Group-42.png"/>
+  <a class="item-card__link">
+    <img alt="Image of an item" src="{{item.itemImages.at(0)?.imageUrl}}"/>
   </a>
-  <span class="item-card__name">Shoes Collection</span>
-  <p class="item-card__text">Start from <span class="item-card--price">$59.00</span></p>
+  <span class="item-card__name">{{item.name}}</span>
+  <p class="item-card__text">Start from <span class="item-card--price">${{item.initialPrice}}</span></p>
 </div>
