@@ -30,6 +30,7 @@ public final class ItemMapper {
                 entity.getName(),
                 entity.getInitialPrice(),
                 currentPrice,
+                entity.getDescription(),
                 ItemImageMapper.convertToDto(entity.getItemImages().getFirst())
         );
     }

@@ -1,6 +1,7 @@
 interface ItemBaseProperties {
   id: number;
   name: string;
+  description: string;
   initialPrice: number;
   currentPrice: number;
 }

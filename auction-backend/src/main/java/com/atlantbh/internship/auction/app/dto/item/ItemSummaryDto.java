@@ -14,6 +14,7 @@ public record ItemSummaryDto(
         String name,
         BigDecimal initialPrice,
         BigDecimal currentPrice,
+        String description,
         ItemImageDto thumbnail
 ) implements Serializable {
 }

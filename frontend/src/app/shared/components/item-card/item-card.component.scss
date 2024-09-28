@@ -1,10 +1,7 @@
-@import "typography";
+@use "colors";
+@use "typography";
 
 .item-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-
   &:hover {
     cursor: pointer;
   }
@@ -17,7 +14,7 @@
 
     &:hover {
       &:after {
-        background-color: $primary;
+        background-color: colors.$primary;
         content: "";
         height: 100%;
         opacity: 0.35;
@@ -27,37 +24,58 @@
     }
 
     img {
+      height: 32rem;
       object-fit: cover;
       width: 100%;
     }
   }
 
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  &__basic-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
   &__name {
-    font-size: 1.8rem;
+    font-size: 2rem;
     @extend .font-bold;
   }
 
   &__text {
-    color: $neutral-grey;
+    color: colors.$neutral-grey;
   }
 
   &--price {
-    color: $primary;
+    color: colors.$primary;
   }
-
 
   &__price-section {
     display: flex;
     flex-direction: column;
   }
+
+  &__price__spacing {
+    margin-top: 2.4rem;
+  }
 }
 
-// Vertical
-.v__orientation {
-  height: 320px;
-}
 
-// Horizontal
-.h__orientation {
-  height: 220px;
+.layout {
+  &--list {
+    display: grid;
+    gap: 2.4rem;
+    grid-template-columns: 1fr 2fr;
+  }
+
+  &--grid {
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: 1fr;
+  }
 }

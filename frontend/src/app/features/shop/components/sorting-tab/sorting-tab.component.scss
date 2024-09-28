@@ -1,11 +1,42 @@
 @use "container";
+@use "colors";
 
 .sorting-tab {
   display: grid;
   gap: 1.6rem;
   grid-template-columns: 1fr;
+  justify-content: space-between;
 
   @media (min-width: container.$large) {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__view {
+    align-items: center;
+    display: flex;
+    gap: 2.4rem;
+    justify-content: flex-end;
+  }
+
+  &__btn {
+    color: colors.$neutral-grey;
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    display: flex;
+    gap: 0.8rem;
+    outline: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--active {
+      color: colors.$primary;
+
+      img {
+        filter: invert(47%) sepia(93%) saturate(2120%) hue-rotate(225deg) brightness(88%) contrast(91%);
+      }
+    }
   }
 }

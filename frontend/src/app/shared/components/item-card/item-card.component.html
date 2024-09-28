@@ -1,23 +1,47 @@
-<div class="item-card">
+<div class="item-card"
+     itemLayout
+     [layout]="layout">
+
   <a class="item-card__link" [routerLink]="['/shop/item/', item.id]">
-    <img [ngClass]="{'v__orientation': imageOrientation === 'v', 'h__orientation': imageOrientation === 'h'}"
-         alt="Image of an item"
-         src="{{item.thumbnail.imageUrl}}"/>
+    <img alt="Image of an item" src="{{item.thumbnail.imageUrl}}"/>
   </a>
-  <span class="item-card__name">{{ item.name }}</span>
 
-  <div class="item-card__price-section">
-    <p class="item-card__text">
-      Start from
-      <span class="item-card--price">${{ item.initialPrice }}</span>
-    </p>
+  <div class="item-card__content">
+    <div class="item-card__basic-info">
+      <span class="item-card__name">{{ item.name }}</span>
 
-    @if (item.currentPrice !== item.initialPrice) {
-      <p class="item-card__text">
-        Current price
-        <span class="item-card--price">${{ item.currentPrice }}
-      </span>
+      @if (layout === 'list') {
+        <p class="item-card__text">{{ item.description }}</p>
+      }
+
+    </div>
+
+    <div class="item-card__price-section"
+         [ngClass]="{'item-card__price__spacing': layout === 'list'}">
+
+      <p class="item-card__text"
+         itemCardFontSize
+         [cardLayout]="layout">
+        Start from
+        <span class="item-card--price"
+              itemCardFontSize
+              [cardLayout]="layout">
+          ${{ item.initialPrice }}
+        </span>
       </p>
-    }
+
+      @if (item.currentPrice !== item.initialPrice) {
+        <p class="item-card__text"
+           itemCardFontSize
+           [cardLayout]="layout">
+          Current price
+          <span class="item-card--price"
+                itemCardFontSize
+                [cardLayout]="layout">
+            ${{ item.currentPrice }}
+          </span>
+        </p>
+      }
+    </div>
   </div>
 </div>

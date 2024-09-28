@@ -2,6 +2,7 @@ import {CommonModule} from "@angular/common";
 import {Component, Input} from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
+import {ItemLayout} from "src/app/shared/components/item-card/directive/item.layout.type";
 import {ItemCardComponent} from "../../../../shared/components/item-card/item-card.component";
 import {LoaderComponent} from "../../../../shared/components/loader/loader.component";
 import {Page} from "../../../../shared/models/interfaces/page";
@@ -18,6 +19,7 @@ import {SectionTabComponent} from "./components/section-tab/section-tab.componen
 })
 export class HomeItemsComponent {
   @Input({required: true}) items$: Observable<Page<ItemSummary> | undefined> | undefined;
+  protected itemLayout: ItemLayout = "grid";
 
   constructor(private router: Router, public loader: LoaderService) {
   }
