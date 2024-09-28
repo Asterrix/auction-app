@@ -1,5 +1,5 @@
 <div class="item-card">
-  <a class="item-card__link" routerLink="item/{{item.id}}">
+  <a class="item-card__link" [routerLink]="['/shop/item/', item.id]">
     <img [ngClass]="{'v__orientation': imageOrientation === 'v', 'h__orientation': imageOrientation === 'h'}"
          alt="Image of an item"
          src="{{item.thumbnail.imageUrl}}"/>
