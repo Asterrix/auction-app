@@ -5,7 +5,6 @@ import com.atlantbh.internship.auction.app.entity.Item;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 /**
  * DTO for {@link Item}
@@ -16,7 +15,6 @@ public record CreateItemRequest(
         String category,
         String subcategory,
         String description,
-        List<String> images,
         BigDecimal initialPrice,
         ZonedDateTime startTime,
         ZonedDateTime endTime) {

@@ -1,5 +1,6 @@
 import {inject, Injectable} from "@angular/core";
-import {FormBuilder, FormControl, FormGroup, ɵElement} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ResetForm} from "../../shared/interfaces/reset-form";
 
 type Location = {
   city: FormControl<string>;
@@ -28,9 +29,9 @@ export type LocationShipping = {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
-export class AddItemLocationShippingService {
+export class AddItemLocationShippingService implements ResetForm {
   private formBuilder = inject(FormBuilder);
 
   private _form = this.formBuilder.nonNullable.group<LocationShipping>({
@@ -55,7 +56,11 @@ export class AddItemLocationShippingService {
     })
   });
 
-  public get form(): FormGroup<{ [K in keyof LocationShipping]: ɵElement<LocationShipping[K], never> }> {
+  public get form() {
     return this._form;
+  }
+
+  public resetForm(): void {
+    this._form.reset();
   }
 }

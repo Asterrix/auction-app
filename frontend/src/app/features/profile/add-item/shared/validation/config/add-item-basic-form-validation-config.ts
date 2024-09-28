@@ -35,7 +35,7 @@ export class AddItemBasicFormValidationConfig {
         validator: new DescriptionValidation()
       },
       [BasicFormValidation.Photos]: {
-        formControl: form.controls.photos,
+        formControl: form.controls.images,
         validator: new ImageValidation()
       },
     };

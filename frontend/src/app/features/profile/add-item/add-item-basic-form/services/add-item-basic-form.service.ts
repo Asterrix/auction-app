@@ -1,5 +1,6 @@
-import {inject, Injectable} from "@angular/core";
+import {computed, inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
 import {FormBuilder, FormControl} from "@angular/forms";
+import {ResetForm} from "../../shared/interfaces/reset-form";
 import {
   AddItemBasicFormValidationConfig,
   BasicFormValidation
@@ -13,26 +14,16 @@ export type Basic = {
   category: FormControl<string>,
   subcategory: FormControl<string>,
   description: FormControl<string>,
-  photos: FormControl<string[]>,
-}
-
-interface AddItemBasicForm {
-  validateForm(): boolean;
-
-  getValidationStatus(field: BasicFormValidation): ValidationResult;
-
-  addImage(event: Event): Promise<void>;
-
-  removeImage(image: string): void;
-
-  updateCategory(category: CategorySelection): void;
+  images: FormControl<File[]>,
 }
 
 @Injectable({
   providedIn: "root"
 })
-export class AddItemBasicFormService implements AddItemBasicForm {
-  protected itemImages: string[] = [];
+export class AddItemBasicFormService implements ResetForm {
+  private itemImagesSignal: WritableSignal<Map<string, File>> = signal(new Map<string, File>());
+  public itemImages: Signal<Map<string, File>> = computed(() => this.itemImagesSignal());
+
   private formBuilder: FormBuilder = inject(FormBuilder);
   private imageService: ImageService = inject(ImageService);
 
@@ -41,7 +32,7 @@ export class AddItemBasicFormService implements AddItemBasicForm {
     subcategory: new FormControl<string>("", {nonNullable: true}),
     description: new FormControl<string>("", {nonNullable: true}),
     itemName: new FormControl<string>("", {nonNullable: true}),
-    photos: new FormControl<string[]>([], {nonNullable: true}),
+    images: new FormControl<File[]>([], {nonNullable: true}),
   });
 
   private validation = new Validation<string | string[]>(
@@ -62,11 +53,14 @@ export class AddItemBasicFormService implements AddItemBasicForm {
     }
 
     if (files) {
-      const newImages: string[] = await this.imageService.addImage(files);
-      this.itemImages = this.imageService.filterDuplicates(this.itemImages, newImages);
+      const newImages: Map<string, File> = await this.imageService.addImage(files);
+
+      newImages.forEach((value, key) => {
+        this.itemImagesSignal().set(key, value);
+      });
 
       this._form.patchValue({
-        photos: this.itemImages
+        images: Array.from(this.itemImages().values())
       });
     }
   }
@@ -76,17 +70,20 @@ export class AddItemBasicFormService implements AddItemBasicForm {
   }
 
   public removeImage(image: string): void {
-    this.itemImages = this.imageService.removeImage(this.itemImages, image);
+    const newImageMap: Map<string, File> = this.imageService.removeImage(this.itemImages(), image);
+    this.itemImagesSignal.set(newImageMap);
 
     this._form.patchValue({
-      photos: this.itemImages
+      images: Array.from(this.itemImages().values())
     });
   }
 
-  // If the image array doesn't get cleared, previous images will be set as default value on second form fill
-  public resetImageArray(): void {
-    this.itemImages = [];
+  public resetForm(): void {
+    // If the image map doesn't get cleared, previous images will be set as default value on second form fill
+    this.itemImages().clear();
+    this._form.reset();
   }
+
 
   public updateCategory(category: CategorySelection): void {
     if (category.type === CategoryType.Category && this._form.controls.category.value !== category.value) {

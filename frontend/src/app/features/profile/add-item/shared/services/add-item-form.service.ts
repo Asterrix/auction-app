@@ -6,20 +6,24 @@ import {AddItemBasicFormService, Basic} from "../../add-item-basic-form/services
 import {
   AddItemLocationShippingService,
   LocationShipping
-} from "../../add-item-location-shipping/add-item-location-shipping.service";
-import {AddItemPriceFormService, PriceDate} from "../../add-item-set-price-form/add-item-price-form.service";
+} from "../../add-item-location-shipping/services/add-item-location-shipping.service";
+import {
+  AddItemPriceFormService,
+  PriceDateTime
+} from "../../add-item-set-price-form/services/add-item-price-form.service";
+import {ResetForm} from "../interfaces/reset-form";
 import CreateItemRequest = Api.ItemApi.PostMethods.CreateItemRequest;
 
 type AddItemGroup = {
   basicInfo: FormGroup<Basic>,
-  priceDate: FormGroup<PriceDate>,
+  priceDate: FormGroup<PriceDateTime>,
   locationShipping: FormGroup<LocationShipping>
 }
 
 @Injectable({
   providedIn: "root"
 })
-export class AddItemFormService {
+export class AddItemFormService implements ResetForm {
   private formBuilder: FormBuilder = inject(FormBuilder);
   private basicForm = inject(AddItemBasicFormService);
   private priceDateForm = inject(AddItemPriceFormService);
@@ -41,7 +45,7 @@ export class AddItemFormService {
       category: basicFormControls.category.value,
       subcategory: basicFormControls.subcategory.value,
       description: basicFormControls.description.value,
-      images: basicFormControls.photos.value,
+      images: basicFormControls.images.value,
       initialPrice: priceDateForm.price.value,
       startTime: priceDateForm.startTime.value,
       endTime: priceDateForm.endTime.value
@@ -51,9 +55,9 @@ export class AddItemFormService {
   }
 
   public resetForm(): void {
-    this.basicForm.form.reset();
-    this.priceDateForm.form.reset();
-    this.locationShipping.form.reset();
+    this.basicForm.resetForm();
+    this.priceDateForm.resetForm();
+    this.locationShipping.resetForm();
     this.form.reset();
   }
 }

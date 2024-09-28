@@ -13,8 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,8 +53,8 @@ public class ItemController {
 
     @PostMapping
     @PreAuthorize("hasRole('User')")
-    public ResponseEntity<ItemDto> createItem(@RequestBody final CreateItemRequest request) {
-        itemService.createItem(request);
+    public ResponseEntity<ItemDto> createItem(@RequestPart CreateItemRequest item, @RequestPart List<MultipartFile> images) throws IOException {
+        itemService.createItem(item, images);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

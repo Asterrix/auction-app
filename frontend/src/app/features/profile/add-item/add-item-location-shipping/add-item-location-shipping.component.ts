@@ -11,7 +11,7 @@ import {CardDropdownComponent} from "../add-item-credit-card-form/card-dropdown/
 import {FormFieldWrapperComponent} from "../shared/form-field-wrapper/form-field-wrapper.component";
 import {FormMemberComponent} from "../shared/form-member/form-member.component";
 import {FormNavigationHandler} from "../shared/form-navigation-handler";
-import {AddItemLocationShippingService} from "./add-item-location-shipping.service";
+import {AddItemLocationShippingService} from "./services/add-item-location-shipping.service";
 import {FormPhoneNumberComponent} from "./form-phone-number/form-phone-number.component";
 
 @Component({
