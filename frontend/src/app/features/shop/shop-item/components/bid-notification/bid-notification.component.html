@@ -1,11 +1,9 @@
-<ng-container *ngIf="alert() as alert">
-  <div [ngClass]="{'success': alert.type === AlertType.Info, 'alert': alert.type === AlertType.WarningLevelTwo}"
-       class="bid-notification">
-    <div class="container">
-      <div class="notification">
-        <span>{{alert.message}}</span>
-      </div>
+<div [ngClass]="{'success': alert.type === AlertType.Info, 'alert': alert.type === AlertType.WarningLevelTwo}"
+     class="bid-notification">
+  <div class="container">
+    <div class="notification">
+      <span>{{ alert.message }}</span>
     </div>
   </div>
-</ng-container>
+</div>
 

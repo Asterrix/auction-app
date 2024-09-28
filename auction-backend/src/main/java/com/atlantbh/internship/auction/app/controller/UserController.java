@@ -19,7 +19,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("items")
     public ResponseEntity<List<UserItemDto>> getAllUserItems() {
         return new ResponseEntity<>(userService.findAllItemsOwnedByUser(), HttpStatus.OK);

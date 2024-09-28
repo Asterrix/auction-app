@@ -80,6 +80,10 @@ public final class ItemSpecification {
         return (root, query, builder) -> builder.equal(root.get("finished"), false);
     }
 
+    public static Specification<Item> isActive() {
+        return (root, query, builder) -> builder.greaterThan(root.get("endTime"), builder.currentTimestamp());
+    }
+
     public static Specification<Item> orderByNameAsc() {
         return ItemOrderBySpecification.orderByNameAsc();
     }

@@ -1,7 +1,9 @@
 @if (item) {
   <div class="shop-item">
 
-    <app-bid-notification [alert]="alertService.alert"/>
+    @if (alert()) {
+      <app-bid-notification [alert]="alert()!"/>
+    }
 
     <div class="container">
       <div class="shop-item__page__layout">

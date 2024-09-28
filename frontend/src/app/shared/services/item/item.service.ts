@@ -1,6 +1,6 @@
-import {computed, inject, Injectable, signal} from "@angular/core";
-import {BehaviorSubject, catchError, Observable} from "rxjs";
-import {FeaturedItem, ItemAggregate} from "../api/item/item.interface";
+import {inject, Injectable} from "@angular/core";
+import {BehaviorSubject, Observable} from "rxjs";
+import {FeaturedItem} from "../api/item/item.interface";
 import {NewApiService} from "../api/new-api.service";
 
 @Injectable({
@@ -8,8 +8,6 @@ import {NewApiService} from "../api/new-api.service";
 })
 export class ItemService {
   private featuredItem$ = new BehaviorSubject<FeaturedItem | undefined>(undefined);
-  private itemSignal = signal<ItemAggregate | undefined>(undefined);
-  item = computed(this.itemSignal);
   private apiService = inject(NewApiService);
 
   initFeaturedItem(): void {
@@ -20,15 +18,5 @@ export class ItemService {
 
   getFeaturedItem(): Observable<FeaturedItem | undefined> {
     return this.featuredItem$.asObservable();
-  }
-
-  initItem(itemId: number): void {
-    this.itemSignal.set(undefined);
-
-    this.apiService.itemApi.getItemById(itemId).pipe(
-      catchError((error: any) => {
-        throw error;
-      }))
-      .subscribe((item): void => this.itemSignal.set(item));
   }
 }

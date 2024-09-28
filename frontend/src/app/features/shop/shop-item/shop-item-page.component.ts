@@ -1,9 +1,9 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {toObservable} from "@angular/core/rxjs-interop";
+import {Component, OnDestroy, OnInit, signal} from "@angular/core";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {AbstractControl, FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {Observable} from "rxjs";
+import {catchError, take} from "rxjs";
 import {PrimaryButtonComponent} from "../../../shared/components/buttons/primary-button/primary-button.component";
 import {SecondaryButtonComponent} from "../../../shared/components/buttons/secondary-button/secondary-button.component";
 import {InputFieldComponent} from "../../../shared/components/forms/input-field/input-field.component";
@@ -17,10 +17,9 @@ import {
 import {
   NavigationTrailService
 } from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
-import {Alert, AlertService, AlertType} from "../../../shared/services/alert.service";
+import {Alert, AlertType} from "../../../shared/services/alert.service";
 import {ItemAggregate} from "../../../shared/services/api/item/item.interface";
 import {ErrorService} from "../../../shared/services/error.service";
-import {ItemService} from "../../../shared/services/item/item.service";
 import {NewItemService} from "../../../shared/services/item/new-item.service";
 import {AuthenticationService} from "../../../shared/services/user/authentication.service";
 import {BidService} from "../../../shared/services/user/bid.service";
@@ -56,40 +55,33 @@ export class ShopItemPage implements OnInit, OnDestroy {
   bidForm: FormGroup = this.fb.group({
     offer: ["", [Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
-  alert$: Observable<Alert> = toObservable(this.alertService.alert);
-  item$: Observable<ItemAggregate>;
+  protected item = signal<ItemAggregate | undefined>(undefined);
+  protected alert = signal<Alert | undefined>(undefined);
 
-  constructor(protected itemService: ItemService,
-              private newItemService: NewItemService,
+  constructor(private newItemService: NewItemService,
               private activeRoute: ActivatedRoute,
               private trailService: NavigationTrailService,
               private fb: FormBuilder,
               private biddingService: BidService,
-              protected alertService: AlertService,
               private errorService: ErrorService,
               private router: Router,
               protected authService: AuthenticationService) {
 
     const param = this.activeRoute.snapshot.params[ItemPageParameter.Id];
 
-    this.item$ = this.newItemService.getItem(param);
+    this.newItemService.getItem(param)
+      .pipe(takeUntilDestroyed())
+      .subscribe((item: ItemAggregate) => {
+        this.item.set(item);
+      });
   }
 
   ngOnInit(): void {
     this.trailService.displayNavigationTrail();
-
-    this.alert$.subscribe(value => {
-      if (value.type !== AlertType.None) {
-        setTimeout(() => {
-          this.alertService.clearAlert();
-        }, 5000);
-      }
-    });
   }
 
   ngOnDestroy(): void {
     this.trailService.closeNavigationTrail();
-    this.alertService.clearAlert();
   }
 
   public onSubmit(): void {
@@ -98,16 +90,41 @@ export class ShopItemPage implements OnInit, OnDestroy {
     if (this.isFormValid()) {
       this.sendForm();
     } else {
-      this.setAlert();
+      this.setAlert({
+        message: "There are higher bids than yours. You could give a second try!",
+        type: AlertType.WarningLevelTwo
+      });
     }
   }
 
   private sendForm(): void {
     if (this.bidForm.valid) {
       const itemId: number = this.activeRoute.snapshot.params["id"];
+      const offerAmount = this.bidForm.get("offer")?.value;
+
       this.biddingService.makeAnOffer({
         itemId: itemId,
-        amount: this.bidForm.get("offer")?.value
+        amount: offerAmount
+      }).pipe(
+        take(1),
+        catchError((e) => {
+          this.setAlert({
+            message: "An error occurred while processing your bid. Please try again later.",
+            type: AlertType.WarningLevelOne
+          });
+          throw e;
+        })).subscribe(() => {
+        this.setAlert({
+          message: "Congrats! You are the highest bidder!",
+          type: AlertType.Info
+        });
+
+        this.item.update((item: ItemAggregate | undefined) => {
+          if (item !== undefined) {
+            item.biddingInformation.highestBid = offerAmount;
+          }
+          return item;
+        });
       });
     }
   }
@@ -123,8 +140,8 @@ export class ShopItemPage implements OnInit, OnDestroy {
   }
 
   private isFormValid(): boolean {
-    if (this.itemService.item() && this.bidForm.get("offer")?.value) {
-      const item = this.itemService.item();
+    if (this.item() && this.bidForm.get("offer")?.value) {
+      const item = this.item();
       const bid = this.bidForm.get("offer");
 
       if (item !== undefined && bid !== undefined) {
@@ -139,13 +156,13 @@ export class ShopItemPage implements OnInit, OnDestroy {
 
   private isOfferAboveTheCurrentOffers(item: ItemAggregate, bid: AbstractControl): boolean {
     return !(item.biddingInformation.highestBid >= bid.value || item.item.initialPrice > bid.value);
-
   }
 
-  private setAlert() {
-    this.alertService.setAlert({
-      message: "There are higher bids than yours. You could give a second try!",
-      type: AlertType.WarningLevelTwo
-    });
-  }
+  private setAlert = (alert: Alert) => {
+    this.alert.set(alert);
+
+    setTimeout(() => {
+      this.alert.set(undefined);
+    }, 5000);
+  };
 }
