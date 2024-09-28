@@ -30,7 +30,7 @@ public final class BidsMapper {
         final TableItemSummary itemSummary = mapToBidItemSummary(item.getId(), imageUrl, item.getName());
         final String timeRemaining = TimeRemainingCalculator.getTimeRemaining(ZonedDateTime.now(), bid.getItem().getEndTime());
         final BigDecimal currentBid = bid.getAmount();
-        final int numberOfBids = item.getUserItemBids().size();
+        final int numberOfBids = item.getBids().size();
 
         return new UserBidsAggregate(itemSummary, timeRemaining, currentBid, numberOfBids, highestBid);
     }

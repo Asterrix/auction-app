@@ -64,7 +64,7 @@ public class BiddingServiceImpl implements BiddingService {
         ownerValidation.validate(item.getOwner(), bidder);
 
         final BigDecimal offer = bidRequest.amount();
-        final Enum<OfferType> offerType = determineTypeOfOffer(item.getUserItemBids());
+        final Enum<OfferType> offerType = determineTypeOfOffer(item.getBids());
         compareOfferToCurrentOffers(offerType, item, offer);
 
         final Bid bid = new Bid(bidder, item, offer);
@@ -113,7 +113,7 @@ public class BiddingServiceImpl implements BiddingService {
 
     private BigDecimal findHighestBid(final Item item) {
         return item
-                .getUserItemBids()
+                .getBids()
                 .stream()
                 .max(Comparator.comparing(Bid::getAmount))
                 .orElseThrow(() -> new ValidationException("Highest bid could not be found."))
