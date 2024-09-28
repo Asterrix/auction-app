@@ -8,6 +8,7 @@ import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 public interface ItemService {
@@ -35,7 +36,7 @@ public interface ItemService {
      * @return {@link Optional} of {@link ItemAggregate}.
      */
 
-    Optional<ItemAggregate> getItemById(final Integer itemId);
+    Optional<ItemAggregate> getItemById(final Integer itemId, final ZonedDateTime timeOfRequest);
 
     ItemFeaturedDto getFeaturedItem();
 }

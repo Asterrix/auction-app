@@ -1,14 +1,14 @@
 package com.atlantbh.internship.auction.app.mapper;
 
 import com.atlantbh.internship.auction.app.dto.bid.BidItemSummary;
-import com.atlantbh.internship.auction.app.dto.bid.UserBidsAggregate;
 import com.atlantbh.internship.auction.app.dto.bid.BidNumberCount;
+import com.atlantbh.internship.auction.app.dto.bid.UserBidsAggregate;
 import com.atlantbh.internship.auction.app.entity.Bid;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class BidsMapper {
     private BidsMapper() {
@@ -26,7 +26,7 @@ public class BidsMapper {
         final Item item = bid.getItem();
         final String imageUrl = item.getItemImages().getFirst().getImageUrl();
         final BidItemSummary itemSummary = mapToBidItemSummary(item.getId(), imageUrl, item.getName());
-        final String timeRemaining = TimeRemainingCalculator.getTimeRemaining(LocalDateTime.now(), bid.getItem().getEndTime());
+        final String timeRemaining = TimeRemainingCalculator.getTimeRemaining(ZonedDateTime.now(), bid.getItem().getEndTime());
         final BigDecimal currentBid = bid.getAmount();
         final int numberOfBids = item.getUserItemBids().size();
 

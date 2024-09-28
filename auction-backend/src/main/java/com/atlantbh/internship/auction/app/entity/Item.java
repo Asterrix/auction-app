@@ -1,9 +1,11 @@
 package com.atlantbh.internship.auction.app.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +28,12 @@ public class Item {
     private BigDecimal initialPrice;
 
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
+    private ZonedDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
+    private ZonedDateTime endTime;
 
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<ItemImage> itemImages = new ArrayList<>();
@@ -51,8 +55,8 @@ public class Item {
     public Item(final String name,
                 final String description,
                 final BigDecimal initialPrice,
-                final LocalDateTime startTime,
-                final LocalDateTime endTime,
+                final ZonedDateTime startTime,
+                final ZonedDateTime endTime,
                 final List<ItemImage> itemImages,
                 final Category category,
                 final User owner) {
@@ -98,19 +102,19 @@ public class Item {
         this.initialPrice = initialPrice;
     }
 
-    public LocalDateTime getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(final LocalDateTime startTime) {
+    public void setStartTime(final ZonedDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public ZonedDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(final LocalDateTime endTime) {
+    public void setEndTime(final ZonedDateTime endTime) {
         this.endTime = endTime;
     }
 
