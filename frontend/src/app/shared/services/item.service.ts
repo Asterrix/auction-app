@@ -15,7 +15,8 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 export class ItemService {
   private featuredItem$ = new BehaviorSubject<FeaturedItem | undefined>(undefined);
   private items$ = new BehaviorSubject<Page<ItemSummary> | undefined>(undefined);
-  private item = signal<ItemAggregate>(<ItemAggregate>{item: {}, biddingInformation: {}});
+  private itemSignal = signal<ItemAggregate | undefined>(undefined);
+  item = computed(this.itemSignal);
 
   constructor(private apiService: Api.Service, private loader: LoaderService) {
   }
@@ -61,12 +62,8 @@ export class ItemService {
       catchError((error: any) => {
         throw error;
       }))
-      .subscribe((item): void => this.item.set(item))
+      .subscribe((item): void => this.itemSignal.set(item))
       .add(() => this.loader.removeLoader("item"));
-  }
-
-  getItem() {
-    return computed(this.item);
   }
 
   initItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {
