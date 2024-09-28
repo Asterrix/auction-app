@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {distinctUntilChanged, map} from "rxjs/operators";
-import {EmptyValue} from "../../../models/enums/EmptyValue";
+import {Constants} from "../../../models/enums/constants";
 import {NavigationTrail} from "../navigation-trail.component";
 
 export interface NavigationTrailStructure {
@@ -24,7 +24,7 @@ export class NavigationTrailService {
     );
 
     this.lastPathLabel$ = this.paths$.pipe(
-      map((items) => items.length > 0 ? items[items.length - 1].label : EmptyValue.String)
+      map((items) => items.length > 0 ? items[items.length - 1].label : Constants.EMPTY_VALUE)
     );
   }
 
@@ -39,7 +39,7 @@ export class NavigationTrailService {
   private buildNavigationTrail(route: ActivatedRoute): Array<NavigationTrailStructure> {
     const navigationTrails: Array<NavigationTrailStructure> = new Array<NavigationTrailStructure>();
     let currentRoute: ActivatedRoute = route;
-    let trailPath: string = EmptyValue.String;
+    let trailPath: string = Constants.EMPTY_VALUE;
 
     while (currentRoute) {
       const nextTrailPath: string = this.generateNextTrail(trailPath, currentRoute);
