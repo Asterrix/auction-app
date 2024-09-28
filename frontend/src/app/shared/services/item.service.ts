@@ -57,6 +57,7 @@ export class ItemService {
 
   initItem(itemId: number): void {
     this.loader.getLoader("item").showLoader();
+    this.itemSignal.set(undefined);
 
     this.apiService.getItemById(itemId).pipe(
       catchError((error: any) => {
