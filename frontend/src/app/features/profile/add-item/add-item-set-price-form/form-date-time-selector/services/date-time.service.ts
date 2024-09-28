@@ -1,6 +1,6 @@
 import {computed, inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
 import {eachDayOfInterval, endOfMonth, startOfMonth} from "date-fns";
-import {MemoService} from "../../../../../../shared/services/memo.service";
+import {MemoService} from "../../../../../../shared/utils/memo/memo.service";
 import {DateService} from "./date.service";
 import {TimePeriod, TimeService} from "./time.service";
 

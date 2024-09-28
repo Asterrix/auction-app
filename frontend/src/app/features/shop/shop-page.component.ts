@@ -13,7 +13,7 @@ import {Api} from "../../shared/services/api.service";
 import {ItemSummary} from "../../shared/services/api/item/item.interface";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item/item.service";
-import {SearchService} from "../../shared/services/search.service";
+import {SearchService} from "../../shared/services/search/search.service";
 import {ContentSectionComponent} from "./components/content-section/content-section.component";
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {SortingTabComponent} from "./components/sorting-tab/sorting-tab.component";
