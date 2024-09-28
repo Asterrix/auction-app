@@ -2,7 +2,7 @@
   <div class="container">
     <div class="shop__layout">
       <shop-sidebar [categories$]="categories$"/>
-      <shop-content-section/>
+      <shop-content-section [items$]="items$" [pagination]="pagination" (increasePageSize)="loadMoreElements()"/>
     </div>
   </div>
 </div>
