@@ -1,8 +1,10 @@
 package com.atlantbh.internship.auction.app.mapper;
 
+import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.projection.ItemImageInfo;
+import com.atlantbh.internship.auction.app.projection.ItemInfo;
 
 import java.util.List;
 
@@ -18,7 +20,11 @@ public final class ItemMapper {
         return entityList.stream().map(ItemMapper::convertToSummaryDto).toList();
     }
 
-    public static ItemFeaturedDto convertToFeaturedDto(final Item entity) {
-        return new ItemFeaturedDto(entity.getId(), entity.getName(), entity.getDescription(), entity.getInitialPrice(), ItemImageMapper.convertToDto(entity.getItemImages()));
+    public static ItemFeaturedDto convertToFeaturedDto(final ItemInfo itemInfo, final ItemImageInfo itemImageInfo) {
+        return new ItemFeaturedDto(itemInfo.getId(),
+                itemInfo.getName(),
+                itemInfo.getDescription(),
+                itemInfo.getInitialPrice(),
+                ItemImageMapper.convertToDto(itemImageInfo));
     }
 }

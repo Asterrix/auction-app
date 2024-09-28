@@ -1,8 +1,10 @@
 package com.atlantbh.internship.auction.app.service;
 
+import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
-import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
+import com.atlantbh.internship.auction.app.projection.ItemImageInfo;
+import com.atlantbh.internship.auction.app.projection.ItemInfo;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
 import com.atlantbh.internship.auction.app.service.impl.ItemServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,9 +59,47 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetFeatured_ReturnsItem() {
-        Item item = new Item(1, "Item1", "Desc1", new BigDecimal("100.00"), LocalDate.EPOCH, LocalDate.EPOCH, List.of());
+        final ItemInfo itemInfo = new ItemInfo() {
+            @Override
+            public Integer getId() {
+                return 1;
+            }
 
-        when(repository.findById(1)).thenReturn(Optional.of(item));
+            @Override
+            public String getName() {
+                return "Item";
+            }
+
+            @Override
+            public String getDescription() {
+                return "Desc";
+            }
+
+            @Override
+            public BigDecimal getInitialPrice() {
+                return new BigDecimal("92.00");
+            }
+        };
+
+        final ItemImageInfo itemImageInfo = new ItemImageInfo() {
+            @Override
+            public Integer getId() {
+                return 1;
+            }
+
+            @Override
+            public String getName() {
+                return "Image";
+            }
+
+            @Override
+            public String getImageUrl() {
+                return "ImageUrl";
+            }
+        };
+
+        when(repository.getFeaturedItem(1)).thenReturn(Optional.of(itemInfo));
+        when(repository.getFeaturedItemImage(1)).thenReturn(Optional.of(itemImageInfo));
 
         ItemFeaturedDto featured = service.getFeatured();
 
@@ -68,7 +108,7 @@ class ItemServiceTest {
 
     @Test
     void ItemService_GetFeatured_ThrowsError() {
-        when(repository.findById(1)).thenReturn(Optional.empty());
+        when(repository.getFeaturedItem(1)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> {
             service.getFeatured();
