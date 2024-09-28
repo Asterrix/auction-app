@@ -1,11 +1,11 @@
 <div class="login-form">
   <h1 class="login-form__title">Login</h1>
 
-  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="form">
-    <ng-container *ngIf="error$ | async as error">
-      <app-alert [message]="error"/>
-    </ng-container>
+  <ng-container *ngIf="error$ | async as error">
+    <app-alert [message]="error.message" [severity]="error.severity" class="container"/>
+  </ng-container>
 
+  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="container">
     <form-input-field
       [formFieldGroup]="loginForm"
       formField="email"

@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {JwtPayload} from "jwt-decode";
 import {BehaviorSubject, catchError, Observable} from "rxjs";
 import {Constant} from "../models/enums/constant";
+import {Severity} from "../models/errorModel";
 import {TokenManager} from "../models/token-manager";
 import {Api} from "./api.service";
 import {ErrorService} from "./error.service";
@@ -79,7 +80,7 @@ export class AuthenticationService {
     this.apiService.authenticateUser(auth)
       .pipe(
         catchError((e) => {
-          this.errorService.setErrorMessage(e.error.error.message);
+          this.errorService.initialiseError(Severity.NORMAL, e.error.error.message);
           throw e;
         })
       )

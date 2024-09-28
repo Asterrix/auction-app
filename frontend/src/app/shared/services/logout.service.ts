@@ -10,12 +10,18 @@ export class LogoutService {
   }
 
   logoutUser(): void {
-    this.apiService.logoutUser().subscribe(response => {
-      if (response.status === 200) {
-        TokenManager.removeToken();
-        this.authenticationService.resetUsername();
-        this.router.navigate(["/home"]).then(null);
-      }
-    });
+    this.triggerLogoutProcedure();
+    this.router.navigate(["/home"]).then(null);
+  }
+
+  logoutUserTokenInvalidated(): void {
+    this.triggerLogoutProcedure();
+    this.router.navigate(["/login"]).then(null);
+  };
+
+  private triggerLogoutProcedure(): void {
+    this.apiService.logoutUser();
+    TokenManager.removeToken();
+    this.authenticationService.resetUsername();
   }
 }

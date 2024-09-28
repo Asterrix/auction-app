@@ -1,19 +1,20 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
+import {ErrorModel, Severity} from "../models/errorModel";
 
 @Injectable({providedIn: "root"})
 export class ErrorService {
-  private errorMessageSubject = new BehaviorSubject<string>("");
+  private errorSubject = new BehaviorSubject<ErrorModel | null>(null);
 
-  getErrorMessage(): Observable<string> {
-    return this.errorMessageSubject.asObservable();
+  getError(): Observable<ErrorModel | null> {
+    return this.errorSubject.asObservable();
   }
 
-  setErrorMessage(message: string): void {
-    return this.errorMessageSubject.next(message);
+  initialiseError(severity: Severity, message: string): void {
+    this.errorSubject.next(ErrorModel.initialiseError(severity, message));
   }
 
-  clearErrorMessage(): void {
-    this.errorMessageSubject.next("");
+  clearErrorSubject(): void {
+    this.errorSubject.next(null);
   }
 }

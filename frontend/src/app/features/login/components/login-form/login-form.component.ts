@@ -8,6 +8,7 @@ import {CheckboxComponent, CheckboxShape} from "../../../../shared/components/ch
 import {CheckboxFieldComponent} from "../../../../shared/components/forms/checkbox-field/checkbox-field.component";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
 import {Constant} from "../../../../shared/models/enums/constant";
+import {ErrorModel} from "../../../../shared/models/errorModel";
 import {Api} from "../../../../shared/services/api.service";
 import {AuthenticationService} from "../../../../shared/services/authentication.service";
 import {ErrorService} from "../../../../shared/services/error.service";
@@ -26,14 +27,14 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     password: "",
     rememberMe: false
   });
-  error$: Observable<string> | undefined;
+  error$: Observable<ErrorModel | null> | undefined;
   protected readonly CheckboxShape = CheckboxShape;
 
   constructor(private fb: FormBuilder, private userService: AuthenticationService, private errorService: ErrorService) {
   }
 
   ngOnInit(): void {
-    this.error$ = this.errorService.getErrorMessage();
+    this.error$ = this.errorService.getError();
   }
 
   onSubmit(): void {
@@ -54,6 +55,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.errorService.clearErrorMessage();
+    this.errorService.clearErrorSubject();
   }
 }
