@@ -22,6 +22,7 @@
   &__btn {
     background-color: $input-gray;
     border: 1px solid $neutral-light-grey;
+    color: $neutral-grey;
     @include buttonStyles;
 
     &:hover {
