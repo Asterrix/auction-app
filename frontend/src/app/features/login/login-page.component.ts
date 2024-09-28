@@ -30,6 +30,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navbarService.displayMinimalNavbar(false);
+    this.errorService.clearErrorSubject();
   }
 
   submitForm(authParams: Required<Authentication>): void {
