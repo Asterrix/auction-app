@@ -1,0 +1,7 @@
+<div class="progress-bar">
+  <div *ngFor="let index of number" class="progress-bar__item">
+    <img [src]="index < currentProgress ? 'assets/icons/progress_full.svg' : 'assets/icons/progress_empty.svg'"
+         alt="Current progress is {{currentProgress}} of total {{totalProgress}}"/>
+    <hr *ngIf="index !== totalProgress - 1"/>
+  </div>
+</div>
