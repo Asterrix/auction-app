@@ -3,7 +3,7 @@ import {Component, OnDestroy, OnInit, signal} from "@angular/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {AbstractControl, FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {catchError, take} from "rxjs";
+import {catchError, of, Subscription} from "rxjs";
 import {PrimaryButtonComponent} from "../../../shared/components/buttons/primary-button/primary-button.component";
 import {SecondaryButtonComponent} from "../../../shared/components/buttons/secondary-button/secondary-button.component";
 import {InputFieldComponent} from "../../../shared/components/forms/input-field/input-field.component";
@@ -57,6 +57,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
   });
   protected item = signal<ItemAggregate | undefined>(undefined);
   protected alert = signal<Alert | undefined>(undefined);
+  private bidSubscription: Subscription | undefined;
 
   constructor(private newItemService: NewItemService,
               private activeRoute: ActivatedRoute,
@@ -82,6 +83,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.trailService.closeNavigationTrail();
+    this.bidSubscription?.unsubscribe();
   }
 
   public onSubmit(): void {
@@ -102,17 +104,16 @@ export class ShopItemPage implements OnInit, OnDestroy {
       const itemId: number = this.activeRoute.snapshot.params["id"];
       const offerAmount = this.bidForm.get("offer")?.value;
 
-      this.biddingService.makeAnOffer({
+      this.bidSubscription = this.biddingService.makeAnOffer({
         itemId: itemId,
         amount: offerAmount
       }).pipe(
-        take(1),
         catchError((e) => {
           this.setAlert({
             message: "An error occurred while processing your bid. Please try again later.",
             type: AlertType.WarningLevelOne
           });
-          throw e;
+          return of(e);
         })).subscribe(() => {
         this.setAlert({
           message: "Congrats! You are the highest bidder!",
@@ -122,6 +123,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
         this.item.update((item: ItemAggregate | undefined) => {
           if (item !== undefined) {
             item.biddingInformation.highestBid = offerAmount;
+            item.biddingInformation.totalNumberOfBids++;
           }
           return item;
         });
