@@ -2,7 +2,7 @@ import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {toObservable} from "@angular/core/rxjs-interop";
 import {AbstractControl, FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
 import {PrimaryButtonComponent} from "../../../shared/components/buttons/primary-button/primary-button.component";
 import {SecondaryButtonComponent} from "../../../shared/components/buttons/secondary-button/secondary-button.component";
@@ -46,7 +46,8 @@ import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
     FormsModule,
     BidNotificationComponent,
     ValidationMessageComponent,
-    NgOptimizedImage
+    NgOptimizedImage,
+    RouterLink
   ],
   templateUrl: "./shop-item-page.component.html",
   styleUrls: ["./shop-item-page.component.scss"]

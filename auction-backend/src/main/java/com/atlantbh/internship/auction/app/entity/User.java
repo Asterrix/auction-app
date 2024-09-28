@@ -46,6 +46,9 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private final List<Item> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<PaymentInfo> paymentInfo = new ArrayList<>();
+
     public User() {
     }
 
@@ -129,6 +132,14 @@ public class User {
 
     public List<Item> getItems() {
         return items;
+    }
+
+    public List<PaymentInfo> getPaymentInfo() {
+        return paymentInfo;
+    }
+
+    public void setPaymentInfo(List<PaymentInfo> paymentInfo) {
+        this.paymentInfo = paymentInfo;
     }
 
 }
