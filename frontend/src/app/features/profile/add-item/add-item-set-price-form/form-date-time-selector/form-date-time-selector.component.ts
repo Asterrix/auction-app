@@ -1,7 +1,7 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, inject, Input, Output} from "@angular/core";
-import {ClickOutsideDirective} from "../../shared/directives/click-outside.directive";
-import {ModalComponent} from "../../shared/modal/modal.component";
+import {ClickOutsideDirective} from "../../../../../shared/directives/click-outside.directive";
+import {ModalComponent} from "../../../../../shared/components/modal/modal.component";
 import {DateSelectorComponent} from "./date-selector/date-selector.component";
 import {DateTimeService} from "./services/date-time.service";
 import {TimeSelector} from "./time-selector/time-selector.component";

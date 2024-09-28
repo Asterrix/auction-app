@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component, EventEmitter, inject, Output} from "@angular/core";
-import {EventService} from "../../../../../shared/services/event.service";
+import {EventService} from "../../services/event.service";
 
 @Component({
   selector: "app-modal",
