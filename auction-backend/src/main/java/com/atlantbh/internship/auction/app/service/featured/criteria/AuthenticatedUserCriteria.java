@@ -57,7 +57,7 @@ public final class AuthenticatedUserCriteria {
         final SpecificationBuilder<Item> specificationBuilder = SpecificationBuilder.of(Item.class)
                 .and(ItemSpecification.isActive())
                 .and(ItemSpecification.ownerIsNot(userId))
-                .and(ItemSpecification.hasSubcategory(mostPopularCategoryParentName, mostPopularSubcategoryName))
+                .and(ItemSpecification.hasCategory(mostPopularCategoryParentName, mostPopularSubcategoryName))
                 .and(ItemSpecification.priceIsBetween(startingPrice, endingPrice))
                 .and(ItemSpecification.endTimeIsNotShorterThan(endTimeStartLimit))
                 .and(ItemSpecification.endTimeIsNotOlderThan(endTimeEndLimit))
