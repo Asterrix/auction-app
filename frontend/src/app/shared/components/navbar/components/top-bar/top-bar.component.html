@@ -23,22 +23,22 @@
       </div>
 
       <div>
-        <ng-container *ngIf="username$ | async as username; else actionMenu">
+        <ng-container *ngIf="user$ | async as user; else actionMenu">
           <div class="member">
-            <span (click)="logoutUser()">Hi, {{username}}</span>
+            <span (click)="logoutUser()">Hi, {{user.firstName + " " + user.lastName}}</span>
           </div>
         </ng-container>
 
         <ng-template #actionMenu>
           <div class="top-bar__action-menu">
             <div>
-              <a routerLink="/login" class="member">Login</a>
+              <a class="member" routerLink="/login">Login</a>
             </div>
             <div>
               <span class="divider">or</span>
             </div>
             <div>
-              <a routerLink="/register" class="member">Create an account</a>
+              <a class="member" routerLink="/register">Create an account</a>
             </div>
           </div>
         </ng-template>
