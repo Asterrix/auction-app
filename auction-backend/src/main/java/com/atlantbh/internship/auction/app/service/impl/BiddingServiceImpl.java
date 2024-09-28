@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.impl.bidding;
+package com.atlantbh.internship.auction.app.service.impl;
 
 import com.atlantbh.internship.auction.app.config.claims.ClaimsExtractor;
 import com.atlantbh.internship.auction.app.dto.bid.BidItemSummary;

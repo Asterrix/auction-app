@@ -1,8 +1,8 @@
-<div *ngIf="item$ | async as item" class="item-information">
+<div class="item-information">
   <app-tab>
     <li class="tab-item">
       <a [routerLinkActiveOptions]="{exact: true}"
-         [routerLink]="['/shop/item', item.item.id]"
+         [routerLink]="['/shop/item', itemId]"
          class="tab-item__link"
          routerLinkActive="--active">
         Details
@@ -11,7 +11,7 @@
   </app-tab>
   <div>
     <p class="item-information__content">
-      {{item.item.description}}
+      {{description}}
     </p>
   </div>
 </div>

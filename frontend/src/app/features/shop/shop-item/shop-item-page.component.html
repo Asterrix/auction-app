@@ -1,39 +1,50 @@
-<ng-container *ngIf="loader.getLoader('item').isLoading$ | async; else content">
-  <app-loader class="loader-placeholder"/>
-</ng-container>
+<div class="shop-item">
 
-<ng-template #content>
-  <div class="shop-item">
+  <app-bid-notification [alert]="alertService.alert"/>
 
-    <app-bid-notification [alert]="alertService.alert"/>
+  <div class="container">
+    <div class="shop-item__page__layout">
 
-    <div class="container">
-      <div class="shop-item__page__layout">
-        <shop-item-showcase [activeImage]="activeImage" [item$]="item$"/>
+      <ng-container *ngIf="itemService.getItem() as item">
+
+        <shop-item-showcase [images]="item().item.images"/>
+
         <div class="shop-item__description__layout">
-          <shop-item-summary [item$]="item$"/>
+          <shop-item-summary
+            [biddingInfo]="item().biddingInformation"
+            [item]="item().item"/>
 
           <form (ngSubmit)="onSubmit()" class="form">
-            <ng-container *ngIf="item$ | async as item">
-              <form-input-field
-                [formFieldGroup]="bidForm"
-                [isInputValid]="bidForm.get('offer')?.valid"
-                formField="offer"
-                placeholder="{{item.biddingInformation.highestBid === 0 ? 'Enter $' + item.item.initialPrice + ' or higher'
-                : 'Enter higher offer than $' + (item.biddingInformation.highestBid | number:'1.2-2') }}"
-                type="text"/>
-              <button class="btn" type="submit">
-                Place bid
-                <img alt="Go right icon" src="assets/icons/right_pointer.svg"/>
-              </button>
+            <form-input-field
+              [formFieldGroup]="bidForm"
+              [isInputValid]="bidForm.get('offer')?.valid"
+              formField="offer"
+              placeholder="{{item().biddingInformation.highestBid === 0 ? 'Enter $' + item().item.initialPrice + ' or higher'
+                            : 'Enter higher offer than $' + (item().biddingInformation.highestBid | number:'1.2-2') }}"
+              type="text"/>
 
-              <app-validation-message *ngIf="!bidForm.get('offer')?.valid"
-                                      message="Make an offer in the following format: 100.00"/>
-            </ng-container>
+            <button class="btn" type="submit">
+              Place bid
+              <img alt="Go right icon" ngSrc="assets/icons/right_pointer.svg" height="24" width="24"/>
+            </button>
+
+            <app-validation-message
+              *ngIf="!bidForm.get('offer')?.valid"
+              message="Make an offer in the following format: 100.00"/>
+
           </form>
-          <shop-item-description [item$]="item$"/>
+
+          <shop-item-description
+            [description]="item().item.description"
+            [itemId]="item().item.id"/>
         </div>
-      </div>
+
+      </ng-container>
     </div>
   </div>
-</ng-template>
+
+  <ng-container *ngIf="loader.getLoader('item').isLoading$ | async">
+    <app-loader class="loader-placeholder"/>
+  </ng-container>
+</div>
+
