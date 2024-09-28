@@ -1,6 +1,5 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
-import com.atlantbh.internship.auction.app.builder.UserBuilder;
 import com.atlantbh.internship.auction.app.dto.user.UserRegistrationDto;
 import com.atlantbh.internship.auction.app.entity.Role;
 import com.atlantbh.internship.auction.app.entity.User;
@@ -38,14 +37,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         final Optional<Role> defaultRole = roleRepository.findByRoleAllIgnoreCase("user");
         if (defaultRole.isEmpty()) throw new NoSuchElementException();
 
-        User entity = new UserBuilder()
-                .setFirstName(user.firstName())
-                .setLastName(user.lastName())
-                .setEmail(user.email())
-                .setPassword(user.password())
-                .setRole(defaultRole.get())
-                .setIsActive(true)
-                .createUser();
+        User entity = new User(
+                user.firstName().replaceAll("\\s+", " ").trim(),
+                user.lastName().replaceAll("\\s+", " ").trim(),
+                user.email(),
+                user.password(),
+                defaultRole.get(),
+                true);
 
         // Will throw
         validateUser(entity);
