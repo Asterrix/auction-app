@@ -37,10 +37,17 @@
 
   <form-input-field
     [formFieldGroup]="registerForm"
-    formField="password"
+    [formField]="RegisterForm.Password"
+    [isInputValid]="validatePassword.valid"
     label="Password"
     placeholder="********"
-    type="password"/>
+    type="password">
+
+    <ng-container *ngIf="!validatePassword.valid">
+      <app-validation-message [message]="validatePassword.message!"/>
+    </ng-container>
+
+  </form-input-field>
 
   <button-primary label="Register"/>
 
