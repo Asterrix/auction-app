@@ -2,6 +2,8 @@ package com.atlantbh.internship.auction.app.config;
 
 import com.atlantbh.internship.auction.app.config.constant.AuctionAppProperties;
 import com.atlantbh.internship.auction.app.config.constant.RSAKeyProperties;
+import com.atlantbh.internship.auction.app.service.TokenService;
+import com.atlantbh.internship.auction.app.service.filter.TokenFilter;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -10,6 +12,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,16 +24,19 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
     private final AuctionAppProperties appProperties;
     private final RSAKeyProperties rsaKeyProperties;
+    private final TokenService tokenService;
 
-    public SecurityConfig(final AuctionAppProperties appProperties, final RSAKeyProperties rsaKeyProperties) {
+    public SecurityConfig(final AuctionAppProperties appProperties, final RSAKeyProperties rsaKeyProperties, @Lazy final TokenService tokenService) {
         this.appProperties = appProperties;
         this.rsaKeyProperties = rsaKeyProperties;
+        this.tokenService = tokenService;
     }
 
     @Bean
@@ -47,6 +53,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new TokenFilter(tokenService), BasicAuthenticationFilter.class)
                 .build();
     }
 

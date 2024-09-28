@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -22,6 +23,14 @@ public class TokenServiceImpl implements TokenService {
     public TokenServiceImpl(final JwtEncoder jwtEncoder, final TokenRepository tokenRepository) {
         this.jwtEncoder = jwtEncoder;
         this.tokenRepository = tokenRepository;
+    }
+
+    private static String extractTokenFromBearer(final String bearerToken) {
+        return bearerToken.substring(7); // Remove "Bearer "
+    }
+
+    private static boolean isExpired(final Instant currentTime, final Token token) {
+        return token.getExpirationTime().isBefore(currentTime);
     }
 
     @Override
@@ -45,13 +54,21 @@ public class TokenServiceImpl implements TokenService {
         return tokenValue;
     }
 
+    @Override
+    public boolean isValid(final Instant currentTime, final String clientToken) {
+        final Optional<Token> token = tokenRepository.findByToken(extractTokenFromBearer(clientToken));
+        if (token.isEmpty()) return false;
+        if (isExpired(currentTime, token.get())) return false;
+
+        return true;
+    }
+
     private void saveTokenToDb(final String token, final Instant expirationDate) {
         tokenRepository.save(new Token(token, expirationDate));
     }
 
     @Override
     public void deleteToken(final String bearerToken) {
-        final String token = bearerToken.substring(7); // Ignore "Bearer "
-        tokenRepository.findByToken(token).ifPresent(tokenRepository::delete);
+        tokenRepository.findByToken(extractTokenFromBearer(bearerToken)).ifPresent(tokenRepository::delete);
     }
 }
