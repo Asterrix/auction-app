@@ -1,0 +1,43 @@
+@import "typography.styles";
+@import "colors.styles";
+
+.home-item-list-tab {
+  display: flex;
+
+  &__list {
+    border-bottom: 1px solid $neutral-09;
+    display: flex;
+    list-style: none;
+    width: 100%;
+
+    &__item {
+      &__link {
+        display: block;
+        padding: 0.4rem 1rem;
+
+        &:hover {
+          border-bottom: 3px solid $primary;
+        }
+      }
+
+      &:first-child &__link {
+        padding-left: 0;
+      }
+
+      &:last-child &__link {
+        padding-right: 0;
+      }
+    }
+  }
+}
+
+.item--active {
+  border-bottom: 3px solid $primary;
+  @extend .font-semibold;
+  color: $neutral-00;
+  font-size: 1.8rem;
+
+  &:hover {
+    border-bottom: 3px solid $primary;
+  }
+}

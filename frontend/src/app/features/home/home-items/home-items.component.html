@@ -1,0 +1,19 @@
+<div class="home-item-list">
+  <div class="container">
+    <div class="home-item-list__layout">
+
+      <app-home-items-tab/>
+
+      <div *ngIf="activeSection === Section.Default" class="items-grid">
+        <app-item-card/>
+        <app-item-card/>
+        <app-item-card/>
+      </div>
+
+
+      <div *ngIf="activeSection === Section.LastChance" class="items-grid">
+        <app-item-card/>
+      </div>
+    </div>
+  </div>
+</div>
