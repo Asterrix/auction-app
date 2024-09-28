@@ -11,7 +11,7 @@ public interface FeaturedSuggestion {
 
     Specification<Item> getUserBidsCriteria(final Integer userId, final ZonedDateTime currentTime);
 
-    Specification<Item> getAuthenticatedQueryCriteria(final Integer userId, final ZonedDateTime currentTime);
+    Specification<Item> getAuthenticatedUserQueryCriteria(final Integer userId, final ZonedDateTime currentTime);
 
     Specification<Item> getRegularUserCriteria(final ZonedDateTime currentTime);
 
