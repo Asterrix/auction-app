@@ -10,10 +10,10 @@ import java.util.Collections;
 
 import static com.atlantbh.internship.auction.app.builder.CorsConfigurationBuilder.Methods.GET;
 import static com.atlantbh.internship.auction.app.builder.CorsConfigurationBuilder.Methods.POST;
+import static com.atlantbh.internship.auction.app.config.CorsConfigurer.Header.AUTHORIZATION;
 
 public class CorsConfigurer {
     private final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
     private final AuctionAppProperties appProperties;
 
     public CorsConfigurer(final AuctionAppProperties appProperties) {
@@ -25,6 +25,7 @@ public class CorsConfigurer {
         buildCategoryCorsConfiguration();
         buildUserRegistrationCorsConfiguration();
         buildUserAuthenticationCorsConfiguration();
+        buildUserLogoutCorsConfiguration();
         return source;
     }
 
@@ -37,7 +38,7 @@ public class CorsConfigurer {
         final CorsConfiguration itemsConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(GET)
-                .setAllowedHeaders("*")
+                .setAllowedHeaders(AUTHORIZATION)
                 .allowCredentials()
                 .build();
 
@@ -48,7 +49,7 @@ public class CorsConfigurer {
         final CorsConfiguration categoriesConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(GET)
-                .setAllowedHeaders("*")
+                .setAllowedHeaders(AUTHORIZATION)
                 .allowCredentials()
                 .build();
 
@@ -59,7 +60,7 @@ public class CorsConfigurer {
         final CorsConfiguration registerConfig = new CorsConfigurationBuilder()
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(POST)
-                .setAllowedHeaders("*")
+                .setAllowedHeaders(AUTHORIZATION)
                 .allowCredentials()
                 .build();
 
@@ -71,10 +72,25 @@ public class CorsConfigurer {
                 .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
                 .setAllowedMethods(POST)
                 .setAllowedHeaders("*")
-                .setExposedHeaders("Authorization")
+                .setExposedHeaders(AUTHORIZATION)
                 .allowCredentials()
                 .build();
 
-        registerCorsConfig("/authentication/**", authConfig);
+        registerCorsConfig("/authentication", authConfig);
+    }
+
+    private void buildUserLogoutCorsConfiguration() {
+        final CorsConfiguration authConfig = new CorsConfigurationBuilder()
+                .setAllowedOrigins(Collections.singletonList(appProperties.getClientRoute()))
+                .setAllowedMethods(POST)
+                .setAllowedHeaders(AUTHORIZATION)
+                .allowCredentials()
+                .build();
+
+        registerCorsConfig("/authentication/logout", authConfig);
+    }
+
+    static class Header {
+        public static final String AUTHORIZATION = "Authorization";
     }
 }
