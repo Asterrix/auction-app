@@ -5,7 +5,7 @@ $cube-shape: 8rem;
 
 @mixin table-layout {
   display: grid;
-  grid-template-columns: $cube-shape 2fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: $cube-shape 2fr 1fr 1fr 1fr 1fr;
 }
 
 @mixin table-horizontal-spacing {
