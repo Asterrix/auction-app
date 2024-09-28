@@ -1,7 +1,7 @@
 import {Route} from "@angular/router";
 import {Constant} from "../../shared/models/enums/constant";
 import {environment} from "../../../environments/environment";
-import {ApiRoute, ShopRouteTitles} from "../../../environments/api-route";
+import {ApiRoute, ItemPageParam, ShopRouteTitles} from "../../../environments/api-route";
 import {ShopItemComponent} from "./shop-item/shop-item.component";
 import {ShopComponent} from "./shop.component";
 
@@ -15,7 +15,7 @@ export const SHOP_ROUTES: Route[] = [
     children: [
       {path: Constant.EmptyValue, component: ShopComponent},
       {
-        path: `${ApiRoute.ShopRoute.Item}/:id`,
+        path: `${ApiRoute.ShopRoute.Item}/:${ItemPageParam.Id}`,
         title: `${environment.applicationName} - ${ShopRouteTitles[ApiRoute.ShopRoute.Item]}`,
         component: ShopItemComponent,
         data: {
