@@ -1,0 +1,12 @@
+@import "typography";
+
+.checkbox-field {
+  align-items: center;
+  display: flex;
+  gap: 1.2rem;
+  width: fit-content;
+
+  &__label {
+    @extend .font-semi-bold;
+  }
+}

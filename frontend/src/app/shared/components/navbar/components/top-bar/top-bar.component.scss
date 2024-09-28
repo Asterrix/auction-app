@@ -26,4 +26,13 @@
       }
     }
   }
+
+  &__action {
+    color: $white;
+    transition: all 300ms ease-out;
+
+    &:hover {
+      color: $neutral-light-grey;
+    }
+  }
 }
