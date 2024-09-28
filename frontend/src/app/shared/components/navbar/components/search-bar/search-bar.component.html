@@ -1,13 +1,18 @@
-<form class="search-bar"
-      [formGroup]="searchForm">
-  <input type="text"
-         placeholder="Try enter: Shoes"
+<form class="search-bar" [formGroup]="searchForm">
+  <input #searchInput
+         type="text"
+         placeholder="Try entering: Shoes"
          formControlName="searchValue"
          [formControl]="searchForm.controls.searchValue"
          (keydown.enter)="handleSearchNavigation()">
 
-  <img ngSrc="assets/icons/magnify_icon.svg"
-       alt="Search icon"
-       height="24"
-       width="24"/>
+  <button type="button"
+          class="search-bar__btn"
+          (click)="handleSearchNavigation()">
+
+    <img ngSrc="assets/icons/magnify_icon.svg"
+         alt="Search icon"
+         height="24"
+         width="24"/>
+  </button>
 </form>

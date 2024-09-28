@@ -1,11 +1,11 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, inject, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {NavigationEnd, Router} from "@angular/router";
-import {debounceTime} from "rxjs";
-import {ShopPageParameter} from "../../../../../features/shop/shop-routes";
+import {debounceTime, filter, pairwise, Subject, takeUntil} from "rxjs";
+import {distinctUntilChanged, map} from "rxjs/operators";
 import {Constant} from "../../../../models/enums/constant";
-import {SearchService} from "../../../../services/search/search.service";
+import {SearchService} from "../../../../services/search.service";
 
 @Component({
   selector: "app-search-bar",
@@ -15,47 +15,76 @@ import {SearchService} from "../../../../services/search/search.service";
   styleUrls: ["./search-bar.component.scss"]
 })
 export class SearchBarComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  protected searchForm = this.formBuilder.nonNullable.group({
+  @ViewChild("searchInput") searchFormElementRef!: ElementRef;
+
+  searchValue: string = Constant.EmptyValue;
+  searchForm = this.formBuilder.nonNullable.group({
     searchValue: Constant.EmptyValue
   });
-  private searchService = inject(SearchService);
-  private router = inject(Router);
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly searchService: SearchService,
+    private readonly router: Router,
+  ) {
+  }
 
   ngOnInit(): void {
-    this.searchForm.controls.searchValue.valueChanges
-      .pipe(debounceTime(300))
-      .subscribe(async () => await this.search());
+    this.searchForm.get("searchValue")?.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe();
 
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd && !event.url.includes(ShopPageParameter.Parameter.ItemName)) {
-        if (this.searchForm.controls.searchValue.value !== Constant.EmptyValue) {
-          this.searchForm.patchValue({
-            searchValue: Constant.EmptyValue
-          });
+    // Clear search value when navigating from home to shop
+    this.handleNavigationForSearchClearing();
+  }
+
+  onChange(): void {
+    this.searchValue = this.searchForm.value.searchValue ?? Constant.EmptyValue;
+    this.search();
+  }
+
+  handleSearchNavigation(): void {
+    this.searchService.handleSearchNavigation(this.searchValue);
+  }
+
+  private handleNavigationForSearchClearing(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(event => event as NavigationEnd),
+      pairwise(),
+      takeUntil(this.destroy$))
+      .subscribe(([previousUrl, currentUrl]) => {
+        if ((this.isNavigatingToShop(currentUrl) && this.isInputNotInFocus()) ||
+          this.isNavigatingAwayFromShop(previousUrl, currentUrl)) {
+          this.clearSearchForm();
         }
-      }
-    });
+      });
   }
 
-  protected async handleSearchNavigation() {
-    const searchValue = this.searchForm.controls.searchValue.value;
-
-    await this.searchService.navigateToShopPage(searchValue);
+  private isNavigatingToShop(currentUrl: NavigationEnd): boolean {
+    return currentUrl.url.includes("/shop");
   }
 
-  private async search() {
-    const searchValue = this.searchForm.controls.searchValue.value;
-    await this.saveSearchQuery(searchValue);
+  private isInputNotInFocus(): boolean {
+    return document.activeElement !== this.searchFormElementRef?.nativeElement;
+  }
 
-    if (searchValue === Constant.EmptyValue) {
-      await this.searchService.clearSearchParameter();
+  private isNavigatingAwayFromShop(previousUrl: NavigationEnd, currentUrl: NavigationEnd): boolean {
+    return previousUrl.url.includes("/shop") && !this.isNavigatingToShop(currentUrl);
+  }
+
+  private clearSearchForm(): void {
+    this.searchForm.patchValue({searchValue: Constant.EmptyValue});
+  }
+
+  private search(): void {
+    if (this.searchValue === Constant.EmptyValue) {
+      this.searchService.clearQueryParameter();
     } else {
-      await this.searchService.appendQueryParameter(searchValue);
+      this.searchService.appendQueryParameter(this.searchValue);
     }
-  }
-
-  private async saveSearchQuery(searchValue: string) {
-    this.searchService.saveSearchQuery(searchValue);
   }
 }
