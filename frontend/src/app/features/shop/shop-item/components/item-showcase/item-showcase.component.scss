@@ -1,0 +1,50 @@
+@import "colors.styles";
+@import "container.styles";
+
+@mixin image-hw {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.item-showcase {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  &__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 4.8rem;
+    width: 100%;
+  }
+
+  &__main {
+    display: flex;
+    height: 648px;
+    justify-content: center;
+
+    &__image {
+      @include image-hw;
+    }
+  }
+
+  &__slide {
+    display: grid;
+    gap: 3.2rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    &__item {
+      height: 8rem;
+
+      img {
+        @include image-hw;
+      }
+
+      &:hover {
+        outline: 1px solid $primary;
+        outline-offset: 3px;
+      }
+    }
+  }
+}

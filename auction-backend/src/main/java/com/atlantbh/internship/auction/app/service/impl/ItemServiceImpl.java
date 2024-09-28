@@ -1,5 +1,6 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
+import com.atlantbh.internship.auction.app.dto.ItemDto;
 import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
@@ -31,6 +32,12 @@ public final class ItemServiceImpl implements ItemService {
     public Page<ItemSummaryDto> getAll(final Pageable pageable) {
         final Page<Item> items = itemRepository.findAll(pageable);
         return new PageImpl<>(ItemMapper.convertToSummaryDto(items.getContent()));
+    }
+
+    @Override
+    public Optional<ItemDto> getById(final Integer itemId) {
+        Optional<Item> item = itemRepository.findById(itemId);
+        return item.map(ItemMapper::convertToItemDto).or(Optional::empty);
     }
 
     @Override

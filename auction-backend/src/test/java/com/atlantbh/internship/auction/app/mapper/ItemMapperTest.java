@@ -1,5 +1,6 @@
 package com.atlantbh.internship.auction.app.mapper;
 
+import com.atlantbh.internship.auction.app.dto.ItemDto;
 import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.entity.Item;
@@ -57,5 +58,19 @@ class ItemMapperTest {
         assertEquals(item.getItemImages().getFirst().getId(), featuredDto.itemImage().id());
         assertEquals(item.getItemImages().getFirst().getName(), featuredDto.itemImage().name());
         assertEquals(item.getItemImages().getFirst().getImageUrl(), featuredDto.itemImage().imageUrl());
+    }
+
+    @Test
+    void ItemMapper_TakeEntityAndMapItTo_ItemDto() {
+        ItemDto itemDto = ItemMapper.convertToItemDto(item);
+
+        assertEquals(item.getId(), itemDto.id());
+        assertEquals(item.getName(), itemDto.name());
+        assertEquals(item.getDescription(), itemDto.description());
+        assertEquals(item.getInitialPrice(), itemDto.initialPrice());
+        assertEquals(item.getItemImages().size(), itemDto.itemImages().size());
+        assertEquals(item.getItemImages().getFirst().getId(), itemDto.itemImages().getFirst().id());
+        assertEquals(item.getItemImages().getFirst().getName(), itemDto.itemImages().getFirst().name());
+        assertEquals(item.getItemImages().getFirst().getImageUrl(), itemDto.itemImages().getFirst().imageUrl());
     }
 }

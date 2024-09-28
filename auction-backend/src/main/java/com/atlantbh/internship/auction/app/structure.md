@@ -19,7 +19,8 @@
 
 - **mapper**: holds classes that handle the mapping or conversion of data between different formats or structures.
     - Example: Mapping `UserEntity` to `UserDto`.
-- **projection**: holds entity projection interfaces.
+
+- **model**: holds functional class implementations that perform certain functionality
 
 - **repository**: holds classes and interfaces responsible for communicating with the database. They are responsible for
   data access and persistence, without implementing any business logic.

@@ -1,0 +1,21 @@
+@import "colors.styles";
+@import "typography.styles";
+@import "container.styles";
+
+.shop-item{
+  &__page__layout {
+    display: grid;
+    gap: 4.8rem;
+    padding: 8rem 0;
+
+    @media (min-width: $large) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__description__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+  }
+}

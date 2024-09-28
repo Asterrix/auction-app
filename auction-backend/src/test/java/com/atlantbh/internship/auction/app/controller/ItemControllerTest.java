@@ -1,5 +1,7 @@
 package com.atlantbh.internship.auction.app.controller;
 
+import com.atlantbh.internship.auction.app.dto.ItemDto;
+import com.atlantbh.internship.auction.app.dto.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.ItemImageDto;
 import com.atlantbh.internship.auction.app.dto.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.service.ItemService;
@@ -24,10 +26,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -83,5 +87,41 @@ class ItemControllerTest {
         verify(itemService).getAll(pageableCaptor.capture());
         assertEquals(0, pageableCaptor.getValue().getPageNumber());
         assertEquals(3, pageableCaptor.getValue().getPageSize());
+    }
+
+    @Test
+    public void ItemController_GetById_ReturnsItem_StatusOk() throws Exception {
+        ItemImageDto imageDto = new ItemImageDto(1, "Image1", "ImageUrl");
+        ItemDto item = new ItemDto(1, "Item", "Desc", new BigDecimal("20.00"), "1 Day", List.of(imageDto));
+        Optional<ItemDto> expected = Optional.of(item);
+
+        given(itemService.getById(anyInt())).willReturn(expected);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items/" + anyInt()).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void ItemController_GetById_ReturnsEmptyOptional_StatusNotFound() throws Exception {
+        Optional<ItemDto> expected = Optional.empty();
+
+        given(itemService.getById(anyInt())).willReturn(expected);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items/" + anyInt()).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void ItemController_GetFeaturedItem_ReturnsItem_StatusOk() throws Exception {
+        ItemImageDto imageDto = new ItemImageDto(1, "Image1", "ImageUrl");
+        ItemFeaturedDto itemFeaturedDto = new ItemFeaturedDto(1, "Item", "Desc", new BigDecimal("9.0"), imageDto);
+
+        given(itemService.getFeatured()).willReturn(itemFeaturedDto);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/items/featured").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 }
