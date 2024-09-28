@@ -1,0 +1,25 @@
+@import "colors";
+@import "typography";
+
+.table-nav {
+  border-left: 1px solid $neutral-light-grey;
+  border-right: 1px solid $neutral-light-grey;
+  border-top: 1px solid $neutral-light-grey;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: fit-content;
+}
+
+.btn {
+  background-color: $gray-100;
+  display: block;
+  font-size: 1.6rem;
+  padding: 0.6rem 1.6rem;
+  text-align: center;
+  @extend .font-semi-bold;
+
+  &--active {
+    background-color: $primary;
+    color: $white;
+  }
+}
