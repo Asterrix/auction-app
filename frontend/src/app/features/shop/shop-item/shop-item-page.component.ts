@@ -2,7 +2,7 @@ import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {toObservable} from "@angular/core/rxjs-interop";
 import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
 import {PrimaryButtonComponent} from "../../../shared/components/buttons/primary-button/primary-button.component";
 import {SecondaryButtonComponent} from "../../../shared/components/buttons/secondary-button/secondary-button.component";
@@ -18,6 +18,7 @@ import {Constant} from "../../../shared/models/enums/constant";
 import {Alert, AlertService, AlertType} from "../../../shared/services/alert.service";
 import {Api} from "../../../shared/services/api.service";
 import {BidService} from "../../../shared/services/bid.service";
+import {ErrorService} from "../../../shared/services/error.service";
 import {ItemService} from "../../../shared/services/item.service";
 import {LoaderService} from "../../../shared/services/loader.service";
 import {AuthenticationService, UserDetails} from "../../../shared/services/user/authentication.service";
@@ -32,7 +33,19 @@ import ItemImage = Api.ItemApi.Interfaces.ItemImage;
 @Component({
   selector: "shop-item",
   standalone: true,
-  imports: [CommonModule, NavigationTrailComponent, ItemShowcaseComponent, ItemSummaryComponent, ItemDescriptionComponent, LoaderComponent, InputFieldComponent, PrimaryButtonComponent, SecondaryButtonComponent, FormsModule, BidNotificationComponent],
+  imports: [
+    CommonModule,
+    NavigationTrailComponent,
+    ItemShowcaseComponent,
+    ItemSummaryComponent,
+    ItemDescriptionComponent,
+    LoaderComponent,
+    InputFieldComponent,
+    PrimaryButtonComponent,
+    SecondaryButtonComponent,
+    FormsModule,
+    BidNotificationComponent
+  ],
   templateUrl: "./shop-item-page.component.html",
   styleUrls: ["./shop-item-page.component.scss"]
 })
@@ -51,7 +64,9 @@ export class ShopItemPage implements OnInit, OnDestroy {
               public loader: LoaderService,
               private fb: FormBuilder,
               private biddingService: BidService,
-              protected alertService: AlertService) {
+              protected alertService: AlertService,
+              private errorService: ErrorService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -85,8 +100,21 @@ export class ShopItemPage implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    const user: UserDetails = <UserDetails>AuthenticationService.getCurrentUser();
-    let itemId: number = this.activeRoute.snapshot.params["id"];
-    this.biddingService.makeAnOffer({bidderId: user.id, itemId: itemId, amount: this.bidForm.get("offer")?.value});
+    if (AuthenticationService.isAuthenticated()) {
+      const user: UserDetails = <UserDetails>AuthenticationService.getCurrentUser();
+      const itemId: number = this.activeRoute.snapshot.params["id"];
+      this.biddingService.makeAnOffer({
+        bidderId: user.id,
+        itemId: itemId,
+        amount: this.bidForm.get("offer")?.value
+      });
+      return;
+    }
+
+    this.errorService.setError({
+      message: "You must be authenticated to make offers on items.",
+      type: AlertType.WarningLevelTwo
+    });
+    this.router.navigate(["/login"]).then(null);
   }
 }

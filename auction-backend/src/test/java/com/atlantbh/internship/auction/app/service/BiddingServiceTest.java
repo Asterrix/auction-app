@@ -218,7 +218,7 @@ class BiddingServiceTest {
                 () -> biddingService.makeAnOfferOnItem(bid),
                 "The bidder's offer must either exceed or match the seller's initial price.");
 
-        assertEquals("The bid must match or exceed the starting price.", validationException.getMessage());
+        assertEquals("Initial bid must match or exceed the starting price.", validationException.getMessage());
     }
 
     @Test

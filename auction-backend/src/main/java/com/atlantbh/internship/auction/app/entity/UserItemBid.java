@@ -21,7 +21,7 @@ public class UserItemBid {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    @Column(name = "amount", nullable = false, unique = true, precision = 10, scale = 2)
+    @Column(name = "amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
     public UserItemBid() {
