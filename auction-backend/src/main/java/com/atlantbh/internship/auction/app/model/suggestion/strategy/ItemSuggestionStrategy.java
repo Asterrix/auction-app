@@ -17,11 +17,11 @@ public class ItemSuggestionStrategy {
         this.regularUserSuggestionStrategy = regularUserSuggestionStrategy;
     }
 
-    public List<Item> getSuggestionsAuthenticatedUser(final Integer userId, final String query, final int count, final ZonedDateTime currentTime) {
+    public List<Item> getAuthenticatedUserSuggestions(final Integer userId, final String query, final int count, final ZonedDateTime currentTime) {
         return authenticatedUserSuggestionStrategy.getSuggestions(userId, query, count, currentTime);
     }
 
-    public List<Item> getSuggestionsRegularUser(final int count, final String query, final ZonedDateTime currentTime) {
+    public List<Item> getRegularUserSuggestions(final int count, final String query, final ZonedDateTime currentTime) {
         return regularUserSuggestionStrategy.getSuggestions(currentTime, query, count);
     }
 }
