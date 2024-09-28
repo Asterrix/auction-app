@@ -35,15 +35,28 @@ public class EmailValidator extends Validator {
         for (int i = 0, charArrayLength = charArray.length; i < charArrayLength; i++) {
             final char c = charArray[i];
 
+            if(c == ' ') throw new ValidationException("Invalid email address.");
+
             if (c == '.') {
                 if (i == 0 || i == n - 1) {
                     throw new ValidationException("Invalid email address.");
                 }
 
                 if (i < charArray.length - 1) {
-                    validateDotPlacement(charArray, i, i + 1);
+                    validateDuplicateCharacterPlacement(charArray, i, i + 1, c);
                 }
                 characters.add('.');
+                continue;
+            }
+
+            if (c == '_') {
+                if (i == 0 || i == n - 1) {
+                    throw new ValidationException("Invalid email address.");
+                }
+
+                if (i < charArray.length - 1) {
+                    validateDuplicateCharacterPlacement(charArray, i, i + 1, c);
+                }
                 continue;
             }
 
@@ -56,7 +69,7 @@ public class EmailValidator extends Validator {
             }
 
             if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
-                throw new ValidationException("Only letters (a-z), numbers (0-9), and (.) are allowed.");
+                throw new ValidationException("Only letters (a-z), numbers (0-9), and (.,_) are allowed.");
             }
         }
 
@@ -66,8 +79,8 @@ public class EmailValidator extends Validator {
         return domainSeparatorIndex;
     }
 
-    private static void validateDotPlacement(final char[] input, final int trail, final int head) {
-        if (input[trail] == '.' && input[head] == '.') {
+    private static void validateDuplicateCharacterPlacement(final char[] input, final int trail, final int head, final char c) {
+        if (input[trail] == c && input[head] == c) {
             throw new ValidationException("Invalid email address.");
         }
     }
