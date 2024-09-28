@@ -48,4 +48,10 @@ public class TokenServiceImpl implements TokenService {
     private void saveTokenToDb(final String token, final Instant expirationDate) {
         tokenRepository.save(new Token(token, expirationDate));
     }
+
+    @Override
+    public void deleteToken(final String bearerToken) {
+        final String token = bearerToken.substring(7); // Ignore "Bearer "
+        tokenRepository.findByToken(token).ifPresent(tokenRepository::delete);
+    }
 }
