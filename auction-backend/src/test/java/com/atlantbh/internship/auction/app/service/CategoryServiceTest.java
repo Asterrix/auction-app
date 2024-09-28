@@ -24,7 +24,7 @@ class CategoryServiceTest {
     private CategoryServiceImpl service;
 
     @Test
-    void CategoryService_GetAll_ReturnsListOfCategories() {
+    void getAllCategories_ShouldReturnListOfCategories() {
         List<Category> categories = List.of(
                 new Category(1, "Category1"),
                 new Category(2, "Category2"),

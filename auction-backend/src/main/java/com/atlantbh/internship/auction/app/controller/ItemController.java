@@ -26,7 +26,7 @@ public final class ItemController {
 
     @GetMapping
     public ResponseEntity<Page<ItemSummaryDto>> getAllItems(final Pageable pageable) {
-        return new ResponseEntity<>(itemService.getAll(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getAllItems(pageable), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

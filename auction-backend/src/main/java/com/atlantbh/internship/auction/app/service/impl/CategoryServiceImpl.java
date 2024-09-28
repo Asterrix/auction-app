@@ -1,7 +1,6 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
 import com.atlantbh.internship.auction.app.dto.category.CategoryDto;
-import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.mapper.CategoryMapper;
 import com.atlantbh.internship.auction.app.repository.CategoryRepository;
 import com.atlantbh.internship.auction.app.service.CategoryService;
@@ -19,7 +18,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        final List<Category> categories = repository.findAll();
-        return CategoryMapper.convertToDto(categories);
+        return CategoryMapper.convertToDto(repository.findAll());
     }
 }
