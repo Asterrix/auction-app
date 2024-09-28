@@ -6,7 +6,7 @@ import Category = Api.CategoryApi.Category;
 import Subcategory = Api.CategoryApi.Subcategory;
 
 export type DropdownSelection = {
-  category: string;
+  category: number;
   subcategory: Subcategory[];
 }
 
@@ -36,7 +36,7 @@ export class CategoryDropdownComponent {
     this.hideDropdown.emit();
   }
 
-  protected emitSelectionChange(content: string, subcategories: Subcategory[]): void {
+  protected emitSelectionChange(content: number, subcategories: Api.CategoryApi.Subcategory[]): void {
     this.listToggled = true;
 
     this.onSelect.emit({

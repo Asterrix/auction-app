@@ -71,7 +71,7 @@
       </ng-container>
 
       <ng-container *ngIf="showCreditCardForm">
-        <button class="btn--next">Finish</button>
+        <button class="btn--next" (click)="submitFormEvent()">Finish</button>
       </ng-container>
     </div>
   </div>

@@ -3,7 +3,7 @@
     (hideDropdown)="hideDropdownMenu(type.Category)"
     (onSelect)="propagateCategorySelectionEvent(categoryType.Category, $event)"
     (showDropdown)="showDropdownMenu(type.Category)"
-    [buttonText]="activeCategory=== '' ? 'Select Category' : activeCategory"
+    [buttonText]="activeCategory === '' ? 'Select Category' : activeCategory"
     [isActive]="dropdown[type.Category]"
     [isValid]="categoryValid"
     [listOfCategories]="categories"/>

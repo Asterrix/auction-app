@@ -10,8 +10,8 @@ import {ImageService} from "./services/image.service";
 
 export type Basic = {
   itemName: FormControl<string>,
-  category: FormControl<string>,
-  subcategory: FormControl<string>,
+  category: FormControl<number>,
+  subcategory: FormControl<number>,
   description: FormControl<string>,
   photos: FormControl<string[]>,
 }
@@ -37,11 +37,11 @@ export class AddItemBasicFormService implements AddItemBasicForm {
   private imageService: ImageService = inject(ImageService);
 
   private _form = this.formBuilder.nonNullable.group<Basic>({
-    category: new FormControl<string>("", {nonNullable: true}),
+    category: new FormControl<number>(0, {nonNullable: true}),
+    subcategory: new FormControl<number>(0, {nonNullable: true}),
     description: new FormControl<string>("", {nonNullable: true}),
     itemName: new FormControl<string>("", {nonNullable: true}),
     photos: new FormControl<string[]>(this.itemImages, {nonNullable: true}),
-    subcategory: new FormControl<string>("", {nonNullable: true}),
   });
 
   private validation = new Validation<string | string[]>(AddItemBasicFormValidationConfig.initialiseValidationConfig(this._form));

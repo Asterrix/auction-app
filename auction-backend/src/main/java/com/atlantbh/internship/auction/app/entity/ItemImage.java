@@ -12,7 +12,7 @@ public class ItemImage {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "image_url", nullable = false, length = 1000)
+    @Column(name = "image_url", nullable = false, length = 999999999) //Temporarily
     private String imageUrl;
 
     @ManyToOne(optional = false)
