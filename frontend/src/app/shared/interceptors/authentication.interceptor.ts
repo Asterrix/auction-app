@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {catchError, EMPTY, Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Severity} from "../models/errorModel";
+import {TokenManager} from "../models/token-manager";
 import {AuthenticationService} from "../services/authentication.service";
 import {ErrorService} from "../services/error.service";
 import {LogoutService} from "../services/logout.service";
@@ -17,8 +18,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     const isCorrectServer: boolean = request.url.startsWith(environment.apiUrl);
 
     if (isAuthenticated && isCorrectServer) {
-      const token = AuthenticationService.retrieveUserToken();
-      const normalisedToken = token?.substring(1, token?.length - 1); // Remove `"` characters
+      const token: string = AuthenticationService.retrieveUserToken();
+      const normalisedToken: string = TokenManager.createHeaderToken(token);
 
       const modifiedReq = request.clone({
         setHeaders: {Authorization: `Bearer ${normalisedToken!}`}

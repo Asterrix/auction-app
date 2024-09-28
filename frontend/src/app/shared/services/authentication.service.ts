@@ -19,56 +19,56 @@ export interface UserDetails extends JwtPayload {
   providedIn: "root"
 })
 export class AuthenticationService {
-  private authenticatedSubjectUsername = new BehaviorSubject<string | null>(AuthenticationService.getCurrentUsername());
+  private authenticatedSubjectUsername = new BehaviorSubject<string>(AuthenticationService.getCurrentUsername());
 
   constructor(private router: Router, private apiService: Api.Service, private errorService: ErrorService) {
   }
 
-  static retrieveUserToken(): string | null {
-    const token: string | null = TokenManager.retrieveTokenFromSessionStorage();
-    if (token !== null && token !== Constant.EmptyValue) {
+  static retrieveUserToken(): string {
+    const token: string = TokenManager.retrieveTokenFromSessionStorage();
+    if (token !== Constant.EmptyValue) {
       return token;
     }
 
-    const localToken: string | null = TokenManager.retrieveTokenFromLocalStorage();
-    if (localToken !== null && localToken !== Constant.EmptyValue) {
+    const localToken: string = TokenManager.retrieveTokenFromLocalStorage();
+    if (localToken !== Constant.EmptyValue) {
       return localToken;
     }
 
-    return null;
+    return Constant.EmptyValue;
   }
 
   static isAuthenticated(): boolean {
-    const user: string | null = this.getCurrentUsername();
-    return user !== null && user !== Constant.EmptyValue;
+    const user: string = this.getCurrentUsername();
+    return user !== Constant.EmptyValue;
   }
 
-  private static getCurrentUsername(): string | null {
-    const sessionToken: string | null = TokenManager.retrieveTokenFromSessionStorage();
-    const sessionTokenFromStorage: string | null = this.getTokenFromStorage(sessionToken);
-    if (sessionTokenFromStorage !== null) return sessionTokenFromStorage;
+  private static getCurrentUsername(): string {
+    const sessionToken: string = TokenManager.retrieveTokenFromSessionStorage();
+    const sessionTokenFromStorage: string = this.getUserDetailsFromToken(sessionToken);
+    if (sessionTokenFromStorage !== Constant.EmptyValue) return sessionTokenFromStorage;
 
 
-    const localToken: string | null = TokenManager.retrieveTokenFromLocalStorage();
-    const localTokenFromStorage: string | null = this.getTokenFromStorage(localToken);
-    if (localTokenFromStorage !== null) return localTokenFromStorage;
+    const localToken: string = TokenManager.retrieveTokenFromLocalStorage();
+    const localTokenFromStorage: string = this.getUserDetailsFromToken(localToken);
+    if (localTokenFromStorage !== Constant.EmptyValue) return localTokenFromStorage;
 
-    return null;
+    return Constant.EmptyValue;
   }
 
-  private static getTokenFromStorage(token: string | null): null | string {
-    if (token !== null && token !== Constant.EmptyValue) {
+  private static getUserDetailsFromToken(token: string): string {
+    if (token !== Constant.EmptyValue) {
       const decodedHeader: UserDetails = TokenManager.decodeToken(token);
       return this.extractUsernameFromDecodedHeader(decodedHeader);
     }
-    return null;
+    return Constant.EmptyValue;
   }
 
   private static extractUsernameFromDecodedHeader(decodedHeader: UserDetails): string {
     return decodedHeader.firstName + " " + decodedHeader.lastName;
   }
 
-  getUsername(): Observable<string | null> {
+  getUsername(): Observable<string> {
     return this.authenticatedSubjectUsername.asObservable();
   }
 
@@ -86,8 +86,8 @@ export class AuthenticationService {
       )
       .subscribe(
         (response: HttpResponse<void>): void => {
-          const token: string | null = TokenManager.retrieveTokenFromHeader(response);
-          if (token !== null) {
+          const token: string = TokenManager.retrieveTokenFromHeader(response);
+          if (token !== Constant.EmptyValue) {
             TokenManager.determineLocationToStoreToken(rememberMe, token);
             this.setUsername();
             this.navigateToHomeRoute();
