@@ -76,7 +76,7 @@ export class AuthenticationService {
     this.setUsername();
   }
 
-  authenticateUser(auth: Required<Authentication>, rememberMe: boolean): void {
+  authenticateUser(auth: Required<Authentication>): void {
     this.apiService.authenticateUser(auth)
       .pipe(
         catchError((e) => {
@@ -88,7 +88,7 @@ export class AuthenticationService {
         (response: HttpResponse<void>): void => {
           const token: string = TokenManager.retrieveTokenFromHeader(response);
           if (token !== Constant.EmptyValue) {
-            TokenManager.determineLocationToStoreToken(rememberMe, token);
+            TokenManager.determineLocationToStoreToken(auth.rememberMe, token);
             this.setUsername();
             this.navigateToHomeRoute();
           }
