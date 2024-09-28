@@ -5,7 +5,11 @@
         <shop-sidebar [categories$]="categories$"/>
 
         <div class="main_section">
-          <shop-sorting-tab/>
+
+          @if (items().length > 0) {
+            <shop-sorting-tab/>
+          }
+
           <shop-content-section
             [items]="items()"
             [pagination]="pagination"
