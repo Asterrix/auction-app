@@ -4,11 +4,11 @@
       <div class="home-items__layout">
         <home-items-section-tab/>
 
-        <ng-container *ngIf="loader.loading$ | async">
+        <ng-container *ngIf="loader.getLoader('home-item').isLoading$ | async">
           <app-loader class="loader-placeholder--items"/>
         </ng-container>
 
-        <div *ngIf="!(loader.loading$ | async)" class="items-grid">
+        <div *ngIf="!(loader.getLoader('home-item').isLoading$ | async)" class="items-grid">
           <ng-container *ngFor="let item of items.content">
             <app-item-card (click)="navigateToItem(item.id)" [id]="item.id" [item]="item"/>
           </ng-container>

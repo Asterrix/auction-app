@@ -6,16 +6,17 @@
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
+  height: 100%;
 }
 
 .btn {
+  align-self: center;
   background-color: $primary;
   border: none;
   color: $white;
   padding: 1.8rem 5.7rem;
-  width: fit-content;
   @extend .font-medium;
-  align-self: center;
+  width: fit-content;
 
   &:hover {
     cursor: pointer;
@@ -24,4 +25,11 @@
 
 .items-grid {
   @include items-grid(3);
+}
+
+.loader-placeholder {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
 }

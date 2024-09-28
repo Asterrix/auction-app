@@ -1,18 +1,31 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
+
+class Loader {
+  private loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  isLoading$: Observable<boolean> = this.loadingSubject.asObservable();
+
+  showLoader(): void {
+    this.loadingSubject.next(true);
+  };
+}
 
 @Injectable({
   providedIn: "root"
 })
 export class LoaderService {
-  private loading = new BehaviorSubject<boolean>(true);
-  loading$ = this.loading.asObservable();
+  private loaders: Record<string, Loader> = {};
 
-  showLoader() {
-    this.loading.next(true);
+  getLoader(key: string): Loader {
+    if (!this.loaders[key]) {
+      this.loaders[key] = new Loader();
+    }
+    return this.loaders[key];
   }
 
-  hideLoader() {
-    this.loading.next(false);
+  removeLoader(key: string): void {
+    if (this.loaders[key]) {
+      delete this.loaders[key];
+    }
   }
 }

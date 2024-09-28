@@ -1,17 +1,31 @@
 <div class="content_section">
 
-  <p *ngIf="(pagination.totalElements$ | async) === 0">
-    No items were found.
-  </p>
+  <ng-container *ngIf="loader.getLoader('items').isLoading$ | async; else content">
+    <app-loader class="loader-placeholder"/>
+  </ng-container>
 
-  <div *ngIf="items$ | async as items" class="items-grid">
-    <ng-container *ngFor="let item of items.content">
-      <app-item-card (click)="navigateToItem(item.id)" [item]="item"/>
-    </ng-container>
-  </div>
+  <ng-template #content>
+    <p *ngIf="(pagination.totalElements$ | async) === 0">
+      No items were found.
+    </p>
+
+    <div *ngIf="items$ | async as items" class="items-grid">
+      <ng-container *ngFor="let item of items.content">
+        <app-item-card (click)="navigateToItem(item.id)" [item]="item"/>
+      </ng-container>
+    </div>
+  </ng-template>
 
 
+  <!-- Explore More -->
   <ng-container *ngIf="(pagination.isLast$ | async) === false">
-    <button (click)="loadMoreElements()" class="btn">Explore More</button>
+    <ng-container *ngIf="(loader.getLoader('load-more').isLoading$ | async); else btn">
+      <app-loader/>
+    </ng-container>
+    <ng-template #btn>
+      <button (click)="loadMoreElements()" *ngIf="(loader.getLoader('items').isLoading$ | async) === false" class="btn">
+        Explore More
+      </button>
+    </ng-template>
   </ng-container>
 </div>

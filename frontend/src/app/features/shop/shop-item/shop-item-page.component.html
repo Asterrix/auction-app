@@ -1,4 +1,4 @@
-<ng-container *ngIf="(loader$ | async); else content">
+<ng-container *ngIf="loader.getLoader('item').isLoading$ | async; else content">
   <app-loader class="loader-placeholder"/>
 </ng-container>
 
