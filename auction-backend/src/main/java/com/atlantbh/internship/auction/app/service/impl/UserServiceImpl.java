@@ -6,9 +6,8 @@ import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.User;
 import com.atlantbh.internship.auction.app.mapper.UserItemsMapper;
 import com.atlantbh.internship.auction.app.repository.UserRepository;
-import com.atlantbh.internship.auction.app.service.item.ItemService;
 import com.atlantbh.internship.auction.app.service.UserService;
-import com.atlantbh.internship.auction.app.service.item.ItemStateChanger;
+import com.atlantbh.internship.auction.app.service.item.ItemService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +19,13 @@ public class UserServiceImpl implements UserService {
     private final ClaimsExtractor claimsExtractor;
     private final ItemService itemService;
     private final UserRepository userRepository;
-    private final ItemStateChanger itemStateChanger;
 
     public UserServiceImpl(final ClaimsExtractor claimsExtractor,
                            @Lazy final ItemService itemService,
-                           final UserRepository userRepository,
-                           final ItemStateChanger itemStateChanger) {
+                           final UserRepository userRepository) {
         this.claimsExtractor = claimsExtractor;
         this.itemService = itemService;
         this.userRepository = userRepository;
-        this.itemStateChanger = itemStateChanger;
     }
 
     @Override
@@ -41,8 +37,7 @@ public class UserServiceImpl implements UserService {
     public List<UserItemDto> findAllItemsOwnedByUser() {
         final Integer userId = claimsExtractor.getUserId();
         final List<Item> items = itemService.findAllItemsByOwnerId(userId);
-        final List<Item> updatedItems = itemStateChanger.updateFinishedAttribute(items);
 
-        return UserItemsMapper.mapToUserItemDto(updatedItems);
+        return UserItemsMapper.mapToUserItemDto(items);
     }
 }
