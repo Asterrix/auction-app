@@ -15,6 +15,7 @@ import com.atlantbh.internship.auction.app.repository.UserRepository;
 import com.atlantbh.internship.auction.app.service.BiddingService;
 import com.atlantbh.internship.auction.app.service.validation.bidding.BidComparer;
 import com.atlantbh.internship.auction.app.service.validation.bidding.OwnerValidation;
+import com.atlantbh.internship.auction.app.service.validation.bidding.TimeValidation;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,6 +33,7 @@ public class BiddingServiceImpl implements BiddingService {
     private final MainValidationClass<BidRequest> requestValidator;
     private final OwnerValidation ownerValidation;
     private final BidComparer bidComparer;
+    private final TimeValidation timeValidation;
 
     public BiddingServiceImpl(final ItemRepository itemRepository,
                               final UserRepository userRepository,
@@ -39,7 +41,8 @@ public class BiddingServiceImpl implements BiddingService {
                               final ClaimsExtractor claimsExtractor,
                               final MainValidationClass<BidRequest> requestValidator,
                               final OwnerValidation ownerValidation,
-                              final BidComparer bidComparer) {
+                              final BidComparer bidComparer,
+                              final TimeValidation timeValidation) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.bidRepository = bidRepository;
@@ -47,13 +50,16 @@ public class BiddingServiceImpl implements BiddingService {
         this.requestValidator = requestValidator;
         this.ownerValidation = ownerValidation;
         this.bidComparer = bidComparer;
+        this.timeValidation = timeValidation;
     }
 
     @Override
     public void makeAnOfferOnItem(final BidRequest bidRequest, final LocalDateTime timeOfRequest) {
         requestValidator.validate(bidRequest);
 
-        final Item item = getItem(bidRequest.itemId(), timeOfRequest);
+        final Item item = getItem(bidRequest.itemId());
+        timeValidation.validate(timeOfRequest, item.getEndTime());
+
         final User bidder = getBidder(claimsExtractor.getUserId());
         ownerValidation.validate(item.getOwner(), bidder);
 
@@ -98,9 +104,9 @@ public class BiddingServiceImpl implements BiddingService {
                 .orElseThrow(() -> new ValidationException("Bidder could not be found."));
     }
 
-    private Item getItem(final Integer itemId, final LocalDateTime dateTime) {
+    private Item getItem(final Integer itemId) {
         return itemRepository
-                .findByIdAndEndTimeGreaterThan(itemId, dateTime)
+                .findById(itemId)
                 .orElseThrow(() -> new ValidationException("Item does not exist."));
     }
 
