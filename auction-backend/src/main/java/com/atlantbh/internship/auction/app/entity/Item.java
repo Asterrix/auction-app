@@ -34,7 +34,16 @@ public class Item {
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     private List<ItemImage> itemImages = new ArrayList<>();
 
-    public Item(Integer id, String name, String description, BigDecimal initialPrice, LocalDate startDate, LocalDate endDate, List<ItemImage> itemImages) {
+    public Item() {
+    }
+
+    public Item(final Integer id,
+                final String name,
+                final String description,
+                final BigDecimal initialPrice,
+                final LocalDate startDate,
+                final LocalDate endDate,
+                final List<ItemImage> itemImages) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -42,10 +51,6 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.itemImages = itemImages;
-    }
-
-    public Item() {
-
     }
 
     public Integer getId() {

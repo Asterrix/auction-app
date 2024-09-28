@@ -3,11 +3,11 @@ package com.atlantbh.internship.auction.app.mapper;
 import java.util.List;
 
 public interface Mapper<E, D> {
-    E toEntity(D dto);
+    E toEntity(final D dto);
 
-    D toDto(E entity);
+    D toDto(final E entity);
 
-    List<E> toEntity(List<D> dtoList);
+    List<E> toEntity(final List<D> dtoList);
 
-    List<D> toDto(List<E> entityList);
+    List<D> toDto(final List<E> entityList);
 }
