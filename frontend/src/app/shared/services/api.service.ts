@@ -239,7 +239,7 @@ export namespace Api {
       export function getListOfNewestItems(httpClient: HttpClient, pagination: IPagination): Observable<Page<ItemSummary>> {
 
         const params: Partial<ItemParams> = {
-          sort: `${SortBy.StartTime},${SortByDirection.DESC}`
+          sort: `${SortBy.StartTime},${SortByDirection.ASC}`
         };
 
         return getListOfItems(httpClient, params, pagination);
@@ -248,7 +248,7 @@ export namespace Api {
       export function getListOfLastChanceItems(httpClient: HttpClient, pagination: IPagination): Observable<Page<ItemSummary>> {
 
         const params: Partial<ItemParams> = {
-          sort: `${SortBy.EndTime},${SortByDirection.DESC}`
+          sort: `${SortBy.EndTime},${SortByDirection.ASC}`
         };
 
         return getListOfItems(httpClient, params, pagination);
