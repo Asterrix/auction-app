@@ -8,7 +8,7 @@
         <ng-container *ngIf="items$ | async as items">
 
           <ng-container *ngFor="let item of items.content">
-            <app-item-card [id]="item.id" [item]="item" (click)="navigateToItem(item.id)"/>
+            <app-item-card (click)="navigateToItem(item.id)" [id]="item.id" [item]="item"/>
           </ng-container>
 
         </ng-container>
