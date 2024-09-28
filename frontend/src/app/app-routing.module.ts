@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {HomeAboutUsComponent} from "./features/home/home-about-us/home-about-us.component";
 import {HomePrivacyPolicyComponent} from "./features/home/home-privacy-policy/home-privacy-policy.component";
 import {HomeTermsConditionsComponent} from "./features/home/home-terms-conditions/home-terms-conditions.component";
+import {HomeComponent} from "./features/home/home.component";
 
 const applicationName: string = "Auction App";
 
@@ -15,6 +16,7 @@ const routes: Routes = [
       trail: "Home"
     },
     children: [
+      {path: "", component: HomeComponent},
       {
         path: "about-us",
         title: `${applicationName} - About Us`,
