@@ -10,6 +10,7 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -83,10 +84,8 @@ public final class ItemSpecification {
      *
      * @return {@link Specification} for filtering items by their auction end date.
      */
-    public static Specification<Item> isActive() {
-        // This is faulty, should be changed in the future to use different time-calculating mechanism
-        final LocalDate localDate = LocalDate.now();
-        return (root, query, builder) -> builder.greaterThan(root.get("endDate"), localDate);
+    public static Specification<Item> isActive(final LocalDateTime dateTime) {
+        return (root, query, builder) -> builder.greaterThan(root.get("endTime"), dateTime);
     }
 
     private static String normaliseInput(final String input) {

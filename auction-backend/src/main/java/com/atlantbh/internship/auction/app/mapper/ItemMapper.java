@@ -9,6 +9,7 @@ import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.entity.ItemImage;
 import com.atlantbh.internship.auction.app.model.impl.TimeRemainingCalculator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public final class ItemMapper {
@@ -28,13 +29,13 @@ public final class ItemMapper {
         return entityList.stream().map(ItemMapper::convertToSummaryDto).toList();
     }
 
-    public static ItemDto convertToItemDto(final Item entity) {
+    public static ItemDto convertToItemDto(final Item entity, final LocalDateTime currentTime) {
         return new ItemDto(
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
                 entity.getInitialPrice(),
-                TimeRemainingCalculator.getTimeRemaining(entity.getStartTime(), entity.getEndTime()),
+                TimeRemainingCalculator.getTimeRemaining(currentTime, entity.getEndTime()),
                 ItemImageMapper.convertToDto(entity.getItemImages()));
     }
 
