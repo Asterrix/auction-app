@@ -1,7 +1,7 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {ClickOutsideDirective} from "../../../../../shared/directives/click-outside.directive";
-import {DropdownInterface} from "../../../../../shared/interfaces/dropdown.interface";
+import {Dropdown} from "../../../../../shared/interfaces/dropdown.interface";
 import {Api} from "../../../../../shared/services/api.service";
 import Category = Api.CategoryApi.Category;
 import Subcategory = Api.CategoryApi.Subcategory;
@@ -13,7 +13,7 @@ import Subcategory = Api.CategoryApi.Subcategory;
   templateUrl: "./categories-dropdown.component.html",
   styleUrl: "./categories-dropdown.component.scss"
 })
-export class CategoriesDropdown implements DropdownInterface<string> {
+export class CategoriesDropdown implements Dropdown<string> {
   @Input({required: true}) label!: string;
   @Input({required: true}) isActive!: boolean;
   @Input({required: true}) content!: Category[] | Subcategory[];
