@@ -1,10 +1,9 @@
 import {animate, AnimationTriggerMetadata, style, transition, trigger} from "@angular/animations";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import {FormsModule} from "@angular/forms";
-import {ActivatedRoute, Params, Router, RouterLink, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute, Params, RouterLink, RouterLinkActive} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
-import {Constant} from "../../../../shared/models/enums/constant";
 import {Api} from "../../../../shared/services/api.service";
 import {CategoryService} from "../../../../shared/services/category.service";
 import {ShopPageParameter} from "../../shop-routes";
@@ -34,29 +33,26 @@ const accordionAnimation: AnimationTriggerMetadata = trigger("expandCollapse", [
   animations: [accordionAnimation]
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  categories$: Observable<Array<Category> | undefined> | undefined;
+  @Input({required: true}) categories$: Observable<Array<Category> | undefined> | undefined;
   accordionState: Record<number, boolean> = {};
-  activeCategory: string = Constant.EmptyValue;
-  activeSubcategory: string = Constant.EmptyValue;
-  private categoriesSet: Set<string> = new Set<string>();
-  private subscription: Record<string, Subscription> = {};
+  activeCategory: Observable<string> | undefined;
+  activeSubcategory: Observable<string> | undefined;
+  private querySub: Subscription | undefined;
 
-  constructor(private categoryService: CategoryService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private categoryService: CategoryService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.categoryService.initCategories();
-    this.categories$ = this.categoryService.getAllCategories();
-
-    this.subscribeToCategories();
+    this.getActiveCategories();
+    this.categoryService.subscribeToCategories();
     this.subscribeToQueryParamChanges();
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe();
+    this.querySub?.unsubscribe();
   }
 
-  toggleSection(index: number): void {
+  toggleAccordion(index: number): void {
     this.accordionState[index] = !this.accordionState[index];
   }
 
@@ -64,62 +60,36 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.accordionState = {};
   }
 
-  private subscribeToCategories(): void {
-    if (this.categories$) {
-      this.subscription["category"] = this.categories$.subscribe(value => {
-        this.mapCategoriesToSet(value);
-      });
-    }
-  }
-
-  private mapCategoriesToSet(value: Category[] | undefined) {
-    value?.map(category => {
-      this.categoriesSet.add(category.name.toLowerCase());
-    });
-  }
-
   private subscribeToQueryParamChanges(): void {
-    this.subscription["queryParam"] = this.activatedRoute.queryParams.subscribe((params: Params): void => {
-      const paramCategory: string = params[ShopPageParameter.Parameter.Category];
-      if (paramCategory) this.handleCategoryChange(paramCategory);
+    this.querySub = this.activatedRoute.queryParams.subscribe((params: Params): void => {
+      const paramCategory: string = this.handleCategoryChange(params);
 
-      const paramSubcategory: string = params[ShopPageParameter.Parameter.Subcategory];
-      if (paramCategory) this.handleSubcategoryChange(paramSubcategory);
+      if (!paramCategory) {
+        this.resetActiveCategories();
+      }
+
+      this.handleSubcategoryChange(params, paramCategory);
     });
   }
 
-  private unsubscribe(): void {
-    for (const key in this.subscription) {
-      if (this.subscription[key]) {
-        this.subscription[key].unsubscribe();
-      }
-    }
+  private resetActiveCategories(): void {
+    this.categoryService.resetActiveCategories();
   }
 
-  private handleCategoryChange(paramCategory: string): void {
-    if (this.activeCategory === paramCategory.toLowerCase()) return;
-
-    if (this.categoryExists(paramCategory)) {
-      this.activeCategory = paramCategory.toLowerCase();
-    } else {
-      this.redirectToDefaultCategory();
-    }
+  private getActiveCategories(): void {
+    this.activeCategory = this.categoryService.getActiveCategory();
+    this.activeSubcategory = this.categoryService.getActiveSubcategory();
   }
 
-  private handleSubcategoryChange(paramCategory: string): void {
-    this.activeSubcategory = paramCategory ?? Constant.EmptyValue;
+  private handleCategoryChange(params: Params): string {
+    const paramCategory: string = params[ShopPageParameter.Parameter.Category];
+    if (paramCategory) this.categoryService.handleCategoryChange(paramCategory, this.activatedRoute);
+    return paramCategory;
   }
 
-  private redirectToDefaultCategory(): void {
-    this.router.navigate([], {
-      queryParams: {
-        category: null
-      },
-      relativeTo: this.activatedRoute
-    }).then(null);
-  }
-
-  private categoryExists(section: string): boolean {
-    return this.categoriesSet.has(section);
+  private handleSubcategoryChange(params: Params, paramCategory: string): string {
+    const paramSubcategory: string = params[ShopPageParameter.Parameter.Subcategory];
+    if (paramCategory) this.categoryService.handleSubcategoryChange(paramSubcategory);
+    return paramSubcategory;
   }
 }
