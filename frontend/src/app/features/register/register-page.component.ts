@@ -3,7 +3,9 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
 import {MainNavbarService} from "../../shared/components/navbar/components/main-navbar/services/main-navbar.service";
 import {ErrorModel} from "../../shared/models/errorModel";
+import {Api} from "../../shared/services/api.service";
 import {ErrorService} from "../../shared/services/error.service";
+import {RegisterService} from "../../shared/services/user/register.service";
 import {RegisterFormComponent} from "./components/register-form/register-form.component";
 
 @Component({
@@ -16,7 +18,7 @@ import {RegisterFormComponent} from "./components/register-form/register-form.co
 export class RegisterPage implements OnInit, OnDestroy {
   error$: Observable<ErrorModel | null> | undefined;
 
-  constructor(private navbarService: MainNavbarService, private errorService: ErrorService) {
+  constructor(private registerService: RegisterService, private navbarService: MainNavbarService, private errorService: ErrorService) {
   }
 
   ngOnInit(): void {
@@ -24,7 +26,8 @@ export class RegisterPage implements OnInit, OnDestroy {
     this.navbarService.displayMinimalNavbar(true);
   }
 
-  onSubmit(): void {
+  onSubmit($event: Required<Api.UserApi.Register>): void {
+    this.registerService.registerUser($event);
   }
 
   ngOnDestroy(): void {

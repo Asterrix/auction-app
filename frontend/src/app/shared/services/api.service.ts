@@ -12,6 +12,7 @@ export namespace Api {
   import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
   import Authentication = Api.UserApi.Authentication;
+  import Register = Api.UserApi.Register;
 
 
   @Injectable({providedIn: "root"})
@@ -50,6 +51,10 @@ export namespace Api {
     logoutUser(): Observable<HttpResponse<void>> {
       return UserApi.PostMethods.logout(this.httpClient);
     }
+
+    registerUser(auth: Required<Register>): Observable<HttpResponse<boolean>> {
+      return UserApi.PostMethods.register(this.httpClient, auth);
+    }
   }
 
 
@@ -60,19 +65,37 @@ export namespace Api {
       rememberMe: boolean;
     }
 
+    export interface Register {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+    }
+
     enum Endpoint {
       Authentication = "authentication",
-      Logout = "logout"
+      Logout = "logout",
+      Register = "register"
     }
 
     export namespace PostMethods {
-      export function authenticate(httpClient: HttpClient, auth: Required<Authentication>) {
+      export function authenticate(httpClient: HttpClient, auth: Required<Authentication>): Observable<HttpResponse<void>> {
         const body = {username: auth.username, password: auth.password};
         return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}`, body, {observe: "response"});
       }
 
       export function logout(httpClient: HttpClient): Observable<HttpResponse<void>> {
         return httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Authentication}/${Endpoint.Logout}`, null, {observe: "response"});
+      }
+
+      export function register(httpClient: HttpClient, userDetails: Required<Register>): Observable<HttpResponse<boolean>> {
+        const body: Register = {
+          firstName: userDetails.firstName,
+          lastName: userDetails.lastName,
+          email: userDetails.email,
+          password: userDetails.password
+        };
+        return httpClient.post<boolean>(`${environment.apiUrl}/${Endpoint.Register}`, body, {observe: "response"});
       }
     }
   }

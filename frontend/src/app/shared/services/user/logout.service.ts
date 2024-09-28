@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
-import {TokenManager} from "../models/token-manager";
-import {Api} from "./api.service";
+import {TokenManager} from "../../models/token-manager";
+import {Api} from "../api.service";
 import {AuthenticationService} from "./authentication.service";
 
 @Injectable({providedIn: "root"})

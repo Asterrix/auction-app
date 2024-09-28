@@ -4,9 +4,9 @@ import {catchError, EMPTY, Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Severity} from "../models/errorModel";
 import {TokenManager} from "../models/token-manager";
-import {AuthenticationService} from "../services/authentication.service";
+import {AuthenticationService} from "../services/user/authentication.service";
 import {ErrorService} from "../services/error.service";
-import {LogoutService} from "../services/logout.service";
+import {LogoutService} from "../services/user/logout.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {

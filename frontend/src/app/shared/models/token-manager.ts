@@ -1,6 +1,6 @@
 import {HttpResponse} from "@angular/common/http";
 import {jwtDecode} from "jwt-decode";
-import {UserDetails} from "../services/authentication.service";
+import {UserDetails} from "../services/user/authentication.service";
 import {Constant} from "./enums/constant";
 
 enum Token {
