@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/items")
-public class ItemController {
+public final class ItemController {
     private final ItemService itemService;
 
     public ItemController(final ItemService itemService) {
@@ -21,12 +21,12 @@ public class ItemController {
     }
 
     @GetMapping
-    public final ResponseEntity<Page<ItemSummaryDto>> getAllItems(final Pageable pageable) {
+    public ResponseEntity<Page<ItemSummaryDto>> getAllItems(final Pageable pageable) {
         return new ResponseEntity<>(itemService.getAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("featured")
-    public final ResponseEntity<ItemFeaturedDto> getFeaturedItem() {
+    public ResponseEntity<ItemFeaturedDto> getFeaturedItem() {
         return new ResponseEntity<>(itemService.getFeatured(), HttpStatus.OK);
     }
 }

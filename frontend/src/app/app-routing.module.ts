@@ -4,7 +4,7 @@ import {ApiRoute} from "../environments/api-route";
 import {Constant} from "./shared/models/enums/constant";
 
 const routes: Routes = [
-  {path: Constant.EMPTY_VALUE, redirectTo: `/${ApiRoute.HomeRoute.Home}`, pathMatch: "full"},
+  {path: Constant.EmptyValue, redirectTo: `/${ApiRoute.HomeRoute.Home}`, pathMatch: "full"},
   {
     path: ApiRoute.HomeRoute.Home,
     loadChildren: () => import("./features/home/home-routes").then(mod => mod.HOME_ROUTES)
