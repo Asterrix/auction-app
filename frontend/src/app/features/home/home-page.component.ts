@@ -1,14 +1,16 @@
 import {CommonModule} from "@angular/common";
-import {Component, inject, OnDestroy, OnInit} from "@angular/core";
+import {Component, inject, OnDestroy, OnInit, signal} from "@angular/core";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Observable, Subscription} from "rxjs";
+import {Observable, Subscription, take} from "rxjs";
 import {Page} from "../../shared/models/interfaces/page";
 import {PaginationService} from "../../shared/models/pagination.service";
 import {Api} from "../../shared/services/api.service";
 import {ItemOrderBy} from "../../shared/services/api/item/item.enum";
 import {FeaturedItem, ItemSummary} from "../../shared/services/api/item/item.interface";
+import {NewApiService} from "../../shared/services/api/new-api.service";
 import {CategoryService} from "../../shared/services/category.service";
 import {ItemService} from "../../shared/services/item/item.service";
+import {FeaturedComponent} from "./components/featured/featured.component";
 import {HomeHeaderComponent} from "./components/home-header/home-header.component";
 import {
   Section,
@@ -22,7 +24,7 @@ import Category = Api.CategoryApi.Category;
 @Component({
   selector: "home",
   standalone: true,
-  imports: [CommonModule, HomeHeaderComponent, HomeItemsComponent],
+  imports: [CommonModule, HomeHeaderComponent, HomeItemsComponent, FeaturedComponent],
   templateUrl: "./home-page.component.html",
   styleUrls: ["./home-page.component.scss"],
   providers: [
@@ -36,16 +38,16 @@ export class HomePage implements OnInit, OnDestroy {
   categories$: Observable<Array<Category> | undefined> | undefined;
   featuredItem$: Observable<FeaturedItem | undefined> | undefined;
   items$: Observable<Page<ItemSummary> | undefined> | undefined;
+  protected featuredItems = signal<ItemSummary[]>([]);
   private paginationService = inject(PaginationService);
   protected pagination = this.paginationService.pagination;
   private queryParamSub: Subscription | undefined;
-
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private categoryService: CategoryService,
-              private sectionTabService: SectionTabService,
-              private itemService: ItemService) {
-  }
+  private apiService = inject(NewApiService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private categoryService = inject(CategoryService);
+  private sectionTabService = inject(SectionTabService);
+  private itemService = inject(ItemService);
 
   ngOnInit(): void {
     this.clearItemQueryParam();
@@ -64,6 +66,12 @@ export class HomePage implements OnInit, OnDestroy {
 
         this.sectionTabService.handleSectionChange(section, params);
         this.fetchSectionItems();
+      });
+
+    this.apiService.itemApi.suggestions("")
+      .pipe(take(1))
+      .subscribe((items: ItemSummary[]): void => {
+        this.featuredItems.set(items);
       });
   }
 

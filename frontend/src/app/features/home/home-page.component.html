@@ -1,4 +1,9 @@
 <div class="home">
   <home-header [categories$]="categories$" [featuredItem$]="featuredItem$"/>
+
+  @if (featuredItems().length > 0) {
+    <home-featured [featuredItems]="featuredItems()"/>
+  }
+
   <home-items [items$]="items$"/>
 </div>
