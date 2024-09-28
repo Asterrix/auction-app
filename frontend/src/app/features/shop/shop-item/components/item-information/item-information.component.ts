@@ -13,7 +13,7 @@ import {Observable} from "rxjs";
   styleUrls: ["./item-information.component.scss"]
 })
 export class ItemInformationComponent implements OnInit {
-  public item$: Observable<Item> = {} as Observable<Item>;
+  public item$: Observable<Item | undefined> | undefined;
 
   constructor(private itemService: ItemService) {
   }
