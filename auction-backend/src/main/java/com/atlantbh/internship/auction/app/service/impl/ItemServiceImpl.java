@@ -20,7 +20,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Page<ItemSummaryDto> getAll(final Pageable pageable) {
-        Page<Item> items = itemRepository.findAll(pageable);
+        final Page<Item> items = itemRepository.findAll(pageable);
         return new PageImpl<>(ItemMapper.convertToDto(items.getContent()));
     }
 }
