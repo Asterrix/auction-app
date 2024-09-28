@@ -43,6 +43,20 @@
       }
     }
   }
+
+  &__suggestion__container {
+    display: flex;
+    gap: 0.8rem;
+  }
+
+  &__suggestion {
+    @extend .font-semi-bold;
+    color: $primary;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .active {

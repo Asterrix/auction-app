@@ -68,8 +68,4 @@ export class ItemApi {
 
     return this.httpClient.post<void>(`${environment.apiUrl}/${Endpoint.Items}`, formData, {observe: "response"});
   }
-
-  public suggestions = (query: string): Observable<ItemSummary[]> => {
-    return this.httpClient.get<ItemSummary[]>(`${environment.apiUrl}/${Endpoint.Items}/suggestions`, {params: {query}});
-  };
 }
