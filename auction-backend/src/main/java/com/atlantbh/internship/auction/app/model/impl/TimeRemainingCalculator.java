@@ -11,20 +11,16 @@ public final class TimeRemainingCalculator {
     }
 
     public static String getTimeRemaining(final LocalDateTime currentTime, final LocalDateTime endTime) {
-        validateDate(currentTime, endTime);
-
         final DateInterval calculatedDateInterval = calculateDateInterval(currentTime, endTime);
 
         return convertToString(calculatedDateInterval);
     }
 
-    private static void validateDate(final LocalDateTime startTime, final LocalDateTime endTime) {
-        if (startTime.isAfter(endTime)) {
-            throw new IllegalArgumentException("Start date is ahead of end date. Check your parameters.");
-        }
-    }
-
     private static DateInterval calculateDateInterval(final LocalDateTime startTime, final LocalDateTime endTime) {
+        if (startTime.isAfter(endTime)) {
+            return new DateInterval(0, 0, 0, 0);
+        }
+
         final long totalMinutes = ChronoUnit.MINUTES.between(startTime, endTime);
         final int secondMinutes = 60;
         final int hoursInDay = 24;
@@ -46,6 +42,11 @@ public final class TimeRemainingCalculator {
         final long remainingDays = calculatedDateInterval.remainingDays();
         final long remainingHours = calculatedDateInterval.remainingHours();
         final long remainingMinutes = calculatedDateInterval.remainingMinutes();
+
+        if (remainingWeeks == 0 && remainingDays == 0 && remainingHours == 0 && remainingMinutes == 0) {
+            stringBuilder.append("Finished");
+            return stringBuilder.toString();
+        }
 
         if (remainingWeeks > 0) {
             stringBuilder.append(remainingWeeks).append(space).append(remainingWeeks == 1 ? "Week" : "Weeks");
