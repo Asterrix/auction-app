@@ -1,5 +1,5 @@
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Component} from "@angular/core";
+import {Component, ViewChild} from "@angular/core";
 import {Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {Observable} from "rxjs";
 import {ProfileRouteEndpoint} from "../../../../../features/profile/profile-routes";
@@ -18,6 +18,7 @@ import {SearchBarComponent} from "../search-bar/search-bar.component";
 export class MainNavbarComponent {
   protected readonly ProfileRouteEndpoint = ProfileRouteEndpoint;
   protected readonly searchSuggestion$: Observable<string | undefined>;
+  @ViewChild(SearchBarComponent) searchBarComponent!: SearchBarComponent;
 
   constructor(
     protected userService: AuthenticationService,
@@ -28,6 +29,10 @@ export class MainNavbarComponent {
   }
 
   protected querySuggestion = async (suggestion: string) => {
+    this.searchBarComponent.searchForm.patchValue({
+      searchValue: suggestion
+    })
+
     await this.router.navigate([], {
       relativeTo: this.router.routerState.root,
       queryParams: {itemName: suggestion},
