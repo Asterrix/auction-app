@@ -1,5 +1,6 @@
 package com.atlantbh.internship.auction.app.service.impl;
 
+import com.atlantbh.internship.auction.app.config.TokenConfig;
 import com.atlantbh.internship.auction.app.entity.Token;
 import com.atlantbh.internship.auction.app.repository.TokenRepository;
 import com.atlantbh.internship.auction.app.service.TokenService;
@@ -10,13 +11,11 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Optional;
 
 @Service
 public class TokenServiceImpl implements TokenService {
-    public static final String ISSUER = "Auction Application";
     private final JwtEncoder jwtEncoder;
     private final TokenRepository tokenRepository;
 
@@ -35,21 +34,21 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String generateToken(final UserAuthentication user) {
-        final Instant now = Instant.now();
-        final Instant expiresAt = now.plus(7, ChronoUnit.DAYS);
         final HashMap<String, Object> userClaims = user.getClaims();
+        final Instant issuedAt = TokenConfig.issuedAt();
+        final Instant expirationDate = TokenConfig.expirationDate(issuedAt);
 
         final JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer(ISSUER)
-                .issuedAt(now)
-                .expiresAt(expiresAt)
+                .issuer(TokenConfig.ISSUER)
+                .issuedAt(issuedAt)
+                .expiresAt(expirationDate)
                 .subject(user.getPrincipal().toString())
                 .claims(claim -> claim.putAll(userClaims))
                 .build();
 
         final String tokenValue = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        saveTokenToDb(tokenValue, expiresAt);
+        saveTokenToDb(tokenValue, expirationDate);
 
         return tokenValue;
     }
@@ -57,8 +56,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public boolean isValid(final Instant currentTime, final String clientToken) {
         final Optional<Token> token = tokenRepository.findByToken(extractTokenFromBearer(clientToken));
-        if (token.isEmpty()) return false;
-        if (isExpired(currentTime, token.get())) return false;
+        if (token.isEmpty() || isExpired(currentTime, token.get())) return false;
 
         return true;
     }

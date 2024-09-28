@@ -47,7 +47,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
   private createAuthRequest(authForm: FormGroup): Required<AuthenticationRequest> {
     return {
-      username: authForm.get(LoginForm.Email)?.value ?? Constant.EmptyValue,
+      email: authForm.get(LoginForm.Email)?.value ?? Constant.EmptyValue,
       password: authForm.get(LoginForm.Password)?.value ?? Constant.EmptyValue,
       rememberMe: authForm.get(LoginForm.RememberMe)?.value ?? false
     };
