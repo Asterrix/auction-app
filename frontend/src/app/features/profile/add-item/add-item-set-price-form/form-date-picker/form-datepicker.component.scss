@@ -1,0 +1,28 @@
+@import "colors";
+@import "typography";
+
+.form {
+  display: grid;
+  gap: 0.8rem;
+
+  &__label {
+    border: 1px solid transparent;
+    @extend .font-semi-bold;
+    color: $neutral-dark;
+
+    &:focus {
+      border: 1px solid $primary;
+    }
+  }
+
+  &__input {
+    background-color: $input-gray;
+    border: 1px solid $neutral-light-grey;
+    padding: 1.6rem;
+  }
+}
+
+input[type=date] {
+  color: $neutral-grey;
+  font-family: inherit;
+}
