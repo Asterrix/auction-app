@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * DTO for {@link Bid}
  */
 public record UserBidsAggregate(
-        BidItemSummary item,
+        TableItemSummary item,
         String timeRemaining,
         BigDecimal biddingOffer,
         Integer numberOfBids,

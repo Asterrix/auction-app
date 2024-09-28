@@ -1,6 +1,6 @@
 @use "../table/table.component";
-@import "colors";
-@import "typography";
+@use "colors";
+@use "typography";
 
 $cube-shape: 8rem;
 
@@ -9,12 +9,21 @@ $cube-shape: 8rem;
   width: $cube-shape;
 }
 
+.bids-layout {
+  @include table.bids-layout;
+  @include table.table-horizontal-spacing;
+}
+
+.seller-layout {
+  @include table.seller-layout;
+  @include table.table-horizontal-spacing;
+}
+
 .table-data-row {
-  @include table.table-row;
   transition: all 300ms ease-out;
 
   &:hover {
-    background-color: $gray-100;
+    background-color: colors.$gray-100;
   }
 }
 

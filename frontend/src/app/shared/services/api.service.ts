@@ -16,6 +16,7 @@ export namespace Api {
   import CreateItemRequest = Api.ItemApi.PostMethods.CreateItemRequest;
   import Authentication = Api.UserApi.AuthenticationRequest;
   import Register = Api.UserApi.RegisterRequest;
+  import UserItems = Api.UserApi.UserItem;
 
 
   @Injectable({providedIn: "root"})
@@ -70,6 +71,10 @@ export namespace Api {
     createItem(req: Required<CreateItemRequest>): Observable<HttpResponse<void>> {
       return ItemApi.PostMethods.createItem(this.httpClient, req);
     }
+
+    getUserItems(): Observable<UserItems[]> {
+      return UserApi.GetMethod.getUserItems(this.httpClient);
+    }
   }
 
 
@@ -90,7 +95,25 @@ export namespace Api {
     enum Endpoint {
       Authentication = "authentication",
       Logout = "logout",
-      Register = "register"
+      Register = "register",
+      Users = "users"
+    }
+
+    export type UserItem = {
+      item: {
+        id: number;
+        portrait: string;
+        name: string;
+      }
+      timeRemaining: string;
+      numberOfBids: number;
+      highestBid: number;
+    }
+
+    export namespace GetMethod {
+      export function getUserItems(httpClient: HttpClient): Observable<UserItem[]> {
+        return httpClient.get<UserItem[]>(`${environment.apiUrl}/${Endpoint.Users}/items`);
+      }
     }
 
     export namespace PostMethods {

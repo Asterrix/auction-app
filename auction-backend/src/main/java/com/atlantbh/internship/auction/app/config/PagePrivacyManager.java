@@ -27,7 +27,7 @@ public class PagePrivacyManager {
             final AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth
     ) {
         auth.requestMatchers("api/v1/bids").hasRole("User");
-
+        auth.requestMatchers("api/v1/users/items").hasRole("User");
         auth.anyRequest().authenticated();
 
         return auth;

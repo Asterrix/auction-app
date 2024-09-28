@@ -1,10 +1,14 @@
 <table class="table">
   <thead class="table__head">
-  <tr class="table__row">
+  <tr class="table__row" [ngClass]="{'six-column-layout' : tableSection === TableSection.Bids}">
     <th class="table__header">Item</th>
     <th class="table__header">Name</th>
     <th class="table__header">Time left</th>
-    <th class="table__header">Your price</th>
+
+    @if (tableSection === TableSection.Bids) {
+      <th class="table__header">Your price</th>
+    }
+
     <th class="table__header">No. bids</th>
     <th class="table__header">Highest bid</th>
   </tr>

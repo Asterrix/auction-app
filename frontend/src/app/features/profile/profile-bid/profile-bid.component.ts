@@ -4,12 +4,12 @@ import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
 import {LoaderComponent} from "../../../shared/components/loader/loader.component";
 import {Api} from "../../../shared/services/api.service";
-import {BidService} from "../../../shared/services/bid.service";
+import {BidService} from "../../../shared/services/user/bid.service";
 import {LoaderService} from "../../../shared/services/loader.service";
 import {ShopRouteEndpoint} from "../../shop/shop-routes";
 import {TableDataRow} from "../components/table-data-row/table-data-row.component";
 import {TableEmptyComponent} from "../components/table-empty/table-empty.component";
-import {TableComponent} from "../components/table/table.component";
+import {TableComponent, TableSection} from "../components/table/table.component";
 import {ProfileRouteEndpoint} from "../profile-routes";
 import {ProfileSharedNavTabComponent} from "../shared-nav/profile-shared-nav-tab.component";
 import UserBiddingInfo = Api.BidApi.UserBiddingInfo;
@@ -32,4 +32,6 @@ export class ProfileBidComponent implements OnInit {
   public ngOnInit(): void {
     this.bids$ = this.biddingService.getAllUserBiddingInfo();
   }
+
+    protected readonly TableSection = TableSection;
 }

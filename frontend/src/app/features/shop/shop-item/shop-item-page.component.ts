@@ -19,7 +19,7 @@ import {
 } from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
 import {Alert, AlertService, AlertType} from "../../../shared/services/alert.service";
 import {Api} from "../../../shared/services/api.service";
-import {BidService} from "../../../shared/services/bid.service";
+import {BidService} from "../../../shared/services/user/bid.service";
 import {ErrorService} from "../../../shared/services/error.service";
 import {ItemService} from "../../../shared/services/item.service";
 import {AuthenticationService} from "../../../shared/services/user/authentication.service";
