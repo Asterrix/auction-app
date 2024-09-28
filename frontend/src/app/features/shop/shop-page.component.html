@@ -1,4 +1,4 @@
-@if ((categories$ | async) && items) {
+@if ((categories$ | async) && items()) {
   <div class="shop">
     <div class="container">
       <div class="shop__layout">
@@ -7,7 +7,7 @@
         <div class="main_section">
           <shop-sorting-tab/>
           <shop-content-section
-            [items]="items.content"
+            [items]="items()"
             [pagination]="pagination"
             (increasePageSize)="loadMoreElements()"/>
         </div>
