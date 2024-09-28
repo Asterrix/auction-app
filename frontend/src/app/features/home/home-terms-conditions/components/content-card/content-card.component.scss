@@ -1,0 +1,11 @@
+@import "colors.styles";
+
+.content-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+
+  &__content {
+    color: $neutral-05;
+  }
+}

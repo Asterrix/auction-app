@@ -1,0 +1,35 @@
+<div class="main-navbar">
+  <div class="container">
+    <div class="main-navbar__layout">
+
+      <div class="main-navbar__logo">
+        <app-anchor-image
+          [externalLink]="false"
+          [imageHeight]="56"
+          [imageWidth]="163"
+          alt="Auction App Logo"
+          imageSource="assets/logos/auction-app-logo-1.png"
+          link="/home"
+        />
+      </div>
+
+      <div class="main-navbar__search">
+        <div>
+          <app-search-bar/>
+        </div>
+
+        <div class="main-navbar__navigation">
+          <ul>
+            <li>
+              <a class="active" routerLink="/home">Home</a>
+            </li>
+            <li>
+              <a>Shop</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

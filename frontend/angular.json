@@ -29,6 +29,18 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "styles": [
+              "src/styles/global.styles.scss",
+              "src/styles/container.styles.scss",
+              "src/themes/typography.styles.scss",
+              "src/themes/colors.styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles",
+                "src/themes"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
@@ -89,6 +101,18 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "styles": [
+              "src/styles/global.styles.scss",
+              "src/styles/container.styles.scss",
+              "src/themes/typography.styles.scss",
+              "src/themes/colors.styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles",
+                "src/themes"
+              ]
+            },
             "scripts": []
           }
         }
