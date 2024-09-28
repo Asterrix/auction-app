@@ -1,5 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component} from "@angular/core";
+import {LoaderService} from "../../services/loader.service";
 
 @Component({
   selector: "app-loader",
@@ -9,4 +10,7 @@ import {Component} from "@angular/core";
   styleUrls: ["./loader.component.scss"]
 })
 export class LoaderComponent {
+
+  constructor(public loaderService: LoaderService) {
+  }
 }

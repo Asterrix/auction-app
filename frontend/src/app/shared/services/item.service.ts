@@ -3,7 +3,6 @@ import {BehaviorSubject, catchError, Observable} from "rxjs";
 import {Page} from "../models/interfaces/page";
 import {IPagination} from "../models/pagination";
 import {Api} from "./api.service";
-import {LoaderService} from "./loader.service";
 import ItemParams = Api.ItemApi.GetMethods.ItemParams;
 import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
 import Item = Api.ItemApi.Interfaces.Item;
@@ -17,7 +16,7 @@ export class ItemService {
   private item$ = new BehaviorSubject<Item | undefined>(undefined);
   private items$ = new BehaviorSubject<Page<ItemSummary> | undefined>(undefined);
 
-  constructor(private apiService: Api.Service, private loader: LoaderService) {
+  constructor(private apiService: Api.Service) {
   }
 
   initFeaturedItem(): void {
@@ -31,29 +30,17 @@ export class ItemService {
   }
 
   initItemsNewestArrivals(): void {
-    this.loader.showLoader();
-
     this.apiService.getListOfNewestArrivals().pipe(catchError((error: any) => {
       console.error(error);
       throw error;
-    }))
-      .subscribe((items): void => this.items$.next(items))
-      .add(() => {
-        this.loader.hideLoader();
-      });
+    })).subscribe((items): void => this.items$.next(items));
   }
 
   initItemsLastChance(): void {
-    this.loader.showLoader();
-
     this.apiService.getListOfLastChanceItems().pipe(catchError((error: any) => {
       console.error(error);
       throw error;
-    }))
-      .subscribe((items): void => this.items$.next(items))
-      .add(() => {
-        this.loader.hideLoader();
-      });
+    })).subscribe((items): void => this.items$.next(items));
   }
 
   getItems(): Observable<Page<ItemSummary> | undefined> {
@@ -61,20 +48,11 @@ export class ItemService {
   }
 
   initItem(itemId: number): void {
-    this.loader.showLoader();
-
-    return this.apiService.getItemById(itemId).pipe(
+    this.apiService.getItemById(itemId).pipe(
       catchError((error: any) => {
         console.error(error);
         throw error;
-      })
-    )
-      .subscribe((item): void => {
-        this.item$.next(item);
-      })
-      .add(() => {
-        this.loader.hideLoader();
-      });
+      })).subscribe((item): void => this.item$.next(item));
   }
 
   getItem(): Observable<Item | undefined> {
@@ -82,37 +60,20 @@ export class ItemService {
   }
 
   initItems(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {
-    this.loader.showLoader();
-
-    return this.apiService.getListOfAllItems(filter, pagination).pipe(
-      catchError((error: any) => {
-        console.error(error);
-        throw error;
-      })
-    )
-      .subscribe((page): void => {
-        this.items$.next(page);
-      })
-      .add(() => {
-        this.loader.hideLoader();
-      });
-  }
-
-  loadMoreData(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {
-    this.loader.showLoader();
-
     this.apiService.getListOfAllItems(filter, pagination).pipe(
       catchError((error: any) => {
         console.error(error);
         throw error;
-      })
-    )
-      .subscribe((page): void => {
-        this.addNewDataToExistingState(page);
-      })
-      .add(() => {
-        this.loader.hideLoader();
-      });
+      })).subscribe((page): void => this.items$.next(page));
+  }
+
+  loadMoreData(filter: Partial<ItemParams>, pagination: Required<IPagination>): void {
+    this.apiService.getListOfAllItems(filter, pagination).pipe(
+      catchError((error: any) => {
+        console.error(error);
+        throw error;
+      }))
+      .subscribe((page): void => this.addNewDataToExistingState(page));
   }
 
   private addNewDataToExistingState(page: Page<ItemSummary>): void {
