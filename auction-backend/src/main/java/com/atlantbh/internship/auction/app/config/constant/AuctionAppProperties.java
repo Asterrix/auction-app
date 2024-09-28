@@ -8,8 +8,15 @@ public class AuctionAppProperties {
     @Value("${app-properties.client-route}")
     private String clientRoute;
 
+    @Value("${app-properties.api-version}")
+    private String apiVersion;
+
     public String getClientRoute() {
         return clientRoute;
+    }
+
+    public String getApiVersion() {
+        return apiVersion;
     }
 }
 

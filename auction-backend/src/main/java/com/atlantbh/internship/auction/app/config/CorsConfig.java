@@ -15,24 +15,33 @@ public class CorsConfig {
         this.appProperties = appProperties;
     }
 
+    /**
+     * Creates a WebMvcConfigurer bean that configures CORS for the application.
+     *
+     * @return a WebMvcConfigurer bean that configures CORS
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(final CorsRegistry registry) {
-                registry.addMapping("/api/v1/items")
-                        .allowedOrigins(appProperties.getClientRoute())
-                        .allowedMethods(HttpMethod.GET.name());
-
-                registry.addMapping("/api/v1/category")
-                        .allowedOrigins(appProperties.getClientRoute())
-                        .allowedMethods(HttpMethod.GET.name());
-
-                registry.addMapping("/api/v1/items/featured")
-                        .allowedOrigins(appProperties.getClientRoute())
-                        .allowedMethods(HttpMethod.GET.name());
+                createMapping(registry, "/items", new String[]{HttpMethod.GET.name()});
+                createMapping(registry, "/category", new String[]{HttpMethod.GET.name()});
+                createMapping(registry, "/items/featured", new String[]{HttpMethod.GET.name()});
             }
         };
     }
 
+    /**
+     * Adds a GET request mapping to the given CORS registry, with the specified path and allowed methods.
+     *
+     * @param registry       the CORS registry to add the mapping to
+     * @param path           the path to map the HTTP requests to
+     * @param allowedMethods the allowed methods for the path
+     */
+    private void createMapping(final CorsRegistry registry, final String path, final String[] allowedMethods) {
+        registry.addMapping("/" + appProperties.getApiVersion() + path)
+                .allowedOrigins(appProperties.getClientRoute())
+                .allowedMethods(allowedMethods);
+    }
 }
