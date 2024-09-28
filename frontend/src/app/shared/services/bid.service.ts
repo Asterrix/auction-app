@@ -33,6 +33,6 @@ export class BidService {
   }
 
   getAllUserBiddingInfo(): Observable<Array<UserBiddingInfo>> {
-    return  this.apiService.getAllUserBiddingInformation();
+    return this.apiService.getAllUserBiddingInformation();
   }
 }
