@@ -18,10 +18,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
     @Mock
-    CategoryRepository repository;
+    private CategoryRepository repository;
 
     @InjectMocks
-    CategoryServiceImpl service;
+    private CategoryServiceImpl service;
 
     @Test
     void CategoryService_GetAll_ReturnsListOfCategories() {
