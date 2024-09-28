@@ -10,11 +10,16 @@ export class LogoutService {
   }
 
   logoutUser(): void {
-    this.triggerLogoutProcedure();
-    this.navigateToHomeRoute();
+    this.apiService.logoutUser().subscribe(response => {
+      if (response) {
+        this.triggerLogoutProcedure();
+        this.navigateToHomeRoute();
+      }
+    });
   }
 
   logoutUserTokenInvalidated(): void {
+    this.apiService.logoutUser();
     this.triggerLogoutProcedure();
     this.navigateToLoginRoute();
   };
@@ -28,7 +33,6 @@ export class LogoutService {
   }
 
   private triggerLogoutProcedure(): void {
-    this.apiService.logoutUser();
     TokenManager.removeToken();
     this.authService.resetUsername();
   }
