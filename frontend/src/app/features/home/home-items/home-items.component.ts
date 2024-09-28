@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {Observable, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {HomeItemsTabComponent, Section, SectionQueryParam} from "./components/home-items-tab/home-items-tab.component";
 import {ItemCardComponent} from "../../../shared/components/item-card/item-card.component";
-import {HomeItemsService, ItemSummary} from "./services/home-items.service";
 import {Page} from "../../../shared/models/interfaces/page";
 import {ActivatedRoute, Params} from "@angular/router";
+import {ItemService, ItemSummary} from "../services/item.service";
 
 @Component({
   selector: "app-home-items",
@@ -16,13 +16,11 @@ import {ActivatedRoute, Params} from "@angular/router";
 })
 export class HomeItemsComponent implements OnInit, OnDestroy {
   private _queryParamSub: Subscription | undefined;
-  private _itemsObservableSub: Subscription | undefined;
   private _queryParam: Section = Section.Default;
-
-  constructor(private homeItemsService: HomeItemsService, private activatedRoute: ActivatedRoute) {
-  }
-
   private _items: Array<ItemSummary> = Array<ItemSummary>();
+
+  constructor(private itemService: ItemService, private activatedRoute: ActivatedRoute) {
+  }
 
   get items(): Array<ItemSummary> {
     return this._items;
@@ -38,18 +36,18 @@ export class HomeItemsComponent implements OnInit, OnDestroy {
   }
 
   loadItems(): void {
-    let itemsObservable$: Observable<Page<ItemSummary>>;
-
     switch (this._queryParam) {
       case Section.LastChance:
-        itemsObservable$ = this.homeItemsService.getListOfLastChanceItems();
+        this.itemService.items$.data$ = this.itemService.getListOfLastChanceItems();
         break;
       default:
-        itemsObservable$ = this.homeItemsService.getListOfNewestItems();
+        this.itemService.items$.data$ = this.itemService.getListOfNewestItems();
     }
 
-    this._itemsObservableSub = itemsObservable$.subscribe((page: Page<ItemSummary>): void => {
-      page.content.map((item: ItemSummary) => this._items.push(item));
+    this.itemService.items$.data$.subscribe((items: Page<ItemSummary> | undefined) => {
+      if (items) {
+        this._items = items.content;
+      }
     });
   }
 
@@ -57,8 +55,6 @@ export class HomeItemsComponent implements OnInit, OnDestroy {
     if (this._queryParamSub) {
       this._queryParamSub.unsubscribe();
     }
-    if (this._itemsObservableSub) {
-      this._itemsObservableSub.unsubscribe();
-    }
+    this.itemService.items$.unsubscribe();
   }
 }
