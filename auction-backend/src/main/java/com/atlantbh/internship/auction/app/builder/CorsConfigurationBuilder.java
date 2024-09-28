@@ -3,6 +3,7 @@ package com.atlantbh.internship.auction.app.builder;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CorsConfigurationBuilder {
@@ -13,36 +14,25 @@ public class CorsConfigurationBuilder {
         return this;
     }
 
-    public CorsConfigurationBuilder setAllowedMethods(final String... allowedMethods) {
-        configuration.setAllowedMethods(List.of(allowedMethods));
+    public CorsConfigurationBuilder setAllowedMethods(final List<HttpMethod> allowedMethods) {
+        List<String> methodList = new ArrayList<>(allowedMethods.size());
+        allowedMethods.forEach(method -> methodList.add(method.toString()));
+        configuration.setAllowedMethods(methodList);
         return this;
     }
 
-    public CorsConfigurationBuilder setAllowedHeaders(final String... allowedHeaders) {
-        configuration.setAllowedHeaders(List.of(allowedHeaders));
+    public CorsConfigurationBuilder setAllowedHeaders(final List<String> allowedHeaders) {
+        configuration.setAllowedHeaders(allowedHeaders);
         return this;
     }
 
-    public CorsConfigurationBuilder setExposedHeaders(final String... exposedHeaders) {
-        configuration.setExposedHeaders(List.of(exposedHeaders));
-        return this;
-    }
-
-    public CorsConfigurationBuilder allowCredentials() {
-        configuration.setAllowCredentials(true);
+    public CorsConfigurationBuilder setExposedHeaders(final List<String> exposedHeaders) {
+        configuration.setExposedHeaders(exposedHeaders);
         return this;
     }
 
     public CorsConfiguration build() {
         return configuration;
-    }
-
-    public static class Methods {
-        public static final String GET = HttpMethod.GET.name();
-        public static final String POST = HttpMethod.POST.name();
-        public static final String PATCH = HttpMethod.PATCH.name();
-        public static final String PUT = HttpMethod.PUT.name();
-        public static final String DELETE = HttpMethod.DELETE.name();
     }
 }
 
