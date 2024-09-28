@@ -1,7 +1,7 @@
 package com.atlantbh.internship.auction.app.service;
 
-import com.atlantbh.internship.auction.app.dto.user.UserRegistrationDto;
+import com.atlantbh.internship.auction.app.dto.user.RegistrationRequest;
 
 public interface RegistrationService {
-    Boolean registerUser(final UserRegistrationDto user);
+    Boolean registerUser(final RegistrationRequest user);
 }
