@@ -16,7 +16,9 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
     public String findCustomerByUserId(final Integer userId) {
         return repository.findByUser_Id(userId)
                 .map(PaymentInfo::getCustomerId)
-                .orElse("");
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "User with id %d does not have payment info attached to them.".formatted(userId))
+                );
     }
 
     @Override

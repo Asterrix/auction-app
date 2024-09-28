@@ -72,7 +72,9 @@ public class ItemController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        final ItemAggregate result = itemService.getItemById(itemId, timeOfRequest).orElseThrow();
+        final ItemAggregate result = itemService
+                .getItemById(itemId, timeOfRequest)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Item with id: %d could not be found.", itemId)));
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
