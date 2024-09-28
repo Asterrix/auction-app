@@ -24,6 +24,10 @@
       }
     }
   }
+
+  &__page-title {
+    @extend .font-medium;
+  }
 }
 
 .--active {
