@@ -1,8 +1,8 @@
 import {CommonModule} from "@angular/common";
-import {Component, inject, OnDestroy, OnInit, signal} from "@angular/core";
+import {Component, inject, OnInit, signal} from "@angular/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ActivatedRoute, Params} from "@angular/router";
-import {debounceTime, Observable, Subscription} from "rxjs";
+import {debounceTime, Observable, take} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 import {LoaderComponent} from "../../shared/components/loader/loader.component";
 import {InfiniteScrollDirective} from "../../shared/directives/infinite-scroll.directive";
@@ -33,10 +33,9 @@ import Category = Api.CategoryApi.Category;
     },
   ]
 })
-export class ShopPage implements OnInit, OnDestroy {
+export class ShopPage implements OnInit {
   categories$: Observable<Array<Category> | undefined> | undefined;
   protected items = signal<ItemSummary[]>([]);
-  private subscription: Set<Subscription> = new Set<Subscription>();
   private itemFilterBuilder: ItemFilterBuilder = new ItemFilterBuilder();
   private paginationService: PaginationService = inject(PaginationService);
   protected pagination = this.paginationService.pagination;
@@ -55,10 +54,12 @@ export class ShopPage implements OnInit, OnDestroy {
       this.paginationService.resetPagination();
       this.handleQueryParameterChange(param);
 
-      this.getItems().subscribe((items: Page<ItemSummary>) => {
-        this.items.update(() => items.content);
-        this.paginationService.updatePaginationDetails(items.last, items.totalElements);
-      });
+      this.getItems()
+        .pipe(take(1))
+        .subscribe((items: Page<ItemSummary>) => {
+          this.items.update(() => items.content);
+          this.paginationService.updatePaginationDetails(items.last, items.totalElements);
+        });
     });
   }
 
@@ -67,20 +68,17 @@ export class ShopPage implements OnInit, OnDestroy {
     this.initialiseCategories();
   }
 
-  public ngOnDestroy(): void {
-    this.unsubscribe();
-  }
-
   loadMoreElements(): void {
     if (!this.pagination().isLastPage) {
       this.paginationService.increasePageNumber();
 
-      this.subscription.add(
-        this.getItems().subscribe((items: Page<ItemSummary>) => {
-          this.items.update((item: ItemSummary[]) => item.concat(items.content));
-          this.paginationService.updatePaginationDetails(items.last, items.totalElements);
-        })
-      );
+      this.getItems()
+        .pipe(take(1))
+        .subscribe((items: Page<ItemSummary>) => {
+            this.items.update((item: ItemSummary[]) => item.concat(items.content));
+            this.paginationService.updatePaginationDetails(items.last, items.totalElements);
+          }
+        );
     }
   }
 
@@ -97,11 +95,6 @@ export class ShopPage implements OnInit, OnDestroy {
       subcategory: filter.subcategory,
       orderBy: filter.orderBy
     });
-  }
-
-  private unsubscribe(): void {
-    this.subscription.forEach((subscription: Subscription) => subscription.unsubscribe());
-    this.subscription.clear();
   }
 
   private initialiseCategories(): void {
