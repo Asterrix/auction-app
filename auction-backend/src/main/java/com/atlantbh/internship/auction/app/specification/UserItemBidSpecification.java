@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.specification;
+package com.atlantbh.internship.auction.app.specification;
 
 import com.atlantbh.internship.auction.app.entity.Bid;
 import jakarta.persistence.criteria.Predicate;

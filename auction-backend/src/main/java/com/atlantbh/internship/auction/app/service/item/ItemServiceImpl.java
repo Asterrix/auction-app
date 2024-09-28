@@ -12,7 +12,7 @@ import com.atlantbh.internship.auction.app.mapper.ItemMapper;
 import com.atlantbh.internship.auction.app.repository.BidRepository;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
-import com.atlantbh.internship.auction.app.service.specification.UserItemBidSpecification;
+import com.atlantbh.internship.auction.app.specification.UserItemBidSpecification;
 import com.atlantbh.internship.auction.app.service.validation.item.ItemEntityValidation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
