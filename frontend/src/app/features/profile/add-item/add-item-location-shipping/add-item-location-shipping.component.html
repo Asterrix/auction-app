@@ -1,12 +1,20 @@
 <form-wrapper formSubject="Location & Shipping">
+
   <app-form-member
+    [controlGroup]="locationShippingForm"
+    [valid]="true"
+    controlName="address"
     inputType="text"
     memberId="address"
     memberLabel="Address"
     placeholder="123 Main Street"
   />
 
+
   <app-form-member
+    [controlGroup]="locationShippingForm"
+    [valid]="true"
+    controlName="email"
     inputType="email"
     memberId="email"
     memberLabel="Enter email"
@@ -15,6 +23,9 @@
 
   <div class="form__city">
     <app-form-member
+      [controlGroup]="formControl.location"
+      [valid]="true"
+      controlName="city"
       inputType="text"
       memberId="city"
       memberLabel="City"
@@ -22,6 +33,9 @@
     />
 
     <app-form-member
+      [controlGroup]="formControl.location"
+      [valid]="true"
+      controlName="zip"
       inputType="text"
       memberId="zip"
       memberLabel="Zip code"
@@ -31,13 +45,20 @@
 
   <div class="form__member">
     <label class="form__member__label">Country</label>
-    <form-dropdown [isActive]="false" buttonText="ex.Spain"/>
+    <form-dropdown
+      (onSelect)="changeCountry($event)"
+      [isActive]="false"
+      [isValid]="true"
+      buttonText="ex.Spain"/>
   </div>
 
-  <app-form-phone-number/>
+  <app-form-phone-number
+    [controlGroup]="locationShippingForm"
+    controlName="contact"/>
 
-
-  <app-add-item-credit-card-form/>
+  <app-add-item-credit-card-form
+    [creditCardGroup]="formControl.creditCard"
+    [credCardExpirationGroup]="formControl.creditCard.controls.expiration"/>
 
   <div class="form__navigation">
     <button class="btn--cancel">Cancel</button>
