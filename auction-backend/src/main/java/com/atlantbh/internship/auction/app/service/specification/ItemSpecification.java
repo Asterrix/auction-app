@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 
-public class ItemSpecification {
+public final class ItemSpecification {
     public static Specification<Item> isPartOfCategory(final String categoryName) {
         return (root, query, builder) -> {
             query.distinct(true);

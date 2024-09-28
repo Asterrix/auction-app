@@ -3,7 +3,7 @@ import {Component, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
 import {Api} from "../../../../../shared/services/api.service";
 import {ItemService} from "../../../../../shared/services/item.service";
-import Item = Api.ItemApi.Interfaces.Item;
+import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 @Component({
   selector: "shop-item-summary",
@@ -13,7 +13,7 @@ import Item = Api.ItemApi.Interfaces.Item;
   styleUrls: ["./item-summary.component.scss"]
 })
 export class ItemSummaryComponent implements OnInit {
-  public item$: Observable<Item | undefined> | undefined;
+  public item$: Observable<ItemAggregate | undefined> | undefined;
 
   constructor(private itemService: ItemService) {
   }

@@ -38,6 +38,9 @@ public class Item {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "item", orphanRemoval = true)
+    private List<UserItemBid> userItemBids = new ArrayList<>();
+
     public Item() {
     }
 
@@ -121,6 +124,14 @@ public class Item {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<UserItemBid> getUserItemBids() {
+        return userItemBids;
+    }
+
+    public void setUserItemBids(final List<UserItemBid> userItemBids) {
+        this.userItemBids = userItemBids;
     }
 
 }

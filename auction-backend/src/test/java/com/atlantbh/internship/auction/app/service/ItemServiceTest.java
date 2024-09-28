@@ -1,10 +1,12 @@
 package com.atlantbh.internship.auction.app.service;
 
+import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.entity.Category;
 import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.repository.ItemImageRepository;
 import com.atlantbh.internship.auction.app.repository.ItemRepository;
+import com.atlantbh.internship.auction.app.repository.UserItemBidRepository;
 import com.atlantbh.internship.auction.app.service.impl.ItemServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,11 +33,14 @@ class ItemServiceTest {
     @Mock
     private ItemImageRepository imageRepository;
 
+    @Mock
+    private UserItemBidRepository itemBidRepository;
+
     private ItemServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        service = new ItemServiceImpl(itemRepository, imageRepository);
+        service = new ItemServiceImpl(itemRepository, imageRepository, itemBidRepository);
     }
 
     @Test
@@ -53,7 +58,7 @@ class ItemServiceTest {
         final Optional<Item> optionalItem = Optional.of(item);
 
         when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
-        final Optional<ItemDto> result = service.getItemById(anyInt());
+        final Optional<ItemAggregate> result = service.getItemById(anyInt());
 
         assertTrue(result.isPresent());
     }
@@ -63,7 +68,7 @@ class ItemServiceTest {
         final Optional<Item> optionalItem = Optional.empty();
 
         when(itemRepository.findById(anyInt())).thenReturn(optionalItem);
-        final Optional<ItemDto> result = service.getItemById(anyInt());
+        final Optional<ItemAggregate> result = service.getItemById(anyInt());
 
         assertTrue(result.isEmpty());
     }

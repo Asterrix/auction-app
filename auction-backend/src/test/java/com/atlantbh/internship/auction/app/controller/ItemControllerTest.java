@@ -1,9 +1,12 @@
 package com.atlantbh.internship.auction.app.controller;
 
+import com.atlantbh.internship.auction.app.dto.UserItemBidDto;
+import com.atlantbh.internship.auction.app.dto.aggregate.ItemAggregate;
 import com.atlantbh.internship.auction.app.dto.item.ItemDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemFeaturedDto;
 import com.atlantbh.internship.auction.app.dto.item.ItemSummaryDto;
 import com.atlantbh.internship.auction.app.dto.item.image.ItemImageDto;
+import com.atlantbh.internship.auction.app.entity.Item;
 import com.atlantbh.internship.auction.app.service.ItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -124,16 +127,20 @@ class ItemControllerTest {
         final String path = "/api/v1/items/";
         final int itemId = 1;
         final String urlTemplate = path + itemId;
-        final Optional<ItemDto> optionalItemDto = Optional.of(new ItemDto(
+
+        final ItemDto itemDto = new ItemDto(
                 itemId,
                 "Item",
                 "Desc",
                 new BigDecimal("20.00"),
                 "1 Day",
-                List.of())
+                List.of()
         );
 
-        given(itemService.getItemById(itemId)).willReturn(optionalItemDto);
+        final UserItemBidDto itemBidDto = new UserItemBidDto(new BigDecimal("20"), 1L);
+        final ItemAggregate itemAggregate = new ItemAggregate(itemDto, itemBidDto);
+
+        given(itemService.getItemById(itemId)).willReturn(Optional.of(itemAggregate));
 
         final MockHttpServletResponse response = mockMvc
                 .perform(get(urlTemplate).accept(MediaType.APPLICATION_JSON))

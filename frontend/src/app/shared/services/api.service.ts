@@ -11,6 +11,7 @@ export namespace Api {
   import FeaturedItem = Api.ItemApi.Interfaces.FeaturedItem;
   import Item = Api.ItemApi.Interfaces.Item;
   import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
+  import ItemAggregate = Api.ItemApi.Interfaces.ItemAggregate;
 
 
   @Injectable({providedIn: "root"})
@@ -34,7 +35,7 @@ export namespace Api {
       return ItemApi.GetMethods.getFeaturedItem(this.httpClient);
     }
 
-    getItemById(itemId: number): Observable<Item> {
+    getItemById(itemId: number): Observable<ItemAggregate> {
       return ItemApi.GetMethods.getItemById(this.httpClient, itemId);
     }
 
@@ -96,6 +97,16 @@ export namespace Api {
         id: number;
         name: string;
         imageUrl: string;
+      }
+
+      export interface BiddingInformation {
+        highestBid: number;
+        totalNumberOfBids: number;
+      }
+
+      export interface ItemAggregate {
+        item: Item;
+        biddingInformation: BiddingInformation;
       }
     }
 
@@ -187,8 +198,8 @@ export namespace Api {
         return httpClient.get<FeaturedItem>(`${environment.apiUrl}/${Endpoint.Items}/${Endpoint.Featured}`);
       }
 
-      export function getItemById(httpClient: HttpClient, itemId: number): Observable<Item> {
-        return httpClient.get<Item>(`${environment.apiUrl}/${Endpoint.Items}/${itemId}`);
+      export function getItemById(httpClient: HttpClient, itemId: number): Observable<ItemAggregate> {
+        return httpClient.get<ItemAggregate>(`${environment.apiUrl}/${Endpoint.Items}/${itemId}`);
       }
 
       export function getListOfItems(httpClient: HttpClient, params: Partial<ItemParams>, pagination: Required<IPagination>): Observable<Page<ItemSummary>> {
