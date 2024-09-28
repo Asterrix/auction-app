@@ -70,7 +70,7 @@ export class ItemService {
   private getListOfItems(sortAttribute: string, sortDirection: string): Observable<Page<ItemSummary>> {
     const getListOfItemsParams = {
       page: 0,
-      size: environment.pageSize,
+      size: 8,
       sort: sortAttribute, sortDirection
     };
 
