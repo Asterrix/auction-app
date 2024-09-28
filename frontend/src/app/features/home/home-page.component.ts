@@ -1,6 +1,5 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
 import {Page} from "../../shared/models/interfaces/page";
@@ -41,9 +40,14 @@ export class HomePage implements OnInit, OnDestroy {
               private categoryService: CategoryService,
               private sectionTabService: SectionTabService,
               private newItemService: NewItemService) {
+  }
 
-    this.activatedRoute.queryParams
-      .pipe(takeUntilDestroyed())
+  ngOnInit(): void {
+    this.clearItemQueryParam();
+    this.fetchFeaturedItem();
+    this.fetchCategories();
+
+    this.queryParamSub = this.activatedRoute.queryParams
       .subscribe((params: Params): void => {
 
         // Quickfix
@@ -56,12 +60,6 @@ export class HomePage implements OnInit, OnDestroy {
         this.sectionTabService.handleSectionChange(section, params);
         this.fetchSectionItems();
       });
-  }
-
-  ngOnInit(): void {
-    this.clearItemQueryParam();
-    this.fetchFeaturedItem();
-    this.fetchCategories();
   }
 
   ngOnDestroy(): void {
