@@ -1,0 +1,23 @@
+<div class="section-tab">
+  <ul class="section-tab__list">
+
+    <li class="section-tab__list__item">
+      <a [routerLinkActiveOptions]="{exact: true}"
+         class="section-tab__list__item__link"
+         routerLink="/home"
+         routerLinkActive="--active">
+        New Arrivals
+      </a>
+    </li>
+
+    <li class="section-tab__list__item">
+      <a [queryParams]="{section: Section.LastChance}"
+         class="section-tab__list__item__link"
+         routerLink="/home"
+         routerLinkActive="--active">
+        Last Chance
+      </a>
+    </li>
+
+  </ul>
+</div>

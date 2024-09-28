@@ -1,8 +1,8 @@
-import {Component} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
+import {Component} from "@angular/core";
 import {RouterLink} from "@angular/router";
-import {NavigationTrailService, NavigationTrailStructure} from "./services/navigation-trail.service";
 import {Observable} from "rxjs";
+import {NavigationTrailService, NavigationTrailStructure} from "./services/navigation-trail.service";
 
 export enum NavigationTrail {
   Trail = "trail"
@@ -24,7 +24,7 @@ export class NavigationTrailComponent {
   constructor(private navigationTrailService: NavigationTrailService) {
   }
 
-  public getLabel(): Observable<String> {
+  public getLabel(): Observable<string> {
     return this.navigationTrailService.getLastPathLabelAsObservable();
   }
 

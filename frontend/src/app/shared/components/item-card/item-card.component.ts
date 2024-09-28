@@ -1,6 +1,7 @@
-import {Component, Input} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {ItemSummary} from "../../services/item.service";
+import {Component, Input} from "@angular/core";
+import {Api} from "../../services/api.service";
+import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 
 @Component({
   selector: "app-item-card",

@@ -1,0 +1,19 @@
+<div class="home-items">
+  <div class="container">
+    <div class="home-items__layout">
+
+      <home-items-section-tab/>
+
+      <div class="items-grid">
+        <ng-container *ngIf="items$ | async as items">
+
+          <ng-container *ngFor="let item of items">
+            <app-item-card [id]="item.id" [item]="item"/>
+          </ng-container>
+
+        </ng-container>
+      </div>
+
+    </div>
+  </div>
+</div>
