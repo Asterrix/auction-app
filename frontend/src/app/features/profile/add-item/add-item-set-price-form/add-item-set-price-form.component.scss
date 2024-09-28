@@ -1,22 +1,7 @@
-@import "colors";
-@import "typography";
-
-@mixin buttonStyles {
-  transition: all 200ms ease-out;
-  text-transform: uppercase;
-  padding: 1.2rem 2.4rem;
-  @extend .font-semi-bold;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
+@use "../shared/buttons/add-item-buttons";
+@use "colors" as *;
 
 .form {
-  display: grid;
-  gap: 2.4rem;
-  padding: 4.8rem 6.4rem;
-
   &__dates {
     display: grid;
     gap: 1.2rem;
@@ -47,38 +32,3 @@
   }
 }
 
-.btn {
-  &--cancel {
-    @include buttonStyles;
-    background-color: transparent;
-    border: 2px solid $neutral-light-grey;
-
-    &:hover {
-      border: 2px solid $primary;
-    }
-  }
-
-  &--back {
-    @include buttonStyles;
-    background-color: transparent;
-    border: 2px solid $primary;
-
-    &:hover {
-      background-color: lighten($primary, 2);
-      border: 2px solid lighten($primary, 2);
-      color: $white;
-    }
-  }
-
-  &--next {
-    @include buttonStyles;
-    background-color: $primary;
-    border: 2px solid $primary;
-    color: $white;
-
-    &:hover {
-      background-color: lighten($primary, 2);
-      border: 2px solid lighten($primary, 2);
-    }
-  }
-}

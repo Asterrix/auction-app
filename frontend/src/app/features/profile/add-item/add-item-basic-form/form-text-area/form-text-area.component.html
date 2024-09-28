@@ -1,0 +1,19 @@
+<div class="text-area">
+  <label
+    class="text-area__label"
+    for="description">
+    Description
+  </label>
+
+  <textarea
+    (input)="updateCounts()"
+    [(ngModel)]="textInput"
+    class="text-area__input"
+    id="description"
+    rows="7">
+  </textarea>
+
+  <span class="text-area__count">
+    {{wordCount}} words ({{characterCount}} characters)
+  </span>
+</div>

@@ -1,7 +1,7 @@
 import {Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Constant} from "../../../../../../shared/models/enums/constant";
-import {EventService} from "../../../../../../shared/services/event.service";
+import {Constant} from "../../../../../shared/models/enums/constant";
+import {EventService} from "../../../../../shared/services/event.service";
 
 @Component({
   selector: "add-item-basic-form-images",

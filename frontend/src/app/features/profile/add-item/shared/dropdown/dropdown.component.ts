@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 
 @Component({
-  selector: "form-categories-dropdown",
+  selector: "form-dropdown",
   standalone: true,
   imports: [CommonModule, NgOptimizedImage],
   templateUrl: "./dropdown.component.html",

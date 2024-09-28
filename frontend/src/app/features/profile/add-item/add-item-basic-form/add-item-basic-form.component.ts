@@ -2,10 +2,10 @@ import {CommonModule} from "@angular/common";
 import {Component, inject} from "@angular/core";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {InputFieldComponent} from "../../../../shared/components/forms/input-field/input-field.component";
-import {FormCategoriesComponent} from "./components/form-categories/form-categories.component";
-import {FormImagesComponent} from "./components/form-images/form-images.component";
-import {FormItemNameComponent} from "./components/form-item-name/form-item-name.component";
-import {FormTextAreaComponent} from "./components/form-text-area/form-text-area.component";
+import {FormMemberComponent} from "../shared/form-member/form-member.component";
+import {FormCategoriesComponent} from "./form-categories/form-categories.component";
+import {FormImagesComponent} from "./form-images/form-images.component";
+import {FormTextAreaComponent} from "./form-text-area/form-text-area.component";
 import {FormWrapperComponent} from "../../../../shared/components/forms/form-wrapper/form-wrapper.component";
 import {ImageService} from "./services/image.service";
 
@@ -18,8 +18,8 @@ import {ImageService} from "./services/image.service";
     FormWrapperComponent,
     FormCategoriesComponent,
     FormTextAreaComponent,
-    FormItemNameComponent,
-    FormImagesComponent
+    FormImagesComponent,
+    FormMemberComponent
   ],
   templateUrl: "./add-item-basic-form.component.html",
   styleUrls: ["./add-item-basic-form.component.scss"]
