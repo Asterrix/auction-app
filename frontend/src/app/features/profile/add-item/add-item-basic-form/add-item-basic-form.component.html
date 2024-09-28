@@ -1,20 +1,76 @@
 <form-wrapper formSubject="Add Item">
-  <app-form-member
-    inputType="text"
-    memberId="name"
-    memberLabel="What do you want to sell?"
-    placeholder="ex. Playstation 5"/>
+  <form [formGroup]="addItemBasicForm" class="form">
 
-  <add-item-basic-form-categories/>
-  <add-item-basic-form-text-area/>
+    <form-field-wrapper>
+      <app-form-member
+        [controlGroup]="addItemBasicForm"
+        [valid]="validation.getStatus(formControls.itemName).valid"
+        controlName="itemName"
+        inputType="text"
+        memberId="name"
+        memberLabel="What do you want to sell?"
+        placeholder="ex. Playstation 5"/>
 
-  <add-item-basic-form-images
-    (addImageEvent)="addImage($event)"
-    (removeImageEvent)="removeImage($event)"
-    [itemImages]="itemImages"/>
+      <app-validation-message
+        *ngIf="!validation.getStatus(formControls.itemName).valid"
+        message="{{validation.getStatus(formControls.itemName).message}}"/>
+    </form-field-wrapper>
 
-  <div class="navigation">
-    <button class="btn--cancel" type="reset">Cancel</button>
-    <button class="btn--next" type="button">Next</button>
-  </div>
+
+    <form-field-wrapper>
+      <add-item-basic-form-categories
+        (onSelect)="updateCategorySelection($event)"
+        [activeCategory]="formControls.category.value"
+        [activeSubcategory]="formControls.subcategory.value"
+        [categoryValid]="validation.getStatus(formControls.category).valid"
+        [subcategoryValid]="validation.getStatus(formControls.subcategory).valid"
+      />
+
+      <div class="categories__validation__layout">
+        <app-validation-message
+          *ngIf="!validation.getStatus(formControls.category).valid"
+          message="{{validation.getStatus(formControls.category).message}}"
+        />
+
+        <div *ngIf="
+        validation.getStatus(formControls.category).valid
+        && !validation.getStatus(formControls.subcategory).valid">
+        </div>
+
+        <app-validation-message
+          *ngIf="!validation.getStatus(formControls.subcategory).valid"
+          message="{{validation.getStatus(formControls.subcategory).message}}"
+        />
+      </div>
+    </form-field-wrapper>
+
+    <add-item-basic-form-text-area
+      [controlGroup]="addItemBasicForm"
+      [valid]="validation.getStatus(formControls.description).valid"
+      controlName="description">
+
+      <app-validation-message
+        *ngIf="!validation.getStatus(formControls.description).valid"
+        message="{{validation.getStatus(formControls.description).message}}"
+      />
+    </add-item-basic-form-text-area>
+
+
+    <form-field-wrapper>
+      <add-item-basic-form-images
+        (addImageEvent)="addImage($event)"
+        (removeImageEvent)="removeImage($event)"
+        [isValid]="validation.getStatus(formControls.photos).valid"
+        [itemImages]="itemImages"/>
+
+      <app-validation-message
+        *ngIf="!validation.getStatus(formControls.photos).valid"
+        message="{{validation.getStatus(formControls.photos).message}}"/>
+    </form-field-wrapper>
+
+    <div class="navigation">
+      <button class="btn--cancel" type="reset">Cancel</button>
+      <button (click)="submitForm()" class="btn--next" type="submit">Next</button>
+    </div>
+  </form>
 </form-wrapper>

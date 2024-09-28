@@ -1,4 +1,14 @@
-<div class="member">
-  <label [for]="memberId" class="member__label">{{memberLabel}}</label>
-  <input [id]="memberId" [placeholder]="placeholder" [type]="inputType" class="member__input">
+<div [formGroup]="controlGroup" class="member">
+  <label
+    [for]="memberId"
+    class="member__label">
+    {{memberLabel}}
+  </label>
+  <input
+    [formControlName]="controlName"
+    [id]="memberId"
+    [ngClass]="{'invalid': !valid}"
+    [placeholder]="placeholder"
+    [type]="inputType"
+    class="member__input">
 </div>

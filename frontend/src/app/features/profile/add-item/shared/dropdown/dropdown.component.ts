@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 
 @Component({
   selector: "form-dropdown",
@@ -11,8 +11,10 @@ import {CommonModule, NgOptimizedImage} from "@angular/common";
 export class DropdownComponent {
   @Input({required: true}) buttonText!: string;
   @Input({required: true}) isActive!: boolean;
+  @Input({required: false}) isValid!: boolean;
   @Output() hideDropdown = new EventEmitter<void>();
   @Output() showDropdown = new EventEmitter<void>();
+  @Output() onSelect = new EventEmitter<string>();
 
   protected showDropdownMenu(): void {
     this.showDropdown.emit();
@@ -20,5 +22,9 @@ export class DropdownComponent {
 
   protected hideDropdownMenu(): void {
     this.hideDropdown.emit();
+  }
+
+  protected emitSelectionChange(): void {
+    this.onSelect.emit("Test");
   }
 }

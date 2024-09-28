@@ -1,13 +1,17 @@
 <div class="form-categories">
   <form-dropdown
     (hideDropdown)="hideDropdownMenu(type.Category)"
+    (onSelect)="propagateCategorySelectionEvent(categoryType.Category, $event)"
     (showDropdown)="showDropdownMenu(type.Category)"
+    [buttonText]="activeCategory=== '' ? 'Select Category' : activeCategory"
     [isActive]="dropdown[type.Category]"
-    buttonText="Select Category"/>
+    [isValid]="categoryValid"/>
 
   <form-dropdown
     (hideDropdown)="hideDropdownMenu(type.Subcategory)"
+    (onSelect)="propagateCategorySelectionEvent(categoryType.Subcategory, $event)"
     (showDropdown)="showDropdownMenu(type.Subcategory)"
+    [buttonText]="activeSubcategory === '' ? 'Select Subcategory' : activeSubcategory"
     [isActive]="dropdown[type.Subcategory]"
-    buttonText="Select Subcategory"/>
+    [isValid]="subcategoryValid"/>
 </div>

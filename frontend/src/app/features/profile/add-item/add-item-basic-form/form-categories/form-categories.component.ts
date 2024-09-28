@@ -1,10 +1,15 @@
 import {CommonModule} from "@angular/common";
-import {Component} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {DropdownComponent} from "../../shared/dropdown/dropdown.component";
 
-enum CategoryType {
+export enum CategoryType {
   Category,
   Subcategory
+}
+
+export type CategorySelection = {
+  type: CategoryType,
+  value: string
 }
 
 @Component({
@@ -15,8 +20,14 @@ enum CategoryType {
   styleUrl: "./form-categories.component.scss"
 })
 export class FormCategoriesComponent {
+  @Output() onSelect = new EventEmitter<CategorySelection>();
+  @Input({required: true}) activeCategory!: string;
+  @Input({required: true}) activeSubcategory!: string;
+  @Input({required: true}) categoryValid!: boolean;
+  @Input({required: true}) subcategoryValid!: boolean;
   protected type = CategoryType;
   protected dropdown: boolean[] = [];
+  protected categoryType = CategoryType;
 
   protected showDropdownMenu(type: CategoryType): void {
     this.dropdown[type] = true;
@@ -24,5 +35,12 @@ export class FormCategoriesComponent {
 
   protected hideDropdownMenu(type: CategoryType): void {
     this.dropdown[type] = false;
+  }
+
+  protected propagateCategorySelectionEvent(categoryType: CategoryType, selectedCategory: string): void {
+    this.onSelect.emit({
+      type: categoryType,
+      value: selectedCategory
+    });
   }
 }

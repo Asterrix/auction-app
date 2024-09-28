@@ -31,6 +31,22 @@
 
   &__count {
     color: $neutral-grey;
-    justify-self: right;
+    margin-left: auto;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__info {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.invalid {
+  border: 1px solid $error;
+
+  &__text {
+    color: $error;
   }
 }
