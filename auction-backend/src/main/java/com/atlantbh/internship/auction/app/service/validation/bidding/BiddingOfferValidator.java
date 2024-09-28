@@ -1,12 +1,14 @@
-package com.atlantbh.internship.auction.app.service.validation;
+package com.atlantbh.internship.auction.app.service.validation.bidding;
 
 import com.atlantbh.internship.auction.app.exception.AllowedDecimalScaleException;
 import com.atlantbh.internship.auction.app.exception.FractionalDivisionIsNotZero;
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.model.utils.Validator;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Component
 public class BiddingOfferValidator implements Validator<BigDecimal> {
     private static final byte ALLOWED_DECIMAL_SCALE = 2;
 
@@ -42,7 +44,7 @@ public class BiddingOfferValidator implements Validator<BigDecimal> {
 
     private void validateOfferIsNotNull(final BigDecimal offer) {
         if (offer == null) {
-            throw new ValidationException("Bid request cannot be processed because the request doesnt contain valid information.");
+            throw new ValidationException("Bid request cannot be processed because the request doesn't contain numeric value.");
         }
     }
 
@@ -52,5 +54,4 @@ public class BiddingOfferValidator implements Validator<BigDecimal> {
         validateDecimalScale(offer);
         validateFractionalPart(offer);
     }
-
 }

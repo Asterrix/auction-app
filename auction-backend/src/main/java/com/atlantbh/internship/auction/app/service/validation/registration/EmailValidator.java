@@ -1,4 +1,4 @@
-package com.atlantbh.internship.auction.app.service.validation;
+package com.atlantbh.internship.auction.app.service.validation.registration;
 
 import com.atlantbh.internship.auction.app.exception.ValidationException;
 import com.atlantbh.internship.auction.app.model.utils.Validator;
