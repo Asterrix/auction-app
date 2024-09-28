@@ -1,36 +1,37 @@
-@use "colors" as *;
+@use "colors";
 @use "typography";
+@use "forms";
 
 .text-area {
   display: grid;
   gap: 0.8rem;
 
   &__label {
-    color: $neutral-dark;
+    color: colors.$neutral-dark;
     @extend .font-semi-bold;
   }
 
   &__input {
     appearance: none;
-    background-color: $input-gray;
-    border: 1px solid $neutral-light-grey;
+    background-color: colors.$input-gray;
+    border: 1px solid colors.$neutral-light-grey;
     font-family: inherit;
     padding: 1.6rem;
     resize: none;
 
     &::placeholder {
-      color: $neutral-grey;
+      color: colors.$neutral-grey;
     }
 
     &:focus {
-      border: 1px solid $primary;
+      border: 1px solid colors.$primary;
 
       outline: none;
     }
   }
 
   &__count {
-    color: $neutral-grey;
+    color: colors.$neutral-grey;
     margin-left: auto;
     text-align: right;
     white-space: nowrap;
@@ -43,10 +44,10 @@
   }
 }
 
-.invalid {
-  border: 1px solid $error;
+.invalid-field {
+  @include forms.invalid-field;
 
   &__text {
-    color: $error;
+    color: colors.$error;
   }
 }

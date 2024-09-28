@@ -1,5 +1,4 @@
 import {Constant} from "../../../../../shared/models/enums/constant";
-import {isEmptyFn} from "../../../../../shared/models/validators/validator-functions";
 import {Validate, ValidationMessage, ValidationResult} from "../../shared/validation/validation";
 import {CategoryType} from "../form-categories/form-categories.component";
 
@@ -8,7 +7,7 @@ enum ValidationMessages {
   RequiredSubcategory
 }
 
-export class CategoryValidation implements Validate<string> {
+export class CategoryValidation implements Validate<number> {
   private errorMessages: ValidationMessage = {
     [ValidationMessages.RequiredCategory]: "Select a category.",
     [ValidationMessages.RequiredSubcategory]: "Select a subcategory."
@@ -19,8 +18,8 @@ export class CategoryValidation implements Validate<string> {
     this.categoryType = categoryType;
   }
 
-  public validate(category: string): ValidationResult {
-    if (isEmptyFn(category)) {
+  public validate(category: number): ValidationResult {
+    if (category < 1) {
 
       if (this.categoryType === CategoryType.Category) {
         return {valid: false, message: this.errorMessages[ValidationMessages.RequiredCategory]};

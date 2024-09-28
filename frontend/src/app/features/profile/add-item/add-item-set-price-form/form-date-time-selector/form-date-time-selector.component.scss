@@ -1,5 +1,6 @@
 @use "colors";
 @use "typography";
+@use "forms";
 
 .form {
   display: grid;
@@ -33,6 +34,6 @@ img {
   }
 }
 
-.invalid {
-  border: 1px solid colors.$error;
+.invalid-field {
+  @include forms.invalid-field;
 }

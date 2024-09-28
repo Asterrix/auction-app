@@ -4,26 +4,28 @@
       <app-progress-bar
         [currentProgress]="currentFormNum"
         [totalProgress]="totalFormNum"/>
-      <ng-container [ngSwitch]="currentFormNum">
-        <add-item-basic-form
-          (cancelForm)="cancelFormEvent()"
-          (goBack)="goBackEvent()"
-          (submitForm)="submitFormEvent()"
-          *ngSwitchDefault/>
 
-        <add-item-set-price-form
-          (cancelForm)="cancelFormEvent()"
-          (goBack)="goBackEvent()"
-          (submitForm)="submitFormEvent()"
-          *ngSwitchCase="2"/>
-
-        <app-add-item-location-shipping
-          (cancelForm)="cancelFormEvent()"
-          (goBack)="goBackEvent()"
-          (submitForm)="submitFormEvent()"
-          *ngSwitchCase="3"
-          [showCreditCardForm]="displayCreditCardForm"/>
-      </ng-container>
+      @switch (currentFormNum) {
+        @default {
+          <add-item-basic-form
+            (cancelForm)="cancelFormEvent()"
+            (goBack)="goBackEvent()"
+            (submitForm)="submitFormEvent()"/>
+        }
+        @case (2) {
+          <add-item-set-price-form
+            (cancelForm)="cancelFormEvent()"
+            (goBack)="goBackEvent()"
+            (submitForm)="submitFormEvent()"/>
+        }
+        @case (3) {
+          <app-add-item-location-shipping
+            (cancelForm)="cancelFormEvent()"
+            (goBack)="goBackEvent()"
+            (submitForm)="submitFormEvent()"
+            [showCreditCardForm]="displayCreditCardForm"/>
+        }
+      }
     </div>
   </div>
 </section>
