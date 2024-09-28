@@ -1,0 +1,1 @@
+INSERT INTO public.roles(id, role) VALUES (1, 'Admin');
