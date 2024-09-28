@@ -19,4 +19,12 @@ public class PagePrivacyManager {
     ) {
         return auth.anyRequest().authenticated();
     }
+
+    protected static AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry swagger(
+            final AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth
+    ) {
+        return auth
+                .requestMatchers("swagger-ui/**").permitAll()
+                .requestMatchers("v3/api-docs/**").permitAll();
+    }
 }
