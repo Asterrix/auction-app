@@ -27,7 +27,7 @@ import ItemSummary = Api.ItemApi.Interfaces.ItemSummary;
 export class ShopPage implements OnInit, OnDestroy {
   categories$: Observable<Array<Category> | undefined> | undefined;
   items$: Observable<Page<ItemSummary> | undefined> | undefined;
-  pagination: Pagination = new Pagination({page: 0, size: 8});
+  pagination: Pagination = new Pagination({page: 0, size: 9});
   private subscription: Record<string, Subscription> = {};
   private itemFilterBuilder: ItemFilterBuilder = new ItemFilterBuilder();
 
