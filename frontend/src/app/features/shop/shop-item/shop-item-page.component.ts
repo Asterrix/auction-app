@@ -7,6 +7,9 @@ import {Observable, Subscription} from "rxjs";
 import {PrimaryButtonComponent} from "../../../shared/components/buttons/primary-button/primary-button.component";
 import {SecondaryButtonComponent} from "../../../shared/components/buttons/secondary-button/secondary-button.component";
 import {InputFieldComponent} from "../../../shared/components/forms/input-field/input-field.component";
+import {
+  ValidationMessageComponent
+} from "../../../shared/components/forms/validation-message/validation-message.component";
 import {LoaderComponent} from "../../../shared/components/loader/loader.component";
 import {
   NavigationTrailComponent
@@ -14,14 +17,13 @@ import {
 import {
   NavigationTrailService
 } from "../../../shared/components/navbar/components/navigation-trail/services/navigation-trail.service";
-import {Constant} from "../../../shared/models/enums/constant";
 import {Alert, AlertService, AlertType} from "../../../shared/services/alert.service";
 import {Api} from "../../../shared/services/api.service";
 import {BidService} from "../../../shared/services/bid.service";
 import {ErrorService} from "../../../shared/services/error.service";
 import {ItemService} from "../../../shared/services/item.service";
 import {LoaderService} from "../../../shared/services/loader.service";
-import {AuthenticationService, UserDetails} from "../../../shared/services/user/authentication.service";
+import {AuthenticationService} from "../../../shared/services/user/authentication.service";
 import {ItemPageParameter} from "../shop-routes";
 import {BidNotificationComponent} from "./components/bid-notification/bid-notification.component";
 import {ItemDescriptionComponent} from "./components/item-description/item-description.component";
@@ -44,7 +46,8 @@ import ItemImage = Api.ItemApi.Interfaces.ItemImage;
     PrimaryButtonComponent,
     SecondaryButtonComponent,
     FormsModule,
-    BidNotificationComponent
+    BidNotificationComponent,
+    ValidationMessageComponent
   ],
   templateUrl: "./shop-item-page.component.html",
   styleUrls: ["./shop-item-page.component.scss"]
@@ -54,7 +57,7 @@ export class ShopItemPage implements OnInit, OnDestroy {
   activeImage: ItemImage | undefined;
   itemImageSub: Subscription | undefined;
   bidForm: FormGroup = this.fb.group({
-    offer: [Constant.EmptyValue, [Validators.required]]
+    offer: ["", [Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
   alert: Observable<Alert> = toObservable(this.alertService.alert);
 
@@ -100,21 +103,20 @@ export class ShopItemPage implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (AuthenticationService.isAuthenticated()) {
-      const user: UserDetails = <UserDetails>AuthenticationService.getCurrentUser();
+    if(!AuthenticationService.isAuthenticated()){
+      this.errorService.setError({
+        message: "You must be authenticated to make offers on items.",
+        type: AlertType.WarningLevelTwo
+      });
+      this.router.navigate(["/login"]).then(null);
+    }
+
+    if (this.bidForm.valid) {
       const itemId: number = this.activeRoute.snapshot.params["id"];
       this.biddingService.makeAnOffer({
-        bidderId: user.id,
         itemId: itemId,
         amount: this.bidForm.get("offer")?.value
       });
-      return;
     }
-
-    this.errorService.setError({
-      message: "You must be authenticated to make offers on items.",
-      type: AlertType.WarningLevelTwo
-    });
-    this.router.navigate(["/login"]).then(null);
   }
 }
